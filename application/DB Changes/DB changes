@@ -1,0 +1,7 @@
+ALTER TABLE `disciplines`
+	ADD COLUMN `type` ENUM('A','E') NULL DEFAULT 'A' AFTER `status`;
+	ALTER TABLE `payments`
+	ADD COLUMN `semester_id` INT NULL AFTER `created_date`,
+	ADD COLUMN `program_id` INT NULL AFTER `semester_id`;
+	ALTER TABLE `payments`
+	ADD COLUMN `payment_type` VARCHAR(255) NOT NULL AFTER `program_id`;

@@ -1,0 +1,19 @@
+[26-Jul-2018 21:23:02 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '$html' (T_VARIABLE) in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/generate.php on line 178
+[26-Jul-2018 21:23:08 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '$html' (T_VARIABLE) in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/generate.php on line 178
+[26-Jul-2018 21:23:20 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '$html' (T_VARIABLE) in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/generate.php on line 178
+[26-Jul-2018 21:23:42 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '$html' (T_VARIABLE) in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/generate.php on line 178
+[05-Aug-2018 00:42:41 Asia/Kolkata] PHP Fatal error:  Call to undefined function zob_start() in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/generate.php on line 102
+[05-Aug-2018 00:42:50 Asia/Kolkata] PHP Fatal error:  Call to undefined function zob_start() in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/generate.php on line 102
+[05-Aug-2018 00:43:36 Asia/Kolkata] PHP Fatal error:  Call to undefined function zob_start() in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/generate.php on line 102
+[05-Aug-2018 00:44:15 Asia/Kolkata] PHP Fatal error:  Call to undefined function zob_start() in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/generate.php on line 102
+[05-Aug-2018 00:44:35 Asia/Kolkata] PHP Fatal error:  Call to undefined function zob_start() in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/generate.php on line 102
+[05-Aug-2018 00:44:53 Asia/Kolkata] PHP Fatal error:  Call to undefined function zob_start() in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/generate.php on line 102
+[05-Aug-2018 21:22:11 Asia/Kolkata] PHP Fatal error:  Call to undefined method Generate_model::get_student_assign_course_list() in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/examdate.php on line 190
+[06-Aug-2018 22:17:46 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 44556764 bytes) in /home/sapoappc/tanuvas.sapoapp.com/application/third_party/mpdf/mpdf.php on line 28347
+[06-Aug-2018 22:26:32 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 47482014 bytes) in /home/sapoappc/tanuvas.sapoapp.com/application/third_party/mpdf/mpdf.php on line 28347
+[06-Aug-2018 22:27:59 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 47482014 bytes) in /home/sapoappc/tanuvas.sapoapp.com/application/third_party/mpdf/mpdf.php on line 28347
+[06-Aug-2018 22:35:57 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 55540764 bytes) in /home/sapoappc/tanuvas.sapoapp.com/application/third_party/mpdf/mpdf.php on line 28347
+[07-Aug-2018 00:20:07 Asia/Kolkata] PHP Parse error:  syntax error, unexpected ';' in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/generate.php on line 229
+[07-Aug-2018 00:20:14 Asia/Kolkata] PHP Parse error:  syntax error, unexpected ';' in /home/sapoappc/tanuvas.sapoapp.com/application/controllers/generate.php on line 229
+[07-Aug-2018 07:19:49 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 55540764 bytes) in /home/sapoappc/tanuvas.sapoapp.com/application/third_party/mpdf/mpdf.php on line 28347
+[07-Aug-2018 11:47:31 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 64063276 bytes) in /home/sapoappc/tanuvas.sapoapp.com/application/third_party/mpdf/mpdf.php on line 11591

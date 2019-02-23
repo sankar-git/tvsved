@@ -1,0 +1,46 @@
+1. Home Page
+	only Login - Types not requirred. base on the credential, it will redirect to automatically - DONE
+2. After Payment Gateway Success - Invoice Generation Template - Book 48 the page
+		 - Download PDF and Preview - DONE
+		 - Duplicate Certificate Fee - DONE
+		 - Re-evluation Fee - DONE
+3. SMS Gateway - Forgot Password, Need to Check Integration. If not work, need implementation - 26th Page
+4. Menu -> Manage Messages -> Sended Messages
+		- Need to display Send By - DONE
+		- Remove Delete  - DONE
+5. SMS Limit Configuration - Per day Limit (10000)
+6. Report/List - SMS Count Sent by Indivutual
+7. User Login - Redirect from dashboard to profile/userProfile - DONE
+8. Profile - Only Number, Email will be editable. 
+	- Role - remove/hidden - DONE
+	- Audit Trail for Email & Number .
+	- Notiication will send to Admin
+9. Add Attendance  - Degree based on the Campus
+10. disciplines - Add Flag or Arts/Eng - DONE
+11. Reports -> Generate Registration Card -> Hall Ticket Alignment(Should not break, per page 2/1) - DONE
+12. Manage Courses
+		Add,List,Active, - DONE
+13. Certificate - PG/UG - New Certif Creation and Consolidated for UG(Portrait & Landscape)
+14. Feedback - Admin 
+15. Class Grade Chart - Failed List & Subject Wise List - Partially DONE for Review(Failed List need do)
+		- View HTML - DONE
+		- Convert Portrait to Landscape PDF - DONE
+16. Deflicit - HOLD/Implementation
+
+
+Failure Template - Message
+
+
+Additional Changes:
+
+Student: Menu
+	- Remove Process: Add Direct Menu
+		FeedBack Form
+		Apply For Duplicate Certificate
+		Apply For Re-Evaluation
+		My Payment Details
+
+Apply For Duplicate Certificate
+Apply For Re-Evaluation
+My Payment Details
+		Show Filters/list Section
