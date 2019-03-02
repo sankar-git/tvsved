@@ -791,7 +791,7 @@ Class Master_model extends CI_Model
 		//$this->db->join('tbl_course_assignment sac','u.id=sac');
 		$this->db->join('user_map_student_details umap','umap.user_id = u.id','INNER');
 		
-        $this->db->where(array('umap.campus_id'=>$cid,'umap.semester_id'=>$sid,'umap.degree_id'=>$did,'umap.batch_id'=>$bid));
+        $this->db->where(array('umap.campus_id'=>$cid,'umap.degree_id'=>$did,'umap.batch_id'=>$bid));
         $result	= $this->db->get()->result();
 		return $result;
 	}

@@ -626,6 +626,12 @@ Class Type_model extends CI_Model
 	    $result	= $this->db->get()->row();
 		return $result;
 	}
+	function insert_degree($data=array()){
+		if(count($data)>0){
+			$this->db->insert('degrees',$data);
+			return $this->db->insert_id();
+		}
+	}
 	function get_degree_info($degreename)
 	{
 		$this->db->select('degrees.id');
@@ -696,6 +702,11 @@ Class Type_model extends CI_Model
 	    $result	= $this->db->get()->row();
 		return $result;
 	}
+	function insert_discipline($disciplinename)
+	{
+		$this->db->insert('disciplines',array('discipline_code'=>$disciplinename,'discipline_name'=>$disciplinename));
+       
+	}
 	function get_discipline_info($disciplinename)
 	{
 		$this->db->select('disciplines.id');
@@ -703,6 +714,20 @@ Class Type_model extends CI_Model
 		$this->db->where('discipline_name',$disciplinename);
 	    $result	= $this->db->get()->row();
 		return $result;
+	}
+	function get_group_info($group_name)
+	{
+		$this->db->select('course_groups.id');
+        $this->db->from('course_groups');
+		$this->db->where('course_group_name',$group_name);
+	    $result	= $this->db->get()->row();
+		//print_r($result);
+		if(count($result)==0){
+			$date = date('Y-m-d h:m:s');
+			$this->db->insert('course_groups',array('course_group_code'=>$group_name,'course_group_name'=>$group_name,'status'=>1,'created_on'=>"$date"));
+			return $this->db->insert_id();
+		}else
+			return $result->id;
 	}
 	function get_course_info($coursecode,$coursename)
 	{
@@ -741,6 +766,7 @@ Class Type_model extends CI_Model
 		$this->db->select('programs.id');
         $this->db->from('programs');
 		$this->db->where('program_name',$programname);
+		$this->db->or_where('program_code',$programname);
 	    $result	= $this->db->get()->row();
 		return $result;
 	}

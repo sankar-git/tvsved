@@ -153,6 +153,7 @@ class Discipline extends CI_Controller {
 		$data['programs'] = $this->Discipline_model->get_program(); 
 		$data['degrees'] = $this->Discipline_model->get_degree();
         $data['course_groups'] = $this->Discipline_model->get_course_group();
+        $data['subject_groups'] = $this->Discipline_model->get_subject_group();
         $data['syllabus_years'] = $this->Discipline_model->get_syllabus_year();	
         $data['semesters'] = $this->Discipline_model->get_semester();		
 		//print_r($data['course_groups']); exit;
@@ -554,6 +555,111 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 		
 		$this->load->view('admin/course_list_view',$data);
 	}
+	function uploadCourse(){
+		$fileName = $_FILES['userfile']['tmp_name'];
+		$csvData = file_get_contents($fileName);
+		$lines = explode(PHP_EOL, $csvData);
+		$array = array();
+		$error_msg = array();
+		$dataArr1 = array();
+		foreach ($lines as $key=>$line) {
+			$data = str_getcsv($line);
+			$template_count =  count($data);
+			if($key == 0 || $data[0]=='' )
+				continue;
+			
+			//p($data);exit;
+			//$campusLists=$this->type_model->get_campus_info($data[0]);
+			$programLists=$this->type_model->get_program_info(trim($data[0]));
+			$degreeLists=$this->type_model->get_degree_info(trim($data[1]));
+			if($template_count == 8)
+			$disciplineLists=$this->type_model->get_discipline_info(trim($data[4]));
+			else
+			$disciplineLists=$this->type_model->get_discipline_info(trim($data[5]));
+			$programListsid=0;
+			if(count($programLists) == 0)
+				$error_msg[] = 'Program not exists in our database:'.$data[0];
+			else
+				$programListsid = $programLists->id;
+			
+			
+			if(count($disciplineLists) == 0){
+				if($template_count == 8)
+					$disciplineListsid = $this->type_model->insert_discipline(trim($data[4]));
+				else
+					$disciplineListsid = $this->type_model->insert_discipline(trim($data[5]));
+				
+			}else
+				$disciplineListsid = $disciplineLists->id;
+			
+			$degreeListsid=0;
+			if(count($degreeLists) == 0){
+				if($disciplineListsid>0 && $programListsid>0){
+					$degreeListsid = $this->type_model->insert_degree(array('degree_code'=>trim($data[2]),'degree_name'=>trim($data[2]),'discipline_id'=>$disciplineListsid,'program_id'=>$programListsid));
+				}else{
+					$error_msg[] = 'Degree '.$data[2].' not added. Discipline and Program requirred to add degree';
+				}
+			}
+			else
+				$degreeListsid = $degreeLists->id;
+			//$semesterLists=$this->type_model->get_semester_info($data[3]);
+			//
+			if($template_count == 8){
+				$course_code=trim($data[2]);
+				$course_title=trim($data[3]);
+				$semesterListsid=0;
+				$group_id=$this->type_model->get_group_info(trim($data[5]));
+				$theorycredit=trim($data[6]);
+				$practiclecredit=trim($data[7]);
+			}else{
+				$semesterLists=$this->type_model->get_semester_info(trim($data[2]));
+				if(count($semesterLists) == 0)
+					$error_msg[] = 'Semster '.$data[2].' not exists';
+				else
+					$semesterListsid = $semesterLists->id;
+				$course_code=trim($data[3]);
+				$course_title=trim($data[4]);
+				$disciplineLists=$this->type_model->get_discipline_info(trim($data[5]));
+				$group_id=$this->type_model->get_group_info(trim($data[6]));
+				$theorycredit=trim($data[7]);
+				$practiclecredit=trim($data[8]);
+			}
+		   
+			
+			
+			$dataArr1[]= array(
+				'program_id'=>$programListsid,
+				'degree_id'=>$degreeListsid,
+				'course_group_id'=>$group_id,
+				'semester_id'=>$semesterListsid,
+				'discipline_id'=>$disciplineListsid,
+				'course_code'=>$course_code,
+				'course_title'=>$course_title,
+				'theory_credit'=>$theorycredit,
+				'practicle_credit'=>$practiclecredit);
+			$courselist = $this->type_model->get_course_info($course_code,$course_title);
+			if(count($courselist) > 0)
+				$error_msg[] = 'Course Code:'.$course_code.' & Course Name'.$course_title.' exists in our database';
+		}
+		//echo "<pre>";
+		//print_r($error_msg);
+		//print_r($dataArr1);exit;
+		if(count($error_msg) == 0){
+			if(count($dataArr1)>0){
+				foreach($dataArr1 as $key=>$value){
+					//print_r($value);exit;
+					$insertid=$this->Discipline_model->save_course($value);
+				}
+				$this->session->set_flashdata('message', 'Successfully Uploaded Courses');
+			}else{
+				$error_msg[] = 'Please upload courses';
+				$this->session->set_flashdata('error_msg', $error_msg);
+			}
+		}else{
+			$this->session->set_flashdata('error_msg', $error_msg);
+		}
+		redirect('discipline/viewCourse');
+	}
 	function editCourse($id)
 	{
 		$data['page_title']="Update Course";
@@ -563,7 +669,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
         $data['course_groups'] = $this->Discipline_model->get_course_group();
         $data['syllabus_years'] = $this->Discipline_model->get_syllabus_year();	
         $data['semesters'] = $this->Discipline_model->get_semester();
-		
+		 $data['subject_groups'] = $this->Discipline_model->get_subject_group();
 		$data['course_row']=$this->Discipline_model->get_course_by_id($id);
 		//print_r($data['course_row']); exit;
 		$this->load->view('admin/course_edit_view',$data);

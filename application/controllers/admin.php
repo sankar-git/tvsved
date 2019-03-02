@@ -795,7 +795,8 @@ class Admin extends CI_Controller {
 		   $data['userid'] = $id;
 		   $data['user_row']=$this->type_model->get_user_by_id($id,$role_id);
 		// echo "<pre>";print_r( $data); echo $this->db->last_query();exit;exit;
-		   if($role_id=='1')
+			//echo $role_id;exit;
+		   if($role_id=='1' || $role_id=='6')
 		   {
 			    $data['user_school']=$this->type_model->get_user_school_by_id($id,$role_id);
 				 $data['user_education']=$this->type_model->get_user_education_by_id($id,$role_id);

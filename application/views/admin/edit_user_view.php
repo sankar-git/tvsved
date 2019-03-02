@@ -1,5 +1,7 @@
 <?php
 //print_r($user_row); exit;
+ini_set("display_errors","Off");
+error_reporting(0);
   $session_data = $this->session->userdata('sms');
   $data= menuAccess($session_data[0]->id,$session_data[0]->role_id);
   //print_r($data);
@@ -88,20 +90,20 @@ function setgroup(val)
               <div class="box-body">
 			    <div class="row">
 					<div class="form-group col-md-3">
-					  <label for="exampleInputEmail1"><i class="fa fa-user-circle-o"></i> First Name<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="exampleInputEmail1"><i class="fa fa-user-circle-o"></i> First Name</label>
 					  <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo $user_row->first_name;?>" placeholder="Enter First Name">
 					</div>
 					<div class="form-group col-md-3">
-					  <label for="exampleInputPassword1"><i class="fa fa-user-circle-o"></i> Last Name<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="exampleInputPassword1"><i class="fa fa-user-circle-o"></i> Last Name</label>
 					  <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo $user_row->last_name;?>" placeholder="Enter Last Name" >
 					</div>
 					
 					<div class="form-group col-md-3">
-					  <label for="exampleInputEmail1"><i class="fa fa-user-circle-o"></i>Username<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="exampleInputEmail1"><i class="fa fa-user-circle-o"></i>Username</label>
 					  <input type="text" class="form-control" id="username" name="username" value="<?php echo $user_row->username;?>" placeholder="Enter Username" readonly>
 					</div>
 					<div class="form-group col-md-3">
-					  <label for="exampleInputPassword1"><i class="fa fa-user-circle-o"></i>Password<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="exampleInputPassword1"><i class="fa fa-user-circle-o"></i>Password</label>
 					  <input type="text" class="form-control" id="password" name="password" value="<?php echo $user_row->password;?>" placeholder="Enter Password" readonly>
 					</div>
 					
@@ -110,15 +112,15 @@ function setgroup(val)
 			   
 			    <div class="row">
 				    <div class="form-group col-md-3">
-					  <label for="exampleInputPassword1"><i class="fa fa-envelope"></i> Email<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="exampleInputPassword1"><i class="fa fa-envelope"></i> Email</label>
 					  <input type="email" class="form-control" id="email" name="email" value="<?php echo $user_row->email;?>" placeholder=" Enter Email">
 					</div>
 				    <div class="form-group col-md-3">
-					  <label for="exampleInputPassword1"><i class="fa fa-phone"></i> Contact No.<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="exampleInputPassword1"><i class="fa fa-phone"></i> Contact No.</label>
 					  <input type="text" class="form-control" id="contact_number" name="contact_number" value="<?php echo $user_row->contact_number;?>" placeholder="Enter Contact Number">
 					</div>
 					<div class="form-group col-md-3">
-					  <label for="user_type"><i class="fa fa-universal-access" aria-hidden="true"></i> Role<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="user_type"><i class="fa fa-universal-access" aria-hidden="true"></i> Role</label>
 					  <select name="user_type" id="user_type" class="form-control" disabled>
 					  <option value="">--Select Role--</option>
 					  <?php foreach($roles as $role){?>
@@ -128,7 +130,7 @@ function setgroup(val)
 					  </select>
 					</div>
 					<div class="form-group col-md-3">
-					  <label for="user_type"><i class="fa fa-intersex custom"></i> Gender<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="user_type"><i class="fa fa-intersex custom"></i> Gender</label>
 					  <select name="gender" id="gender" class="form-control">
 					  <option value="">--Select Gender--</option>
 					  <option value="male" <?php if($user_row->gender=='male') {echo "selected";} ?>>Male</option>
@@ -146,7 +148,7 @@ function setgroup(val)
 					
 					
 					<div class="form-group col-md-3">
-					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> DOB<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> DOB</label>
 					  <input type="text" class="form-control" id="dob" name="dob" value="<?php echo $user_row->dob;?>" placeholder="Enter Date Of Birth">
 					</div>
 					
@@ -158,7 +160,7 @@ function setgroup(val)
 				<div class="form-group col-md-12"><i class="fa fa-book"></i> Basic Info</div>
 				<div class="row">
 					<div class="form-group col-md-3">
-					  <label for="user_type"><i class="fa fa-intersex custom"></i> Blood Group<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="user_type"><i class="fa fa-intersex custom"></i> Blood Group</label>
 					  <select name="bloodgroup" id="bloodgroup" class="form-control">
 					  <option value="">--Select Blood Group--</option>
 					  <option value="A" <?php if($user_row->blood_group == "A") echo "selected";?>>A</option>
@@ -171,7 +173,7 @@ function setgroup(val)
 					</div>
 					
 					<div class="form-group col-md-3">
-					  <label for="user_type"><i class="fa fa-intersex custom"></i> Mother Tongue<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="user_type"><i class="fa fa-intersex custom"></i> Mother Tongue</label>
 					  <select name="mothertongue" id="mothertongue" class="form-control">
 					  <option value="">--Select Mother Tongue--</option>
 					  <option value="English" <?php if($user_row->mother_tongue == "English") echo "selected";?>>English</option>
@@ -183,7 +185,7 @@ function setgroup(val)
 					  </select>
 					</div>
 					<div class="form-group col-md-3">
-					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Day Scholar/Hosteller<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Day Scholar/Hosteller</label>
 					   <select name="residenttype" id="residenttype" class="form-control" >
 					  <option value="">--Select Resident Type--</option>
 					  
@@ -194,7 +196,7 @@ function setgroup(val)
 					  </select>
 					</div>
 					<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-venus custom"></i> Religion<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-venus custom"></i> Religion</label>
 						   <select name="religion" id="religion" class="form-control">
 						      <option value="">--Select Religion--</option>
 							  <option value="1" <?php if($user_row->religion=="1"){echo "selected";}?>>Muslim</option>
@@ -203,7 +205,7 @@ function setgroup(val)
 						   </select> 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="nationality"><i class="fa fa-flag"></i> Nationality<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="nationality"><i class="fa fa-flag"></i> Nationality</label>
 						   <select name="nationality" id="nationality" class="form-control">
 						      <option value="">--Select Nationality--</option>
 							  <option value="1"  <?php if($user_row->nationality=="1"){echo "selected";}?>>Indian</option>
@@ -212,7 +214,7 @@ function setgroup(val)
 						   </select> 
 						</div>
 						<div class="form-group col-md-3">
-					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Community<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Community</label>
 					   <select name="community" id="community" class="form-control" onchange="getCaste();">
 					  <option value="">--Select Community--</option>
 					  <?php foreach($community as $rescom){?>
@@ -222,7 +224,7 @@ function setgroup(val)
 					  </select>
 					</div>
 					<div class="form-group col-md-3">
-					  <label for="caste"><i class="fa fa-birthday-cake"></i> Caste<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="caste"><i class="fa fa-birthday-cake"></i> Caste</label>
 					  <select name="caste" id="caste" class="form-control" >
 					  <option value="">--Select Caste--</option>
 					  </select>
@@ -233,7 +235,7 @@ function setgroup(val)
 				
 				<div class="row">
 						<div class="form-group col-md-3">
-						  <label for="parent"><i class="fa fa-user-circle-o"></i>Batch<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="parent"><i class="fa fa-user-circle-o"></i>Batch</label>
 						  <select name="batch_id" id="batch_id" class="form-control">
 							  <option value="">--Select Batch--</option>
 							  <?php foreach($batches as $batch){?>
@@ -243,7 +245,7 @@ function setgroup(val)
 						 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="mother"><i class="fa fa-female"></i>Campus<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="mother"><i class="fa fa-female"></i>Campus</label>
 						 <select name="campus_id" id="campus_id" class="form-control" onchange="getDegree();">
 							  <option value="">--Select Campus--</option>
 							 <?php foreach($campuses as $campus){?>
@@ -252,7 +254,7 @@ function setgroup(val)
 						  </select>
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="occupation"><i class="fa fa-tasks"></i>Degree<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="occupation"><i class="fa fa-tasks"></i>Degree</label>
 						   <select name="degree_id" id="degree_id" class="form-control">
 							  <option value="">--Select Degree--</option>
 							  <option value="A" <?php if($user_row->degree_id == "1") echo "selected";?>>A</option>
@@ -261,7 +263,7 @@ function setgroup(val)
 						  </select>
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="father_contact">Type<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="father_contact">Type</label>
 						  <select name="course_type" id="course_type" class="form-control">
 							  <option value="">--Select Type--</option>
 							  <option value="1" <?php if($user_row->course_type == "1") echo "selected";?>>Full Time</option>
@@ -276,19 +278,19 @@ function setgroup(val)
 				     <div class="row">
 					 <div class="form-group col-md-12"><i class="fa fa-book"></i> Permanent Address</div>
 						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Address<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address"><i class="fa fa-address-book-o"></i> Address</label>
 						  <input type="text" class="form-control" id="address" name="address" placeholder="Enter Address" value="<?=$user_row->address?>">
 						 
 						</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Street<span style="color:red;font-weight: bold;">*</span></label>
-						  <input type="text" class="form-control" id="street" name="street" placeholder="Enter Street" value="<?=$user_row->street?>">
+						  <label for="address"><i class="fa fa-address-book-o"></i> Street</label>
+						  <input type="text" class="form-control" id="street" name="street" placeholder="Enter Street" value="<?=@$user_row->street?>">
 						 
 						</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> Country<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-flag"></i> Country</label>
 						   <select name="country_id" id="country_id" class="form-control" onchange="getState('state_id');">
 						      <option value="">--Select Country--</option>
 							  <?php foreach($countries as $country) { ?>
@@ -299,7 +301,7 @@ function setgroup(val)
 						</div>
 										   
 						<div class="form-group col-md-3">
-						  <label for="state"><i class="fa fa-flag"></i> State<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="state"><i class="fa fa-flag"></i> State</label>
 						   <select name="state_id" id="state_id" class="form-control">
 						      <option value="">--Select State--</option>
 							</select> 
@@ -307,7 +309,7 @@ function setgroup(val)
 						</div>
 				   <div class="row">
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> City<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-flag"></i> City</label>
 						   <select name="city_id" id="city_id" class="form-control" >
 						      <option value="">--Select City--</option>
 							  <?php foreach($city as $cities) { ?>
@@ -317,14 +319,14 @@ function setgroup(val)
 						   </select> 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="zip"><i class="fa fa-map-pin"></i> Zip Code<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="zip"><i class="fa fa-map-pin"></i> Zip Code</label>
 						  <input type="text" class="form-control" id="zip_code" maxlength="6" name="zip_code" placeholder="Enter Zip Code" value="<?=$user_row->zip_code?>">
 						 
 						</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="mother"><i class="fa fa-female"></i> Guardian/Spouse Name<span style="color:red;font-weight: bold;">*</span></label>
-						  <input type="text" class="form-control" id="guardian_name" name="guardian_name" placeholder="Enter Guardian/Spouse Name" value="<?=$user_row->guardian_name?>">
+						  <label for="mother"><i class="fa fa-female"></i> Guardian/Spouse Name</label>
+						  <input type="text" class="form-control" id="guardian_name" name="guardian_name" placeholder="Enter Guardian/Spouse Name" value="<?=@$user_row->guardian_name?>">
 						</div>
 				   </div>
 				   
@@ -332,19 +334,19 @@ function setgroup(val)
 					  <div class="form-group col-md-12"><i class="fa fa-book"></i> Local Address</div>
 					  
 						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Address<span style="color:red;font-weight: bold;">*</span></label>
-						  <input type="text" class="form-control" id="address_local" name="address_local" placeholder="Enter Address" value="<?=$user_row->address_local?>">
+						  <label for="address"><i class="fa fa-address-book-o"></i> Address</label>
+						  <input type="text" class="form-control" id="address_local" name="address_local" placeholder="Enter Address" value="<?=@$user_row->address_local?>">
 						 
 						</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Street<span style="color:red;font-weight: bold;">*</span></label>
-						  <input type="text" class="form-control" id="street_local" name="street_local" placeholder="Enter Street" value="<?=$user_row->street_local?>">
+						  <label for="address"><i class="fa fa-address-book-o"></i> Street</label>
+						  <input type="text" class="form-control" id="street_local" name="street_local" placeholder="Enter Street" value="<?=@$user_row->street_local?>">
 						 
 						</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> Country<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-flag"></i> Country</label>
 						   <select name="country_id_local" id="country_id_local" class="form-control" onchange="getState('state_id_local');">
 						      <option value="">--Select Country--</option>
 							  <?php foreach($countries as $country) { ?>
@@ -355,7 +357,7 @@ function setgroup(val)
 						</div>
 										   
 						<div class="form-group col-md-3">
-						  <label for="state"><i class="fa fa-flag"></i> State<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="state"><i class="fa fa-flag"></i> State</label>
 						   <select name="state_id_local" id="state_id_local" class="form-control">
 						      <option value="">--Select State--</option>
 							</select> 
@@ -363,7 +365,7 @@ function setgroup(val)
 						</div>
 				   <div class="row">
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> City<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-flag"></i> City</label>
 						   <select name="city_id_local" id="city_id_local" class="form-control" >
 						      <option value="">--Select City--</option>
 							  <?php foreach($city as $cities) { ?>
@@ -373,13 +375,13 @@ function setgroup(val)
 						   </select> 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="zip"><i class="fa fa-map-pin"></i> Zip Code<span style="color:red;font-weight: bold;">*</span></label>
-						  <input type="text" class="form-control" id="zip_code_local" maxlength="6" name="zip_code_local" placeholder="Enter Zip Code" value="<?=$user_row->zip_code_local?>">
+						  <label for="zip"><i class="fa fa-map-pin"></i> Zip Code</label>
+						  <input type="text" class="form-control" id="zip_code_local" maxlength="6" name="zip_code_local" placeholder="Enter Zip Code" value="<?=@$user_row->zip_code_local?>">
 						 
 						</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="state"><i class="fa fa-flag"></i> Type of scholarship Received<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="state"><i class="fa fa-flag"></i> Type of scholarship Received</label>
 						   <select name="scholarship" id="scholarship" class="form-control">
 						      <option value="">--Select Type of scholarship Received--</option>
 						      <option value="A"  <?php if($user_row->scholarship == "A"){echo "selected";}?>>A</option>
@@ -447,7 +449,7 @@ function setgroup(val)
 					</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> Medium of Instruction<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-flag"></i> Medium of Instruction</label>
 						   <select name="medium_instr" id="medium_instr" class="form-control" >
 						      <option value="">--Select Medium of Instruction--</option>
 							  
@@ -461,7 +463,7 @@ function setgroup(val)
 						</div>
 										   
 						<div class="form-group col-md-3">
-						  <label for="state"><i class="fa fa-flag"></i> Mode of Admission<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="state"><i class="fa fa-flag"></i> Mode of Admission</label>
 						   <select name="modeofadmission" id="modeofadmission" class="form-control">
 						      <option value="">--Select Mode of Admission--</option>
 						      <option value="N/A" <?php if($user_row->mode_of_admission == "N/A"){echo "selected";}?>>N/A</option>
@@ -475,9 +477,9 @@ function setgroup(val)
 					  <label for="section"><i class="fa fa-bell-o"></i>Group</label>
 					     <select name="group" id="group" class="form-control" onchange="setgroup(this.value);">
 						      <option value="">--Select Group--</option>
-							  <option value="group1" <?php if($user_education[0]['group'] == "group1"){echo "selected";}?>>Group 1</option>
-							<option value="group2" <?php if($user_education[0]['group'] == "group2"){echo "selected";}?> >Group 2</option>
-							  <option value="vocational" <?php if($user_education[0]['group'] == "vocational"){echo "selected";}?>>Vocational</option>
+							  <option value="group1" <?php if(@$user_education[0]['group'] == "group1"){echo "selected";}?>>Group 1</option>
+							<option value="group2" <?php if(@$user_education[0]['group'] == "group2"){echo "selected";}?> >Group 2</option>
+							  <option value="vocational" <?php if(@$user_education[0]['group'] == "vocational"){echo "selected";}?>>Vocational</option>
 							 
 							</select>
 					</div>
@@ -532,7 +534,7 @@ function setgroup(val)
 					</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> Remarks<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-flag"></i> Remarks</label>
 						   <textarea name="remark" id="remark" class="form-control"><?php echo $user_row->remark;?></textarea> 
 						</div>
 										   
@@ -626,16 +628,16 @@ function setgroup(val)
 				
 					<div class="row">
 						<div class="form-group col-md-3">
-						  <label for="parent"><i class="fa fa-user-circle-o"></i> Parent Name<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="parent"><i class="fa fa-user-circle-o"></i> Parent Name</label>
 						  <input type="text" class="form-control" id="parent_name" name="parent_name" value="<?php echo $user_row->parent_name;?>" placeholder="Enter Parent Name">
 						 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="mother"><i class="fa fa-female"></i> Mother Name<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="mother"><i class="fa fa-female"></i> Mother Name</label>
 						  <input type="text" class="form-control" id="mother_name" name="mother_name" value="<?php echo $user_row->mother_name;?>" placeholder="Enter Mother Name">
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="occupation"><i class="fa fa-tasks"></i> Occupation<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="occupation"><i class="fa fa-tasks"></i> Occupation</label>
 						   <select name="occupation" id="occupation" class="form-control">
 							  <option value="">--Select Occupation--</option>
 							  <option value="1" <?php if($user_row->occupation=='1') {echo "selected";}?>>Cultivation</option>
@@ -643,23 +645,23 @@ function setgroup(val)
 						  </select>
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="father_contact"><i class="fa fa-phone"></i> Father Contact<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="father_contact"><i class="fa fa-phone"></i> Father Contact</label>
 						  <input type="text" class="form-control" id="father_contact" name="father_contact" value="<?php echo $user_row->father_contact;?>" placeholder="Enter Father Contact">
 						</div>
 				   </div>
 				   <div class="row">
 						<div class="form-group col-md-3">
-						  <label for="parent"><i class="fa fa-phone"></i> Alternate Contact<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="parent"><i class="fa fa-phone"></i> Alternate Contact</label>
 						  <input type="text" class="form-control" id="alternate_contact" name="alternate_contact" value="<?php echo $user_row->father_contact;?>" placeholder="Enter Alternate Contact">
 						 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="mother"><i class="fa fa-envelope"></i> Father Email<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="mother"><i class="fa fa-envelope"></i> Father Email</label>
 						  <input type="text" class="form-control" id="father_email" name="father_email" value="<?php echo $user_row->father_contact;?>" placeholder="Enter Father Email">
 						</div>
 						
 						<div class="form-group col-md-3">
-					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Annual Income<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Annual Income</label>
 					  <input type="text" class="form-control" id="annualincome" name="annualincome" placeholder="Enter Annual Income" value="<?=$user_row->annual_income?>">
 					</div>
 						

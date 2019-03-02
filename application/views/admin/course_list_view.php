@@ -27,7 +27,13 @@
 	   <div class="box box-primary">
 	       
             <div class="box-footer" >
-               <p style="color:green" align="center"> <?php echo $this->session->flashdata('message'); ?></p>
+				<?php if($this->session->flashdata('message') != ''){?>
+               <p style="color:green" align="center"><?php echo $this->session->flashdata('message'); ?></p>
+				<?php }elseif(is_array($this->session->flashdata('error_msg'))){ 
+				foreach($this->session->flashdata('error_msg') as $key=>$error){
+				?>
+				 <p style="color:red" align="center"><?php echo $key+1 .'. '.$error; ?></p>
+				<?php } } ?>
 			     <!--<div style="float:left;">
 				  <form method="post" action="<?php echo base_url();?>discipline/downloadCourse">
                                   <input style="background: #1870BB;border: none;color: #fff;padding: 5px 10px;font-size: 13px;" type="submit" value="Download Excel" name="courseExcel">
@@ -40,7 +46,7 @@
 						 
 						</div>
 						<div class="form-group col-md-3">
-					    <form name="courseUpload" id="courseUpload" action="<?php echo base_url();?>discipline/upload" >
+					    <form name="courseUpload" method="post"  enctype="multipart/form-data" id="courseUpload" action="<?php echo base_url();?>discipline/uploadCourse" >
 						  <label for="campus">Upload Course Excel Format<span style="color:red;font-weight: bold;">*</span></label>
 						   <input type="file"  name="userfile" id="userfile"  class="btn btn-primary">  
 						   <div class="form-group col-md-5" style="text-align:left; padding-left:40px; padding-top:25px;">

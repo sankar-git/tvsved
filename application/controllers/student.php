@@ -1499,7 +1499,10 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 				$updatedetails= $this->type_model->add_unique_id_of_student($insertid,$dataArr1);
 			}
 
-				
+				if($firstrow[3] != '' && $firstrow[3] == 'Full Time')
+					$coursetype = '1';
+				else
+					$coursetype = '2';
 			$dataArr2= array(
 			                'user_id'=>$insertid,
 							'role_id'=>'1',
@@ -1534,7 +1537,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 			                'batch_id'=>$batchListsid,
 			                'campus_id'=>$campusListsid,
 			                'degree_id'=>$degreeListsid,
-							'course_type'=>$firstrow[3],
+							'course_type'=>$coursetype,
 							'blood_group'=>$firstrow[12],
 							'mother_tongue'=>$firstrow[13],
 							'resident_type'=>$firstrow[14],

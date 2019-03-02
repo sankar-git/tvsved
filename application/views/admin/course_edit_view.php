@@ -164,8 +164,8 @@
 			degree_id: "required",
 			discipline_id: "required",
 			course_group_id:"required",
-			syllabus_year:"required",
-			semester_id:"required",
+			/*syllabus_year:"required",
+			semester_id:"required",*/
 			course_code:"required",
 			course_title:"required",
 			theory_credit:"required",
@@ -218,8 +218,8 @@
 			degree_id:"Select Degree Name",
 			discipline_id: "Select Discipline Name",
 			course_group_id:"Select Course Group Name",
-			syllabus_year:"Select Syllabus Year Name",
-			semester_id:"Select Semester Name",
+			/*syllabus_year:"Select Syllabus Year Name",
+			semester_id:"Select Semester Name",*/
 			course_code:"Enter Course Code",
 			course_title:"Enter Course Title",
 			theory_credit:"Enter Theory Credits",
