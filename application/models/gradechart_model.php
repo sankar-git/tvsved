@@ -23,7 +23,7 @@ Class Gradechart_model extends CI_Model
 	{
 		$this->db->select('c.course_code,c.theory_credit,c.practicle_credit,u.user_unique_id,u.first_name,u.last_name,u.user_unique_id,b.batch_name,
 		c.course_title,cp.campus_name,d.degree_name,s.semester_name,sum.course_id,sum.theory_internal,sum.practical_internal,
-		sum.theory_external,sum.practical_external');
+		sum.theory_external1,sum.practical_external');
 		$this->db->from('students_ug_marks sum');
 		$this->db->join('users u','u.id = sum.student_id','INNER');
 		$this->db->join('batches b','b.id = sum.batch_id','INNER');
@@ -114,7 +114,7 @@ Class Gradechart_model extends CI_Model
 			$this->db->order_by('u.first_name,u.last_name,csg.id');
 		}else
 			$this->db->order_by('c.id,u.first_name,u.last_name');
-		$result=$this->db->get()->result();
+		$result=$this->db->get()->result();//echo $this->db->last_query();exit;
 		return $result;
 	}
 	function get_subject_wise_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id)

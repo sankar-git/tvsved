@@ -630,7 +630,7 @@ class Grade extends CI_Controller {
 			  
 		   $data['numeralCodes'] =  array("I","II","III","IV","V","VI","VII","VIII","IX");
 		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
-		    $subject_name=$data['subject_wise_list'][0]->course_title;
+		    $subject_name=@$data['subject_wise_list'][0]->course_title;
 			$data['display'] = 'fail_list';
 			$data['title'] = "Failed Student's Report";
 		   //load the view and saved it into $html variable
