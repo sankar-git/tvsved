@@ -69,7 +69,7 @@ class Marks extends CI_Controller {
 	{
 		
 		
-		$data['page_title']="Upload UG Marks";
+		$data['page_title']="Upload UG/PG Marks";
 		$data['campuses'] = $this->Discipline_model->get_campus(); 
 		//$data['batches'] = $this->Discipline_model->get_batches(); 
 		//$data['semesters'] = $this->Discipline_model->get_semester(); 

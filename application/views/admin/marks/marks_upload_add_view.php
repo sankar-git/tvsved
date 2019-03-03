@@ -779,7 +779,7 @@
 		{
 			$(".external").show(); 
 			
-			$("#bvscwewew .external th").eq(2).show().html('Internal Theory(30)');
+			$("#bvscwewew .external th").eq(2).show().html('Internal Theory(20)');
 			$("#bvscwewew .external th").eq(3).html('TermPaper(10)');
 			$("#bvscwewew .external th").eq(4).show().html('Internal Practical(50/100)');
 			$("#bvscwewew .external th").eq(5).show().html('External Theory(70/100)');

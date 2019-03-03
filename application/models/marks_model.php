@@ -18,9 +18,12 @@ Class Marks_model extends CI_Model
 	 {
 		$this->db->select('c.id,c.course_code,course_title,c.course_group_id');
 		$this->db->from('courses c');
-        $this->db->join('tbl_course_assignment  ca','c.id = ca.course_id','LEFT');
-		$this->db->where(array('c.discipline_id'=>$discipline_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id));
-		$this->db->group_by('c.id');
+        //$this->db->join('tbl_course_assignment  ca','c.id = ca.course_id','LEFT');
+		if($program_id == 1)
+			$this->db->where(array('c.discipline_id'=>$discipline_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id));
+		else
+			$this->db->where(array('c.program_id'=>$program_id,'c.degree_id'=>$degree_id));
+		//$this->db->group_by('c.id');
 		$result	= $this->db->get()->result();
 		return $result;
 	 }

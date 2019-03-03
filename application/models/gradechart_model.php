@@ -43,18 +43,18 @@ Class Gradechart_model extends CI_Model
 	    	$this->db->select('u.first_name,u.last_name,u.user_unique_id,cp.campus_code,b.batch_name,c.course_title,c.course_code,du.dummy_value,d.degree_name,d.degree_code,sem.semester_name,csg.course_subject_name,csg.course_subject_title,c.theory_credit,c.practicle_credit');
 	    	$this->db->from('users u');
 	    	//$this->db->from('courses c');
-	    	$this->db->join('user_map_student_details ud','ud.user_id = u.id','INNER');
-	    	$this->db->join('batches b','b.id = ud.batch_id','INNER');
-		    $this->db->join('campuses cp','cp.id = ud.campus_id','INNER');
+	    	$this->db->join('user_map_student_details ud','ud.user_id = u.id','LEFT');
+	    	$this->db->join('batches b','b.id = ud.batch_id','LEFT');
+		    $this->db->join('campuses cp','cp.id = ud.campus_id','LEFT');
 			$this->db->join('student_assigned_courses sa','sa.student_id = u.id','LEFT');
 		    $this->db->join('courses c','c.id = sa.course_id','LEFT');
-		    $this->db->join('semesters sem','sem.id = c.semester_id','INNER');
+		    $this->db->join('semesters sem','sem.id = sa.semester_id','LEFT');
 		    $this->db->join('degrees d','d.id = ud.degree_id','INNER');
 		    $this->db->join('tbl_dummy du','du.student_id = u.id','LEFT');
 		    $this->db->join('course_subject_groups csg','csg.id = c.course_subject_id','LEFT');
 		    
 		    
-		    $this->db->where(array('ud.campus_id'=>$campus_id,'ud.degree_id'=>$degree_id,'ud.batch_id'=>$batch_id,'c.id'=>$course_id,'c.semester_id'=>$semester_id));$this->db->group_by('u.id');
+		    $this->db->where(array('sa.campus_id'=>$campus_id,'sa.degree_id'=>$degree_id,'sa.batch_id'=>$batch_id,'c.id'=>$course_id,'sa.semester_id'=>$semester_id));$this->db->group_by('u.id');
 		    $result	= $this->db->get()->result();
 			//echo $this->db->last_query();exit;
 	    	return $result;
