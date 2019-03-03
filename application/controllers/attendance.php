@@ -484,7 +484,7 @@ function drawMultSeries() {
 		//print_r($period);exit;
 		$attendance_date_from=$attendance_date_fromArr[2].'-'.$attendance_date_fromArr[1].'-'.$attendance_date_fromArr[0];
 		$attendance_date_to=$attendance_date_toArr[2].'-'.$attendance_date_toArr[1].'-'.$attendance_date_toArr[0];
-		
+		$dataChart='';
 		$p = 0;
 			$a = 0;
 			//$attendance_date=$this->input->post('attendance_date');
@@ -671,7 +671,7 @@ function drawMultSeries() {
 		redirect('authenticate', 'refresh');
 		}
 		if($sessdata[0]->role_id==2){
-			$data['degrees'] = $this->Discipline_model->get_degree($sessdata[0]->campus);
+			$data['degrees'] = $this->Discipline_model->get_degree(@$sessdata[0]->campus);
 		}else
 			$data['degrees'] = $this->Discipline_model->get_degree();
 		$data['page_title']="Holiday List";

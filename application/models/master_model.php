@@ -387,12 +387,19 @@ Class Master_model extends CI_Model
 	}
 	function get_degree_by_program_id($id,$campus_id='')
     {
-		$this->db->select('d.*');
-		 $this->db->from('campus_map_degree_and_programs as cmd');
-		$this->db->join('degrees d','d.id = cmd.degree_id','INNER');
-		$this->db->where(array('cmd.program_id'=>$id));
-		if($campus_id>0)
-		$this->db->where(array('cmd.campus_id'=>$campus_id));
+		if($id >1){
+			$this->db->select('d.*');
+			$this->db->from('degrees as d');
+			$this->db->where(array('d.program_id'=>$id));
+		}else{
+			$this->db->select('d.*');
+			$this->db->from('campus_map_degree_and_programs as cmd');
+			$this->db->join('degrees d','d.id = cmd.degree_id','INNER');
+			$this->db->where(array('cmd.program_id'=>$id));
+			if($campus_id>0)
+			$this->db->where(array('cmd.campus_id'=>$campus_id));
+		}
+		$this->db->order_by('degree_name');
 		$result=$this->db->get()->result();//echo $this->db->last_query();exit;
 		return $result;
 	}
@@ -416,10 +423,16 @@ Class Master_model extends CI_Model
 	}
 	function get_semester_by_degree_id($degree_id)
 	{
-		$this->db->select('s.id,s.semester_name');
-        $this->db->from('semesters as s');
-        $this->db->join('degree_map_semester m','s.id = m.semester_id','INNER');
-        $this->db->where(array('m.degree_id' => $degree_id));
+		if($degree_id == 1){
+			$this->db->select('s.id,s.semester_name');
+			$this->db->from('semesters as s');
+			$this->db->join('degree_map_semester m','s.id = m.semester_id','INNER');
+			$this->db->where(array('m.degree_id' => $degree_id));
+		}else{
+			$this->db->select('s.id,s.semester_name');
+			$this->db->from('semesters as s');
+			$this->db->where_in('s.id' ,array(3,8,9,10));
+		}
         $result	= $this->db->get()->result();
 		return $result;
 	}
@@ -749,13 +762,20 @@ Class Master_model extends CI_Model
 	{
 		$this->db->select('c.*');
 		$this->db->from('courses c');
-        $this->db->where(array('c.discipline_id'=>$discipline_id));
-		if( !empty($degree_id) )
-			$this->db->where(array('c.degree_id'=>$degree_id));
-		if( !empty($semester_id) )
-			$this->db->where(array('c.semester_id'=>$semester_id));
-		if( !empty($program_id) )
-			$this->db->where(array('c.program_id'=>$program_id));
+		if($program_id>1){
+			if( !empty($degree_id) )
+				$this->db->where(array('c.degree_id'=>$degree_id));
+			if( !empty($program_id) )
+				$this->db->where(array('c.program_id'=>$program_id));
+		}else{
+			$this->db->where(array('c.discipline_id'=>$discipline_id));
+			if( !empty($degree_id) )
+				$this->db->where(array('c.degree_id'=>$degree_id));
+			if( !empty($semester_id) )
+				$this->db->where(array('c.semester_id'=>$semester_id));
+			if( !empty($program_id) )
+				$this->db->where(array('c.program_id'=>$program_id));
+		}
         $result	= $this->db->get()->result();
 		return $result;
 	}

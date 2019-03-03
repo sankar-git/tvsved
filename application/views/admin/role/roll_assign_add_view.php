@@ -115,7 +115,13 @@
 	
 	$(document).ready(function() {
 		$("#sales_dob").datepicker({format: 'dd-mm-yyyy',autoclose: true});
-		
+		$('#user_id').multiselect({
+			        	includeSelectAllOption: true,
+			        	enableFiltering: true,
+						buttonWidth: '345px',
+                        maxHeight: 350
+						
+			        });
 	});
   function getUser()
   {

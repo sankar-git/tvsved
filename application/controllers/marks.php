@@ -266,6 +266,7 @@ class Marks extends CI_Controller {
 			$m=$l+$k+$j+$cc;
 			$n=$m+$l+$k+$j+$cc;
 			$o=$n+$m+$l+$k+$j+$cc;
+			if(count($studentList)>0){
 			foreach($studentList as $students)
 			{ 
 				if($marks_type=='1')
@@ -345,11 +346,119 @@ class Marks extends CI_Controller {
 				}
 			 
 			}
+	   }else{
+		   $trdata='<tr><td>No Data Found<td></tr>';
+	   }
 			echo $trdata; 
 		//}
 		
 	//}
     		 
+	}
+	function getStudentAssignedPGMarkss(){
+		$campus_id=$this->input->post('campus_id');
+		$program_id=$this->input->post('program_id');
+		$degree_id=$this->input->post('degree_id');
+		$batch_id=$this->input->post('batch_id');
+		$semester_id=$this->input->post('semester_id');
+		$discipline_id=$this->input->post('discipline_id');
+		$course_id=$this->input->post('course_id');
+		$marks_type=$this->input->post('marks_type');
+		$practicle_credit=$this->input->post('practicle_credit');
+		$theory_credit=$this->input->post('theory_credit');
+		
+	    $send['campus_id']=$campus_id;
+	    $send['program_id']=$program_id;
+	    $send['degree_id']=$degree_id;
+	    $send['batch_id']=$batch_id;
+	    $send['semester_id']=$semester_id;
+	    $send['discipline_id']=$discipline_id;
+	    $send['course_id']=$course_id;
+		$theroy_class='';
+	    $practical_class='';
+	    $assignment_class='';
+	    $trdata='';
+		$studentList= $this->Marks_model->get_student_assigned_marks($send);
+		if(!empty($studentList[0]->course_id)){
+		  foreach($studentList as $students)
+			{
+				if($marks_type=='1')
+				{
+					$trdata.='<tr>
+				            <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
+							<input type="hidden" name="student_id[]" value="'.$students->id.'">
+							</td>
+							<td>'.$students->first_name.' '.$students->last_name.'</td>';
+					$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal1.'" ></td>';
+					$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'"  ></td>';
+					$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" ></td>';
+					$trdata.='</tr>';
+				}
+				if($marks_type=='2'){
+					$readonly='';
+					$trdata.='<tr>
+				         <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.' 
+						    <input type="hidden" name="student_id[]" value="'.$students->id.'"></td>
+						  <td>'.$students->first_name.' '.$students->last_name.'</td>';
+					$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal1.'" '.$readonly.' ></td>';
+					$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'" '.$readonly.' ></td>';
+					$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" '.$readonly.' ></td>';
+					$trdata.='<td><input type="text" name="theory_external[]"  value="'.$students->theory_external1.'" ></td></tr>';
+				}
+			}
+			echo $trdata; 
+		}else
+		{   
+			$studentListNew= $this->Marks_model->get_student_assigned_marks_course_where_not_inserted($send);
+			if(!empty($studentListNew))
+			{
+				$trdata='';
+				foreach($studentListNew as $students)
+				{	
+					$readonly=' ';
+					if($marks_type=='1')
+					{
+						$trdata.='<tr>
+				        <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
+						    <input type="hidden" name="student_id[]" value="'.$students->id.'">
+						</td>
+				          <td>'.$students->first_name.' '.$students->last_name.'</td>';
+						$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="" ></td>';
+							$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.@$students->assignment_mark.'" '.$readonly.' ></td>';
+						$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="" ></td>';
+						$trdata.='</tr>';
+					}
+					if($marks_type=='2'){
+						$readonly=' ';
+						if($course_id==$students->course_id)
+						{
+							$trdata.='<tr>
+								 <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
+									 <input type="hidden" name="student_id[]" value="'.$students->id.'"> 
+								 </td><td>'.$students->first_name.' '.$students->last_name.'</td>';
+							$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal.'" '.$readonly.' ></td>';
+							$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'" '.$readonly.' ></td>';
+							$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" '.$readonly.' ></td>';
+							$trdata.='<td><input type="text" name="theory_external[]"  value="" ></td></tr>';
+						}
+						else
+						{
+							$trdata.='<tr>
+								 <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
+									 <input type="hidden" name="student_id[]" value="'.$students->id.'">
+								 </td>
+								  <td>'.$students->first_name.' '.$students->last_name.'</td>';
+								  
+							$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="" '.$readonly.'></td>';
+							$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.@$students->assignment_mark.'" '.$readonly.' "></td>';
+							$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="" '.$readonly.'></td>';
+							$trdata.='<td><input type="text" name="theory_external[]"   value="" '.$readonly.'></td></tr>';	
+						}
+					}
+				}
+				echo $trdata; 
+			}
+		}	
 	}
 	
 	//**************************************For B.Tech colleges****************************//
@@ -419,15 +528,15 @@ class Marks extends CI_Controller {
 				$checked = 'checked';
 				$trdata.='<tr>
 				            <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
-							<input type="hidden" name="student_idd[]" value="'.$students->id.'">
+							<input type="hidden" name="student_id[]" value="'.$students->id.'">
 							</td>
 							
 							<td>'.$students->first_name.' '.$students->last_name.'</td>';
 							if($theory_credit >0)
-								$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal1.'" tabindex="'.$i.'"></td>';
-							$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'"  tabindex="'.$k.'"></td>';
+								$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal1.'" ></td>';
+							$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'"  ></td>';
 							if($practicle_credit >0)
-								$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" tabindex="'.$j.'"></td>';
+								$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" ></td>';
 					    $trdata.='</tr>';
 				}
 				if($marks_type=='2'){
@@ -443,15 +552,15 @@ class Marks extends CI_Controller {
 				$readonly='';
 				$trdata.='<tr>
 				         <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.' 
-						    <input type="hidden" name="student_idd[]" value="'.$students->id.'"></td>
+						    <input type="hidden" name="student_id[]" value="'.$students->id.'"></td>
 						 
 						  <td>'.$students->first_name.' '.$students->last_name.'</td>';
 						  if($theory_credit >0)
-							$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal1.'" '.$readonly.' tabindex="'.$k.'"></td>';
-						$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'" '.$readonly.' tabindex="'.$k.'"></td>';
+							$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal1.'" '.$readonly.' ></td>';
+						$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'" '.$readonly.' ></td>';
 						if($practicle_credit >0)
-							$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" '.$readonly.' tabindex="'.$l.'"></td>';
-						  $trdata.='<td><input type="text" name="theory_external[]" class="theory_external_btech" value="'.$students->theory_external1.'" tabindex="'.$m.'"></td>
+							$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" '.$readonly.' ></td>';
+						  $trdata.='<td><input type="text" name="theory_external[]" class="theory_external_btech" value="'.$students->theory_external1.'" ></td>
 						  
 						
 						
@@ -477,7 +586,7 @@ class Marks extends CI_Controller {
 				
 			
 			foreach($studentListNew as $students)
-			{
+			{	$readonly=' ';
 				if($marks_type=='1')
 				{
 					
@@ -490,14 +599,14 @@ class Marks extends CI_Controller {
 				$checked = 'checked';
 				$trdata.='<tr>
 				        <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
-						    <input type="hidden" name="student_idd[]" value="'.$students->id.'">
+						    <input type="hidden" name="student_id[]" value="'.$students->id.'">
 						</td>
 				          <td>'.$students->first_name.' '.$students->last_name.'</td>';
 						   if($theory_credit >0)
 								$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="" tabindex="'.$i.'"></td>';
-							$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.@$students->assignment_mark.'" '.$readonly.' tabindex="'.$k.'"></td>';
+							$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.@$students->assignment_mark.'" '.$readonly.' ></td>';
 							if($practicle_credit >0)
-								$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="" tabindex="'.$j.'"></td>';
+								$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="" ></td>';
 						
 					$trdata.='</tr>';
 				}
@@ -515,16 +624,16 @@ class Marks extends CI_Controller {
 				{
 				$trdata.='<tr>
 				         <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
-						     <input type="hidden" name="student_idd[]" value="'.$students->id.'"> 
+						     <input type="hidden" name="student_id[]" value="'.$students->id.'"> 
 						 </td>
 						
 						<td>'.$students->first_name.' '.$students->last_name.'</td>';
 						if($theory_credit >0)
-						  $trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal.'" '.$readonly.' tabindex="'.$k.'"></td>';
-					  $trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'" '.$readonly.' tabindex="'.$k.'"></td>';
+						  $trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal.'" '.$readonly.' ></td>';
+					  $trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'" '.$readonly.' ></td>';
 					  if($practicle_credit >0)
-						  $trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" '.$readonly.' tabindex="'.$l.'"></td>';
-						   $trdata.='<td><input type="text" name="theory_external[]" class="theory_external_btech" value="" tabindex="'.$m.'"></td>
+						  $trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" '.$readonly.' ></td>';
+						   $trdata.='<td><input type="text" name="theory_external[]" class="theory_external_btech" value="" ></td>
 						  
 						
 						
@@ -535,12 +644,12 @@ class Marks extends CI_Controller {
 				{
 				$trdata.='<tr>
 				         <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
-						     <input type="hidden" name="student_idd[]" value="'.$students->id.'">
+						     <input type="hidden" name="student_id[]" value="'.$students->id.'">
 						 </td>
 						  <td>'.$students->first_name.' '.$students->last_name.'</td>';
 						  if($theory_credit >0)
 							  $trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="" '.$readonly.'></td>';
-						  $trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'" '.$readonly.' tabindex="'.$k.'"></td>';
+						  $trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.@$students->assignment_mark.'" '.$readonly.' "></td>';
 						   if($practicle_credit >0)
 							$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="" '.$readonly.'></td>';
 						  $trdata.='<td><input type="text" name="theory_external[]" class="theory_external_btech"  value="" '.$readonly.'></td>
@@ -556,11 +665,7 @@ class Marks extends CI_Controller {
 		}
 	}		
 	}
-	
-	
-	
-	
-	
+		
 	function saveUGInternalMarksNew()
 	{
 		//print_r($_POST); exit;
@@ -847,15 +952,15 @@ class Marks extends CI_Controller {
 	{
 	 	//print_r($_POST); exit;
 		$register_date_time=date('Y-m-d H:i:s');
-		$campus_id=$this->input->post('campus_idd');
-		$program_id=$this->input->post('program_idd');
-		$degree_id=$this->input->post('degree_idd');
-		$batch_id=$this->input->post('batch_idd');
-		$semester_id=$this->input->post('semester_idd');
-		$discipline_id=$this->input->post('discipline_idd');
-		$course_id=$this->input->post('course_idd');
-		$marks_type=$this->input->post('marks_typee');
-		$student_ids=$this->input->post('student_idd');
+		$campus_id=$this->input->post('campus_id');
+		$program_id=$this->input->post('program_id');
+		$degree_id=$this->input->post('degree_id');
+		$batch_id=$this->input->post('batch_id');
+		$semester_id=$this->input->post('semester_id');
+		$discipline_id=$this->input->post('discipline_id');
+		$course_id=$this->input->post('course_id');
+		$marks_type=$this->input->post('marks_type');
+		$student_ids=$this->input->post('student_id');
 		$theory_internal=$this->input->post('theory_internal');
 		$assignment_markArr=$this->input->post('assignment_mark');
 		$practical_internal=$this->input->post('practical_internal');
@@ -870,7 +975,7 @@ class Marks extends CI_Controller {
 						$practical_marks=$practical_internal[$i];
 						$assignment_mark=$assignment_markArr[$i];
 						$student_id=$student_ids[$i];
-						$this->Marks_model->delete_ug_marks($student_id,$course_id); //delete old and save new
+						//$this->Marks_model->delete_ug_marks($student_id,$course_id); //delete old and save new
 						$marks_sum=$theory_marks+$practical_marks;//adding internal marks
 						$data=array(
 							'campus_id'=>$campus_id,
@@ -891,7 +996,7 @@ class Marks extends CI_Controller {
 						//p($data); 
 						
 						
-						$save = $this->Marks_model->save_ug_marks_new($data); 
+						$save = $this->Marks_model->update_ug_marks($data); 
 						//print_r($save);
 						if(!empty($save))
 						{
@@ -1116,7 +1221,7 @@ class Marks extends CI_Controller {
 		//print_r($data['programs']); exit;
 		$str = '';
          foreach($data['courses'] as $k=>$v){ 
-			if(empty($v->course_subject_name))
+			if(empty(@$v->course_subject_name))
 				$str .= "<option value=".$v->id.">".$v->course_title."</option>";
 			else
 				$str .= "<option value=".$v->id.">".$v->course_title.' ('.$v->course_code.")</option>";
