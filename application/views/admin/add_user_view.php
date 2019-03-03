@@ -35,13 +35,16 @@ $this->load->view('admin/helper/header');?>
               <h3 class="box-title" style="color:green"><?php echo $this->session->flashdata('message'); ?></h3>   
             </div>
               
-                  
+                   
            
 		
 
             <!-- /.box-header -->
             <!-- form start -->
             <form role="form" name="userform" id="userform" method="post" action="<?php echo base_url();?>admin/saveUser" enctype="multipart/form-data">
+			 <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
               <div class="box-body">
 			    <div class="row">
 					<div class="form-group col-md-3">
@@ -121,11 +124,11 @@ $this->load->view('admin/helper/header');?>
 					<div class="form-group col-md-12"><i class="fa fa-book"></i> Basic Info</div>
 					<br>
 					<div class="form-group col-md-3">
-					  <label for="password_text"><i class="fa fa-lock"></i>Application No<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="password_text"><i class="fa fa-lock"></i>Application No</label>
 					  <input type="text" class="form-control" id="applicationno" name="applicationno" placeholder="Application No">
 					</div>
 					<div class="form-group col-md-3">
-					  <label for="user_type"><i class="fa fa-intersex custom"></i> Blood Group<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="user_type"><i class="fa fa-intersex custom"></i> Blood Group</label>
 					 
 					 <select name="bloodgroup" id="bloodgroup" class="form-control">
 					  <option value="">--Select Blood Group--</option>
@@ -140,7 +143,7 @@ $this->load->view('admin/helper/header');?>
 					</div>
 					
 					<div class="form-group col-md-3">
-					  <label for="user_type"><i class="fa fa-intersex custom"></i> Mother Tongue<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="user_type"><i class="fa fa-intersex custom"></i> Mother Tongue</label>
 					  <select name="mothertongue" id="mothertongue" class="form-control">
 					  <option value="">--Select Mother Tongue--</option>
 					  <option value="English">English</option>
@@ -152,7 +155,7 @@ $this->load->view('admin/helper/header');?>
 					  </select>
 					</div>
 					<div class="form-group col-md-3">
-					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Day Scholar/Hosteller<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Day Scholar/Hosteller</label>
 					   <select name="residenttype" id="residenttype" class="form-control" >
 					  <option value="">--Select Resident Type--</option>
 					  
@@ -168,7 +171,7 @@ $this->load->view('admin/helper/header');?>
 				<div class="row">
 									<div class="form-group col-md-3">
 
-						  <label for="religion"><i class="fa fa-venus custom"></i> Religion<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-venus custom"></i> Religion</label>
 						   <select name="religion" id="religion" class="form-control">
 						      <option value="">--Select Religion--</option>
 							  <option value="1">Muslim</option>
@@ -177,7 +180,7 @@ $this->load->view('admin/helper/header');?>
 						   </select> 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="nationality"><i class="fa fa-flag"></i> Nationality<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="nationality"><i class="fa fa-flag"></i> Nationality</label>
 						   <select name="nationality" id="nationality" class="form-control">
 						      <option value="">--Select Nationality--</option>
 							  <option value="1">Indian</option>
@@ -186,7 +189,7 @@ $this->load->view('admin/helper/header');?>
 						   </select> 
 						</div>
 						<div class="form-group col-md-3">
-					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Community<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Community</label>
 					   <select name="community" id="community" class="form-control" onchange="getCaste();">
 					  <option value="">--Select Community--</option>
 					  <?php foreach($community as $rescom){?>
@@ -196,7 +199,7 @@ $this->load->view('admin/helper/header');?>
 					  </select>
 					</div>
 					<div class="form-group col-md-3">
-					  <label for="caste"><i class="fa fa-birthday-cake"></i> Caste<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="caste"><i class="fa fa-birthday-cake"></i> Caste</label>
 					  <select name="caste" id="caste" class="form-control" >
 					  <option value="">--Select Caste--</option>
 					  </select>
@@ -226,8 +229,7 @@ $this->load->view('admin/helper/header');?>
 						  <label for="occupation"><i class="fa fa-tasks"></i>Degree<span style="color:red;font-weight: bold;">*</span></label>
 						   <select name="degree_id" id="degree_id" class="form-control">
 							  <option value="">--Select Degree--</option>
-							 <option value="1">A</option>
-							  <option value="2">B</option>
+							 
 						  </select>
 						</div>
 						<div class="form-group col-md-3">
@@ -245,30 +247,30 @@ $this->load->view('admin/helper/header');?>
 					<div class="form-group col-md-12"><i class="fa fa-book"></i> Permanent Address</div>
 					<br>
 						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Address 1<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address"><i class="fa fa-address-book-o"></i> Address 1</label>
 						  <input type="text" class="form-control" id="address" name="address" placeholder="Enter Address">
 						 
 						</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Address 2<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address"><i class="fa fa-address-book-o"></i> Address 2</label>
 						  <input type="text" class="form-control" id="address2" name="address2" placeholder="Enter Address">
 						 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Address 3<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address"><i class="fa fa-address-book-o"></i> Address 3</label>
 						  <input type="text" class="form-control" id="address3" name="address3" placeholder="Enter Address">
 						 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Address 4<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address"><i class="fa fa-address-book-o"></i> Address 4</label>
 						  <input type="text" class="form-control" id="address4" name="address4" placeholder="Enter Address">
 						 
 						</div>
 						</div>
 						 <div class="row">
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> Country<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-flag"></i> Country</label>
 						   <select name="country_id" id="country_id" class="form-control" onchange="getState('state_id');">
 						      <option value="">--Select Country--</option>
 							  <?php foreach($countries as $country) { ?>
@@ -279,13 +281,13 @@ $this->load->view('admin/helper/header');?>
 						</div>
 										   
 						<div class="form-group col-md-3">
-						  <label for="state"><i class="fa fa-flag"></i> State<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="state"><i class="fa fa-flag"></i> State</label>
 						   <select name="state_id" id="state_id" class="form-control">
 						      <option value="">--Select State--</option>
 							</select> 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> City<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-flag"></i> City</label>
 						   <select name="city_id" id="city_id" class="form-control" >
 						      <option value="">--Select City--</option>
 							  <?php foreach($city as $cities) { ?>
@@ -295,7 +297,7 @@ $this->load->view('admin/helper/header');?>
 						   </select> 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="zip"><i class="fa fa-map-pin"></i> Zip Code<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="zip"><i class="fa fa-map-pin"></i> Zip Code</label>
 						  <input type="text" class="form-control" id="zip_code" maxlength="6" name="zip_code" placeholder="Enter Zip Code">
 						 
 						</div>
@@ -304,11 +306,11 @@ $this->load->view('admin/helper/header');?>
 						
 						
 						<div class="form-group col-md-3">
-						  <label for="mother"><i class="fa fa-female"></i> Guardian/Spouse Name<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="mother"><i class="fa fa-female"></i> Guardian/Spouse Name</label>
 						  <input type="text" class="form-control" id="guardian_name" name="guardian_name" placeholder="Enter Guardian/Spouse Name">
 						</div>
 						<div class="form-group col-md-3">
-						   <label for="state"><i class="fa fa-flag"></i>Academic/Vocational<span style="color:red;font-weight: bold;">*</span></label>
+						   <label for="state"><i class="fa fa-flag"></i>Academic/Vocational</label>
 						   <select name="academicvocational" id="academicvocational" class="form-control">
 						      <option value="">--Select Academic/Vocational--</option>
 						      <option value="Academic">Academic</option>
@@ -322,19 +324,19 @@ $this->load->view('admin/helper/header');?>
 					<div class="form-group col-md-12"><i class="fa fa-book"></i> Local Address</div>
 					<br>
 						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Address<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address"><i class="fa fa-address-book-o"></i> Address</label>
 						  <input type="text" class="form-control" id="address_local" name="address_local" placeholder="Enter Address">
 						 
 						</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Street<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address"><i class="fa fa-address-book-o"></i> Street</label>
 						  <input type="text" class="form-control" id="street_local" name="street_local" placeholder="Enter Street">
 						 
 						</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> Country<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-flag"></i> Country</label>
 						   <select name="country_id_local" id="country_id_local" class="form-control" onchange="getState('state_id_local');">
 						      <option value="">--Select Country--</option>
 							  <?php foreach($countries as $country) { ?>
@@ -345,7 +347,7 @@ $this->load->view('admin/helper/header');?>
 						</div>
 										   
 						<div class="form-group col-md-3">
-						  <label for="state"><i class="fa fa-flag"></i> State<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="state"><i class="fa fa-flag"></i> State</label>
 						   <select name="state_id_local" id="state_id_local" class="form-control">
 						      <option value="">--Select State--</option>
 							</select> 
@@ -353,7 +355,7 @@ $this->load->view('admin/helper/header');?>
 						</div>
 				   <div class="row">
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> City<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-flag"></i> City</label>
 						   <select name="city_id" id="city_id" class="form-control" >
 						      <option value="">--Select City--</option>
 							  <?php foreach($city as $cities) { ?>
@@ -363,13 +365,13 @@ $this->load->view('admin/helper/header');?>
 						   </select> 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="zip"><i class="fa fa-map-pin"></i> Zip Code<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="zip"><i class="fa fa-map-pin"></i> Zip Code</label>
 						  <input type="text" class="form-control" id="zip_code_local" maxlength="6" name="zip_code_local" placeholder="Enter Zip Code">
 						 
 						</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="state"><i class="fa fa-flag"></i> Type of scholarship Received<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="state"><i class="fa fa-flag"></i> Type of scholarship Received</label>
 						   <select name="scholarship" id="scholarship" class="form-control">
 						      <option value="">--Select Type of scholarship Received--</option>
 						      <option value="A">A</option>
@@ -440,7 +442,7 @@ $this->load->view('admin/helper/header');?>
 					</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> Medium of Instruction<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-flag"></i> Medium of Instruction</label>
 						   <select name="medium_instr" id="medium_instr" class="form-control" >
 						      <option value="">--Select Medium of Instruction--</option>
 							  
@@ -454,7 +456,7 @@ $this->load->view('admin/helper/header');?>
 						</div>
 										   
 						<div class="form-group col-md-3">
-						  <label for="state"><i class="fa fa-flag"></i> Mode of Admission<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="state"><i class="fa fa-flag"></i> Mode of Admission</label>
 						   <select name="modeofadmission" id="modeofadmission" class="form-control">
 						      <option value="">--Select Mode of Admission--</option>
 						      <option value="N/A">N/A</option>
@@ -710,7 +712,7 @@ $this->load->view('admin/helper/header');?>
 					</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> Remarks<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="religion"><i class="fa fa-flag"></i> Remarks</label>
 						   <textarea name="medium_instr" id="medium_instr" class="form-control"></textarea> 
 						</div>
 										   
@@ -818,7 +820,7 @@ $this->load->view('admin/helper/header');?>
 					</div>
 					
 					<div class="form-group col-md-3">
-						  <label for="mother"><i class="fa fa-female"></i>Campus Preference 1<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="mother"><i class="fa fa-female"></i>Campus Preference 1</label>
 						 <select name="campus_preference1" id="campus_preference1" class="form-control" >
 							  <option value="">--Select Campus--</option>
 							 <?php foreach($campuses as $campus){?>
@@ -828,7 +830,7 @@ $this->load->view('admin/helper/header');?>
 						</div>
 					
 					<div class="form-group col-md-3">
-						  <label for="mother"><i class="fa fa-female"></i>Campus Preference 2<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="mother"><i class="fa fa-female"></i>Campus Preference 2</label>
 						 <select name="campus_preference2" id="campus_preference2" class="form-control" >
 							  <option value="">--Select Campus--</option>
 							 <?php foreach($campuses as $campus){?>
@@ -838,7 +840,7 @@ $this->load->view('admin/helper/header');?>
 						</div>
 					
 					<div class="form-group col-md-3">
-						  <label for="mother"><i class="fa fa-female"></i>Campus Preference 3<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="mother"><i class="fa fa-female"></i>Campus Preference 3</label>
 						 <select name="campus_preference3" id="campus_preference3" class="form-control" >
 							  <option value="">--Select Campus--</option>
 							 <?php foreach($campuses as $campus){?>
@@ -850,7 +852,7 @@ $this->load->view('admin/helper/header');?>
 				  
 				  <div class="row">
 				  <div class="form-group col-md-3">
-						  <label for="mother"><i class="fa fa-female"></i>Campus Preference 4<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="mother"><i class="fa fa-female"></i>Campus Preference 4</label>
 						 <select name="campus_preference4" id="campus_preference4" class="form-control" >
 							  <option value="">--Select Campus--</option>
 							 <?php foreach($campuses as $campus){?>
@@ -1169,16 +1171,16 @@ $this->load->view('admin/helper/header');?>
 				</div>
 					<div class="row">
 						<div class="form-group col-md-3">
-						  <label for="parent"><i class="fa fa-user-circle-o"></i> Parent Name<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="parent"><i class="fa fa-user-circle-o"></i> Parent Name</label>
 						  <input type="text" class="form-control" id="parent_name" name="parent_name" placeholder="Enter Parent Name">
 						 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="mother"><i class="fa fa-female"></i> Mother Name<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="mother"><i class="fa fa-female"></i> Mother Name</label>
 						  <input type="text" class="form-control" id="mother_name" name="mother_name" placeholder="Enter Mother Name">
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="occupation"><i class="fa fa-tasks"></i> Occupation<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="occupation"><i class="fa fa-tasks"></i> Occupation</label>
 						   <select name="occupation" id="occupation" class="form-control">
 							  <option value="">--Select Occupation--</option>
 							  <option value="1">Cultivation</option>
@@ -1187,23 +1189,23 @@ $this->load->view('admin/helper/header');?>
 						</div>
 						
 						<div class="form-group col-md-3">
-					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Annual Income<span style="color:red;font-weight: bold;">*</span></label>
+					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Annual Income</label>
 					  <input type="text" class="form-control" id="annualincome" name="annualincome" placeholder="Enter Annual Income">
 					</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="father_contact"><i class="fa fa-phone"></i> Father Contact<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="father_contact"><i class="fa fa-phone"></i> Father Contact</label>
 						  <input type="text" class="form-control" id="father_contact" name="father_contact" placeholder="Enter Father Contact">
 						</div>
 				   
 				  
 						<div class="form-group col-md-3">
-						  <label for="parent"><i class="fa fa-phone"></i> Alternate Contact<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="parent"><i class="fa fa-phone"></i> Alternate Contact</label>
 						  <input type="text" class="form-control" id="alternate_contact" name="alternate_contact" placeholder="Enter Alternate Contact">
 						 
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="mother"><i class="fa fa-envelope"></i> Father Email<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="mother"><i class="fa fa-envelope"></i> Father Email</label>
 						  <input type="text" class="form-control" id="father_email" name="father_email" placeholder="Enter Father Email">
 						</div>
 						 <div class="form-group col-md-3">
@@ -1236,46 +1238,46 @@ $this->load->view('admin/helper/header');?>
 				<div><i class="fa fa-book"></i>Teacher Info</div>
 					<div class="row">
 						<div class="form-group col-md-3">
-						  <label for="address_line1"> Address Line1<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line1"> Address Line1</label>
 						  <input type="text" class="form-control" id="address_line1" name="address_line1" placeholder="Address Line1">
 						  
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line2"> Address Line2<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line2"> Address Line2</label>
 						  <input type="text" class="form-control" id="address_line2" name="address_line2" placeholder="Address Line2">
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line3"> Address Line3<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line3"> Address Line3</label>
 						  <input type="text" class="form-control" id="address_line3" name="address_line3" placeholder="Address Line3">
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line4"> Address Line4<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line4"> Address Line4</label>
 						  <input type="text" class="form-control" id="address_line4" name="address_line4" placeholder="Address Line4">
 						</div>
 				   </div>
 				   <div class="row">
 						<div class="form-group col-md-3">
-						  <label for="address_line1"> Landline No<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line1"> Landline No</label>
 						  <input type="text" class="form-control" id="landline_number" name="landline_number" placeholder="Landline No">
 						  
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line2">Employment Id<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line2">Employment Id</label>
 						  <input type="text" class="form-control" id="employee_id" name="employee_id" placeholder="Employment Id">
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line3">Qualification<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line3">Qualification</label>
 						  <input type="text" class="form-control" id="qualification" name="qualification" placeholder="Qualification">
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line4">Date of Join<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line4">Date of Join</label>
 						  <input type="text" class="form-control" id="date_of_joining" name="date_of_joining" placeholder="Date of Join">
 						</div>
 				   </div>
 				   
 				    <div class="row">
 						<div class="form-group col-md-3">
-						  <label for="address_line1">Designation<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line1">Designation</label>
 						    <select name="designation" id="designation" class="form-control" >
 						      <option value="">--Select Designation--</option>
 							  <option value="1">Professor</option>
@@ -1289,7 +1291,7 @@ $this->load->view('admin/helper/header');?>
 						  
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line2">Department<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line2">Department</label>
 						  <input type="text" class="form-control" id="department" name="department" placeholder="Department">
 						</div>
 						<div class="form-group col-md-3">
@@ -1319,26 +1321,26 @@ $this->load->view('admin/helper/header');?>
 				  
 					<div class="row">
 						<div class="form-group col-md-3">
-						  <label for="address_line1"> Address Line1<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line1"> Address Line1</label>
 						  <input type="text" class="form-control" id="user_address_line1" name="user_address_line1" placeholder="Address Line1">
 						  
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line2"> Address Line2<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line2"> Address Line2</label>
 						  <input type="text" class="form-control" id="user_address_line2" name="user_address_line2" placeholder="Address Line2">
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line3"> Address Line3<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line3"> Address Line3</label>
 						  <input type="text" class="form-control" id="user_address_line3" name="user_address_line3" placeholder="Address Line3">
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line4"> Address Line4<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line4"> Address Line4</label>
 						  <input type="text" class="form-control" id="user_address_line4" name="user_address_line4" placeholder="Address Line4">
 						</div>
 				   </div>
 				   <div class="row">
 						<div class="form-group col-md-3">
-						  <label for="address_line1"> Landline No<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line1"> Landline No</label>
 						  <input type="text" class="form-control" id="user_landline_number" name="landline_number">
 						  
 						</div>
@@ -1354,27 +1356,27 @@ $this->load->view('admin/helper/header');?>
 				  
 					<div class="row">
 						<div class="form-group col-md-3">
-						  <label for="address_line1"> Address Line1<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line1"> Address Line1</label>
 						  <input type="text" class="form-control" id="user_address_line1" name="user_address_line1" placeholder="Address Line1">
 						  
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line2"> Address Line2<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line2"> Address Line2</label>
 						  <input type="text" class="form-control" id="user_address_line2" name="user_address_line2" placeholder="Address Line2">
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line3"> Address Line3<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line3"> Address Line3</label>
 						  <input type="text" class="form-control" id="user_address_line3" name="user_address_line3" placeholder="Address Line3">
 						</div>
 						<div class="form-group col-md-3">
-						  <label for="address_line4"> Address Line4<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line4"> Address Line4</label>
 						  <input type="text" class="form-control" id="user_address_line4" name="user_address_line4" placeholder="Address Line4">
 						</div>
 				   </div>
 				   
 				    <div class="row">
 						<div class="form-group col-md-3">
-						  <label for="address_line1"> Landline No<span style="color:red;font-weight: bold;">*</span></label>
+						  <label for="address_line1"> Landline No</label>
 						  <input type="text" class="form-control" id="user_landline_number" name="landline_number">
 						</div>
 						<div class="form-group col-md-3">
@@ -1411,7 +1413,7 @@ $this->load->view('admin/helper/header');?>
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Save</button>
               </div>
             </form>
           </div>
@@ -1602,7 +1604,7 @@ $this->load->view('admin/helper/header');?>
 			for (i = 0; i < param.length; i++) {
 
 				var checkElement = $(param[i]);
-				var success = !$.validator.methods.equalTo.call(this, value, element, checkElement);
+				var success = !jQuery.validator.methods.equalTo.call(this, value, element, checkElement);
 				// console.log('success', success);
 				if(!success)
 					notEqual = success;
@@ -1673,11 +1675,11 @@ $this->load->view('admin/helper/header');?>
 			
 			/*dob:"required",
 			community:"required",
-			caste:"required",
+			caste:"required",*/
 			batch_id:"required",
 			campus_id:"required",
 			degree_id:"required",
-			course_type:"required",
+			/*course_type:"required",
 			parent_name:"required",
 			mother_name:"required",
 			occupation:"required",
@@ -1769,11 +1771,11 @@ $this->load->view('admin/helper/header');?>
 			},
 			unique_id: "Student Unique Id Required",
 			gender: "Gender Is Required",
-			/*dob: "DOB Is Required",
+			/*dob: "DOB Is Required",*/
 			batch_id: "Select Batch Is Required",
 			campus_id:"Campus required",
 			degree_id:"Degree required",
-			course_type:"Type required",
+			/*course_type:"Type required",
 			
 			parent_name:"Parent Name required",
 			mother_name:"Mother Name required",

@@ -198,7 +198,7 @@ class Admin extends CI_Controller {
 	}
 	function saveUser()
 	{     
-	        p($_POST); //exit;
+	       // p($_POST); //exit;
 	        $register_date_time=date('Y-m-d H:i:s');
 			$username = $this->input->post('username');
 			$password   = $this->input->post('password');
@@ -256,7 +256,7 @@ class Admin extends CI_Controller {
 			else
 				$state_id = $this->input->post('state_id');
 			
-			$state_id=$this->input->post('state_id');
+			//$state_id=$this->input->post('state_id');
 			$zip_code=$this->input->post('zip_code');
 			$parent_image=$_FILES['parent_image']['name'];
 			
@@ -281,7 +281,11 @@ class Admin extends CI_Controller {
 			else
 				$state_id_local = $this->input->post('state_id_local');
 			
-			$zip_code_local=$this->input->post('zip_code_local');
+			if($this->input->post('zip_code_local') == '')
+				$zip_code_local = '0';
+			else
+				$zip_code_local = $this->input->post('zip_code_local');
+			
 			$scholarship=$this->input->post('scholarship');
 			
 		
@@ -320,7 +324,10 @@ class Admin extends CI_Controller {
 			//newfields
 			$academicvocational=$this->input->post('academicvocational');
 			$group=$this->input->post('group');
-			$language=$this->input->post('language');
+			if($this->input->post('language') == '')
+				$language = '0';
+			else
+				$language = $this->input->post('language');
 			$english=$this->input->post('english');
 			$mathematics=$this->input->post('mathematics');
 			$physics_theory=$this->input->post('physics_theory');
@@ -384,7 +391,12 @@ class Admin extends CI_Controller {
 			$viii_year=$this->input->post('viii_year_of_study');
 			$viii_place=$this->input->post('viii_place_of_study');
 			$viii_state=$this->input->post('viii_state_of_study');
-			$transaction_id=$this->input->post('transaction_id');
+			
+			if($this->input->post('transaction_id') == '')
+				$transaction_id = '0';
+			else
+				$transaction_id = $this->input->post('language');
+			
 			$transaction_date=$this->input->post('transaction_date');
 			$submission_status=$this->input->post('submission_status');
 			$submission_date=$this->input->post('submission_date');
@@ -702,24 +714,26 @@ class Admin extends CI_Controller {
 			if($user_type=='1'){
 				$parentsaved['username']=$this->input->post('parent_username');
 				$parentsaved['password']=$this->input->post('parent_password');
-				$parentsaved['user_unique_id']='';
-				$parentsaved['first_name']=$this->input->post('parent_name');
-				$parentsaved['gender']='male';
+				if(!empty($parentsaved['username']) && !empty($parentsaved['password'])){
+					$parentsaved['user_unique_id']='';
+					$parentsaved['first_name']=$this->input->post('parent_name');
+					$parentsaved['gender']='male';
+					
+					$parentsaved['email']=$this->input->post('father_email');
+					$parentsaved['contact_number']=$this->input->post('father_contact');
+					$parentsaved['role_id']=5;
+					$parentsaved['parents_student_id']=$last_id;
+					$parentsaved['created_on']=$register_date_time;
 				
-				$parentsaved['email']=$this->input->post('father_email');
-				$parentsaved['contact_number']=$this->input->post('father_contact');
-				$parentsaved['role_id']=5;
-				$parentsaved['parents_student_id']=$last_id;
-				$parentsaved['created_on']=$register_date_time;
-			
-				$parentsaved['permission_status']=$permission;
-				$parentsaved['subadmin_campus_id']=$subadmin_campus_id;
-				$parentsaved['upload_type']=$marks_upload_permission;
-				$parentsaved['user_image']=$parent_file;
-				$parent_last_id=$this->type_model->save_parent_login($parentsaved);// save common user details
-				$parent_unique_id='PAR'.$parent_last_id;
-				$uinquePar['parent_unique_id']=$parent_unique_id;
-				$this->type_model->update_parent_login($uinquePar,$detail_id);// update parent_unique_id;
+					$parentsaved['permission_status']=$permission;
+					$parentsaved['subadmin_campus_id']=$subadmin_campus_id;
+					$parentsaved['upload_type']=$marks_upload_permission;
+					$parentsaved['user_image']=$parent_file;
+					$parent_last_id=$this->type_model->save_parent_login($parentsaved);// save common user details
+					$parent_unique_id='PAR'.$parent_last_id;
+					$uinquePar['parent_unique_id']=$parent_unique_id;
+					$this->type_model->update_parent_login($uinquePar,$detail_id);// update parent_unique_id;
+				}
 			}
 			
 			$this->session->set_flashdata('message', 'User added successfully');

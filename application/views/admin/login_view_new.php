@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -14,11 +13,9 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url();?>assets_login/css/main.css" rel="stylesheet">
 <link href="<?php echo base_url();?>assets_login/css/login.css" rel="stylesheet">
-
 <!-- AdminCC You can choose a theme from css/themes instead of get all themes -->
 <link href="<?php echo base_url();?>assets_login/css/themes/all-themes.css" rel="stylesheet" />
 
-<script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en&key=AIzaSyBlGK-0tQQjjoS-0hhef-Mop-AeR0vXvBE"></script>
 <script>
 //history.pushState({ page: 1 }, "Title 1", "#nobackk");
 //window.onhashchange = function (event) {
@@ -75,7 +72,7 @@
                       <h4 class="media-heading">TANUVAS<strong><?php echo $page_title;?></strong></h4>
                     </div>
 					
-                    <form class="col-md-12" id="authenticate" name="authenticate" method="post" action="<?php echo base_url();?>authenticate/user_login" autocomplete="false" onsubmit="return checkValidation();">
+                    <form class="col-md-12" id="authenticate" name="authenticate" method="post" action="<?php echo base_url();?>authenticate/user_login" autocomplete="false" >
 					    <div>  <p class="login-box-msg"><?php echo validation_errors(); ?> 
                         <?php echo $this->session->flashdata('logoutmsg'); ?></p>
 						<span class="alert-success"><?php echo $this->session->flashdata('successmsg'); ?></span>
@@ -117,7 +114,7 @@
 <script src="<?php echo base_url();?>assets_login/plugins/css-gradientify/gradientify.min.js"></script><!-- Gradientify Js -->
 
 <script src="<?php echo base_url();?>assets_login/bundles/mainscripts.bundle.js"></script><!-- Custom Js --> 
-
+<script src="<?php echo base_url();?>assets/jquery.validate.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $("body").gradientify({
@@ -127,8 +124,7 @@
                 { start: [33,229,241], stop: [235,236,117] }
             ]
         });
-    });
-	  $("#authenticate").validate({
+		$("#authenticate").validate({
 		rules: {
 			username: "required",
 			password: "required"
@@ -143,8 +139,8 @@
 				form.submit();
 		}
 	});	
+    });
+	  
 </script>
 </body>
-
-<!-- Mirrored from thememakker.com/templates/admincc/locked.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 Dec 2017 20:03:19 GMT -->
 </html>
