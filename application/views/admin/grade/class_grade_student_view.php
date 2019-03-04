@@ -72,11 +72,11 @@
     </style>
 </head>
 
-<>
+
 <body>
 	<p align="center">
 	     <h5 align="center">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY </h5>
-         <h6 align="center"><?php echo $aggregate_marks[0]->discipline_code;?> - DEGREE SUBJECT WISE MARK REPORT</h6>
+         <h6 align="center"><?php echo $aggregate_marks[0]->degree_name;?> - DEGREE SUBJECT WISE MARK REPORT</h6>
 		
 	</p>
     <div style="padding:0px; width:100%; font-family:Arial, Helvetica, sans-serif; ">
@@ -166,7 +166,7 @@
                 <?php } ?>
             </table>
 
-		<?php }else{ ?>
+		<?php }elseif($program_id == 1){ ?>
             <table class="table" width="100%" style="border:solid 1px black;">
                 <tr>
 				    <th rowspan="3" style="text-align:center">S.No.</th>
@@ -256,6 +256,101 @@
                     <!--<td align="center"><?php echo $subject_sum_percent10;?></td>-->
                     <td align="center"><?php echo $passfail_status;?></td>
                    
+                </tr>
+                <?php } ?>
+            </table>
+		<?php }else{?>
+			 <table class="table" width="100%" style="border:solid 1px black;">
+                <tr>
+				    <th>S.No.</th>
+                    <th>I.D.No.</th>
+                    <th>STUDENT NAME</th> 
+                    <th>INTERNAL<br/>MARK<br/>(Max.20)</th>
+                    <th>TERM<br/>PAPER<br/>(Max.10)</th>
+					<th>EXTERNAL<br/>THEORY<br/>(Max.70)</th>
+					<th>THEORY<br/>TOTAL<br/>(%)</th>
+                    <th>PARCTICAL<br/>MARK<br/><?php if($aggregate_marks[0]->theory_credit > 0) {?>(Max.50)<?php }elseif($aggregate_marks[0]->practicle_credit > 0){ ?>(Max.100)<?php }?></th>
+					<th >GRADE<br/>POINT<br/>(Max.10)</th> 
+                    <th>RESULT</th>
+                   <?php if(!empty($this->input->post('blank'))) {?><th>DEFICIT</th><?php } ?>
+				   
+                </tr>
+               
+                
+				<?php 
+				$i=0;
+				$total_internal_sum='';
+				$subject_total_sum='';
+				$percent_subject='';
+				$subject_sum_percent100='';
+				$subject_sum_percent10='';
+				foreach($aggregate_marks as $subject_wise_val){$i++;
+				       //$total_internal_sum = number_format($subject_wise_val->theory_internal1+$subject_wise_val->practical_internal,2);
+						if($aggregate_marks[0]->theory_credit > 0 && $aggregate_marks[0]->practicle_credit > 0) {
+							$total_internal_sum = $subject_wise_val->theory_internal1 + $subject_wise_val->theory_external1 + $subject_wise_val->assignment_mark;
+							$practical = $subject_wise_val->practical_internal*2;
+							if($total_internal_sum>=60 && $practical>=60)
+								$passfail_status = 'PASS';
+							else
+								$passfail_status = 'FAIL';
+							$subject_sum_percent10= number_format((($total_internal_sum+$subject_wise_val->practical_internal)/150)*10,2);
+						}elseif($aggregate_marks[0]->theory_credit > 0 ) {
+							$total_internal_sum = $subject_wise_val->theory_internal1+ $subject_wise_val->assignment_mark+ $subject_wise_val->theory_external1;
+							if($total_internal_sum>=60)
+								$passfail_status = 'PASS';
+							else
+								$passfail_status = 'FAIL';
+							$subject_sum_percent10= number_format($total_internal_sum/10,2);
+						}elseif($aggregate_marks[0]->practicle_credit > 0 ){
+							$total_internal_sum = '-';
+							$practical = $subject_wise_val->practical_internal*2;
+							if($practical>=60)
+								$passfail_status = 'PASS';
+							else
+								$passfail_status = 'FAIL';
+							$subject_sum_percent10= number_format($subject_wise_val->practical_internal/10,2);
+						}
+			
+						$total_internal_sum = number_format($total_internal_sum,2);
+					  
+					  if($display == 'fail_list'){
+						  if($passfail_status == 'PASS')
+							  continue;
+					  }
+				?>
+				 <tr>
+                    <td><?php echo $i;?></td>
+					<td><?php echo $subject_wise_val->user_unique_id;?></td>
+                    <td nowrap><?php echo $subject_wise_val->first_name.' '.$subject_wise_val->last_name;?></td>
+                    <td align="center">
+						<?php if($aggregate_marks[0]->theory_credit > 0){ echo ($subject_wise_val->theory_internal1>0)?number_format($subject_wise_val->theory_internal1,2):number_format(0,2); }else echo '-';?>
+					</td>
+					<td align="center">
+						<?php if($aggregate_marks[0]->theory_credit > 0){  echo round_two_digit($subject_wise_val->assignment_mark);}else echo '-';?>
+					</td>
+					
+                    <td align="center">
+						<?php if($aggregate_marks[0]->theory_credit > 0){  echo ($subject_wise_val->theory_external1>0)?number_format($subject_wise_val->theory_external1,2):number_format(0,2);}else echo '-';?>
+					</td>
+                    <td align="center">
+						<?php echo $total_internal_sum;?>
+					</td>
+                    <?php if($aggregate_marks[0]->practicle_credit > 0){ ?>
+						<td align="center"><?php echo ($subject_wise_val->practical_internal>0)?number_format($subject_wise_val->practical_internal,2):number_format(0,2);?></td>
+					<?php }else{ ?>
+						<td align="center">-</td>
+					<?php } ?>
+                    <td align="center"><?php echo $subject_sum_percent10;?></td>
+                    <td align="center"><?php echo $passfail_status;?></td>
+                   <?php if(!empty($this->input->post('blank'))) {?>
+						<th>
+							<?php if($aggregate_marks[0]->practicle_credit > 0 && $aggregate_marks[0]->theory_credit > 0){ 
+								if($total_internal_sum<60) echo "Theory: ". number_format((60-$total_internal_sum),2)."<br>";
+								if($practical<60) echo "Practical: ". number_format((60-$practical)/2,2);
+							}
+							?>
+						</th>
+					<?php } ?>
                 </tr>
                 <?php } ?>
             </table>

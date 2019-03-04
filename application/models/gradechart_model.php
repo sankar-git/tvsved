@@ -12,11 +12,16 @@ Class Gradechart_model extends CI_Model
 		$this->db->join('degrees d','d.id = sum.degree_id','INNER');
 		$this->db->join('semesters s','s.id = sum.semester_id','INNER');
 		
-			$this->db->where(array('sum.campus_id'=>$campus_id,'sum.program_id'=>$program_id,'sum.degree_id'=>$degree_id,'sum.batch_id'=>$batch_id,'sum.semester_id'=>$semester_id,'sum.course_id'=>$course_id));
+		$this->db->where(array('sum.campus_id'=>$campus_id,'sum.program_id'=>$program_id,'sum.degree_id'=>$degree_id,'sum.batch_id'=>$batch_id,'sum.semester_id'=>$semester_id));
+		if($program_id == 1 && $degree_id == 1){
+			$this->db->where("(c.course_subject_id = 0 || sum.course_id like '%$course_id%')");
+		}else{
+			$this->db->where('sum.course_id',$course_id);
+		}
 		
 	    // $this->db->group_by('u.id',$student_id);
-		//echo $this->db->last_query(); die;
-        $result	= $this->db->get()->result();
+		
+        $result	= $this->db->get()->result();//echo $this->db->last_query(); die;
 		return $result;
 	}
 	function get_aggregate_marks($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id)

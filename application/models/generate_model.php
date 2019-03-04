@@ -85,8 +85,8 @@ Class Generate_model extends CI_Model
 		$this->db->from('users u');
 		$this->db->join('user_map_student_details umap','umap.user_id = u.id','INNER');
 		$this->db->join('student_assigned_courses sac','sac.student_id = u.id','INNER');
-		$this->db->join('batches b','b.id = umap.batch_id','INNER');
-	    $this->db->where(array('umap.campus_id'=>$cid,'umap.degree_id'=>$did,'umap.batch_id'=>$bid,'umap.semester_id'=>$semester_id,'u.role_id'=>1));
+		$this->db->join('batches b','b.id = sac.batch_id','INNER');
+	    $this->db->where(array('sac.campus_id'=>$cid,'sac.degree_id'=>$did,'sac.batch_id'=>$bid,'sac.semester_id'=>$semester_id,'u.role_id'=>1));
 	    $this->db->group_by('sac.student_id');
         $result	= $this->db->get()->result();
 		return $result;
@@ -275,16 +275,12 @@ Class Generate_model extends CI_Model
 		}
 	}
 	
-	function get_student_assigned_subjects_with_date($stuId,$semester_id='')
+	function get_student_assigned_subjects_with_date($course_id)
 	{
-		$this->db->select('c.*,ce.exam_date');
-		$this->db->from('courses c');
-		$this->db->join('student_assigned_courses sac','sac.course_id = c.id','INNER');
-		$this->db->join('course_exam_date ce','ce.course_id = sac.course_id','LEFT');
-		$this->db->where('sac.student_id',$stuId);
-		if($semester_id>0)
-			$this->db->where(array('sac.semester_id'=>$semester_id));
-		$this->db->order_by("sac.course_id", "asc");
+		$this->db->select('ce.exam_date');
+		$this->db->from('course_exam_date ce');
+		$this->db->where(array('ce.course_id'=>$course_id));
+		//$this->db->order_by("sac.course_id", "asc");
         $result	= $this->db->get()->result();
 		return $result;
 	}

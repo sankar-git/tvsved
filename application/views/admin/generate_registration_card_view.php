@@ -94,7 +94,7 @@ $this->load->view('admin/helper/header');?>
 			    <div class="row">
 				<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="batch_id" id="batch_id" class="form-control" >
+					  <select name="batch_id" id="batch_id" class="form-control" onchange="getStudentList();" >
 						  <option value="">Select Batch</option>
 						
 					  </select>
@@ -105,14 +105,14 @@ $this->load->view('admin/helper/header');?>
 					  <select name="date_of_start" id="date_of_start" class="form-control" >
 						  <option value="">Select Start Date</option>
 					  </select>
-					</div>-->
+					</div>
 					<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Date Of Closure<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="date_of_closure" id="date_of_closure" class="form-control" onchange="getStudentList();">
+					  <select name="date_of_closure" id="date_of_closure" class="form-control" >
 						  <option value="">Select Date Of Closure</option>
 						
 					  </select>
-					</div>
+					</div>-->
 					<div class="form-group col-md-3">
 					  <label for="month">Month<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="month" id="month">

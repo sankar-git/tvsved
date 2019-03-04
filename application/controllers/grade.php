@@ -393,7 +393,7 @@ class Grade extends CI_Controller {
 	function courseGroupWiseReport()
 	{
 		   $campus_id=$this->input->post('campus_id');
-	       $program_id=$this->input->post('program_id');
+	       $program_id=$data['program_id']=$this->input->post('program_id');
 	       $degree_id=$data['degree_id']=$this->input->post('degree_id');
 	       $batch_id=$this->input->post('batch_id');
 	       $semester_id=$this->input->post('semester_id');
@@ -490,6 +490,30 @@ class Grade extends CI_Controller {
 		 //====================Generate Blank Start=====================================//
 		  if(!empty($this->input->post('blank')))
 		  {  
+			if($program_id > 1){
+				 $course_id=$course_input;
+		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		    $subject_name=$data['subject_wise_list'][0]->course_title;
+			$data['display'] = 'pass_fail_list';
+			$data['title'] = 'Subject Wise Mark Report';
+			
+		   //load the view and saved it into $html variable
+		   if($this->input->post('downloadpdf') == 'true'){
+		    //load the view and saved it into $html variable
+			$html = $this->load->view('admin/grade/subject_wise_pass_fail_list_pg.php',$data, true);
+			$pdfFilePath = "student_subject_".$subject_name.".pdf";
+	        //load mPDF library
+			$this->load->library('m_pdf');
+			$this->m_pdf->pdf->mPDF('utf-8','A4','','','10','10','15','15');
+	       //generate the PDF from the given html
+			$this->m_pdf->pdf->WriteHTML($html);
+	       //download it.
+			$this->m_pdf->pdf->Output($pdfFilePath, "I");
+            exit;
+			}else{
+			   echo  $this->load->view('admin/grade/subject_wise_pass_fail_list_pg.php',$data,true);exit;
+		   }
+		  }	else{
 	        $course_id=$course_input;
 		   //p($courseid); exit;
 	      // $course_id=$courseid[0]; 
@@ -513,7 +537,8 @@ class Grade extends CI_Controller {
 	 
 			//download it.
 			$this->m_pdf->pdf->Output($pdfFilePath, "I");
-            exit;			
+            exit;	
+		  }			
 		 }
 		 
 		//====================Generate Blank End=====================================//
@@ -589,7 +614,7 @@ class Grade extends CI_Controller {
 			   echo  $this->load->view('admin/grade/subject_wise_pass_fail_list_bvsc.php',$data,true);exit;
 		   }
 		  }	
-          if($degree_id!='1'){
+          if($degree_id!='1' && $program_id == 1){
 		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
 		    $subject_name=$data['subject_wise_list'][0]->course_title;
 			$data['display'] = 'pass_fail_list';
@@ -611,7 +636,30 @@ class Grade extends CI_Controller {
 			}else{
 			   echo  $this->load->view('admin/grade/subject_wise_pass_fail_list_btech.php',$data,true);exit;
 		   }
-		  }			  
+		  }
+		if($program_id > 1){
+		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		    $subject_name=$data['subject_wise_list'][0]->course_title;
+			$data['display'] = 'pass_fail_list';
+			$data['title'] = 'Subject Wise Mark Report';
+			
+		   //load the view and saved it into $html variable
+		   if($this->input->post('downloadpdf') == 'true'){
+		    //load the view and saved it into $html variable
+			$html = $this->load->view('admin/grade/subject_wise_pass_fail_list_pg.php',$data, true);
+			$pdfFilePath = "student_subject_".$subject_name.".pdf";
+	        //load mPDF library
+			$this->load->library('m_pdf');
+			$this->m_pdf->pdf->mPDF('utf-8','A4','','','10','10','15','15');
+	       //generate the PDF from the given html
+			$this->m_pdf->pdf->WriteHTML($html);
+	       //download it.
+			$this->m_pdf->pdf->Output($pdfFilePath, "I");
+            exit;
+			}else{
+			   echo  $this->load->view('admin/grade/subject_wise_pass_fail_list_pg.php',$data,true);exit;
+		   }
+		  }		  
 		 }
 		 
 		//====================Generate Pass Fail List Subject Wise End=====================================//
@@ -649,7 +697,7 @@ class Grade extends CI_Controller {
 			   echo  $this->load->view('admin/grade/subject_wise_pass_fail_list_bvsc.php',$data,true);exit;
 		   }
 		  }	
-          if($degree_id!='1'){
+          if($degree_id!='1' && $program_id == 1){
 		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
 			$data['display'] = 'fail_list';
 			$data['title'] = "Failed Student's Report";
@@ -670,7 +718,30 @@ class Grade extends CI_Controller {
 			}else{
 				echo  $this->load->view('admin/grade/subject_wise_pass_fail_list_btech.php',$data,true);exit;
 			}
-		  }			  
+		  }
+		if($program_id > 1){
+		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		    $subject_name=$data['subject_wise_list'][0]->course_title;
+			$data['display'] = 'pass_fail_list';
+			$data['title'] = 'Subject Wise Mark Report';
+			
+		   //load the view and saved it into $html variable
+		   if($this->input->post('downloadpdf') == 'true'){
+		    //load the view and saved it into $html variable
+			$html = $this->load->view('admin/grade/subject_wise_pass_fail_list_pg.php',$data, true);
+			$pdfFilePath = "student_subject_".$subject_name.".pdf";
+	        //load mPDF library
+			$this->load->library('m_pdf');
+			$this->m_pdf->pdf->mPDF('utf-8','A4','','','10','10','15','15');
+	       //generate the PDF from the given html
+			$this->m_pdf->pdf->WriteHTML($html);
+	       //download it.
+			$this->m_pdf->pdf->Output($pdfFilePath, "I");
+            exit;
+			}else{
+			   echo  $this->load->view('admin/grade/subject_wise_pass_fail_list_pg.php',$data,true);exit;
+		   }
+		  }		  
 		 }
 		 
 		//====================Generate  Fail List Subject Wise End=====================================//

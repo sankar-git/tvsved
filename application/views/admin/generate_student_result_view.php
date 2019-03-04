@@ -91,7 +91,7 @@
 			    <div class="row">
 				<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="batch_id" id="batch_id" class="form-control" >
+					  <select name="batch_id" id="batch_id" class="form-control" onchange="getStudentList();" >
 						  <option value="">Select Batch</option>
 						
 					  </select>
@@ -103,11 +103,32 @@
 						  <option value="">Select Start Date</option>
 						
 					  </select>
-					</div>-->
+					</div>
 					<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Date Of Closure<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="date_of_closure" id="date_of_closure" class="form-control" onchange="getStudentList();">
+					  <select name="date_of_closure" id="date_of_closure" class="form-control" >
 						  <option value="">Select Date Of Closure</option>
+						
+					  </select>
+					</div>-->
+					<div class="form-group col-md-3">
+					  <label for="month">Month<span style="color:red;font-weight: bold;">*</span></label>
+					   <select class="form-control" name="month" id="month">
+					   
+						  <option value="">Select Month</option>
+						<?php for($i=0;$i<12;$i++){ $time = strtotime(sprintf('%d months', $i-1));?>
+						<option value="<?php echo date('F', $time);?>"><?php echo date('F', $time);?></option>
+						<?php }?>
+					  </select>
+					</div>
+					 <div class="form-group col-md-3">
+					  <label for="year">Year<span style="color:red;font-weight: bold;">*</span></label>
+					   <select class="form-control" name="year" id="year">
+					   
+						  <option value="">Select Year</option>
+							<?php for($i=date('Y')-5;$i<=date('Y');$i++){?>
+							<option value="<?php echo $i;?>"><?php echo $i;?></option>
+							<?php }?>
 						
 					  </select>
 					</div>

@@ -1,5 +1,5 @@
 <?php
-ob_start();
+//ob_start();
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Result extends CI_Controller {
 	
@@ -399,12 +399,13 @@ class Result extends CI_Controller {
 	     	//print_r($_POST); exit;
 	   
 		$campus_id=$this->input->post('campus_id');
-		$program_id=$this->input->post('program_id');
+		$program_id=$data['program_id'] =$this->input->post('program_id');
 		$degree_id=$this->input->post('degree_id');
 		$semester_id=$this->input->post('semester_id');
 		$batch_id=$this->input->post('batch_id');
 		$date_of_start=$this->input->post('date_of_start');
-		$date_of_closure=$this->input->post('date_of_closure');
+		$month=$data['month'] =$this->input->post('month');
+		$year=$data['year'] =$this->input->post('year');
 		$student_id=$this->input->post('student_id');
 		
 	    $send['campus_id']=$campus_id;
@@ -424,17 +425,17 @@ class Result extends CI_Controller {
 				$batch_id=$this->input->post('batch_id');
 				$date_of_start=$this->input->post('date_of_start');
 				$date_of_closure=$this->input->post('date_of_closure');
-				$batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
+				//$batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
 				$semesterRow = $this->Result_model->get_semester_name($semester_id); //getting semester name 
 				//p($semesterRow); exit;
-				$batch_year=$batchYear->date_of_closure;
-				$yrdata= strtotime($batch_year);
-                $monthYrr= date('F-Y',$yrdata);
+				//$batch_year=$batchYear->date_of_closure;
+				//$yrdata= strtotime($batch_year);
+                $monthYrr= $month.' '.$year;
 			    $student_id=$this->input->post('student_id'); //array input
 				$allData = array();
 				$students = $this->Generate_model->get_studedent_data($student_id);
 					//p($students); exit;
-					 if($degree_id!=1)
+					 if($degree_id!=1 || $program_id>1)
 					 {
 					 foreach($students as $stuData)
 					 {
@@ -511,8 +512,18 @@ class Result extends CI_Controller {
 									    $external_marks   =   $data['theory_external'];
 										$total_subject_marks=$internal_sum + $external_marks;
 										$data['total_subject_marks']       =$total_subject_marks;
-										if($internal_sum>=25 && $external_marks>=25){$passfail_status='PASS';}
-										else{$passfail_status='FAIL';}
+										if($internal_sum>=25 && $external_marks>=25){ 
+											if($program_id == 1)
+												$passfail_status='PASS';
+											else
+												$passfail_status='P';
+										}
+										else{
+											if($program_id == 1)
+												$passfail_status='FAIL';
+											else
+												$passfail_status='F';
+										}
 										if($internal_sum <25 && $external_marks>=25)
 										{
 											$deflicit='1';
@@ -681,7 +692,7 @@ class Result extends CI_Controller {
 			 }	// end b_tech condition	
 			 
 			 
-			  if($degree_id=1) //bvsc
+			  if($degree_id=1  && $program_id==1) //bvsc
 					 {
 				
 					//echo "hello"; exit;
@@ -879,13 +890,13 @@ class Result extends CI_Controller {
 				$date_of_start=$this->input->post('date_of_start');
 				$date_of_closure=$this->input->post('date_of_closure');
 				//print_r($date_of_closure); exit;
-				 $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
+				// $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
 				 $semesterRow = $this->Result_model->get_semester_name($semester_id); //getting semester name 
 				// print_r($semesterRow); exit;
-				 $batch_year=$batchYear->date_of_closure;
+				// $batch_year=$batchYear->date_of_closure;
 				 //print_r($batch_year); exit;
-				 $yrdata= strtotime($batch_year);
-                 $monthYrr= date('M-Y', $yrdata);
+				 //$yrdata= strtotime($batch_year);
+                 $monthYrr= $month.' '.$year;
 				 //print_r($monthYrr); exit;
 				 $student_id=$this->input->post('student_id'); //array input
 				 $allData = array();
@@ -1159,13 +1170,13 @@ class Result extends CI_Controller {
 				$date_of_start=$this->input->post('date_of_start');
 				$date_of_closure=$this->input->post('date_of_closure');
 				//print_r($date_of_closure); exit;
-				 $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
+				// $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
 				 $semesterRow = $this->Result_model->get_semester_name($semester_id); //getting semester name 
 				// print_r($semesterRow); exit;
-				 $batch_year=$batchYear->date_of_closure;
+				// $batch_year=$batchYear->date_of_closure;
 				 //print_r($batch_year); exit;
-				 $yrdata= strtotime($batch_year);
-                 $monthYrr= date('M-Y', $yrdata);
+				// $yrdata= strtotime($batch_year);
+                 $monthYrr= $month.' '.$year;
 				 //print_r($monthYrr); exit;
 				 $student_id=$this->input->post('student_id'); //array input
 				 $allData = array();
@@ -1306,26 +1317,26 @@ class Result extends CI_Controller {
 	        
 	         //echo "hello"; exit;
 	            $campus_id=$this->input->post('campus_id');
-				$program_id=$this->input->post('program_id');
+				$program_id=$data['program_id']=$this->input->post('program_id');
 				$degree_id=$this->input->post('degree_id');
 				$semester_id=$this->input->post('semester_id');
 				$batch_id=$this->input->post('batch_id');
 				$date_of_start=$this->input->post('date_of_start');
 				$date_of_closure=$this->input->post('date_of_closure');
 				//print_r($date_of_closure); exit;
-				 $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
+				// $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
 				 $semesterRow = $this->Result_model->get_semester_name($semester_id); //getting semester name 
 				// print_r($semesterRow); exit;
-				 $batch_year=$batchYear->date_of_closure;
+				// $batch_year=$batchYear->date_of_closure;
 				 //print_r($batch_year); exit;
-				 $yrdata= strtotime($batch_year);
-                 $monthYrr= date('M-Y', $yrdata);
+				// $yrdata= strtotime($batch_year);
+                 $monthYrr= $month.' '.$year;
 				 //print_r($monthYrr); exit;
 				 $student_id=$this->input->post('student_id'); //array input
 				 $allData = array();
 					 $students = $this->Result_model->get_result_data($student_id);
 					// p($students); exit;
-				if($degree_id==1){
+				if($degree_id==1 && $program_id==1){
 					//echo "hello"; exit;
 					foreach($students as $stuData)
 					 {
@@ -1644,13 +1655,13 @@ class Result extends CI_Controller {
 				$date_of_start=$this->input->post('date_of_start');
 				$date_of_closure=$this->input->post('date_of_closure');
 				//print_r($date_of_closure); exit;
-				 $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
+				// $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
 				 $semesterRow = $this->Result_model->get_semester_name($semester_id); //getting semester name 
 				// print_r($semesterRow); exit;
-				 $batch_year=$batchYear->date_of_closure;
+				// $batch_year=$batchYear->date_of_closure;
 				 //print_r($batch_year); exit;
-				 $yrdata= strtotime($batch_year);
-                 $monthYrr= date('M-Y', $yrdata);
+				 //$yrdata= strtotime($batch_year);
+                 $monthYrr= $month.' '.$year;
 				 //print_r($monthYrr); exit;
 				 $student_id=$this->input->post('student_id'); //array input
 				 $allData = array();
@@ -1931,13 +1942,13 @@ class Result extends CI_Controller {
 				$date_of_start=$this->input->post('date_of_start');
 				$date_of_closure=$this->input->post('date_of_closure');
 				//print_r($date_of_closure); exit;
-				 $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
+				// $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
 				 $semesterRow = $this->Result_model->get_semester_name($semester_id); //getting semester name 
 				// print_r($semesterRow); exit;
-				 $batch_year=$batchYear->date_of_closure;
+				// $batch_year=$batchYear->date_of_closure;
 				 //print_r($batch_year); exit;
-				 $yrdata= strtotime($batch_year);
-                 $monthYrr= date('M-Y', $yrdata);
+				 //$yrdata= strtotime($batch_year);
+                 $monthYrr= $month.' '.$year;
 				 //print_r($monthYrr); exit;
 				 $student_id=$this->input->post('student_id'); //array input
 				 $allData = array();
@@ -2091,13 +2102,13 @@ class Result extends CI_Controller {
 				$date_of_start=$this->input->post('date_of_start');
 				$date_of_closure=$this->input->post('date_of_closure');
 				//print_r($date_of_closure); exit;
-				 $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
+				// $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
 				 $semesterRow = $this->Result_model->get_semester_name($semester_id); //getting semester name 
 				// print_r($semesterRow); exit;
-				 $batch_year=$batchYear->date_of_closure;
+				 //$batch_year=$batchYear->date_of_closure;
 				 //print_r($batch_year); exit;
-				 $yrdata= strtotime($batch_year);
-                 $monthYrr= date('M-Y', $yrdata);
+				 //$yrdata= strtotime($batch_year);
+                 $monthYrr=$month.' '.$year;
 				 //print_r($monthYrr); exit;
 				 $student_id=$this->input->post('student_id'); //array input
 				 $allData = array();

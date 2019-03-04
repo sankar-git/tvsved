@@ -172,7 +172,7 @@
 				 <tr>
                     <td><?php echo $i;?></td>
 					<td><?php echo $subject_wise_val->user_unique_id;?></td>
-                    <td nowrap><?php echo $subject_wise_val->first_name;?></td>
+                    <td nowrap><?php echo $subject_wise_val->first_name.' '.$subject_wise_val->last_name;?></td>
 					<?php if($subject_wise_list[0]->theory_credit > 0){ ?>
                     <td align="center"><?php echo ($subject_wise_val->theory_internal1>0)?number_format($subject_wise_val->theory_internal1,2):number_format(0,2);?></td>
 					<?php } ?>

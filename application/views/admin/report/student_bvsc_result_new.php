@@ -49,7 +49,7 @@
                                 <tr>
                                     <td align="center">
                                         <div>
-                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;" >DETAILED MARK CERTIFICATE</h5>
+                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;" >REPORT CARD</h5>
                                         </div>
                                     </td>
                                 </tr>
@@ -85,8 +85,8 @@
 				<tr>
                     <td align="left" width="25%" style="vertical-align:top;font-weight:bold;">Batch</td>
 					<td align="left" width="25%" style="vertical-align:top;font-weight:bold;">&nbsp;:<?php echo $student_marks['batch_name'];?></td>
-                    <td align="right" width="25%" style="vertical-align:top;font-weight:bold;">Academic Year</td>
-					<td align="left" width="25%" style="vertical-align:top;font-weight:bold;">&nbsp;:<?php echo $student_marks['batch_start_year'];?></td>
+                    <td align="right" width="25%" style="vertical-align:top;font-weight:bold;">Month & Year</td>
+					<td align="left" width="25%" style="vertical-align:top;font-weight:bold;">&nbsp;:<?php echo $month. ' '.$year;?></td>
                     
                 </tr>
 				<tr>

@@ -295,7 +295,7 @@ class Generate extends CI_Controller {
 		$semester_id=$this->input->post('semester_id');
 		$batch_id=$this->input->post('batch_id');
 		$date_of_start=$this->input->post('date_of_start');
-		$date_of_closure=$this->input->post('date_of_closure');
+		//$date_of_closure=$this->input->post('date_of_closure');
 		$student_id=$this->input->post('student_id');
 		$data['month']=$month=$this->input->post('month');
 	       $data['year']=$year=$this->input->post('year');
@@ -303,7 +303,8 @@ class Generate extends CI_Controller {
 	    $send['program_id']=$program_id;
 	    $send['degree_id']=$degree_id;
 	    $send['batch_id']=$batch_id;
-	    
+	    $month=$this->input->post('month');
+		$year=$this->input->post('year');
 	     if(!empty($this->input->post('get_print')))
 		 {  
 		     	
@@ -342,14 +343,14 @@ class Generate extends CI_Controller {
 				
 				$batch_id=$this->input->post('batch_id');
 				$date_of_start=$this->input->post('date_of_start');
-				$date_of_closure=$this->input->post('date_of_closure');
+				
 				//print_r($date_of_closure); exit;
-				 $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
+				// $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
 				// print_r($batchYear->date_of_closure); exit;
-				 $batch_year=$batchYear->date_of_closure;
+				 //$batch_year=$batchYear->date_of_closure;
 				// print_r($batch_year); exit;
-				 $yrdata= strtotime($batch_year);
-                 $monthYrr= date('F Y',$yrdata);				 
+				 //$yrdata= strtotime($batch_year);
+                 $monthYrr= $month.' '.$year;				 
 			//	print_r($monthYrr); exit;
 				 $student_id=$this->input->post('student_id'); //array input
 				 $allData = array();
@@ -379,6 +380,7 @@ class Generate extends CI_Controller {
 							           $data['course_id']   = $subjectVal->id;
 									   $data['course_code']   = $subjectVal->course_code;
 									   $data['course_title']   = $subjectVal->course_title;
+									  
 									   $dataList[] = $data;
 								 }
 								// p($dataList); exit;
@@ -418,15 +420,15 @@ class Generate extends CI_Controller {
 				$semester_id=$this->input->post('semester_id');
 				$batch_id=$this->input->post('batch_id');
 				$date_of_start=$this->input->post('date_of_start');
-				$date_of_closure=$this->input->post('date_of_closure');
+				//$date_of_closure=$this->input->post('date_of_closure');
 				//print_r($date_of_closure); exit;
 				 $semesterRow = $this->Result_model->get_semester_name($semester_id); 
-				 $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
+				 //$batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
 				// print_r($batchYear->date_of_closure); exit;
-				 $batch_year=$batchYear->date_of_closure;
+				// $batch_year=$batchYear->date_of_closure;
 				 //print_r($batch_year); exit;
-				 $yrdata= strtotime($batch_year);
-                 $monthYrr= date('F Y',$yrdata);
+				// $yrdata= strtotime($batch_year);
+                 $monthYrr= $month.' '.$year;
 				 //print_r($monthYrr); exit;
 				 $student_id=$this->input->post('student_id'); //array input
 				 $allData = array();
@@ -435,7 +437,7 @@ class Generate extends CI_Controller {
 					foreach($students as $stuData)
 					 {
 						
-						$subjectList = $this->Generate_model->get_student_assigned_subjects_with_date($stuData->user_id,$semester_id);
+						$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id);
 						// p($subjectList); 
 						     $list['first_name']  =$stuData->first_name;
 						     $list['last_name']  =$stuData->last_name;
@@ -455,7 +457,9 @@ class Generate extends CI_Controller {
 							           $data['course_id']   = $subjectVal->id;
 									   $data['course_code']   = $subjectVal->course_code;
 									   $data['course_title']   = $subjectVal->course_title;
-									   $data['exam_date']   = $subjectVal->exam_date;
+									    $dateArr= $this->Generate_model->get_student_assigned_subjects_with_date($subjectVal->id);
+									  // echo $this->db->last_query();print_r($dateArr);exit;
+									   $data['exam_date']   = $dateArr[0]->exam_date;
 									   $dataList[] = $data;
 								 }
 								// p($dataList); exit;

@@ -90,7 +90,7 @@
 	
 		<p align="center">
 	     <h4 align="center">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY <BR />
-          B.V.Sc. & A.H. - DEGREE - <?php echo strtoupper($title);?></h4>
+          <?php echo $subject_wise_list[0]->degree_name;?>. - DEGREE - <?php echo strtoupper($title);?></h4>
 			<?php if(!isset($_POST['downloadpdf'])){?>
                 <h5 align="center"><a href="javascript:;" onclick="document.genpdf.submit();">Download PDF</a></h5>
 			<?php } ?>		 
@@ -217,7 +217,7 @@
 					
 					<td  align="center" style="padding:2px;height:30px;"><?php echo $i;?></td>
                     <td  align="center" style="padding:2px;"><?php echo $subject_wise_val->user_unique_id;?></td>
-                    <td  align="left" style="padding:2px;"><?php echo $subject_wise_val->first_name;?></td>
+                    <td  align="left" style="padding:2px;"><?php echo $subject_wise_val->first_name.' '.$subject_wise_val->last_name;?></td>
                     <td  align="center" style="padding:2px;"><?php echo round_two_digit($subject_wise_val->theory_internal1/4);?></td>
                     <td  align="center" style="padding:2px;"><?php echo round_two_digit($subject_wise_val->theory_internal2/4);?></td>
                     <td  align="center" style="padding:2px;"><?php echo round_two_digit($subject_wise_val->theory_internal3/4);?></td>
