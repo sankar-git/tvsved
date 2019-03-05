@@ -57,10 +57,10 @@
 		<div align="center" style="border:1px solid;margin-bottom:75px;">
             <table style="font-size:14px;">
                 <tr>
-                    <td align="left" width="100px" style="vertical-align:top;font-weight:bold;">ID No.</td>
-					<td align="left" width="250px" style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp; <?php echo $student_marks['user_unique_id']; ?></td>
-                    <td align="right" width="150px" style="vertical-align:top;font-weight:bold;">Name</td>
-					<td align="left"width="150px" style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;<?php echo $student_marks['first_name']; ?></td>                    
+                    
+					<td align="left" width="200px" style="vertical-align:top;font-weight:bold;"><?php echo $student_marks['user_unique_id']; ?></td>
+                    
+					<td align="left" style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;<?php echo $student_marks['first_name'].' '.$student_marks['last_name']; ?></td>                    
                 </tr>				
             </table> 
 			

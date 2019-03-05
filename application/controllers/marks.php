@@ -693,6 +693,7 @@ class Marks extends CI_Controller {
 	    //$course_credit=$courseid[1]; 
 		$marks_type=$this->input->post('marks_type');
 		$student_ids=$this->input->post('student_id');
+		//print_r($student_ids
 		$marks_type_ncc = $this->input->post('marks_type_ncc');
 		if($marks_type_ncc==3)
 		{
@@ -782,7 +783,7 @@ class Marks extends CI_Controller {
 			//echo "hello";exit;
 			           
 					  // $this->Marks_model->delete_ug_marks($student_id,$course_id); //delete old and save new
-				for($i=0; $i<count($theory_internal1);$i++){
+				for($i=0; $i<count($student_ids);$i++){
 					
 					    $student_id=$student_ids[$i];
 					    //$this->Marks_model->delete_ug_marks($student_id,$course_id); //delete old and save new
@@ -804,6 +805,7 @@ class Marks extends CI_Controller {
 						$highest_marks='';
 						$smallest_marks='';
 						$second_highest='';
+						$markArr=array();
 						//highest number
 						$markArr[] = $theory_marks1;
 						$markArr[] = $theory_marks2;
@@ -926,11 +928,12 @@ class Marks extends CI_Controller {
 							//$data1['external_sum']=($external_sum) ? $external_sum:'';
 							
 						}
-						//p($data1);   exit;
+					//	p($data1);   exit;
 						
 						
 						$save = $this->Marks_model->save_ug_marks_new($data1); 
 						//p($save); 
+						//echo $this->db->last_query();echo "<br/>";
 						if(!empty($save))
 						{
 							$return =1;

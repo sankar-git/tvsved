@@ -752,7 +752,7 @@
 					
 					$('#ncc').hide();
 					$('.trlist').empty();	
-					$('.trlist').append(data);
+					$('#bvsc .trlist').append(data);
 				 }
 			});
 		}else if($('#program_id').val()==1){
@@ -794,7 +794,7 @@
 			success: function(data){
 				//alert(data); return false;
 				$('.trlist').empty();	
-				$('.trlist').append(data);
+				$('#bvscwewew .trlist').append(data);
 			 }
 		});
 	}
@@ -853,7 +853,7 @@
 			success: function(data){
 				//alert(data); return false;
 				$('.trlist').empty();	
-				$('.trlist').append(data);
+				$('#bvscwewew .trlist').append(data);
 			 }
 		});
 			

@@ -745,7 +745,7 @@ class Result extends CI_Controller {
 								 
 								 foreach($subjectList as $subjectVal)
 								 {  
-                                    
+                                    //p($subjectVal);exit;
 							           $data['course_id']               		= $subjectVal->id;
 									   if(empty($subjectVal->course_subject_name))
 										   $course_code = $subjectVal->course_code;
@@ -764,7 +764,7 @@ class Result extends CI_Controller {
 									   $data['theory_practical_credit']    		= $sum_theory_practical_credit;
 									   $numbers = array( $subjectVal->theory_internal1,$subjectVal->theory_internal2,$subjectVal->theory_internal3); 
 									   rsort($numbers);
-									  // print_r($numbers);exit;
+									 //  print_r($numbers);exit;
 									  $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
 									   $data['first_internal']    				= $numbers[0]/4;
 									   $data['second_internal']    				= $numbers[1]/4;
@@ -1622,11 +1622,14 @@ class Result extends CI_Controller {
 			
 			  
 			//load the view and saved it into $html variable
-			$html=$this->load->view('admin/report/aggregate_marks_view', $data, true);
-			
+			if($program == 1){
+				$html=$this->load->view('admin/report/aggregate_marks_view', $data, true);
+			}else{
+				$html=$this->load->view('admin/report/aggregate_marks_pg_view', $data, true);
+			}
 			// print_r($html); exit;
 			//this the the PDF filename that user will get to download
-			$pdfFilePath = "$html=$this->load->view('admin/report/aggregate_marks_view', $data, true);.pdf";
+			$pdfFilePath = "aggregate_marks_view.pdf";
 	 
 			//load mPDF library
 			$this->load->library('m_pdf');
