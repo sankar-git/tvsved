@@ -1622,7 +1622,7 @@ class Result extends CI_Controller {
 			
 			  
 			//load the view and saved it into $html variable
-			if($program == 1){
+			if($program_id == 1){
 				$html=$this->load->view('admin/report/aggregate_marks_view', $data, true);
 			}else{
 				$html=$this->load->view('admin/report/aggregate_marks_pg_view', $data, true);
