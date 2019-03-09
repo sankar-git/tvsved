@@ -133,7 +133,7 @@
                <div class="row">
 			     <div class="form-group col-md-4">
 					  <label for="course-group">Course<span style="color:red;font-weight: bold;">*</span></label>
-					   <select class="form-control" name="course_id" id="course_id" onchange="getCourseCredit(),getInternalOption();getStudentAssignedMarks();">
+					   <select class="form-control" name="course_id" id="course_id" onchange="getCourseCredit();">
 					   
 						  <option value="">Select Course</option> 
 						
@@ -397,21 +397,23 @@
 					$('#theory_credit').val(obj.theory_credit);
 					$('#practicle_credit').val(obj.practicle_credit);
 					$('.credit_points').html('Credit Points: '+obj.theory_credit+' + '+obj.practicle_credit);
+					var non_credit_val = $('#course_id').val();
+					 //alert(non_credit_val[1]);
+					 if(non_credit_val==32){ // courseid
+						//$('#itemsImport').val().empty(); 
+						//$('#marks_type').reset();
+						 $('#marks_type').prop('selectedIndex',0);
+						 $('.for_ncc_hide').hide();
+						 $(".ncc_show").show();
+					 }
+					 else{
+						 $('.for_ncc_hide').show();
+						 $(".ncc_show").hide(); 
+					 }
+					getStudentAssignedMarks();
 				 }
 			});
-		var non_credit_val = $('#course_id').val();
-		 //alert(non_credit_val[1]);
-		 if(non_credit_val==32){ // courseid
-			//$('#itemsImport').val().empty(); 
-			//$('#marks_type').reset();
-			 $('#marks_type').prop('selectedIndex',0);
-			 $('.for_ncc_hide').hide();
-			 $(".ncc_show").show();
-		 }
-		 else{
-			 $('.for_ncc_hide').show();
-			 $(".ncc_show").hide(); 
-		 }
+		
 		 
     }
 	function getInternalOption(){

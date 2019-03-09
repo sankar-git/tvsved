@@ -28,13 +28,13 @@ Class Marks_model extends CI_Model
 		return $result;
 	 }
 	 function get_course_group_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id)
-	 {
-		 if($program_id == 1 && $campus_id==1){
-			$this->db->select("case when `course_subject_name` IS NULL then c.id else concat(GROUP_CONCAT( DISTINCT  c.id order by c.id SEPARATOR '|'),'-',course_subject_id) end as id,  case when `course_subject_name` IS NULL then course_title else course_subject_name end as course_title, `c`.`course_group_id`,c.course_subject_id,csg.course_subject_name,GROUP_CONCAT( DISTINCT  course_code order by course_code SEPARATOR ',') as course_code",false);
+	 { //echo "coming";
+		 if($program_id == 1 && $degree_id==1){
+			$this->db->select("case when `course_subject_name` IS NULL then c.id else concat(GROUP_CONCAT( DISTINCT  c.id order by c.id SEPARATOR '|'),'-',course_subject_id) end as id,  case when `course_subject_name` IS NULL then course_title else course_subject_name end as course_title, `c`.`course_group_id`,c.course_subject_id,csg.course_subject_name,csg.course_subject_title,GROUP_CONCAT( DISTINCT  course_code order by course_code SEPARATOR ',') as course_code",false);
 			$this->db->from('courses c');
-			$this->db->join('tbl_course_assignment  ca','c.id = ca.course_id','LEFT');
+			$this->db->join('student_assigned_courses ca','c.id = ca.course_id','LEFT');
 			$this->db->join('course_subject_groups  csg','csg.id = c.course_subject_id','LEFT');
-			$this->db->where(array('c.discipline_id'=>$discipline_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id));
+			$this->db->where(array('ca.program_id'=>$program_id,'ca.semester_id'=>$semester_id,'ca.degree_id'=>$degree_id));
 			$this->db->group_by('c.course_subject_id');
 		 }else{
 			 $this->db->select("c.id , c.course_title, `c`.`course_group_id`,c.course_subject_id,c.course_code",false);
@@ -48,7 +48,8 @@ Class Marks_model extends CI_Model
 			}
 			//$this->db->group_by('c.course_subject_id');
 		 }
-		$result	= $this->db->get()->result();
+		 //
+		$result	= $this->db->get()->result();//echo $this->db->last_query();exit;
 		return $result;
 	 }
 	 
@@ -68,7 +69,7 @@ Class Marks_model extends CI_Model
         $this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.course_id ='$course_id'",'LEFT');
 		$this->db->where(array('c.campus_id'=>$campus_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,'c.batch_id'=>$batch_id,'u.role_id'=>1));
 		$this->db->group_by('c.student_id');
-		
+		$this->db->order_by('u.first_name,u.last_name');
 		
 		$result	= $this->db->get()->result();//echo $this->db->last_query();
 		if($result)
@@ -208,6 +209,7 @@ Class Marks_model extends CI_Model
 		$this->db->from('users u');
         $this->db->join('user_map_student_details  umap','u.id = umap.user_id','INNER');
         $this->db->where(array('umap.campus_id'=>$campus_id,'umap.degree_id'=>$degree_id,'umap.batch_id'=>$batch_id));
+		$this->db->order_by("u.first_name,u.last_name");
 		$result	= $this->db->get()->result();
 		return $result; 
 	 }

@@ -149,11 +149,11 @@
 	
 	function getDegreebyProgram()
 	{
-		var program_id =$('#program_id').val();
+		var program_id =$('#program_id').val(); var campus_id =$('#campus_id').val();
 		$.ajax({
 			type:'POST',
 			url:'<?php echo base_url();?>course/getDegreebyProgram',
-			data: {'program_id':program_id},
+			data: {'program_id':program_id,'campus_id':campus_id},
 			success: function(data){
 				//alert(data); 
 			var  option_brand = '<option value="">--Select Degree--</option>';

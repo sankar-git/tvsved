@@ -139,13 +139,15 @@
 			  <div id="studentList" style="display:none">
 				   <div class="box-body table-responsive">
 			     
-				  <div style="float:middle;" align="center">
+				  <div style="float:middle;" align="left">
 				 
 				  <input type="submit"  name="report_card" id="report_card" value="Report Card" class="btn btn-primary" formtarget="_blank">
 				  <input type="submit"  name="aggregate_marks" id="aggregate_marks" value="Aggregate Marks" class="btn btn-primary" formtarget="_blank">
 				 <!-- <input type="submit"  name="fail_students" id="fail_students" value="Fail Student" class="btn btn-primary" formtarget="_blank">-->
 				   <input type="submit"  name="result_list" id="result_list" value="Result" class="btn btn-primary" formtarget="_blank">
-				   <input type="submit"  name="result_list" id="result_list" value="Result" class="btn btn-primary" formtarget="_blank">
+				   <!--<input type="submit"  name="deflicit" id="deflicit" value="Deflicit" class="btn btn-primary" formtarget="_blank">-->
+				  <input type="submit"  name="subject_wise_result" id="subject_wise_result" value="Subject-Wise Result" class="btn btn-primary" formtarget="_blank">
+				  
 				  <!-- <input type="submit"  name="subject_wise_result" id="subject_wise_result" value="Subject-Wise Result" class="btn btn-primary" formtarget="_blank">
 				   <input type="submit"  name="fail_student_list" id="fail_student_list" value="Failed Student" class="btn btn-primary" formtarget="_blank">
 				   <input type="submit"  name="deflicit" id="deflicit" value="Deflicit" class="btn btn-primary" formtarget="_blank">

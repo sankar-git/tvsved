@@ -701,6 +701,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 		$course_title = $this->input->post('course_title');
 		$theory_credit = $this->input->post('theory_credit');
 		$practicle_credit = $this->input->post('practicle_credit');
+		$course_subject_id = $this->input->post('course_subject_id');
 		
 		$save['program_id']=$program_id;
 		$save['degree_id']=$degree_id;
@@ -714,6 +715,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 		$save['theory_credit']=$theory_credit;
 		$save['practicle_credit']=$practicle_credit;
 		$save['created_on']=     $register_date_time;
+		$save['course_subject_id']=     $course_subject_id;
 		//print_r($save); exit;
 		$data= $this->Discipline_model->update_course($id,$save);
 		$this->session->set_flashdata('message', 'Course updated successfully');

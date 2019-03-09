@@ -19,7 +19,7 @@ Class Gradechart_model extends CI_Model
 			$this->db->where('sum.course_id',$course_id);
 		}
 		
-	    // $this->db->group_by('u.id',$student_id);
+	    $this->db->order_by('u.first_name,u.last_name');
 		
         $result	= $this->db->get()->result();//echo $this->db->last_query(); die;
 		return $result;
@@ -60,8 +60,11 @@ Class Gradechart_model extends CI_Model
 		    
 		    
 		    $this->db->where(array('sa.campus_id'=>$campus_id,'sa.degree_id'=>$degree_id,'sa.batch_id'=>$batch_id,'c.id'=>$course_id,'sa.semester_id'=>$semester_id));$this->db->group_by('u.id');
+			
+			$this->db->order_by('u.first_name,u.last_name');
 		    $result	= $this->db->get()->result();
 			//echo $this->db->last_query();exit;
+			
 	    	return $result;
 	    	
 	}
@@ -94,7 +97,7 @@ Class Gradechart_model extends CI_Model
 		return $result;
 	}
 	
-	function get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id='')
+	function get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id='',$course_id='')
 	{
 		
 		$this->db->select('c.id as course_id,r.theory_internal1,r.theory_internal2,r.theory_internal3,r.theory_internal,r.theory_paper1,

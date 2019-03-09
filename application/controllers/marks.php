@@ -1220,11 +1220,11 @@ class Marks extends CI_Controller {
 		
 		$data['courses']=$this->Marks_model->get_course_group_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id); 
 		
-		//echo $this->db->last_query();
+		echo $this->db->last_query();
 		//print_r($data['programs']); exit;
 		$str = '';
          foreach($data['courses'] as $k=>$v){ 
-			if(empty(@$v->course_subject_name))
+			if(isset($v->course_subject_name) && $v->course_subject_name!=NULL)
 				$str .= "<option value=".$v->id.">".$v->course_title."</option>";
 			else
 				$str .= "<option value=".$v->id.">".$v->course_title.' ('.$v->course_code.")</option>";
@@ -1241,12 +1241,23 @@ class Marks extends CI_Controller {
 		$batch_id = $this->input->post('batch_id');
 		$semester_id = $this->input->post('semester_id');
 		$discipline_id = $this->input->post('discipline_id');
-		
-		$data['courses']=$this->Marks_model->get_course_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id); 
+		if($degree_id == 1 && $program_id==1){
+			$data['courses']=$this->Marks_model->get_course_group_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id); 
+			
+		}else
+			$data['courses']=$this->Marks_model->get_course_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id); 
 		//print_r($data['programs']); exit;
 		$str = '';
          foreach($data['courses'] as $k=>$v){ 
-           $str .= "<option value=".$v->id.">".$v->course_code.'-'.$v->course_title."</option>";
+		 //print_r($v);
+			if($degree_id == 1 && $program_id==1){
+				if($v->course_subject_id>0)
+					$course_title = $v->course_subject_title .'('. $v->course_code . ')';
+				else
+					$course_title = $v->course_code.'-'.$v->course_title;
+				$str .= "<option value=".$v->id.">".$course_title.'</option>';
+			}else
+				$str .= "<option value=".$v->id.">".$v->course_code.'-'.$v->course_title."</option>";
            }
 		   echo $str;
 	}

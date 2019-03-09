@@ -69,20 +69,20 @@
             <hr />
 			 <table width="100%" style="font-size:12px;">
                 <tr>
-                    <td width="33%" align="left"><b>College: </b><?php 
+                    <td width="65%" align="left"><b>College: </b><?php 
 											if(!empty($result_list[0]['campus_name'])){
 											echo $result_list[0]['campus_name'];
 											}else{echo '';}?></td>
-                   <td ><b>Degree: </b><?php 
-											if(!empty($result_list[0]['degree_name'])){
-											echo $result_list[0]['degree_name'];
+                    <td  ><b>Batch: </b><?php 
+											if(!empty($result_list[0]['batch_name'])){
+											echo $result_list[0]['batch_name'];
 											}else{echo '';}?></td>
                     
                 </tr>
                 <tr>
-                    <td  ><b>Batch: </b><?php 
-											if(!empty($result_list[0]['batch_name'])){
-											echo $result_list[0]['batch_name'];
+                   <td ><b>Degree: </b><?php 
+											if(!empty($result_list[0]['degree_name'])){
+											echo $result_list[0]['degree_name'];
 											}else{echo '';}?></td>
                    
                     <td   ><b>Semester: </b><?php 

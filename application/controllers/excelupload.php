@@ -87,10 +87,9 @@ class Excelupload extends CI_Controller {
 			 $external = array();
 			 
 			 $degree_id = $this->input->post('degree_id');
-			 if($degree_id == '')
-				 $degree_id = $this->input->post('degree_idd');
-			 if($degree_id == 1)
-			 {
+			// if($degree_id == '')
+				// $degree_id = $this->input->post('degree_idd');
+			
 			 $campus_id = $this->input->post('campus_id');
 			 $program_id = $this->input->post('program_id');
 			 $batch_id = $this->input->post('batch_id');
@@ -99,26 +98,29 @@ class Excelupload extends CI_Controller {
 			 $discipline_id = $this->input->post('discipline_id');
 			 $mark_type = $this->input->post('marks_type');
 			 $date_of_start = $this->input->post('date_of_start');
-			 }
-			 if($degree_id != 1)
-			 {
-			 $campus_id = $this->input->post('campus_idd');
-			 $program_id = $this->input->post('program_idd');
-			 $batch_id = $this->input->post('batch_idd');
-			 $semester_id = $this->input->post('semester_idd');
-			 $course_id = $this->input->post('course_idd');
-			 $discipline_id = $this->input->post('discipline_idd');
-			 $mark_type = $this->input->post('marks_typee');
-			 $date_of_start = $this->input->post('date_of_startt');
-			 }
+			
 			 $campuses = $this->Excel_model->get_campus_by_id($campus_id);
 			 $programs = $this->Excel_model->get_program_by_id($program_id);
 			 $degrees = $this->Excel_model->get_degree_by_id($degree_id);
 			 $batches = $this->Excel_model->get_batch_by_id($batch_id);
 			 $semesters = $this->Excel_model->get_semester_by_id($semester_id);
 			 $disciplines = $this->Excel_model->get_discipline_by_id($discipline_id);
-			 $courses = $this->Excel_model->get_course_by_id($course_id);
-			 $dos = $this->Generate_model->get_date_by_degree($degree_id); 
+			$pos = strpos($course_id, '|');
+			 if ($pos === false) {
+				$courses = $this->Excel_model->get_course_by_id($course_id);
+				$course_title = $courses->course_title;
+			 }else{
+				 $course_Arr = explode("|",$course_id);
+				 $course_group_id = $course_Arr[0];
+				 $course_idArr = explode("-",$course_Arr[1]);
+				// print_r( $course_idArr);
+				 $courses_group = $this->Excel_model->get_course_group_by_id($course_id);
+				 $courses1 = $this->Excel_model->get_course_by_id($course_idArr[0]);
+				 $courses2 = $this->Excel_model->get_course_by_id($course_idArr[1]);
+				$course_title = $courses_group->course_subject_title.' ('.$courses1->course_code.','.$courses2->course_code.')';
+			 }
+			 
+			 /*$dos = $this->Generate_model->get_date_by_degree($degree_id); 
 			// echo $dos[1]->id;
 			 for($j=0;$j<count($dos);$j++)
 			 {
@@ -127,20 +129,20 @@ class Excelupload extends CI_Controller {
 					 $dateofstart = $dos[$j]->start_date;
 					 break;
 					 } 
-			 }
+			 }*/
 			// print_r($dos);exit;
 			 $credits = $this->Marks_model->get_course_credit_points($course_id);
 			// print_r($credits[0]->practicle_credit);//exit;
 			 $data['students']=$this->Marks_model->get_ug_students_by_ids($campus_id,$program_id,$degree_id,$batch_id); 
 			// p($data['students']); exit;
-			if($degree_id==1){
+			if($degree_id==1 && $program_id == 1){
             //$finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Student Name','INTERNAL FIRST(10)',' INTERNAL SECOND(10)',' INTERNAL THIRD(10)','PRACTICAL PAPER-I(60)','PRACTICAL PAPER-II(60)','EXTERNAL PAPER-I(100)','EXTERNAL PAPER-II(100)');
-            $finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Date of Start','Student Name');
-			if($credits[0]->theory_credit != '0' && ($mark_type == '1'|| $mark_type == '3'))
+            $finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Student ID','Student Name');
+			//if($credits[0]->theory_credit != '0' && ($mark_type == '1'|| $mark_type == '3'))
 				$theoryarr = array('Internal theory first(40)','Internal theory second(40)','Internal theory third(40)');
-			if($credits[0]->practicle_credit != '0' && $mark_type == '1' || $mark_type == '3')
+			//if($credits[0]->practicle_credit != '0' && $mark_type == '1' || $mark_type == '3')
 				$practicalarr = array('Practical Paper I(60)','Practical Paper II(60)');
-			if($mark_type == '2' || $mark_type == '3')
+			//if($mark_type == '2' || $mark_type == '3')
 				$external = array('External Paper I(100)','External Paper II(100)');
 			$finalExcelArr = array_merge($finalExcelArr,$theoryarr,$practicalarr,$external);
 			//p($finalExcelArr);exit;
@@ -190,15 +192,16 @@ class Excelupload extends CI_Controller {
             $objPHPExcel->getActiveSheet()->setCellValue($cols[3].$newvar, $batches->batch_name);
             $objPHPExcel->getActiveSheet()->setCellValue($cols[4].$newvar, $semesters->semester_name);
             $objPHPExcel->getActiveSheet()->setCellValue($cols[5].$newvar, $disciplines->discipline_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[6].$newvar, $courses->course_title);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $dateofstart);
+            $objPHPExcel->getActiveSheet()->setCellValue($cols[6].$newvar, $course_title);
+            //$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $dateofstart);
+            $objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->user_unique_id);
             $objPHPExcel->getActiveSheet()->setCellValue($cols[8].$newvar, $value->first_name.' '.$value->last_name);
             
 			
             }
           }
 
-        $filename  = $courses->course_title.'_'.'bvsc_marks_upload.xls';
+        $filename  = $course_title.'_'.'bvsc_marks_upload.xls';
         header('Content-Type: application/vnd.ms-excel'); //mime type
         header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
         header('Cache-Control: max-age=0'); //no cache
@@ -208,17 +211,25 @@ class Excelupload extends CI_Controller {
         $objWriter->save('php://output');
         exit;
           }
+		 
 		  if($degree_id!=1){
-
+		//ini_set("display_errors","On");
+		 // error_reporting(E_ALL);echo "coming";exit;
 			  // $finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Student Name','INTERNAL THEORY(30)','INTERNAL PRACTICAL(20)','EXTERNAL THEORY(50)');
-			   $finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Date of Start','Student Name');
-			if($credits[0]->theory_credit != '0' && ($mark_type == '1' || $mark_type == '3'))
-				$theoryarr = array('INTERNAL THEORY(30)');
-			if($credits[0]->practicle_credit != '0' && ($mark_type == '1' || $mark_type == '3'))
-				$practicalarr = array('INTERNAL PRACTICAL(20)');
-			if($mark_type == '2' || $mark_type == '3')
-				$external = array('EXTERNAL THEORY(50)');
-			$finalExcelArr = array_merge($finalExcelArr,$theoryarr,$practicalarr,$external);
+			   $finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Student ID','Student Name');
+			   if($program_id == 1){
+					if($credits[0]->theory_credit != '0' && $credits[0]->practicle_credit != '0')
+						$theoryarr = array('Theory(30)','Assignment(5)','Practical(15)');
+					else if($credits[0]->theory_credit != '0' )
+						$theoryarr = array('Theory(40)','Assignment(10)');
+					else if($credits[0]->practicle_credit != '0' )
+						$theoryarr = array('Assignment(10)','Practical(40)');
+					$external = array('External Theory(50)');
+			   }else{
+					$theoryarr = array('Internal Theory(20)','TermPaper(10)','Internal Practical(50/100)');
+					$external = array('External Theory(70/100)');
+			   }
+			$finalExcelArr = array_merge($finalExcelArr,$theoryarr,$external);
 			//p($finalExcelArr);exit;
 			   $objPHPExcel = new PHPExcel();
 			   $objPHPExcel->setActiveSheetIndex(0);
@@ -266,15 +277,16 @@ class Excelupload extends CI_Controller {
             $objPHPExcel->getActiveSheet()->setCellValue($cols[3].$newvar, $batches->batch_name);
             $objPHPExcel->getActiveSheet()->setCellValue($cols[4].$newvar, $semesters->semester_name);
             $objPHPExcel->getActiveSheet()->setCellValue($cols[5].$newvar, $disciplines->discipline_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[6].$newvar, $courses->course_title);
-			$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $dateofstart);
+            $objPHPExcel->getActiveSheet()->setCellValue($cols[6].$newvar, $course_title);
+			//$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $dateofstart);
+            $objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->user_unique_id);
             $objPHPExcel->getActiveSheet()->setCellValue($cols[8].$newvar, $value->first_name.' '.$value->last_name);
             
 			
             }
           }
 
-			$filename  = $courses->course_title.'_'.'btech_marks_upload.xls';
+			$filename  = $course_title.'_'.'btech_marks_upload.xls';
 			header('Content-Type: application/vnd.ms-excel'); //mime type
 			header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
 			header('Cache-Control: max-age=0'); //no cache
@@ -314,18 +326,39 @@ class Excelupload extends CI_Controller {
 			 $batches = $this->Excel_model->get_batch_by_name($rowsold[1][3]);
 			 $semesters = $this->Excel_model->get_semester_by_name($rowsold[1][4]);
 			 $disciplines = $this->Excel_model->get_discipline_by_name($rowsold[1][5]);
-			 $courses = $this->Excel_model->get_course_by_name($rowsold[1][6]);
+			$degree_id = $degrees->id;
+			$program_id = $programs->id;
+			 if($degree_id==1 && $program_id == 1){
+				  $pos = strpos($rowsold[1][6], '|');
+				if ($pos === false) {
+					$courseGroupArr = explode(" (",$rowsold[1][6]);
+					$courseArr = explode(",",str_replace(")","",$courseGroupArr[1]));
+					$courses_group = $this->Excel_model->get_course_by_group(trim($courseGroupArr[0]));
+					$courses1 = $this->Excel_model->get_course_by_code($courseArr[0],$courses_group->id);
+					$courses2 = $this->Excel_model->get_course_by_code($courseArr[1],$courses_group->id);
+					$course_id = $courses_group->id.'|'.$courses1->id.'-'.$courses2->id;
+				}
+				else{
+				 $courses = $this->Excel_model->get_course_by_name($rowsold[1][6]);
+				 $course_id =$courses->id;
+				}
+			 }else{
+				 $courses = $this->Excel_model->get_course_by_name($rowsold[1][6]);
+				 $course_id =$courses->id;
+			 }
+			 //echo $course_id;exit;
 			// $dateofstart = $this->Excel_model->get_course_by_name($rowsold[1][6]);
 			  $dos = $this->Generate_model->get_date_by_degree($degrees->id); 
 			// echo $dos[1]->id;
-			 for($j=0;$j<count($dos);$j++)
+			$dateofstart='';
+			/* for($j=0;$j<count($dos);$j++)
 			 {
 				 if($dos[$j]->start_date == $rowsold[1][7])
 				 {
 					 $dateofstart = $dos[$j]->id;
 					 break;
 					 } 
-			 }
+			 }*/
 			 
 			 $internal_practical1='';
 			 $internal_practical2='';
@@ -335,270 +368,122 @@ class Excelupload extends CI_Controller {
 			 $sum_get_internal_practical='';
 		     $m =0;
 			 $register_date_time=date('Y-m-d H:i:s');
-			 if($degrees->id==1){
-		     //foreach($rowsold as $firstrow){
-				for($i=1;$i<=count($rowsold);$i++)
-				{				
-					$firstrow = $rowsold[$i];
-					if($firstrow[9] != '')
-					{						
-				 if($rowsold[0][9] == 'Internal theory first(40)')
-				 {
+			for($i=1;$i<=count($rowsold);$i++)
+			{				
+				$firstrow = $rowsold[$i];
+				if($firstrow[9] != '')
+				{
+					if($degree_id == 1 && $program_id==1){
 						$internal_marks1=$firstrow[9];
-					    $internal_marks2=$firstrow[10];
-					    $internal_marks3=$firstrow[11];	 
-				 }
-				 else
-				 {
-						$internal_marks1='';
-					    $internal_marks2='';
-					    $internal_marks3='';
-				 }
-				 if($rowsold[0][9] == 'External Paper I(100)')
-				 {
-						$theory_external1=$firstrow[9];
-					    $theory_external2=$firstrow[10];
-					   
-				 }
-				 else
-				 {
-					 if($rowsold[0][14] == 'External Paper I(100)')
-					{
+						$internal_marks2=$firstrow[10];
+						$internal_marks3=$firstrow[11];	 
+						$internal_practical1=$firstrow[12];
+						$internal_practical2=$firstrow[13]; 
 						$theory_external1=$firstrow[14];
-					    $theory_external2=$firstrow[15];
-					   
+						$theory_external2=$firstrow[15];
+					}elseif($degree_id != 1 && $program_id==1){
+						if($credits[0]->theory_credit != '0' && $credits[0]->practicle_credit != '0'){
+							$internal_marks1=$firstrow[9];
+							$assignment_mark=$firstrow[10];
+							$internal_practical1=$firstrow[11];
+							$theory_external1=$firstrow[12];
+						}else if($credits[0]->theory_credit != '0' ){
+							$internal_marks1=$firstrow[9];
+							$assignment_mark=$firstrow[10];
+							$theory_external1=$firstrow[11];
+						}else if($credits[0]->practicle_credit != '0' ){
+							$assignment_mark=$firstrow[9];
+							$internal_practical1=$firstrow[10];
+							$theory_external1=$firstrow[11];
+						}
+					}elseif($degree_id != 1 && $program_id!=1){
+						$internal_marks1=$firstrow[9];
+						$assignment_mark=$firstrow[10];
+						$internal_practical1=$firstrow[11];
+						$theory_external1=$firstrow[12];
+					}
+					 $stud_id = $firstrow[7];
+					 $stud = explode(' ',$firstrow[8]);
+					 
+					// print_r($stud);
+					 $students = $this->Excel_model->get_student_by_id($stud_id);
+					// p($students); 
+					//for update work
+					$check_student = $this->Excel_model->get_student_already_uploaded($campuses->id,$programs->id,$degrees->id,$batches->id,$semesters->id,$disciplines->id,$course_id,$students->id);
+					//p($check_student); exit;
+					//echo "sfdsfs";
+					if(!empty($check_student->student_id))
+					{
+						//echo "hii"; exit;
+						
+						$update_ug_marks           =array(
+						'campus_id'     =>($campuses->id) ? $campuses->id:'',
+						'program_id'     =>($programs->id) ? $programs->id : '',
+						'degree_id'     =>($degrees->id) ? $degrees->id : '',
+						'batch_id'     =>($batches->id) ? $batches->id : '',
+						'semester_id'     =>($semesters->id) ? $semesters->id : '',
+						'discipline_id'     =>($disciplines->id) ? $disciplines->id : '',
+						'course_id'     =>($course_id) ? $course_id : '',
+						'student_id'    =>($students->id) ? $students->id : '',
+						'theory_internal1'    =>($internal_marks1) ? $internal_marks1 : '',
+						'theory_internal2'    =>($internal_marks2) ? $internal_marks2 : '',
+						'theory_internal3'    =>($internal_marks3) ? $internal_marks3 : '',
+						//'theory_internal'    =>($largesum) ? $largesum : '',
+						'date_of_start' => ($firstrow[7]) ? $firstrow[7] : '',
+						'theory_external1'    =>($theory_external1) ? $theory_external1 : '',
+						'theory_external2'    =>($theory_external2) ? $theory_external2 : '',
+						'practical_internal'    =>($internal_practical1) ? $internal_practical1 : '',
+						'practical_external'    =>($internal_practical2) ? $internal_practical2 : '',
+						//'theory_paper1'    =>($internal_practical1) ? $internal_practical1 : '',
+						//'theory_paper2'    =>($internal_practical2) ? $internal_practical2 : '',
+						//'sum_internal_practical'    =>($sum_get_internal_practical) ? $sum_get_internal_practical : '',
+						//'theory_external'    =>($firstrow[13]) ? $firstrow[13] : '',
+						//'practical_external'    =>($firstrow[14]) ? $firstrow[14] : '',
+						'assignment_mark'    =>($assignment_mark) ? $assignment_mark : '',
+						'created_on'    =>($register_date_time) ? $register_date_time : '',
+						
+						
+
+						);
+						//p($update_ug_marks); exit;
+						$savedata = $this->Excel_model->update_ug_marks_excel($update_ug_marks);
+						
 					}
 					else
 					{
-						$theory_external1='';
-					    $theory_external2='';
+					  //echo "helo";//exit;
+						$save_ug_marks           = array(
+						'campus_id'     =>($campuses->id) ?  $campuses->id:'',
+						'program_id'     =>($programs->id) ? $programs->id : '',
+						'degree_id'     =>($degrees->id) ? $degrees->id : '',
+						'batch_id'     =>($batches->id) ? $batches->id : '',
+						'semester_id'     =>($semesters->id) ? $semesters->id : '',
+						'discipline_id'     =>($disciplines->id) ? $disciplines->id : '',
+						'course_id'     =>($course_id) ? $course_id : '',
+						'student_id'    =>($students->id) ? $students->id : '',
+						'theory_internal1'    =>($internal_marks1) ? $internal_marks1 : '',
+						'theory_internal2'    =>($internal_marks2) ? $internal_marks2 : '',
+						'theory_internal3'    =>($internal_marks3) ? $internal_marks3 : '',
+						//'theory_internal'    =>($largesum) ? $largesum : '',
+						'practical_internal'    =>($internal_practical1) ? $internal_practical1 : '',
+						'practical_external'    =>($internal_practical2) ? $internal_practical2 : '',
+						'theory_external1'    =>($theory_external1) ? $theory_external1 : '',
+						'theory_external2'    =>($theory_external2) ? $theory_external2 : '',
+						//'sum_internal_practical'    =>($sum_get_internal_practical) ? $sum_get_internal_practical : '',
+						//'theory_external'    =>($firstrow[13]) ? $firstrow[13] : '',
+						//'practical_external'    =>($firstrow[14]) ? $firstrow[14] : '',
+						//'external_sum'    =>($total_external) ? $total_external : '',
+						//'date_of_start' => ($firstrow[7]) ? $firstrow[7] : '',
+						'assignment_mark'    =>($assignment_mark) ? $assignment_mark : '',
+						'created_on'    =>($register_date_time) ? $register_date_time : '',
+						);
+						//p($save_ug_marks); exit;
+						$savedata = $this->Excel_model->save_ug_marks_excel($save_ug_marks);
+						
 					}
-				 }
-				  if($rowsold[0][12] == 'Practical Paper I(60)')
-				 {
-						$internal_practical1=$firstrow[12];
-						$internal_practical2=$firstrow[13]; 
-				 }
-				 else
-				 {
-						$internal_practical1='';
-						$internal_practical2=''; 
-				 }
-					   
-						/*$internal_practical1=$firstrow[11];
-						$internal_practical2=$firstrow[12];
-						$theory_external_marks1=$firstrow[13];
-						$theory_external_marks2=$firstrow[14];
-						
-						$get_internal_practical1=$internal_practical1/3;
-						$get_internal_practical2=$internal_practical2/3;
-						
-						$sum_get_internal_practicals=$get_internal_practical1+$get_internal_practical2;
-						$sum_get_internal_practical = number_format($sum_get_internal_practicals, 2);
-						
-						$theory_external1=$theory_external_marks1/5;
-						$theory_external2=$theory_external_marks2/5;
-						
-						$external_sum=$theory_external1+$theory_external2;
-						$total_external = number_format($external_sum, 2);
-			 
-			            $sum1=$internal_marks1+$internal_marks2;
-						$sum2=$internal_marks2+$internal_marks3;
-						$sum3=$internal_marks1+$internal_marks3;
-						if($sum1>=$sum2 && $sum1>=$sum3)
-						{
-							$largesum=$sum1;
-						}
-						if($sum2>=$sum1 && $sum2>=$sum3)
-						{
-							$largesum=$sum2;
-						}
-						if($sum3>=$sum1 && $sum3>=$sum2)
-						{
-							$largesum=$sum3;
-						}
-						//p($largesum); exit;
-						$theory_marks=$largesum;*/
-			 $stud = explode(' ',$firstrow[8]);
-			// print_r($stud);
-			 $students = $this->Excel_model->get_student_by_name($stud[0]);
-			// p($students); 
-			//for update work
-		    $check_student = $this->Excel_model->get_student_already_uploaded($campuses->id,$programs->id,$degrees->id,$batches->id,$semesters->id,$disciplines->id,$courses->id,$students->id);
-			//p($check_student); exit;
-			//echo "sfdsfs";
-			if(!empty($check_student->student_id))
-			{
-				//echo "hii"; exit;
-				
-				$update_ug_marks           =array(
-				'campus_id'     =>($campuses->id) ? $campuses->id:'',
-				'program_id'     =>($programs->id) ? $programs->id : '',
-				'degree_id'     =>($degrees->id) ? $degrees->id : '',
-				'batch_id'     =>($batches->id) ? $batches->id : '',
-				'semester_id'     =>($semesters->id) ? $semesters->id : '',
-				'discipline_id'     =>($disciplines->id) ? $disciplines->id : '',
-				'course_id'     =>($courses->id) ? $courses->id : '',
-				'student_id'    =>($students->id) ? $students->id : '',
-				'theory_internal1'    =>($internal_marks1) ? $internal_marks1 : '',
-				'theory_internal2'    =>($internal_marks2) ? $internal_marks2 : '',
-				'theory_internal3'    =>($internal_marks3) ? $internal_marks3 : '',
-				//'theory_internal'    =>($largesum) ? $largesum : '',
-				'date_of_start' => ($firstrow[7]) ? $firstrow[7] : '',
-				'theory_external1'    =>($theory_external1) ? $theory_external1 : '',
-				'theory_external2'    =>($theory_external2) ? $theory_external2 : '',
-				'theory_paper1'    =>($internal_practical1) ? $internal_practical1 : '',
-				'theory_paper2'    =>($internal_practical2) ? $internal_practical2 : '',
-				//'sum_internal_practical'    =>($sum_get_internal_practical) ? $sum_get_internal_practical : '',
-				//'theory_external'    =>($firstrow[13]) ? $firstrow[13] : '',
-				//'practical_external'    =>($firstrow[14]) ? $firstrow[14] : '',
-				//'external_sum'    =>($total_external) ? $total_external : '',
-				'created_on'    =>($register_date_time) ? $register_date_time : '',
-				
-				
-
-				);
-				//p($update_ug_marks); exit;
-				$savedata = $this->Excel_model->update_ug_marks_excel($update_ug_marks);
-				
+					$m++;
+				}
 			}
-			else
-			{
-			  //echo "helo";//exit;
-				$save_ug_marks           = array(
-				'campus_id'     =>($campuses->id) ?  $campuses->id:'',
-				'program_id'     =>($programs->id) ? $programs->id : '',
-				'degree_id'     =>($degrees->id) ? $degrees->id : '',
-				'batch_id'     =>($batches->id) ? $batches->id : '',
-				'semester_id'     =>($semesters->id) ? $semesters->id : '',
-				'discipline_id'     =>($disciplines->id) ? $disciplines->id : '',
-				'course_id'     =>($courses->id) ? $courses->id : '',
-				'student_id'    =>($students->id) ? $students->id : '',
-				'theory_internal1'    =>($internal_marks1) ? $internal_marks1 : '',
-				'theory_internal2'    =>($internal_marks2) ? $internal_marks2 : '',
-				'theory_internal3'    =>($internal_marks3) ? $internal_marks3 : '',
-				//'theory_internal'    =>($largesum) ? $largesum : '',
-				'theory_paper1'    =>($internal_practical1) ? $internal_practical1 : '',
-				'theory_paper2'    =>($internal_practical2) ? $internal_practical2 : '',
-				'theory_external1'    =>($theory_external1) ? $theory_external1 : '',
-				'theory_external2'    =>($theory_external2) ? $theory_external2 : '',
-				//'sum_internal_practical'    =>($sum_get_internal_practical) ? $sum_get_internal_practical : '',
-				//'theory_external'    =>($firstrow[13]) ? $firstrow[13] : '',
-				//'practical_external'    =>($firstrow[14]) ? $firstrow[14] : '',
-				//'external_sum'    =>($total_external) ? $total_external : '',
-				'date_of_start' => ($firstrow[7]) ? $firstrow[7] : '',
-				'created_on'    =>($register_date_time) ? $register_date_time : '',
-				);
-				//p($save_ug_marks); exit;
-				$savedata = $this->Excel_model->save_ug_marks_excel($save_ug_marks);
-				
-			}
-			$m++;
-					}
-         } //exit;
-	   }//bvsc end
-	   if($degrees->id!=1)
-	   {
-		$n=0;
-		
-		//foreach($rowsold as $firstrow){
-			for($i=1;$i<=count($rowsold);$i++)
-				{				
-					$firstrow = $rowsold[$i];
-					$theory_external1 = '';
-					$practical_internal='';
-					$theory_internal='';
-					if($firstrow[9] != '')
-					{						
-				 if($rowsold[0][9] == 'INTERNAL THEORY(30)')
-				 {
-						$theory_internal=$firstrow[9];
-				 }
-				if($rowsold[0][9] == 'EXTERNAL THEORY(50)')
-				{
-						$theory_external1 = $firstrow[9];
-				}
-						
-				if($rowsold[0][9] == 'INTERNAL PRACTICAL(20)')
-				 {
-						$practical_internal=$firstrow[9];  
-				 }
-				 
-				 if($rowsold[0][10] == 'INTERNAL PRACTICAL(20)')
-				 {
-						$practical_internal=$firstrow[10];  
-				 }
-				 if($rowsold[0][10] == 'EXTERNAL THEORY(50)')
-				{
-						$theory_external1 = $firstrow[10];
-				}
-						
-				if($rowsold[0][11] == 'EXTERNAL THEORY(50)')
-				{
-						$theory_external1 = $firstrow[11];
-				}
-							
-				 
-					   
-				//p($campuses->id);
-				// echo "helo"; exit;
-				$students = $this->Excel_model->get_student_by_name($firstrow[8]);
-				//p($students->id); exit;
-				$check_students = $this->Excel_model->get_student_already_uploaded($campuses->id,$programs->id,$degrees->id,$batches->id,$semesters->id,$disciplines->id,$courses->id,$students->id);
-				//p($check_students); exit;
-			/*	$theory_internal    = $firstrow[8];
-				$practical_internal = $firstrow[9];
-				$theory_external    = $firstrow[10];
-				$internal_external_sum = $theory_internal+$practical_internal+$theory_external;*/
-							
-						if(!empty($check_students))
-						{
-						   // echo "hiii"; exit;
-							$update_btech_marks_excel =array(
-							'campus_id'     =>($campuses->id) ? $campuses->id:'',
-							'program_id'     =>($programs->id) ? $programs->id : '',
-							'degree_id'     =>($degrees->id) ? $degrees->id : '',
-							'batch_id'     =>($batches->id) ? $batches->id : '',
-							'semester_id'     =>($semesters->id) ? $semesters->id : '',
-							'discipline_id'     =>($disciplines->id) ? $disciplines->id : '',
-							'course_id'     =>($courses->id) ? $courses->id : '',
-							'student_id'    =>($students->id) ? $students->id : '',
-							'theory_internal'    =>($theory_internal) ? $theory_internal : '',
-							'practical_internal'    =>($practical_internal) ? $practical_internal : '',
-							//'marks_sum'    =>($internal_external_sum) ? $internal_external_sum : '',
-							'theory_external1'    =>($theory_external1) ? $theory_external1 : '',
-							'created_on'    =>($register_date_time) ? $register_date_time : ''
-							);
-							//p($update_btech_marks_excel); exit;
-						   $savedata = $this->Excel_model->update_ug_marks_excel($update_btech_marks_excel);
-					   }
-					   else
-					   {
-						   // echo "hello"; exit;
-						    $save_btech_marks_excel =array(
-							'campus_id'     =>($campuses->id) ? $campuses->id:'',
-							'program_id'     =>($programs->id) ? $programs->id : '',
-							'degree_id'     =>($degrees->id) ? $degrees->id : '',
-							'batch_id'     =>($batches->id) ? $batches->id : '',
-							'semester_id'     =>($semesters->id) ? $semesters->id : '',
-							'discipline_id'     =>($disciplines->id) ? $disciplines->id : '',
-							'course_id'     =>($courses->id) ? $courses->id : '',
-							'student_id'    =>($students->id) ? $students->id : '',
-							'theory_internal'    =>($theory_internal) ? $theory_internal : '',
-							'practical_internal'    =>($practical_internal) ? $practical_internal : '',
-							//'marks_sum'    =>($internal_external_sum) ? $internal_external_sum : '',
-							'theory_external1'    =>($theory_external1) ? $theory_external1 : '',
-							'created_on'    =>($register_date_time) ? $register_date_time : ''
-							);
-						//	p($save_btech_marks_excel); exit;
-						   $savedata = $this->Excel_model->save_ug_marks_excel($save_btech_marks_excel);
-					   }
-		      $n++;	
-					}
-         }  
-	   } //btech
-	   
-	   
         }
 	    $this->session->set_flashdata('message', 'Excel uploaded successfully.');
         redirect(base_url().'excelupload/uploadUgMarksExcel');

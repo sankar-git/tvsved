@@ -85,12 +85,12 @@
 				
                 
 				<?php //print_r($aggregate_marks[0]);exit;
-			$total_cp='';
-			$total_gp='';
+			$total_cp=0;
+			$total_gp=0;
 			$totalcount=0;
 			foreach($student_marks['subjectList'] as $subject_data){
 				//p($subject_data); exit;
-					if($subject_data['passfail_status'] == 'P'){
+					if($subject_data['passfail_status'] == 'PASS' && $subject_data['theory_credit']>0){
 						$totalcount++;
 				     $total_cp = $total_cp+$subject_data['creditval'];
 					 $total_gp = $total_gp+$subject_data['gradeval'];
@@ -106,7 +106,7 @@
 			<td><?php if($subject_data['theory_external']==''){echo '0.00';}else{echo number_format($subject_data['theory_external'],2);}?></td>
 			<td><?php if($subject_data['theory_internal']==''){echo '0.00';}else{echo number_format($subject_data['theory_internal']+$subject_data['assignment_mark']+$subject_data['theory_external'],2);}?></td>
 			<td><?php if($subject_data['practical_internal']==''){echo '0.00';}else{echo number_format($subject_data['practical_internal'],2);}?></td>
-			<td><?php if($subject_data['internal_sum']==''){echo '0.00';}else{echo number_format($subject_data['total_subject_marks'],2);}?></td>
+			<td><?php if($subject_data['total_subject_marks']==''){echo '0.00';}else{echo number_format($subject_data['total_subject_marks'],2);}?></td>
 			
 			
 			

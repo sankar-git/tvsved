@@ -88,15 +88,17 @@ Class Result_model extends CI_Model
 	}
 	function get_student_result_data($student_id)
 	{
-		$this->db->select('u.*,umap.user_id,b.batch_name,c.campus_name,c.campus_code,d.degree_name');
+		$this->db->select('u.*,umap.user_id,b.batch_name,c.campus_name,c.campus_code,d.degree_name,program_name,umap.parent_name,umap.mother_name,discipline_name');
 		$this->db->from('users u');
 		$this->db->join('user_map_student_details umap','umap.user_id = u.id','INNER');
 		$this->db->join('batches b','b.id = umap.batch_id','INNER');
 		$this->db->join('campuses c','c.id = umap.campus_id','left');
 		$this->db->join('degrees d','d.id = umap.degree_id','left');
+		$this->db->join('programs e','e.id = d.program_id','left');
+		$this->db->join('disciplines f','f.id = d.discipline_id','left');
 		$this->db->where('u.id',$student_id);
-		//echo $this->db->last_query(); die;
-        $result	= $this->db->get()->result();
+		
+        $result	= $this->db->get()->result();//echo $this->db->last_query(); die;
 		return $result;
 	}
 	function get_student_semester_data($student_id)
@@ -112,12 +114,13 @@ Class Result_model extends CI_Model
 	}
 	function get_student_marks_by_id_and_semester_id($student_id,$semester_id)
 	{
-		$this->db->select('um.theory_internal,um.theory_paper1,um.theory_paper2,um.sum_internal_practical,
-		                   um.external_sum,um.practical_internal,um.theory_external,um.practical_external,
+		$this->db->select('um.theory_internal1,um.theory_external2,um.theory_internal3,um.theory_internal2,um.theory_internal1,um.theory_internal,um.assignment_mark,um.theory_paper1,um.theory_paper2,um.sum_internal_practical,
+		                   um.external_sum,um.practical_internal,um.theory_external1,um.practical_external,
 		                   um.marks_sum,um.student_id,um.course_id,um.semester_id,um.ncc_status,c.id,c.course_code,c.course_title,
-						   c.theory_credit,c.practicle_credit,c.course_group_id'); 
+						   c.theory_credit,c.practicle_credit,csg.course_subject_name,csg.course_subject_title,csg.id as course_group_id'); 
 		$this->db->from('students_ug_marks um');
 		$this->db->join('courses as c','c.id=um.course_id','INNER');
+		$this->db->join('course_subject_groups csg','csg.id=c.course_subject_id','LEFT');
 		$this->db->where(array('um.student_id'=>$student_id,'um.semester_id'=>$semester_id));
 		$this->db->order_by("um.course_id", "asc");
         $result	= $this->db->get()->result();

@@ -220,7 +220,7 @@ class Course extends CI_Controller {
 	{
 		$program_id = $this->input->post('program_id');
 		$campus_id = $this->input->post('campus_id');
-		$data['degrees']=$this->Master_model->get_degree_by_program_id($program_id,$campus_id); 
+		$data['degrees']=$this->Master_model->get_degree_by_program_id($program_id,$campus_id);// echo $this->db->last_query();
 		 $str = '';
          foreach($data['degrees'] as $k=>$v){   
           $str .= "<option value=".$v->id.">".$v->degree_name."</option>";

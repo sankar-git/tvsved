@@ -39,49 +39,25 @@
 			
             <!-- /.box-header -->
             <!-- form start -->
-			<center>
-			<div class="row" style="padding-left:30px;" align="rignt">
-			 <div class="form-group col-md-4">
-					  <label for="wwe">Upload Type<span style="color:red;font-weight: bold;">*</span></label>
-					  <select class="form-control" name="upload_type" id="upload_type" onchange="ChangeUploadView();">
-						  <option value="">--Select College Type--</option>
-						   <option value="B">BVSC</option>
-						   <option value="A">BTECH</option>
-						 
-					 </select>
-		      </div>
-			  </div>
-			  </center>
+	
 			 <div id="bvscccc">
             <form role="form"  name="ug_marks_upload_view" id="ug_marks_upload_view" method="post" action="<?php echo base_url();?>excelupload/downloadMarksFormat" enctype="multipart/form-data">
               <div class="box-body">
+			   <div class="box-body">
 			    <div class="row">
-				<?php if($session_data[0]->permission_status=='1'){?>
+				
 				<div class="form-group col-md-4">
 					  <label for="program">Campus<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="campus_id" id="campus_id" class="form-control" onchange="getProgram();">
 						  <option value="">--Select Campus--</option>
-						  <?php foreach($campuses as $k=>$campus){ if($k>3) continue; ?>
+						  <?php foreach($campuses as $k=>$campus){ //if($k>3) continue; ?>
 						  <option value="<?php echo $campus->id; ?>"><?php echo $campus->campus_name; ?></option>
 						 
 						  <?php } ?>
 					  </select>
 					
 			    </div>
-				<?php }else{?>
 				
-				<div class="form-group col-md-4">
-					  <label for="program">Campus<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="campus_id" id="campus_id" class="form-control" onchange="getProgram();">
-						  <option value="">--Select Campus--</option>
-						  <?php foreach($campuses as $campus){?>
-						  <?php if($campus->id==$session_data[0]->subadmin_campus_id || $campus->id==$session_data[0]->campus){?>
-						  <option value="<?php echo $campus->id; ?>"><?php echo $campus->campus_name; ?></option>
-						  <?php }?>
-						  <?php } ?>
-					  </select>
-			    </div>
-				<?php }?>
 				
 					<div class="form-group col-md-4">
 					  <label for="program">Program<span style="color:red;font-weight: bold;">*</span></label>
@@ -153,82 +129,17 @@
 						
 					  </select>
 					</div>
-				  <div class="form-group col-md-4">
-				  <label for="course-group">Date Of Start<span style="color:red;font-weight: bold;">*</span></label>
-				   <select class="form-control" name="date_of_start" id="date_of_start">
-				   </select>
-				</div>
+				 
 				
-				    <div class="ncc_show" style="display:none;">
-				     <div class="form-group col-md-4" id="show_list">
-				       <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
-				       <select class="form-control" name="marks_type_ncc" id="marks_type_ncc" onchange="getStudentnccMarks();">
-						   <option value="0">Select Upload</option>
-						   <option value="3">Upload List</option>
-					  </select>
-				     </div>
-				   </div>
+				   
 				
-				<div class="for_ncc_hide">
-				<?php if($session_data[0]->upload_type=='1'){?>
-				  <div class="form-group col-md-4" id="itemsImport" style="display:none;">
-				  <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
-				   <select class="form-control" name="marks_type" id="marks_type" onchange="getStudentAssignedMarks();">
-					  <option value="0">-Select Marks Type-</option>
-					  <option value="1">Internal Marks</option>
-					  <?php if($session_data[0]->role_id!=2){?>
-					  <option value="2">External Marks</option>
-					  <option value="3">All</option>
-					  <?php } ?>
-				   </select>
-				  </div>
-				<?php } elseif($session_data[0]->upload_type=='2'){?>
-					 <div class="form-group col-md-4" id="itemsImport" style="display:none;">
-				       <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
-				       <select class="form-control" name="marks_type" id="marks_type" onchange="getStudentAssignedMarks();">
-						   <option value="0">-Select Marks Type-</option>
-						   <option value="1">Internal Marks</option>
-						 
-					  </select>
-				     </div>
-				<?php }else{?>
-				     <div class="form-group col-md-4" id="itemsImport" style="display:none;">
-				       <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
-				       <select class="form-control" name="marks_type" id="marks_type" onchange="getStudentAssignedMarks();">
-						   <option value="0">-Select Marks Type-</option>
-						   <option value="2">External Marks</option>
-					  </select>
-				     </div>
-				<?php }?>
-			  </div>
 			  </div>
 			  <div class="row"><div class="form-group col-md-4"><p class="credit_points" style="font-weight:bold">&nbsp;</p></div></div>
 			  
 			  </div>
+			
 			  
-			    <div id="ncc">
-			   <div id="nccListDiv" class="nccListDiv" style="display:none" >
-			        <div class="box-body table-responsive">
-						
-							 <table id="example" class="table table-bordered table-hover">
-								<thead>
-								<tr id="ncc_list" class="ncc_list">
-								    <th>Unique Id</th>
-								    <th>Student Name</th>
-									<th><span style="margin-left: 47px;">Ncc Subject</span></br></th>
-									
-									
-								</tr>
-								
-							</thead>
-							<tbody id="trncc" class="trncc">
-								
-							</tbody>
-						</table>
-						
-	                </div>
-				</div>
-			</div>
+			   
 			  
 			 <div id="courseList" class="courseList" style="display:none">
 			 <label for="campus">Download Upload Marks Excel Format<span style="color:red;font-weight: bold;">*</span></label>
@@ -241,167 +152,8 @@
 			<input type="hidden" name="theory_credit" id="theory_credit" value="" />
 					<input type="hidden" name="practicle_credit" id="practicle_credit" value="" />
 			<!--****************************B.Tech ******************************************************************-->
-			<div id="btechhh" style="display:none">
-			 <form role="form"  name="ug_marks_upload_view_btech" id="ug_marks_upload_view_btech" method="post" action="<?php echo base_url();?>excelupload/downloadMarksFormat" enctype="multipart/form-data">
-			  <!--  <form role="form" name="ug_marks_upload_view_btech" id="ug_marks_upload_view_btech" method="post" action="" enctype="multipart/form-data">-->
-              <div class="box-body">
-			    <div class="row">
-				<?php if($session_data[0]->permission_status=='1'){?>
-				<div class="form-group col-md-4">
-					  <label for="program">Campus<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="campus_idd" id="campus_idd" class="form-control" onchange="getProgramm();">
-						  <option value="">--Select Campus--</option>
-						<?php foreach($campuses as $k=>$campus){ if($k<4) continue;?>
-						  <option value="<?php echo $campus->id; ?>"><?php echo $campus->campus_name; ?></option>
-						 
-						  <?php } ?>
-					  </select>
-			    </div>
-				<?php } else { ?>
-				   <div class="form-group col-md-4">
-					  <label for="program">Campus<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="campus_idd" id="campus_idd" class="form-control" onchange="getProgramm();">
-						  <option value="">--Select Campus--</option>
-						  <?php foreach($campuses as $k=>$campus){ if($k<4) continue;?>
-						  <?php if($campus->id==$session_data[0]->subadmin_campus_id){?>
-						  <option value="<?php echo $campus->id; ?>"><?php echo $campus->campus_name; ?></option>
-						 
-						  <?php }} ?>
-					  </select>
-			    </div>
-				<?php }?>
-				
-				
-					<div class="form-group col-md-4">
-					  <label for="program">Program<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="program_idd" id="program_idd" class="form-control" onchange="getDegreebyProgramm();">
-						  <option value="">--Select Program--</option>
-						  <?php foreach($programs as $program){?>
-						  <option value="<?php echo $program->id; ?>"><?php echo $program->program_name; ?></option>
-						 
-						  <?php } ?>
-					  </select>
-					</div>
-					<div class="form-group col-md-4">
-					  <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
-					  <select class="form-control" name="degree_idd" id="degree_idd" onchange="getSemesterbyDegreee(),getBatchbyDegreee(),getBatchbyDOSS(),getDisciplinebyDegreee();">>
-						  <option value="">--Select Degree--</option>
-						 
-					  </select>
-					</div>
-				</div>
-				
-				
-			   <div class="row">
-				    <div class="form-group col-md-4">
-					  <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="batch_idd" id="batch_idd" class="form-control">
-						  <option value="">Select Batch</option>
-						  <?php foreach($batches as $batch){ ?>
-						  <option value="<?php echo $batch->id;?>"><?php echo $batch->batch_name;?></option>
-						  <?php } ?>
-					  </select>
-					</div>
-					
-					
-					<div class="form-group col-md-4">
-					  <label for="exampleInputEmail1">Semester<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="semester_idd" id="semester_idd" class="form-control">
-						  <option value="">Select Semester</option>
-						  <?php foreach($semesters as $semester){ ?>
-						  <option value="<?php echo $semester->id;?>"><?php echo $semester->semester_name;?></option>
-						  <?php } ?>
-					  </select>
-					</div>
-					
-					
-					<div class="form-group col-md-4">
-					  <label for="course-group">Discipline<span style="color:red;font-weight: bold;">*</span></label>
-					   <select class="form-control" name="discipline_idd" id="discipline_idd" onchange="getCourseByIdss();">
-					   
-						  <option value="">Select Discipline</option>
-						  <?php foreach($disciplines as $discipline){?>
-						    <option value="<?php echo $discipline->id;?>"><?php echo $discipline->discipline_name;?></option>
-						  <?php } ?>
-						
-					  </select>
-					</div>
-					
-					
-				
-					
-               </div>
-			   
-               <div class="row">
-			     <div class="form-group col-md-4">
-					  <label for="course-group">Course<span style="color:red;font-weight: bold;">*</span></label>
-					   <select class="form-control" name="course_idd" id="course_idd" onchange="getStudentAssignedMarkss()">
-					   
-						  <option value="">Select Course</option>
-						
-						
-					  </select>
-					</div>
-				  <div class="form-group col-md-4">
-				  <label for="course-group">Date Of Start<span style="color:red;font-weight: bold;">*</span></label>
-				   <select class="form-control" name="date_of_startt" id="date_of_startt">
-				   </select>
-				</div>
-				<div class="test">
-			<?php if($session_data[0]->upload_type=='1'){?>
 			
-			  <div class="form-group col-md-4" id="itemsImportt" style="display:none;">
-			  <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
-			   <select class="form-control" name="marks_typee" id="marks_typee" onchange="getStudentAssignedMarkss();">
-			      <option value="0">-Select Marks Type-</option>
-			      <option value="1">Internal Marks</option>
-			      <option value="2">External Marks</option>
-				  <option value="3">All</option>
-			   </select>
-			  </div>
-			<?php } elseif($session_data[0]->upload_type=='2'){?>
-			   <div class="form-group col-md-4" id="itemsImportt" style="display:none;">
-			  <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
-			   <select class="form-control" name="marks_typee" id="marks_typee" onchange="getStudentAssignedMarkss();">
-			      <option value="0">-Select Marks Type-</option>
-			      <option value="1">Internal Marks</option>
-			   </select>
-			  </div>
-			  <?php }else{?>
-			  <div class="form-group col-md-4" id="itemsImportt" style="display:none;">
-			  <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
-			   <select class="form-control" name="marks_typee" id="marks_typee" onchange="getStudentAssignedMarkss();">
-			      <option value="0">-Select Marks Type-</option>
-			      <option value="2">External Marks</option>
-			   </select>
-			  </div>
-			  <?php }?>
-			  </div>
-			  </div>
-			  <div class="row">
-				<div class="form-group col-md-4">
-					
-					<p class="credit_points" style="font-weight:bold">&nbsp;</p>
-				</div>
-			</div>
-			 </div>
-			 
 			
-							 <div id="courseList" class="courseList" style="display:none">
-			 <label for="campus">Download Upload Marks Excel Format<span style="color:red;font-weight: bold;">*</span></label>
-						<input style="background: #1870BB;border: none;color: #fff;padding: 5px 10px;font-size: 13px;" type="submit" value="Download Excel" name="downloadExcel" >
-			        
-				</div>
-			  
-              <!-- /.box-body -->
-
-              
-			  
-			  
-			
-			  
-            </form>
-			</div>
 			 <div class="box-body">
 				<div class="row">
 					 <form method="post" id="excel_marks_upload" name="excel_marks_upload" action="<?php echo base_url();?>excelupload/excelUploadMarks" enctype="multipart/form-data"> 
@@ -879,10 +631,10 @@
 	function getStudentAssignedMarks()
 	{   
 	//alert('sdfasdfsdf');
-	var uploadType=$('#marks_type').val();
+	//var uploadType=$('#marks_type').val();
 	//alert(uploadType);
-	           if(uploadType == 0)
-				   return false;
+	          // if(uploadType == 0)
+				  // return false;
 		        $("#courseList").show();
 		var courseid=$('#course_id').val();
 		var courseArr = courseid.split("-");
@@ -897,7 +649,7 @@
 			$(".practical_head_cont").append('<span>PAPER-'+paper+'(60)</span>');
 			$(".external_head_cont").append('<span>PAPER-'+paper+'(100)</span>');
 		}
-	     if(uploadType=='1')
+	     /*if(uploadType=='1')
 		 {
 			 $(".internal").show();
 			 
@@ -908,7 +660,7 @@
 		 {
 			$(".external").show(); 
 		    $(".internal").hide();
-		 }
+		 }*/
 		 
 		var $form =$("#ug_marks_upload_view");
 		$.ajax({

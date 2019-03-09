@@ -412,7 +412,7 @@ class Result extends CI_Controller {
 	    $send['program_id']=$program_id;
 	    $send['degree_id']=$degree_id;
 	    $send['batch_id']=$batch_id;
-	    
+	  
 	    if(!empty($this->input->post('report_card')))
 		 {  
 	          
@@ -1466,7 +1466,7 @@ class Result extends CI_Controller {
 										$creditval = number_format($creditpoint,2);
 										
 									   $data['percentval'] = $total_credits;
-									   $data['gradeval']   = $data['external_sum']/10;
+									   $data['gradeval']   = number_format($data['external_sum']/10,2);
 									   $data['creditval']  = number_format(($data['external_sum']/10)*$total_credits,2);
 									   $data['credithour'] = $total_credits;
 									   $data['result_status'] = $result_status;
@@ -1566,7 +1566,7 @@ class Result extends CI_Controller {
 									  // $data['internal_sum']       = $data['theory_internal']+$data['practical_internal']+$data['assignment_mark'];    
 									  // p($data); exit;
 									   //subjectwise status of pass or fail of btech result
-									   
+									   if($degree_id!=1 && $program_id == 1){
 									   if($subjectVal->theory_credit > 0 && $subjectVal->practicle_credit > 0) 
 										$internal_sum = number_format($subjectVal->theory_internal1 + $subjectVal->practical_internal,2);
 									elseif($subjectVal->theory_credit > 0 ) 
@@ -1603,6 +1603,44 @@ class Result extends CI_Controller {
 									   $sum_total_credits      = $sum_total_credits + $total_credits;
 									   $grade_point_average    = $sum_subject_credit_val/$sum_total_credits;
 									   $gpa                    = number_format($grade_point_average,2);
+									   }else{
+										   if($data['theory_credit'] > 0 && $data['practicle_credit'] > 0) {
+												$total_internal_sum = $subjectVal->theory_internal1 + $subjectVal->theory_external1 + $subjectVal->assignment_mark;
+												$practical = $subjectVal->practical_internal*2;
+												if($total_internal_sum>=60 && $practical>=60)
+													$passfail_status = 'PASS';
+												else
+													$passfail_status = 'FAIL';
+												$subject_sum_percent10= number_format((($total_internal_sum+$subjectVal->practical_internal)/150)*10,2);
+												$total_subject_marks = number_format($total_internal_sum+$subjectVal->practical_internal,2) ;
+											}elseif($data['theory_credit'] > 0 ) {
+												$total_internal_sum = $subjectVal->theory_internal1+ $subjectVal->assignment_mark+ $subjectVal->theory_external1;
+												if($total_internal_sum>=60)
+													$passfail_status = 'PASS';
+												else
+													$passfail_status = 'FAIL';
+												$subject_sum_percent10= number_format($total_internal_sum/10,2);
+												$total_subject_marks = number_format($total_internal_sum,2) ;
+											}elseif($data['practicle_credit']  > 0 ){
+												$total_internal_sum = $subjectVal->practical_internal;
+												$practical = $subjectVal->practical_internal*2;
+												if($practical>=60)
+													$passfail_status = 'PASS';
+												else
+													$passfail_status = 'FAIL';
+												$subject_sum_percent10= number_format($subjectVal->practical_internal/10,2);
+												$total_subject_marks = number_format($total_internal_sum,2) ;
+											}
+											$total_credits = $data['theory_credit'] + $data['practicle_credit'];
+											//$data['marks_sum']       = $total_internal_sum;
+											$data['total_subject_marks']       = $total_subject_marks;
+											//$data['total_subject_marks'] = $total_internal_sum;
+											$data['gradeval']   = $subject_sum_percent10;
+											$creditpoint = $subject_sum_percent10*$total_credits;
+											$creditval = number_format($creditpoint,2);
+											 $data['creditval']  = $creditval;
+											  $data['passfail_status'] = $passfail_status;
+									   }
 									   if(!empty($gpa))
 									   {
 										   $savegpa=$gpa;
@@ -1910,11 +1948,11 @@ class Result extends CI_Controller {
 			
 			  
 			//load the view and saved it into $html variable
-			$html=$this->load->view('admin/report/aggregate_marks_view', $data, true);
+			$html=$this->load->view('admin/report/detailed_result_student_view', $data, true);
 			
 			// print_r($html); exit;
 			//this the the PDF filename that user will get to download
-			$pdfFilePath = "$html=$this->load->view('admin/report/aggregate_marks_view', $data, true);.pdf";
+			$pdfFilePath = "detailed_result_student_view.pdf";
 	 
 			//load mPDF library
 			$this->load->library('m_pdf');

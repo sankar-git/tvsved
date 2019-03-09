@@ -51,9 +51,17 @@ Class Excel_model extends CI_Model
 	 }
 	 function get_course_by_id($course_id)
 	 {
-		$this->db->select('c.course_title');
+		$this->db->select('c.course_title,c.course_code');
 		$this->db->from('courses as c');
         $this->db->where(array('c.id'=>$course_id));
+		$result	= $this->db->get()->row();
+		return $result; 
+	 }
+	 function get_course_group_by_id($course_group_id)
+	 {
+		$this->db->select('c.course_subject_title');
+		$this->db->from('course_subject_groups as c');
+        $this->db->where(array('c.id'=>$course_group_id));
 		$result	= $this->db->get()->row();
 		return $result; 
 	 }
@@ -106,6 +114,22 @@ Class Excel_model extends CI_Model
 		$result	= $this->db->get()->row();
 		return $result; 
 	 }
+	 function get_course_by_group($course_subject_title)
+	 {
+		$this->db->select('c.id');
+		$this->db->from('course_subject_groups as c');
+        $this->db->where(array('c.course_subject_title'=>$course_subject_title));
+		$result	= $this->db->get()->row();
+		return $result; 
+	 }
+	 function get_course_by_code($course_code,$course_group_id='')
+	 {
+		$this->db->select('c.id');
+		$this->db->from('courses as c');
+        $this->db->where(array('c.course_code'=>$course_code,'c.course_subject_id'=>$course_group_id));
+		$result	= $this->db->get()->row();
+		return $result; 
+	 }
 	  function get_course_by_name($course_name)
 	 {
 		$this->db->select('c.id');
@@ -132,6 +156,15 @@ Class Excel_model extends CI_Model
 		//echo $this->db->last_query();
 		return $result; 
 	 }
+	  function get_student_by_id($student_id)
+	 {
+		$this->db->select('u.id');
+		$this->db->from('users as u');
+        $this->db->where(array('u.user_unique_id'=>$student_id));
+		$result	= $this->db->get()->row();
+		//echo $this->db->last_query();
+		return $result; 
+	 }
 	 function save_ug_marks_excel($data)
 	 {
 		    $this->db->insert('students_ug_marks',$data);
@@ -142,7 +175,7 @@ Class Excel_model extends CI_Model
 	 {
 		$this->db->select('ug.student_id');
 		$this->db->from('students_ug_marks as ug');
-        $this->db->where(array('ug.campus_id'=>$campus_id,'ug.program_id'=>$program_id,'ug.degree_id'=>$degree_id,'ug.batch_id'=>$batch_id,'ug.semester_id'=>$semester_id,'ug.discipline_id'=>$discipline_id,'ug.course_id'=>$course_id,'ug.student_id'=>$student_id));
+        $this->db->where(array('ug.campus_id'=>$campus_id,'ug.program_id'=>$program_id,'ug.degree_id'=>$degree_id,'ug.batch_id'=>$batch_id,'ug.semester_id'=>$semester_id,'ug.course_id'=>$course_id,'ug.student_id'=>$student_id));
 		$result	= $this->db->get()->row();
 		return $result;  
 		 
@@ -159,7 +192,7 @@ Class Excel_model extends CI_Model
 		 $course_id=$data['course_id'];
 		 $student_id=$data['student_id'];
 		 
-		$this->db->where(array('campus_id'=>$campus_id,'program_id'=>$program_id,'degree_id'=>$degree_id,'batch_id'=>$batch_id,'semester_id'=>$semester_id,'discipline_id'=>$discipline_id,'course_id'=>$course_id,'student_id'=>$student_id));
+		$this->db->where(array('campus_id'=>$campus_id,'program_id'=>$program_id,'degree_id'=>$degree_id,'batch_id'=>$batch_id,'semester_id'=>$semester_id,'course_id'=>$course_id,'student_id'=>$student_id));
 		$this->db->update('students_ug_marks',$data);
 	 }
 	 
