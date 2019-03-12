@@ -47,7 +47,26 @@ class Student extends CI_Controller {
 	  if($this->input->post('downloadExcel'))
 	  {
 		  // echo "hello"; exit;
-	       $record['campuses'] = $this->Discipline_model->get_campus(); 
+		  // create new PHPExcel object
+		 // echo FCPATH;exit;
+			$objPHPExcel = new PHPExcel();
+			$path = FCPATH.'assets/template/student_template.xls';
+			header('Content-Type: application/vnd.ms-excel'); //mime type
+			header('Content-Disposition: attachment;filename="student_template.xls"'); //tell browser what's the file name
+			header('Cache-Control: max-age=0'); //no cache
+			header("Content-Description: File Transfer");
+			header("Content-Type: application/octet-stream");
+			header('Content-Disposition: attachment; filename="'.basename($path).'"');
+			header("Content-Transfer-Encoding: binary");
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			header('Pragma: public');
+			header("Content-Type: application/force-download");
+			header("Content-Type: application/download");
+			header("Content-Length: ".filesize($path));
+			readfile($path);
+			exit;
+			$record['campuses'] = $this->Discipline_model->get_campus(); 
 		   $record['disciplines'] = $this->Discipline_model->get_discipline(); 
 		   $record['batches'] = $this->Discipline_model->get_batch(); 
 		   $record['degrees'] = $this->Discipline_model->get_degree(); 
