@@ -777,7 +777,7 @@ Class Master_model extends CI_Model
 			if( !empty($program_id) )
 				$this->db->where(array('c.program_id'=>$program_id));
 			$this->db->_protect_identifiers = FALSE;
-			$this->db->order_by("field(discipline_id, $discipline_id) desc");
+			$this->db->order_by("field(discipline_id, $discipline_id),id,semester_id desc");
 			$this->db->_protect_identifiers = TRUE;
 		}
         $result	= $this->db->get()->result();
