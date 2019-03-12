@@ -768,13 +768,17 @@ Class Master_model extends CI_Model
 			if( !empty($program_id) )
 				$this->db->where(array('c.program_id'=>$program_id));
 		}else{
-			$this->db->where(array('c.discipline_id'=>$discipline_id));
+			//$this->db->where(array('c.discipline_id'=>$discipline_id));
+			
 			if( !empty($degree_id) )
 				$this->db->where(array('c.degree_id'=>$degree_id));
-			if( !empty($semester_id) )
-				$this->db->where(array('c.semester_id'=>$semester_id));
+			//if( !empty($semester_id) )
+				//$this->db->where(array('c.semester_id'=>$semester_id));
 			if( !empty($program_id) )
 				$this->db->where(array('c.program_id'=>$program_id));
+			$this->db->_protect_identifiers = FALSE;
+			$this->db->order_by("field(discipline_id, $discipline_id) desc");
+			$this->db->_protect_identifiers = TRUE;
 		}
         $result	= $this->db->get()->result();
 		return $result;

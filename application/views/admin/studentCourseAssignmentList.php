@@ -134,7 +134,7 @@ $this->load->view('admin/helper/header');?>
 									<td nowrap><?php echo $course->batch_name;?></td>
 									<td><?php echo $course->first_name.' '.$course->last_name;?></td>
 									<td><?php echo $course->course_title;?></td>
-									<td width="100px"><a onclick="return confirm('Are you sure to delete');" href="<?php echo base_url(); ?>courses/deleteStudentCourseAssignment/<?php echo $course->id; ?>">Delete</a></td>
+									<td width="100px"><a onclick="return confirm('Are you sure to Deregister');" href="<?php echo base_url(); ?>courses/deleteStudentCourseAssignment/<?php echo $course->id; ?>">Deregister</a></td>
 									</tr>
 									
 									<?php } ?>
