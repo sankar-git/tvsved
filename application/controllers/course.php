@@ -344,6 +344,7 @@ class Course extends CI_Controller {
 	{
 		$data['page_title']="Student Course Assignment List";
 		$data['campuses'] = $this->Discipline_model->get_campus();
+		$data['course_assign_list']=array();
 		if(!empty($this->input->post('campus_id'))){
 			$data['campus_id']=$this->input->post('campus_id');
 			$data['program_id']=$this->input->post('program_id');
@@ -351,8 +352,9 @@ class Course extends CI_Controller {
 			$data['semester_id']=$this->input->post('semester_id');
 			$data['batch_id']=$this->input->post('batch_id');
 			$data['course_assign_list']=$this->Master_model->get_student_assigned_course_list($data);
-		}else
-			$data['course_assign_list']=$this->Master_model->get_student_assigned_course_list();
+		}//else
+			//$data['course_assign_list']=$this->Master_model->get_student_assigned_course_list();
+		
 		//print_r($data['course_assign_list']); exit;
 		//echo $this->db->last_query();exit;
 	    $this->load->view('admin/studentCourseAssignmentList',$data);

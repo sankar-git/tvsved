@@ -371,6 +371,7 @@ class Excelupload extends CI_Controller {
 			for($i=1;$i<=count($rowsold);$i++)
 			{				
 				$firstrow = $rowsold[$i];
+				$assignment_mark='';
 				if($firstrow[9] != '')
 				{
 					if($degree_id == 1 && $program_id==1){
@@ -409,7 +410,7 @@ class Excelupload extends CI_Controller {
 					 $students = $this->Excel_model->get_student_by_id($stud_id);
 					// p($students); 
 					//for update work
-					$check_student = $this->Excel_model->get_student_already_uploaded($campuses->id,$programs->id,$degrees->id,$batches->id,$semesters->id,$disciplines->id,$course_id,$students->id);
+					$check_student = $this->Excel_model->get_student_already_uploaded($campuses->id,$programs->id,$degrees->id,$batches->id,$semesters->id,$disciplines->id,$course_id,@$students->id);
 					//p($check_student); exit;
 					//echo "sfdsfs";
 					if(!empty($check_student->student_id))
@@ -449,7 +450,7 @@ class Excelupload extends CI_Controller {
 						$savedata = $this->Excel_model->update_ug_marks_excel($update_ug_marks);
 						
 					}
-					else
+					elseif(@$students->id!='')
 					{
 					  //echo "helo";//exit;
 						$save_ug_marks           = array(
