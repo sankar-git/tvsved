@@ -35,6 +35,7 @@
 	         
             <div class="box-header with-border">
               <h3 class="box-title" style="color:green"><?php echo $this->session->flashdata('message'); ?></h3>   
+              <h3 class="box-title" style="color:red"><?php echo $this->session->flashdata('errormessage'); ?></h3>   
             </div>
 			
             <!-- /.box-header -->

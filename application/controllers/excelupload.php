@@ -450,7 +450,7 @@ class Excelupload extends CI_Controller {
 						$savedata = $this->Excel_model->update_ug_marks_excel($update_ug_marks);
 						
 					}
-					elseif(@$students->id!='')
+					elseif($students->id>0)
 					{
 					  //echo "helo";//exit;
 						$save_ug_marks           = array(
@@ -481,6 +481,10 @@ class Excelupload extends CI_Controller {
 						//p($save_ug_marks); exit;
 						$savedata = $this->Excel_model->save_ug_marks_excel($save_ug_marks);
 						
+					}else{
+						$errormessage = $stud_id .' not exists in the database. Please check the excel sheet';
+						$this->session->set_flashdata('errormessage', $errormessage);
+						redirect(base_url().'excelupload/uploadUgMarksExcel');
 					}
 					$m++;
 				}
