@@ -409,6 +409,11 @@ class Excelupload extends CI_Controller {
 					// print_r($stud);
 					 $students = $this->Excel_model->get_student_by_id($stud_id);
 					// p($students); 
+					if(@$students->id<=0){
+						$errormessage = $stud_id .' not exists in the database. Please check the excel sheet';
+						$this->session->set_flashdata('errormessage', $errormessage);
+						redirect(base_url().'excelupload/uploadUgMarksExcel');exit;
+					}
 					//for update work
 					$check_student = $this->Excel_model->get_student_already_uploaded($campuses->id,$programs->id,$degrees->id,$batches->id,$semesters->id,$disciplines->id,$course_id,@$students->id);
 					//p($check_student); exit;
@@ -481,10 +486,6 @@ class Excelupload extends CI_Controller {
 						//p($save_ug_marks); exit;
 						$savedata = $this->Excel_model->save_ug_marks_excel($save_ug_marks);
 						
-					}else{
-						$errormessage = $stud_id .' not exists in the database. Please check the excel sheet';
-						$this->session->set_flashdata('errormessage', $errormessage);
-						redirect(base_url().'excelupload/uploadUgMarksExcel');
 					}
 					$m++;
 				}

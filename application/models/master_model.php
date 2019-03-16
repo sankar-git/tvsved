@@ -652,7 +652,7 @@ Class Master_model extends CI_Model
 		return true;			
 		}
 	}
-	function get_student_course_list($data)
+	function get_student_course_list($data,$exclude_semester=array())
 	{
 		//dd($data); 
 		$pid = $data['program_id'];
@@ -661,8 +661,14 @@ Class Master_model extends CI_Model
 		
 		$this->db->select('courses.id,courses.course_title,courses.course_code,courses.theory_credit,courses.practicle_credit,disciplines.discipline_name,	disciplines.discipline_code,courses.status');
 		$this->db->from('courses');
-        $this->db->join('disciplines','disciplines.id = courses.discipline_id','INNER');
-		$this->db->where(array('courses.program_id'=>$pid,'courses.degree_id'=>$did,'courses.semester_id'=>$sid));
+        $this->db->join('disciplines','disciplines.id = courses.discipline_id','LEFT');
+		if($pid>0)
+			$this->db->where('courses.program_id',$pid);
+		if($did>0)
+			$this->db->where('courses.degree_id',$did);
+		if($sid>0)
+			$this->db->where('courses.semester_id',$sid);
+		
         $result	= $this->db->get()->result();
 		return $result;
 	}
@@ -674,10 +680,13 @@ Class Master_model extends CI_Model
 		$degree_id = $data['degree_id'];
 		$batch_id = $data['batch_id'];
 		$semester_id = $data['semester_id'];
-		$this->db->select('*');
-		$this->db->from('user_map_student_details ums');
-        $this->db->join('users  u','u.id = ums.user_id','INNER');
-		$this->db->where(array('ums.campus_id'=>$campus_id,'ums.batch_id'=>$batch_id,'ums.degree_id'=>$degree_id,'ums.semester_id'=>$semester_id));
+		$this->db->select('u.*');
+		$this->db->from('users u ');
+        //$this->db->join('user_map_student_details ums','u.id = ums.user_id','INNER');
+		$this->db->join('student_assigned_courses ca','u.id = ca.student_id','INNER');
+		$this->db->where(array('ca.campus_id'=>$campus_id,'ca.batch_id'=>$batch_id,'ca.degree_id'=>$degree_id,'ca.semester_id'=>$semester_id));
+		$this->db->group_by('u.id');
+		$this->db->order_by('u.first_name,u.last_name');
         $result	= $this->db->get()->result();
 		return $result;
 	}
@@ -745,8 +754,9 @@ Class Master_model extends CI_Model
 		$this->db->from('courses');
         $this->db->join('disciplines','disciplines.id = courses.discipline_id','INNER');
         $this->db->join('student_assigned_courses sac','sac.course_id = courses.id','INNER');
-		$this->db->where(array('sac.program_id'=>$pid,'sac.degree_id'=>$did,'sac.semester_id'=>$sid,'sac.batch_id'=>$bid,'sac.student_id'=>$stuid));
-        $result	= $this->db->get()->result();
+		$this->db->where(array('sac.program_id'=>$pid,'sac.degree_id'=>$did,'sac.semester_id'=>$sid,'sac.batch_id'=>$bid));
+		$this->db->where_in('sac.student_id',$stuid);
+        $result	= $this->db->get()->result();//echo $this->db->last_query();
 		return $result;
 	}
 	function get_student_assigned_course_ids($stu_id)
@@ -828,11 +838,14 @@ Class Master_model extends CI_Model
         $result	= $this->db->get()->result();
 		return $result;
 	}
-	function get_assign_course_row($student_id)
+	function get_assign_course_row($student_id,$semester='')
 	{
 		$this->db->select('c.*');
 		$this->db->from('student_assigned_courses c');
         $this->db->where(array('c.student_id'=>$student_id));
+		if($semester>0){
+			$this->db->where(array('c.semester_id'=>$semester));
+		}
         $result	= $this->db->get()->result();
 		
 		return $result;

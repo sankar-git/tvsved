@@ -30,21 +30,19 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" name="course_approval_form" id="course_approval_form" method="POST" action="<?php echo base_url();?>course/saveStudentAssignedCourse11" enctype="multipart/form-data">
+            <form role="form" name="course_approval_form" id="course_approval_form" method="POST" action="<?php echo base_url();?>course/saveStudentAssignedCourse" enctype="multipart/form-data">
 			
               <div class="box-body">
-			    <!--<div class="row" align="middle">
+			    <div class="row" align="middle">
 			   <div class="form-group col-md-4">
 					  <label for="campus">Assign Type<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="assign_type" id="assign_type" class="form-control" onclick="currentAssignDiv();">
 						  <option value="">--Select Assign Type--</option>
 						  <option value="course">Course Wise</option>
 						  <option value="student">Student Wise</option>
-						  <option value="qualifying">Qualifying Exam Status(PG-Research Paper)</option>
-						
 					  </select>
 					</div>
-				</div>-->
+				</div>
 				
 				
 				<div id="student_wise" style="display:none" >
@@ -104,8 +102,8 @@
 					
 					<div class="form-group col-md-4">
 					  <label for="degree">Student<span style="color:red;font-weight: bold;">*</span></label>
-					  <select class="selectpicker form-control" multiple data-live-search="true"  name="student_id[]" id="student_id" onclick="showStatus(this.value);">
-						  <!--<option value="">--Select Student--</option>-->
+					  <select class="form-control" name="student_id" id="student_id" onclick="showStatus(this.value);">
+						  <option value="">--Select Student--</option>
 						   <?php //foreach($degrees as $degree){?>
 						 <!-- <option value="<?php //echo $degree->id; ?>"><?php //echo $degree->degree_name; ?></option>-->
 						 
@@ -114,7 +112,7 @@
 					</div>
 				 </div>
 				 
-				 <div class="row" id="statusDiv" style="display:none;">
+				 <div class="row" id="statusDiv" >
 				 	<div class="form-group col-md-4">
 					  <label for="batch_id">Status<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="status_id" id="status_id" class="form-control">
@@ -127,13 +125,16 @@
 					  </select>
 					</div>
 				 </div>
-			
+				 <div class="box-footer">
+            
+				 <button type="button" name="assign" id="assign" value="Register" onclick="registerCourse();" class="btn btn-success"/>Register</button>
+              </div>
 				 </div>
 			 
 			 
 			  <!---------------------Course Wise - Start------------------------->
 			 	
-				<div id="course_wise" >
+				<div id="course_wise"  style="display:none" >
 				<div class="row">
 					<div class="form-group col-md-4">
 					  <label for="campus">Campus<span style="color:red;font-weight: bold;">*</span></label>
@@ -218,7 +219,10 @@
 						 </select>
 					</div>
 					</div>
-			
+					 <div class="box-footer">
+            
+				 <button type="button" name="assign" id="assign" value="Register" onclick="registerCourse();" class="btn btn-success"/>Register</button>
+              </div>
 				 </div>
 				 <!---------------------Course Wise -------------------------->
 			 
@@ -305,13 +309,13 @@
 	
 	$(document).ready(function() {
 		$("#sales_dob").datepicker({format: 'dd-mm-yyyy',autoclose: true});
-		$('#student_id').multiselect({
+		/*$('#student_id').multiselect({
 			        	includeSelectAllOption: true,
 			        	enableFiltering: true,
 						buttonWidth: '345px',
                         maxHeight: 350
 						
-			        });
+			        });*/
 		$('#course_id').multiselect({
 				includeSelectAllOption: true,
 				enableFiltering: true,
@@ -510,11 +514,11 @@
 			data: $form.serialize(),
 			success: function(data){
 				//alert(data); 
-			var  option_brand = '';
-			//var  option_brand = '<option value="">--Select Student--</option>';
+			//var  option_brand = '';
+			var  option_brand = '<option value="">--Select Student--</option>';
 			$('#student_id').empty();
 			$("#student_id").append(option_brand+data);
-			$('#student_id').multiselect('rebuild');
+			//$('#student_id').multiselect('rebuild');
 			 }
 		});
 		

@@ -668,6 +668,7 @@ class Course extends CI_Controller {
 	    $send['status_id']=$status_id;
 		if($status_id=='2')
 		{
+			$send['semester_id']='';
 	    //$studentCourse= $this->Master_model->get_assigned_course_id_by_student($student_id);
 		//dd($studentCourse); 
 		$courselist= $this->Master_model->get_student_course_list($send);
@@ -676,7 +677,7 @@ class Course extends CI_Controller {
 		$trdata='';
 			$i=0;
 			     //$status= array();
-				 $statusArr= $this->Master_model->get_assign_course_row($student_id);
+				 $statusArr= $this->Master_model->get_assign_course_row($student_id,$semester_id);
 			   // $array = json_decode(json_encode($statusArr), true);
 				//print_r($array); exit;
 				//$status = (array)$statusArr;
@@ -695,7 +696,7 @@ class Course extends CI_Controller {
 			 //echo '</pre>';
 			   } //exit;
 			//$sttt=array('7','8','9','10','11');
-				//print_r($sttt); exit;
+				//p($myArr); exit;
 			foreach($courselist as $courses)
 			{
 				
@@ -756,28 +757,30 @@ class Course extends CI_Controller {
 	{
 		//p($_POST);exit;
 	    $courseArr =array();
-		//if($this->input->post('assign_type') == 'course'){
+		if($this->input->post('assign_type') == 'course'){
 			$campus_id=$this->input->post('ccampus_id');
 			$program_id=$this->input->post('pprogram_id');
 			$degree_id=$this->input->post('ddegree_id');
 			$batch_id=$this->input->post('bbatch_id');
 			$semester_id=$this->input->post('ssemester_id');
-		/*}else{
+		}else{
 			$campus_id=$this->input->post('campus_id');
 			$program_id=$this->input->post('program_id');
 			$degree_id=$this->input->post('degree_id');
 			$batch_id=$this->input->post('batch_id');
-			$semester_id=$this->input->post('ssemester_id');
-		}*/
+			$semester_id=$this->input->post('semester_id');
+		}
 		$exam_type=$this->input->post('exam_type');
 		$student_idArr=$this->input->post('student_id');
 		$status_id=$this->input->post('status_id');
 		$courses=$this->input->post('course_id');
 		//$courseArr = $this->Master_model->get_student_assigned_course_ids($student_id);
-		//p($student_idArr); 
+		//echo is_array($student_idArr);
+		//p($student_idArr); exit;
+		if(is_array($student_idArr)){
 		foreach($student_idArr as $key=>$studentid){
 			//echo $studentid;exit;
-			//$this->Master_model->delete_student_course_list($student_id,$semester_id);
+			$this->Master_model->delete_student_course_list($student_id,$semester_id);
 			for($i=0;$i<count($courses);$i++){
 				$course_id=$courses[$i];
 				 $data=array(
@@ -794,6 +797,26 @@ class Course extends CI_Controller {
 				//print_r($data);exit;
 				//
 				$this->Master_model->save_student_course_list($data);
+			} //exit;
+		}
+		}else{
+			$this->Master_model->delete_student_course_list($student_idArr,$semester_id);//echo $this->db->last_query();
+			for($i=0;$i<count($courses);$i++){
+				$course_id=$courses[$i];
+				 $data=array(
+					'campus_id'=>$campus_id,
+					'program_id'=>$program_id,
+					'degree_id'=>$degree_id,
+					'batch_id'=>$batch_id,
+					'semester_id'=>$semester_id,
+					'student_id'=>$student_idArr,
+					'course_id'=>$course_id,
+					'exam_type'=>$exam_type
+					
+					);
+				//print_r($data);exit;
+				//
+				$this->Master_model->save_student_course_list($data);//echo $this->db->last_query();
 			} //exit;
 		}
 		
