@@ -1596,6 +1596,8 @@ class Admin extends CI_Controller {
 	function addStudentExcel()
 	{
 		    $data['page_title']='Student Excel Upload';
+			$data['campuses'] = $this->Discipline_model->get_campus();
+			$data['programs'] = $this->Discipline_model->get_program(); 
 			$data['excelErr']='';
 			$this->load->view('admin/excel/student_upload_excel_view',$data);
 	}

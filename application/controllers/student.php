@@ -49,7 +49,7 @@ class Student extends CI_Controller {
 		  // echo "hello"; exit;
 		  // create new PHPExcel object
 		 // echo FCPATH;exit;
-			$objPHPExcel = new PHPExcel();
+			/*$objPHPExcel = new PHPExcel();
 			$path = FCPATH.'assets/template/student_template.xls';
 			header('Content-Type: application/vnd.ms-excel'); //mime type
 			header('Content-Disposition: attachment;filename="student_template.xls"'); //tell browser what's the file name
@@ -65,8 +65,8 @@ class Student extends CI_Controller {
 			header("Content-Type: application/download");
 			header("Content-Length: ".filesize($path));
 			readfile($path);
-			exit;
-			$record['campuses'] = $this->Discipline_model->get_campus(); 
+			exit;*/
+			//$record['campuses'] = $this->Discipline_model->get_campus(); 
 		   $record['disciplines'] = $this->Discipline_model->get_discipline(); 
 		   $record['batches'] = $this->Discipline_model->get_batch(); 
 		   $record['degrees'] = $this->Discipline_model->get_degree(); 
@@ -76,7 +76,9 @@ class Student extends CI_Controller {
 		   $record['city']=$this->type_model->get_city();
 		   $record['community']=$this->type_model->get_community();
 		   $record['caste']=$this->type_model->get_caste();
-		//   print_r($record['caste']);exit;
+		//   print_r($record['caste']);
+		//p($this->input->post());//exit;
+		//exit;
        //............. Add Model............... //
 	 
    //-----------Va Define-----------------------//
@@ -103,7 +105,7 @@ class Student extends CI_Controller {
 
 	  
 	  //**************campuses dropdown********************************//
-	  $record['campuses']  =array(
+	 $record['campuses']  =array(
 				  '1'     =>'Madras Veterinary College, Chennai',
 				  '2'     =>'Veterinary  College and Research Institute, Namakkal',
 				  '3'     =>'Veterinary  College and Research Institute, Orathanadu',
@@ -117,7 +119,10 @@ class Student extends CI_Controller {
           //$campusname[]  = $value->campus_name;
 		   $campusid[]    = $key;
           $campusname[]  = $value;
+		  if($key == $this->input->post('campus_id'))
+			$default_campus = $value;
        }//foreach
+	   //echo $default_campus;exit;
        $finalcampusid   = implode($campusid, ',');
        $finalcampusname = implode($campusname, ',');
     //  print_r($finalcampusname);exit;
@@ -127,7 +132,11 @@ class Student extends CI_Controller {
 	   foreach ($record['degrees'] as $key => $value) {
           $degreeid[]    = $value->id;
           $degreename[]  = $value->degree_name;
+		  if($value->id == $this->input->post('degree_id'))
+			$default_degree = $value->degree_name;
        }//foreach
+	  // echo $default_degree;
+	   //exit;
        $finaldegreeid   = implode($degreeid, ',');
        $finaldegreename = implode($degreename, ',');
 	   
@@ -137,7 +146,11 @@ class Student extends CI_Controller {
 	   foreach ($record['batches'] as $key => $value) {
           $batchid[]    = $value->id;
           $batchname[]  = $value->batch_name;
+		  if($value->id == $this->input->post('batch_id'))
+			$default_batch = $value->batch_name;
        }//foreach
+	   //echo $default_batch;
+	  // exit;
        $finalbatchid   = implode($batchid, ',');
        $finalbatchname = implode($batchname, ',');
       //**************batch dropdown End********************************//   
@@ -889,8 +902,11 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
             );
 			// print_r($finalAttrData['campusName']);exit;
             $objPHPExcel->getActiveSheet()->setCellValue($cols[$i].'1', $finalExcelArr[$i]);
-
-          for($k=2;$k <1000;$k++){
+			if($this->input->post('student_count')>0)
+				$rowcount = $this->input->post('student_count');
+			else
+				$rowcount = 100;
+          for($k=2;$k <$rowcount;$k++){
     //Set height for every single row.
     $objPHPExcel->getActiveSheet()->getRowDimension($k)->setRowHeight(20);
 
@@ -908,7 +924,8 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation22->setPrompt('Please pick a value from the drop-down list.');
     $objValidation22->setFormula1('Worksheet!$'.'A$2:$'.'A$'.($attCount['campusName']));
    $var = $objPHPExcel->getActiveSheet()->getCell('A'.$k)->setDataValidation($objValidation22);
-
+	$objPHPExcel->getActiveSheet()->setCellValue("A" . $k, $default_campus);
+	
    $objValidation23 = $objPHPExcel->getActiveSheet()->getCell('B2')->getDataValidation();
     $objValidation23->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
     $objValidation23->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
@@ -922,6 +939,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation23->setPrompt('Please pick a value from the drop-down list.');
     $objValidation23->setFormula1('Worksheet!$'.'B$2:$'.'B$'.($attCount['degreeName']));
     $objPHPExcel->getActiveSheet()->getCell('B'.$k)->setDataValidation($objValidation23);
+    $objPHPExcel->getActiveSheet()->setCellValue("B" . $k, $default_degree);
    
     $objValidation24 = $objPHPExcel->getActiveSheet()->getCell('C2')->getDataValidation();
     $objValidation24->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
@@ -936,6 +954,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation24->setPrompt('Please pick a value from the drop-down list.');
     $objValidation24->setFormula1('Worksheet!$'.'C$2:$'.'C$'.($attCount['batchName']).'');
     $objPHPExcel->getActiveSheet()->getCell('C'.$k)->setDataValidation($objValidation24);
+	$objPHPExcel->getActiveSheet()->setCellValue("C" . $k, $default_batch);
 	
 	 $objValidation24 = $objPHPExcel->getActiveSheet()->getCell('D2')->getDataValidation();
     $objValidation24->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
