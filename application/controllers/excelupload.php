@@ -435,7 +435,7 @@ class Excelupload extends CI_Controller {
 						'theory_internal2'    =>($internal_marks2) ? $internal_marks2 : '',
 						'theory_internal3'    =>($internal_marks3) ? $internal_marks3 : '',
 						//'theory_internal'    =>($largesum) ? $largesum : '',
-						'date_of_start' => ($firstrow[7]) ? $firstrow[7] : '',
+						//'date_of_start' => ($firstrow[7]) ? $firstrow[7] : '',
 						'theory_external1'    =>($theory_external1) ? $theory_external1 : '',
 						'theory_external2'    =>($theory_external2) ? $theory_external2 : '',
 						'practical_internal'    =>($internal_practical1) ? $internal_practical1 : '',
