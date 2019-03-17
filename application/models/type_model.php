@@ -6,6 +6,11 @@ Class Type_model extends CI_Model
 		$result = $this->db->where(['username'=>$username])->from("users")->count_all_results();
 		return $result;
 	}
+	function isuser($user_unique_id)
+	{
+		$result = $this->db->where(['user_unique_id'=>$user_unique_id])->from("users")->count_all_results();
+		return $result;
+	}
 	function get_user_details($username)
 	{
 		$result = $this->db->where(['username'=>$username])->from("users")->get()->result_array();
@@ -245,11 +250,12 @@ Class Type_model extends CI_Model
         $result	= $this->db->get()->result();
 		return $result;
 	}
-	function get_caste_by_id($id)
+	function get_caste_by_id($id='')
 	{
 		$this->db->select('*');
         $this->db->from('caste');
-        $this->db->where(array('community_id' => $id));
+		if($id>0)
+			$this->db->where(array('community_id' => $id));
         $result	= $this->db->get()->result();
 		return $result;
 	}
