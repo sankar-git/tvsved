@@ -8,7 +8,7 @@ Class Type_model extends CI_Model
 	}
 	function isuser($user_unique_id)
 	{
-		$result = $this->db->where(['user_unique_id'=>$user_unique_id])->from("users")->count_all_results();
+		$result = $this->db->where(['user_unique_id'=>$user_unique_id])->from("users")->get()->row();
 		return $result;
 	}
 	function get_user_details($username)
@@ -58,17 +58,38 @@ Class Type_model extends CI_Model
 				$insert_id = $this->db->insert_id();
 				return $insert_id;		
 	}
+	function update_user_school_detail($data)
+	{       
+		$id = $data['student_id'];
+		$this->db->where('student_id',$id);
+		$this->db->update('student_school_details',$data);
+		return true;
+	}
 	function save_user_education_details($data)
 	{       
 				$this->db->insert('student_education_details',$data);
 				$insert_id = $this->db->insert_id();
 				return $insert_id;		
 	}
+	function update_user_education_detail($data)
+	{       
+		$id = $data['student_id'];
+		$this->db->where('student_id',$id);
+		$this->db->update('student_education_details',$data);
+		return true;
+	}
 	function save_user_transaction_details($data)
 	{       
 				$this->db->insert('student_transaction_details',$data);
 				$insert_id = $this->db->insert_id();
 				return $insert_id;		
+	}
+	function update_user_transaction_detail($data)
+	{       
+		$id = $data['student_id'];
+		$this->db->where('student_id',$id);
+		$this->db->update('student_transaction_details',$data);
+		return true;	
 	}
 	function get_user_data($email)
 	{
@@ -139,8 +160,8 @@ Class Type_model extends CI_Model
 			$this->db->where('s.degree_id', $_POST['degree_id']);
 		if(isset($_POST['batch_id']) && $_POST['batch_id'] != '' && $_POST['batch_id'] != '0')
 			$this->db->where('s.batch_id', $_POST['batch_id']);
-		if(isset($_POST['semester_id']) && $_POST['semester_id'] != '' && $_POST['semester_id'] != '0')
-			$this->db->where('s.semester_id', $_POST['semester_id']);
+		//if(isset($_POST['semester_id']) && $_POST['semester_id'] != '' && $_POST['semester_id'] != '0')
+			//$this->db->where('s.semester_id', $_POST['semester_id']);
 		//if(isset($_POST['discipline_id']) && $_POST['discipline_id'] != '' && $_POST['discipline_id'] != '0')
 			//$this->db->where('s.course_id', $_POST['discipline_id']);
 		$this->db->order_by('first_name', 'ASC');

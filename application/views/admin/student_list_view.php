@@ -69,7 +69,7 @@
 					</div>
 					
 					
-					<div class="form-group col-md-3">
+					<!--<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Semester<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="semester_id" id="semester_id" class="form-control">
 						  <option value="">Select Semester</option>
@@ -82,7 +82,7 @@
 					   
 						  <option value="">Select Discipline</option>
 					  </select>
-					</div>
+					</div>-->
 			     
 			   
 					
