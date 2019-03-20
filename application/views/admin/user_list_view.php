@@ -61,7 +61,7 @@
 									<th>Email</th>
 									<th>User Type</th>
 									<th>Contact Number</th>
-									<th width="190px">Action</th>
+									<th width="260px">Action</th>
 									
 								</tr>
 							</thead>
@@ -82,19 +82,7 @@
 									<?php }?>
 									</td>
 									<td><?php echo $users->email;?></td>
-									<td><?php if($users->role_id=='1')
-									          {
-									              echo "Student";
-											  }
-											  if($users->role_id=='2')
-									          {
-									              echo "Teacher";
-											  }
-											  if($users->role_id=='3')
-									          {
-									              echo "User";
-											  }
-									
+									<td><?php if($users->role_id == 0 || $users->role_id == '') echo "Super Admin";else echo $users->role_name;
 									?></td>
 									<td><?php echo $users->contact_number;?></td>
 									
@@ -116,9 +104,10 @@
 						
 											<!-- <a class="btn btn-sm btn-danger" href="<?php echo base_url(); ?>admin/deleteUser/<?php echo $users->id.'/'.$users->role_id; ?>" onclick="return areyousure();" title="Delete" data-toggle="tooltip"><i class="fa fa-trash-o"></i> </a>-->
 
-											 <a class="btn btn-sm btn-primary inner" href="<?php echo base_url(); ?>admin/userDetails/<?php echo $users->id.'/'.$users->status; ?>" title="View Detail" data-toggle="tooltip"><!-- <i class="fa fa-eye"></i> -->View Details</a>
+											 <a class="btn btn-sm btn-primary inner" href="<?php echo base_url(); ?>admin/userDetails/<?php echo $users->id.'/'.$users->role_id; ?>" title="View Detail" data-toggle="tooltip"><!-- <i class="fa fa-eye"></i> -->View Details</a>
 											 
 											 <a class="btn btn-sm  inner <?php echo $btnClass; ?>" href="<?php echo base_url(); ?>admin/studentStatus/<?php echo $users->id.'/'.$users->status; ?>" title="<?php echo $title; ?>" data-toggle="tooltip"><i class="fa fa-undo"></i><?php if($users->status=='1') { ?> Active<?php }else { ?> Inactive<?php } ?></a>
+											  <a class="btn btn-sm  inner btn-danger" onclick="return confirm('Are you sure to delete?');" href="<?php echo base_url(); ?>admin/deleteUser/<?php echo $users->id.'/0'; ?>" title="<?php echo $title; ?>" data-toggle="tooltip"><i class="fa fa-trash"></i>Delete</a>
 										</div>
 									</td>
 									</tr>

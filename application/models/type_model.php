@@ -137,7 +137,7 @@ Class Type_model extends CI_Model
 	function list_user()
 	{
 		$ignore = array(1, 2);
-		return $this->db->order_by('first_name', 'ASC')->where_not_in('role_id', $ignore)->get('users')->result();//method chaining
+		return $this->db->select('users.*,role.role_name')->from('users')->join('role','users.role_id=role.id','left')->order_by('first_name', 'ASC')->where_not_in('role_id', $ignore)->get()->result();//method chaining
 	}
 	function registerStudent()
 	{

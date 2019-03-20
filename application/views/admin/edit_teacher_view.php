@@ -110,7 +110,7 @@ $this->load->view('admin/helper/header');?>
 			
                <!--teacher other details start-->
                 <div id="teacherDiv">
-				<div><i class="fa fa-book"></i>Teacher Info</div>
+				<div><i class="fa fa-book"></i>Additional Info</div>
 					<div class="row">
 						<div class="form-group col-md-3">
 						  <label for="address_line1"> Address Line1<span style="color:red;font-weight: bold;">*</span></label>
