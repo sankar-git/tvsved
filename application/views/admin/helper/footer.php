@@ -206,6 +206,7 @@
 
 <!-- jQuery UI 1.11.4 -->
 <script src="<?php echo base_url();?>assets/admin/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" type="text/javascript"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button);
@@ -241,7 +242,7 @@
 <script src="<?php echo base_url();?>assets/admin/dist/js/demo.js"></script>
 <script src="<?php echo base_url();?>assets/bootstrap/js/bootstrap-session-timeout.js"></script>
 <link type="text/css" rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css"  />
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" type="text/javascript"></script>
+
 
   <script src="<?php echo base_url();?>assets/admin/dist/js/store.min.js" type="text/javascript"></script>
   <script src="<?php echo base_url();?>assets/admin/dist/js/jquery-idleTimeout.min.js" type="text/javascript"></script>

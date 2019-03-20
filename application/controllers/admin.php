@@ -816,9 +816,7 @@ class Admin extends CI_Controller {
 				 $data['user_education']=$this->type_model->get_user_education_by_id($id,$role_id);
 				  $data['user_transaction']=$this->type_model->get_user_transaction_by_id($id,$role_id);
 		    $this->load->view('admin/edit_user_view',$data); //student edit view
-		   }
-		   
-		   if($role_id=='3')
+		   }else  if($role_id=='3')
 		   {
 			   //print_r($data); exit;
 		    $this->load->view('admin/user_edit_view',$data);  //user edit view
@@ -835,7 +833,12 @@ class Admin extends CI_Controller {
 			$this->Master_model->delete_user($id,$role); 
 		 }
 		 $this->session->set_flashdata('message', 'User deleted successfully');
-	     redirect('admin/listUser'); 
+		 if($role == 1)
+		 	redirect('admin/listStudent?rnd='.rand(0,10).'&msg=success','refresh'); 
+		else if($role == 2)
+		 	redirect('admin/listTeacher?rnd='.rand(0,10).'&msg=success','refresh'); 
+		else
+		 	redirect('admin/listUser?rnd='.rand(0,10).'&msg=success','refresh'); 
 	}
 	function updateUser($id)
 	{
