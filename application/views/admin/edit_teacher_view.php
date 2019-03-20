@@ -42,7 +42,7 @@ $this->load->view('admin/helper/header');?>
 
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" name="userform" id="userform" method="post" action="<?php echo base_url();?>admin/updateTeacher/<?php echo $user_row->id;?>" enctype="multipart/form-data">
+            <form role="form" name="userform" id="userform" method="post" action="<?php echo base_url();?>admin/updateTeacher/<?php echo $userid;?>" enctype="multipart/form-data">
               <div class="box-body">
 			    <div class="row">
 					
@@ -138,15 +138,15 @@ $this->load->view('admin/helper/header');?>
 						</div>
 						<div class="form-group col-md-3">
 						  <label for="address_line2">Employment Id<span style="color:red;font-weight: bold;">*</span></label>
-						  <input type="text" class="form-control" id="employee_id" name="employee_id" value="<?php echo $user_row->employee_id;?>" placeholder="Employment Id">
+						  <input type="text" class="form-control" id="employee_id" name="employee_id" value="<?php echo @$user_row->employee_id;?>" placeholder="Employment Id">
 						</div>
 						<div class="form-group col-md-3">
 						  <label for="address_line3">Qualification<span style="color:red;font-weight: bold;">*</span></label>
-						  <input type="text" class="form-control" id="qualification" name="qualification" value="<?php echo $user_row->qualification?>" placeholder="Qualification">
+						  <input type="text" class="form-control" id="qualification" name="qualification" value="<?php echo @$user_row->qualification?>" placeholder="Qualification">
 						</div>
 						<div class="form-group col-md-3">
 						  <label for="address_line4">Date of Join<span style="color:red;font-weight: bold;">*</span></label>
-						  <input type="text" class="form-control" id="date_of_joining" name="date_of_joining" value="<?php echo $user_row->date_of_joining;?>" placeholder="Date of Join">
+						  <input type="text" class="form-control" id="date_of_joining" name="date_of_joining" value="<?php echo @$user_row->date_of_joining;?>" placeholder="Date of Join">
 						</div>
 				   </div>
 				   
@@ -155,13 +155,13 @@ $this->load->view('admin/helper/header');?>
 						  <label for="address_line1">Designation<span style="color:red;font-weight: bold;">*</span></label>
 						    <select name="designation" id="designation" class="form-control" >
 						      <option value="">--Select Designation--</option>
-							  <option value="1" <?php if($user_row->designation=='1') {echo "selected";} ?> >Professor</option>
-							  <option value="2" <?php if($user_row->designation=='2') {echo "selected";} ?>>Assistant Professor</option>
-							  <option value="3" <?php if($user_row->designation=='3') {echo "selected";} ?>>Associate Professor</option>
-							  <option value="4" <?php if($user_row->designation=='4') {echo "selected";} ?>>Director(Physical Education)</option>
-							  <option value="5" <?php if($user_row->designation=='5') {echo "selected";} ?>>Asst. Director(Physical Education)</option>
-							  <option value="6" <?php if($user_row->designation=='6') {echo "selected";} ?>>Deputy Director(Physical Education)</option>
-							  <option value="7" <?php if($user_row->designation=='7') {echo "selected";} ?>>Assistant Librarian</option>
+							  <option value="1" <?php if(@$user_row->designation=='1') {echo "selected";} ?> >Professor</option>
+							  <option value="2" <?php if(@$user_row->designation=='2') {echo "selected";} ?>>Assistant Professor</option>
+							  <option value="3" <?php if(@$user_row->designation=='3') {echo "selected";} ?>>Associate Professor</option>
+							  <option value="4" <?php if(@$user_row->designation=='4') {echo "selected";} ?>>Director(Physical Education)</option>
+							  <option value="5" <?php if(@$user_row->designation=='5') {echo "selected";} ?>>Asst. Director(Physical Education)</option>
+							  <option value="6" <?php if(@$user_row->designation=='6') {echo "selected";} ?>>Deputy Director(Physical Education)</option>
+							  <option value="7" <?php if(@$user_row->designation=='7') {echo "selected";} ?>>Assistant Librarian</option>
 						    </select>
 						  
 						</div>
@@ -174,7 +174,7 @@ $this->load->view('admin/helper/header');?>
 						  <select name="campus" id="campus" class="form-control">
 						      <option value="">--Select Campus--</option>
 							  <?php foreach($campuses as $campus) { ?>
-							   <option value="<?php echo $campus->id;?>"  <?php if($user_row->campus==$campus->id){echo "selected";}?>><?php echo $campus->campus_name;?></option>
+							   <option value="<?php echo $campus->id;?>"  <?php if(@$user_row->campus==$campus->id){echo "selected";}?>><?php echo $campus->campus_name;?></option>
 							  <?php } ?>
 						    </select>
 						</div>
@@ -183,7 +183,7 @@ $this->load->view('admin/helper/header');?>
 						   <select name="discipline_id" id="discipline_id" class="form-control">
 						    <option value="">--Select Discipline--</option>
 						 <?php foreach($disciplines as $discipline){?>
-					      <option value="<?php echo $discipline->id;?>" <?php if($user_row->discipline==$discipline->id){echo "selected";}?>><?php echo $discipline->discipline_name;?></option>
+					      <option value="<?php echo $discipline->id;?>" <?php if(@$user_row->discipline==$discipline->id){echo "selected";}?>><?php echo $discipline->discipline_name;?></option>
 					     <?php } ?>
 					  </select>
 						</div>

@@ -475,9 +475,9 @@ function setgroup(val)
 					  <label for="section"><i class="fa fa-bell-o"></i>Group</label>
 					     <select name="group" id="group" class="form-control" onchange="setgroup(this.value);">
 						      <option value="">--Select Group--</option>
-							  <option value="group1" <?php if($user_education[0]['group'] == "group1"){echo "selected";}?>>Group 1</option>
-							<option value="group2" <?php if($user_education[0]['group'] == "group2"){echo "selected";}?> >Group 2</option>
-							  <option value="vocational" <?php if($user_education[0]['group'] == "vocational"){echo "selected";}?>>Vocational</option>
+							  <option value="group1" <?php if(@$user_education[0]['group'] == "group1"){echo "selected";}?> >Group 1</option>
+							<option value="group2" <?php if(@$user_education[0]['group'] == "group2"){echo "selected";}?> >Group 2</option>
+							  <option value="vocational" <?php if(@$user_education[0]['group'] == "vocational"){echo "selected";}?> >Vocational</option>
 							 
 							</select>
 					</div>
@@ -485,31 +485,31 @@ function setgroup(val)
 					<div class="row">
 					<div class="form-group col-md-3" id="phydiv" style="display:none">
 					  <label for="roll"><i class="fa fa-ship"></i>Physics</label>
-					    <input type="text" class="form-control" id="physics" name="physics" placeholder="Enter Marks" value="<?=$user_education[0]['physics_theory']?>">
+					    <input type="text" class="form-control" id="physics" name="physics" placeholder="Enter Marks" value="<?php echo @$user_education[0]['physics_theory'];?>">
 					</div>
 					
 					<div class="form-group col-md-3" id="chediv" style="display:none">
 					  <label for="roll"><i class="fa fa-ship"></i>Chemistry</label>
-					    <input type="text" class="form-control" id="chemistry" name="chemistry" placeholder="Enter Marks" value="<?=$user_education[0]['chemistry_theory']?>">
+					    <input type="text" class="form-control" id="chemistry" name="chemistry" placeholder="Enter Marks" value="<?php echo @$user_education[0]['chemistry_theory'];?>">
 					</div>
 					
 					<div class="form-group col-md-3" id="biodiv" style="display:none">
 					  <label for="roll"><i class="fa fa-ship"></i>Biology</label>
-					    <input type="text" class="form-control" id="biology" name="biology" placeholder="Enter Marks" value="<?=$user_education[0]['biology_theory']?>">
+					    <input type="text" class="form-control" id="biology" name="biology" placeholder="Enter Marks" value="<?php echo @$user_education[0]['biology_theory'];?>">
 					</div>
 					
 					<div class="form-group col-md-3" id="botdiv" style="display:none">
 					  <label for="roll"><i class="fa fa-ship"></i>Botany</label>
-					    <input type="text" class="form-control" id="botany" name="botany" placeholder="Enter Marks" value="<?=$user_education[0]['botany_theory']?>">
+					    <input type="text" class="form-control" id="botany" name="botany" placeholder="Enter Marks" value="<?php echo @$user_education[0]['botany_theory'];?>">
 					</div>
 					
 					<div class="form-group col-md-3" id="zoodiv" style="display:none">
 					  <label for="roll"><i class="fa fa-ship"></i>Zoology</label>
-					    <input type="text" class="form-control" id="zoology" name="zoology" placeholder="Enter Marks" value="<?=$user_education[0]['zoology_theory']?>">
+					    <input type="text" class="form-control" id="zoology" name="zoology" placeholder="Enter Marks" value="<?php echo @$user_education[0]['zoology_theory'];?>">
 					</div>
 					<div class="form-group col-md-3" id="fishdiv" style="display:none">
 					  <label for="roll"><i class="fa fa-ship"></i>Fisheries</label>
-					    <input type="text" class="form-control" id="fisheries" name="fisheries" placeholder="Enter Marks" value="<?=$user_education[0]['vocational_theory']?>">
+					    <input type="text" class="form-control" id="fisheries" name="fisheries" placeholder="Enter Marks" value="<?php echo @$user_education[0]['vocational_theory'];?>">
 					</div>
 				   </div>
 				   <div class="row">

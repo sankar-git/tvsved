@@ -86,35 +86,11 @@
 					  <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="batch_id" id="batch_id" class="form-control"  onchange="showTemplate();">
 						  <option value="">Select Batch</option>
-						  <?php foreach($batches as $batch){ ?>
-						  <option value="<?php echo $batch->id;?>"><?php echo $batch->batch_name;?></option>
-						  <?php } ?>
-					  </select>
+						</select>
 					</div>
 					
 					
-					<!--<div class="form-group col-md-4">
-					  <label for="exampleInputEmail1">Semester<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="semester_id" id="semester_id" class="form-control">
-						  <option value="">Select Semester</option>
-						  <?php foreach($semesters as $semester){ ?>
-						  <option value="<?php echo $semester->id;?>"><?php echo $semester->semester_name;?></option>
-						  <?php } ?>
-					  </select>
-					</div>
 					
-					
-					<div class="form-group col-md-4">
-					  <label for="course-group">Discipline<span style="color:red;font-weight: bold;">*</span></label>
-					   <select class="form-control" name="discipline_id" id="discipline_id" onchange="showTemplate();">
-					   
-						  <option value="">Select Discipline</option>
-						  <?php foreach($disciplines as $discipline){?>
-						    <option value="<?php echo $discipline->id;?>"><?php echo $discipline->discipline_name;?></option>
-						  <?php } ?>
-						
-					  </select>
-					</div>-->
 					
 					<div class="form-group col-md-4">
 					  <label for="student_count">Student Count<span style="color:red;font-weight: bold;">*</span></label>

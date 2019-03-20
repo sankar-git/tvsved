@@ -467,8 +467,8 @@ Class Type_model extends CI_Model
 		return $result;					   
 		}
 		
-		if($role_id=='8'){
-			$this->db->select('u.*');
+		if($role_id=='8' || $role_id=='4'){
+			$this->db->select('u.*,umd.*');
 			$this->db->from('users as u');
 			$this->db->join('user_map_subadmin_details as umd','umd.user_id = u.id','LEFT');
 			$this->db->where(array('u.id' => $id));
@@ -476,7 +476,7 @@ Class Type_model extends CI_Model
 			return $result;
 		}
 		if($role_id=='7'){
-			$this->db->select('u.*');
+			$this->db->select('u.*,umd.*');
 			$this->db->from('users as u');
 			$this->db->join('user_map_subadmin_details as umd','umd.user_id = u.id','LEFT');
 			$this->db->where(array('u.id' => $id));

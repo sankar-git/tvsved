@@ -817,16 +817,15 @@ class Admin extends CI_Controller {
 				  $data['user_transaction']=$this->type_model->get_user_transaction_by_id($id,$role_id);
 		    $this->load->view('admin/edit_user_view',$data); //student edit view
 		   }
-		    if($role_id=='2')
-		   {
-			$data['disciplines'] = $this->Discipline_model->get_discipline(); 
-			$data['campuses']=$this->type_model->get_campus();
-		    $this->load->view('admin/edit_teacher_view',$data);
-		   }
+		   
 		   if($role_id=='3')
 		   {
 			   //print_r($data); exit;
 		    $this->load->view('admin/user_edit_view',$data);  //user edit view
+		   }else{
+			$data['disciplines'] = $this->Discipline_model->get_discipline(); 
+			$data['campuses']=$this->type_model->get_campus();
+		    $this->load->view('admin/edit_teacher_view',$data);
 		   }
 	}
 	function deleteUser($id,$role)
@@ -899,7 +898,7 @@ class Admin extends CI_Controller {
 			$country_id_local=$this->input->post('country_id_local');
 			$state_id_local=$this->input->post('state_id_local');
 			$zip_code_local=$this->input->post('zip_code_local');
-			$scholarship=$this->input->post(scholarship);
+			$scholarship=$this->input->post('scholarship');
 			
 			
 			//Academic Info
@@ -981,15 +980,23 @@ class Admin extends CI_Controller {
 			$save['user_image']=$user_file;
 			
 			
-			$save['permission_status']=$permission;
-			$save['subadmin_campus_id']=$subadmin_campus_id;
-			$save['upload_type']=$marks_upload_permission;
+			$save['permission_status']=@$permission;
+			$save['subadmin_campus_id']=@$subadmin_campus_id;
+			$save['upload_type']=@$marks_upload_permission;
 			
 			
 			
 			
 			
 			//print_r($save); //exit;
+			if($state_id == '')
+				$state_id = 0;
+			if($country_id_local == '')
+				$country_id_local = 0;
+			if($state_id_local == '')
+				$state_id_local = 0;
+			if($zip_code_local == '')
+				$zip_code_local = 0;
 			$data = $this->type_model->update_common_user_by_id($id,$save);
 			//echo $this->db->last_query();exit;
 			$saved['parent_name']=$parent_name;
@@ -1123,7 +1130,10 @@ class Admin extends CI_Controller {
 			//print_r($saved); exit;
 			$data = $this->type_model->update_teacher_details_by_id($id,$saved);
 		    $this->session->set_flashdata('message', 'Teacher updated successfully');
-	        redirect('admin/listUser'); 
+			if($user_type == 2)
+				redirect('admin/listTeacher'); 
+			else
+				redirect('admin/listUser'); 
 	}
 	
 	function studentStatus($id,$status)
