@@ -334,6 +334,8 @@ class Transcript extends CI_Controller {
 				     $data['result_data']=$allData;
 					 $data['total_gradeval']=$datas['total_gradeval'];
 					$data['total_count']=$datas['total_count'];
+					$data['month']=$this->input->post('month');
+					$data['year']=$this->input->post('year');
 					 //p($data); exit;
 			
 			  

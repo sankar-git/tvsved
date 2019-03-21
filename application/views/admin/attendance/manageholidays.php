@@ -51,7 +51,7 @@
 				  <input type="hidden" name="login_user_id" id="login_user_id" value="<?php echo $id;?>">
 				  <input type="hidden" name="login_user_type" id="login_user_type" value="<?php echo $role_id;?>">
 				  <label for="degree_id">Degree<span style="color:red;font-weight: bold;">*</span></label>
-				  <select name="degree_id" id="degree_id" class="form-control">
+				  <select name="degree_id[]" multiple id="degree_id" class="form-control">
 					  <option value="">--Select Degree--</option>
 					  <?php foreach($degrees as $degree){?>
 					  <option value="<?php echo $degree->id; ?>"><?php echo $degree->degree_name; ?></option>
@@ -166,7 +166,8 @@ function deleteEvent(event) {
 	var degree_id =$('#degree_id').val();
 	$.ajax({
 		type:'POST',
-		url:'<?php echo base_url();?>attendance/deleteholiday/'+degree_id+'/'+event.id,
+		url:'<?php echo base_url();?>attendance/deleteholiday/'+event.id,
+		data: {'degree_id':degree_id},
 		success: function(data){
 			
 		}
@@ -180,7 +181,8 @@ function saveEvent() {
         id: $('#event-modal input[name="event-index"]').val(),
         name: $('#event-modal input[name="event-name"]').val(),
         startDate: $('#event-modal input[name="event-start-date"]').val(),
-        endDate: $('#event-modal input[name="event-end-date"]').val()
+        endDate: $('#event-modal input[name="event-end-date"]').val(),
+		degree_id :$('#degree_id').val()
     }
     if($('#event-modal input[name="event-name"]').val() == ''){
 		alert('Please enter the name');
@@ -208,10 +210,10 @@ function saveEvent() {
             }
         }
 		
-		var degree_id =$('#degree_id').val();
+		
 		$.ajax({
 			type:'POST',
-			url:'<?php echo base_url();?>attendance/saveholidays/'+degree_id,
+			url:'<?php echo base_url();?>attendance/saveholidays/',
 			data: event,
 			success: function(data){
 				
@@ -226,11 +228,12 @@ function saveEvent() {
                 newId = dataSource[i].id;
             }
         }
-		var degree_id =$('#degree_id').val();
+		
 		$.ajax({
 			type:'POST',
-			url:'<?php echo base_url();?>attendance/saveholidays/'+degree_id,
+			url:'<?php echo base_url();?>attendance/saveholidays/',
 			data: event,
+			
 			success: function(data){
 				event.id = parseInt(data);
 				event.startDate = $('#event-modal input[name="event-start-date"]').datepicker('getDate');
@@ -339,16 +342,29 @@ function loadHolidays(degree_id){
 }
 	$(document).ready(function() {
 		
-		 
+		 $('#degree_id').multiselect({
+				includeSelectAllOption: true,
+				enableFiltering: true,
+				buttonWidth: '345px',
+				maxHeight: 350,
+				onChange: function(element, checked) {
+					if($('#degree_id').val().length>0){
+						$("#activitycalendar").removeClass('hidden');
+							loadHolidays($('#degree_id').val());
+					}else{
+						$("#activitycalendar").addClass('hidden');
+					}
+				}
+			});
 		
-		$('#degree_id').on('change',function(){
+		/*$('#degree_id').on('change',function(){
 			if($(this).val() >0){
 				$("#activitycalendar").removeClass('hidden');
 					loadHolidays($(this).val());
 			}else{
 				$("#activitycalendar").addClass('hidden');
 			}
-		});
+		});*/
 	});
 	
 	$(document).ready(function () {
@@ -476,7 +492,8 @@ function uncheckedChk(){
 	 }
 	</script>	
   
-  
+  <script type="text/javascript" src="<?php echo base_url();?>assets/bootstrap-multiselect.js"></script>
+<link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap-multiselect.css" type="text/css"/>
   
  <?php $this->load->view('admin/helper/footer');?> 
   

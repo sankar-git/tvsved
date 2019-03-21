@@ -122,8 +122,9 @@ Class Attendance_model extends CI_Model
 	}
 	function delete_holidays($degree_id,$id)
 	{
-		if( !empty($degree_id) && !empty($id) ){
-			 $this->db->where(array('degree_id'=>$degree_id,'id'=>$id));
+		if(!empty($id) ){
+			 $this->db->where(array('id'=>$id));
+			 $this->db->where_in('degree_id',$degree_id);
              $this->db->delete('holiday_list');
 		}
 	}
@@ -142,7 +143,7 @@ Class Attendance_model extends CI_Model
 	function get_holidays($degree_id,$date=''){
 		$this->db->select('id,name,startDate,endDate,color');
 		$this->db->from('holiday_list');
-		$this->db->where('degree_id',$degree_id);
+		$this->db->where_in('degree_id',$degree_id);
 		if(!empty($date)){
 			$this->db->where('startDate <=', $date);
 			$this->db->where('endDate >=', $date);
@@ -201,7 +202,9 @@ Class Attendance_model extends CI_Model
 		$data['degree_id'] = $degree_id;
 		$this->db->select('id');
 		$this->db->from('holiday_list');
-		$this->db->where('id',$result['id']);
+		$this->db->where('startDate',$data['startDate']);
+		$this->db->where('endDate',$data['endDate']);
+		$this->db->where('degree_id',$data['degree_id']);
 		$result =$this->db->get()->result();
 		if(isset($result[0]->id) && $result[0]->id>0){
 			$this->db->where('id',$result[0]->id);

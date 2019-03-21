@@ -227,8 +227,14 @@
           
 			  <?php } ?>
 				<?php
-				for($j=$count;$j<39;$j++){ 
-				if($j >=19 && $flag == false){ $flag=true;
+				if(count($result_data) == 0)
+					$row_count = 38;
+				elseif($counter >=19)
+					$row_count = 37;
+				elseif($counter <19)
+					$row_count = 39;
+				for($j=1;$j<$row_count-$count;$j++){ $counter = $j+$count;
+				if($counter >=19 && $flag == false){ $flag=true;
 	              ?>
 				  </table></div><div style="float:left;width:50%"><table class="table" width="100%" style="border:solid 1px black;">
 			  <tr>

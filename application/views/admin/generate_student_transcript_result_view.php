@@ -81,7 +81,27 @@
 						
 					  </select>
 				</div>
-					
+				<div class="form-group col-md-3">
+					  <label for="month">Month<span style="color:red;font-weight: bold;">*</span></label>
+					   <select class="form-control" name="month" id="month">
+					   
+						  <option value="">Select Month</option>
+						<?php for($i=0;$i<12;$i++){ $time = strtotime(sprintf('%d months', $i-1));?>
+						<option value="<?php echo date('F', $time);?>"><?php echo date('F', $time);?></option>
+						<?php }?>
+					  </select>
+					</div>
+					 <div class="form-group col-md-3">
+					  <label for="year">Year<span style="color:red;font-weight: bold;">*</span></label>
+					   <select class="form-control" name="year" id="year">
+					   
+						  <option value="">Select Year</option>
+							<?php for($i=date('Y')-10;$i<=date('Y');$i++){?>
+							<option value="<?php echo $i;?>"><?php echo $i;?></option>
+							<?php }?>
+						
+					  </select>
+					</div>
 			 </div>
 			 <div class="row">
 			 <div class="form-group col-md-3">

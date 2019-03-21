@@ -183,8 +183,12 @@ class Attendance extends CI_Controller {
 	}
 	function getholidays(){
 		$degree_id  = $this->input->post('degree_id');
-		if($degree_id>0)
-				$holidayList = $this->Attendance_model->get_holidays($degree_id);
+		//if(is_array($degree_id)){
+			//$degree_id = implode(",",$degree_id);
+		//}
+		//echo $degree_id;exit;
+		//if($degree_id>0)
+				$holidayList = $this->Attendance_model->get_holidays($degree_id);//echo $this->db->last_query();
 		echo json_encode($holidayList);
 	}
 	function getStudentAttendance(){
@@ -710,12 +714,23 @@ function drawMultSeries() {
 			
 			$this->load->view('admin/attendance/manageholidays',$data);  
 	}
-	function saveholidays($degree_id){
+	function saveholidays(){
 		$data = $_POST;
-		$id = $this->Attendance_model->save_holidays($degree_id,$data);
+		$degree_id  = $this->input->post('degree_id');
+		if(is_array($degree_id)){
+			//$degree_id = implode(",",$degree_id);
+			foreach($degree_id as $key=>$val){
+				$id = $this->Attendance_model->save_holidays($val,$data);
+			}
+		}else	
+			$id = $this->Attendance_model->save_holidays($degree_id,$data);
 		echo $id;
 	}
-	function deleteholiday($degree_id,$id){
+	function deleteholiday($id){
+		$degree_id  = $this->input->post('degree_id');
+		if(is_array($degree_id)){
+			$degree_id = implode(",",$degree_id);
+		}
 		$save = $this->Attendance_model->delete_holidays($degree_id,$id);
 		return true;
 	}
