@@ -82,7 +82,7 @@
 					</div>
 					<div class="form-group col-md-4">
 					  <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
-					  <select class="form-control" name="degree_id" id="degree_id" onchange="getSemesterbyDegree(),getBatchbyDegree(),getBatchbyDOS(),getDisciplinebyDegree(),uploadView();">
+					  <select class="form-control" name="degree_id" id="degree_id" onchange="getSemesterbyDegree(),getBatchbyDegree(),getDisciplinebyDegree(),uploadView();">
 						  <option value="">--Select Degree--</option>
 						 
 					  </select>
@@ -140,11 +140,11 @@
 						
 					  </select>
 					</div>
-				  <div class="form-group col-md-4">
+				  <!--<div class="form-group col-md-4">
 				  <label for="course-group">Date Of Start<span style="color:red;font-weight: bold;">*</span></label>
 				   <select class="form-control" name="date_of_start" id="date_of_start">
 				   </select>
-				</div>
+				</div>-->
 				
 				    <div class="ncc_show" style="display:none;">
 				     <div class="form-group col-md-4" id="show_list">
@@ -162,8 +162,9 @@
 				  <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
 				   <select class="form-control" name="marks_type" id="marks_type" onchange="getStudentAssignedMarks();">
 					  <option value="0">-Select Marks Type-</option>
+					  <?php if($session_data[0]->role_id==2){?>
 					  <option value="1">Internal Marks</option>
-					  <?php if($session_data[0]->role_id!=2){?>
+					  <?php } if($session_data[0]->role_id!=2){?>
 					  <option value="2">External Marks</option>
 					  <?php } ?>
 				   </select>
@@ -173,7 +174,11 @@
 				       <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
 				       <select class="form-control" name="marks_type" id="marks_type" onchange="getStudentAssignedMarks();">
 						   <option value="0">-Select Marks Type-</option>
-						   <option value="1">Internal Marks</option>
+						   <?php if($session_data[0]->role_id==2){?>
+					  <option value="1">Internal Marks</option>
+					  <?php } if($session_data[0]->role_id!=2){?>
+					  <option value="2">External Marks</option>
+					  <?php } ?>
 						 
 					  </select>
 				     </div>
@@ -182,7 +187,11 @@
 				       <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
 				       <select class="form-control" name="marks_type" id="marks_type" onchange="getStudentAssignedMarks();">
 						   <option value="0">-Select Marks Type-</option>
-						   <option value="2">External Marks</option>
+						   <?php if($session_data[0]->role_id==2){?>
+					  <option value="1">Internal Marks</option>
+					  <?php } if($session_data[0]->role_id!=2){?>
+					  <option value="2">External Marks</option>
+					  <?php } ?>
 					  </select>
 				     </div>
 				<?php }?>
@@ -203,7 +212,7 @@
 								<tr id="ncc_list" class="ncc_list">
 								    <th>Unique Id</th>
 								    <th>Student Name</th>
-									<th><span style="margin-left: 47px;">Ncc Subject</span></br></th>
+									<th><span style="margin-left: 47px;">Result</span></br></th>
 									
 									
 								</tr>
@@ -237,11 +246,11 @@
 								</tr>
 								
 								<tr id="external" class="external" style="display:none">
-								    <th>Unique Id</th>
+								    <th>Sno</th>
 								   <!-- <th>Student Id</th>-->
-								    <th>Student Name</th>
-									<th><span style="margin-left: 47px;">INTERNAL</span></br><span>FIRST(40)</span><span>SECOND(40)</span><span>THIRD(40)</span></th>
-									<th nowrap class="practical_head_cont"></th>
+								    <th>Dummy No</th>
+									<!--<th><span style="margin-left: 47px;">INTERNAL</span></br><span>FIRST(40)</span><span>SECOND(40)</span><span>THIRD(40)</span></th>
+									<th nowrap class="practical_head_cont"></th>-->
 									<th nowrap class="external_head_cont"><span style="margin-left: 47px;">EXTERNAL</span></br><span>PAPER-I(100)</span><span>PAPER-II(100)</span></th>
 									
 									
@@ -743,7 +752,7 @@
 						semester_id: $('#semester_id').val(),
 						discipline_id: $('#discipline_id').val(),
 						course_id: $('#course_id').val(),
-						date_of_start: $('#date_of_start').val(),
+						//date_of_start: $('#date_of_start').val(),
 						marks_type_ncc: $('#marks_type_ncc').val(),
 				marks_type: $('#marks_type').val() },
 				success: function(data){
@@ -781,9 +790,13 @@
 		{
 			$(".external").show(); 
 			
-			$("#bvscwewew .external th").eq(2).show().html('Internal Theory(20)');
-			$("#bvscwewew .external th").eq(3).html('TermPaper(10)');
-			$("#bvscwewew .external th").eq(4).show().html('Internal Practical(50/100)');
+			//$("#bvscwewew .external th").eq(2).show().html('Internal Theory(20)');
+			//$("#bvscwewew .external th").eq(3).html('TermPaper(10)');
+			//$("#bvscwewew .external th").eq(4).show().html('Internal Practical(50/100)');
+			$("#bvscwewew .external th").eq(1).html('Dummy No');
+			$("#bvscwewew .external th").eq(2).hide();
+			$("#bvscwewew .external th").eq(3).hide();
+			$("#bvscwewew .external th").eq(4).hide();
 			$("#bvscwewew .external th").eq(5).show().html('External Theory(70/100)');
 			$(".internal").hide();
 		}
@@ -810,6 +823,7 @@
 		if(uploadType=='1')
 		{
 			$(".internal").show();
+			$("#bvscwewew .external th").eq(1).html('Student Name');
 			if($('#practicle_credit').val() == 0) { 
 				$("#bvscwewew .internal th").eq(2).show().html('Internal Theory(40)');
 				$("#bvscwewew .internal th").eq(3).html('Assignment(10)');
@@ -831,7 +845,7 @@
 			$(".external").show(); 
 
 				
-			if($('#practicle_credit').val() == 0) { 
+			/*if($('#practicle_credit').val() == 0) { 
 				$("#bvscwewew .external th").eq(2).show().html('Theory(40)');
 				$("#bvscwewew .external th").eq(3).html('Assignment(10)');
 				$("#bvscwewew .external th").eq(4).hide();
@@ -840,10 +854,15 @@
 				$("#bvscwewew .external th").eq(3).html('Assignment(10)');
 				$("#bvscwewew .external th").eq(2).hide();
 			}else{
-				$("#bvscwewew .external th").eq(4).show().html('Practical(15)');
-				$("#bvscwewew .external th").eq(3).html('Assignment(5)');
-				$("#bvscwewew .external th").eq(2).show().html('Theory(30)');
-			}
+				$("#bvscwewew .external th").eq(2).hide();
+				$("#bvscwewew .external th").eq(4).hide();
+				$("#bvscwewew .external th").eq(3).hide();
+				
+			}*/
+			$("#bvscwewew .external th").eq(1).html('Dummy No');
+			$("#bvscwewew .external th").eq(2).hide();
+			$("#bvscwewew .external th").eq(4).hide();
+			$("#bvscwewew .external th").eq(3).hide();
 			$(".internal").hide();
 		}
 		var $form =$("#ug_marks_upload_view");

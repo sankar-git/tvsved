@@ -267,7 +267,7 @@ class Marks extends CI_Controller {
 			$n=$m+$l+$k+$j+$cc;
 			$o=$n+$m+$l+$k+$j+$cc;
 			if(count($studentList)>0){
-			foreach($studentList as $students)
+			foreach($studentList as $key=>$students)
 			{ 
 				if($marks_type=='1')
 				{
@@ -313,25 +313,14 @@ class Marks extends CI_Controller {
 				$checked = 'checked';
 				$readonly=' ';
 				$trdata.='<tr>
-				            <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.' 
+				            <td><input type="hidden"  value="'.$students->user_unique_id.'">'.($key+1) .' 
 						    <input type="hidden" name="student_id[]" value="'.$students->id.'"></td>
 						 
-						  <td>'.$students->first_name.' '.$students->last_name.'</td>
-						  <td>
-						  <input type="text" name="theory_internal1[]"  class="theory_internal" value="'.$students->theory_internal1.'" '.$readonly.' style="width:60px;" >
-						  <input type="text" name="theory_internal2[]"  class="theory_internal" value="'.$students->theory_internal2.'" '.$readonly.' style="width:60px;" >
-						  <input type="text" name="theory_internal3[]"  class="theory_internal" value="'.$students->theory_internal3.'" '.$readonly.' style="width:60px;">
-						  </td>
-						  <td>';
-						  for($i=1;$i<=$course_idCount;$i++){
-								$var = "theory_paper{$i}";
-								$trdata.='<input type="text" name="theory_paper'.$i.'[]"  class="practical_exam" value="'.$students->{$var}.'" style="width:60px;" >&nbsp;';
-								
-							}
-							
+						  <td>'.$students->dummy_value.'</td>
+						  ';
 						  
-						  $trdata.='</td>
-						  <td>';
+						  
+						  $trdata.=' <td>';
 						  for($i=1;$i<=$course_idCount;$i++){
 								$var = "theory_external{$i}";
 								$trdata.='<input type="text" name="theory_external'.$i.'[]" class="theory_external" value="'.$students->{$var}.'" style="width:60px;">&nbsp;';
@@ -380,7 +369,7 @@ class Marks extends CI_Controller {
 	    $trdata='';
 		$studentList= $this->Marks_model->get_student_assigned_marks($send);
 		if(!empty($studentList[0]->course_id)){
-		  foreach($studentList as $students)
+		  foreach($studentList as $key=>$students)
 			{
 				if($marks_type=='1')
 				{
@@ -397,12 +386,10 @@ class Marks extends CI_Controller {
 				if($marks_type=='2'){
 					$readonly='';
 					$trdata.='<tr>
-				         <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.' 
+				         <td><input type="hidden"  value="'.$students->user_unique_id.'">'.($key+1).' 
 						    <input type="hidden" name="student_id[]" value="'.$students->id.'"></td>
-						  <td>'.$students->first_name.' '.$students->last_name.'</td>';
-					$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal1.'" '.$readonly.' ></td>';
-					$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'" '.$readonly.' ></td>';
-					$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" '.$readonly.' ></td>';
+						  <td>'.$students->dummy_value.'</td>';
+					
 					$trdata.='<td><input type="text" name="theory_external[]"  value="'.$students->theory_external1.'" ></td></tr>';
 				}
 			}
@@ -413,7 +400,7 @@ class Marks extends CI_Controller {
 			if(!empty($studentListNew))
 			{
 				$trdata='';
-				foreach($studentListNew as $students)
+				foreach($studentListNew as $key=>$students)
 				{	
 					$readonly=' ';
 					if($marks_type=='1')
@@ -433,25 +420,21 @@ class Marks extends CI_Controller {
 						if($course_id==$students->course_id)
 						{
 							$trdata.='<tr>
-								 <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
+								 <td><input type="hidden"  value="'.$students->user_unique_id.'">'.($key+1).'
 									 <input type="hidden" name="student_id[]" value="'.$students->id.'"> 
-								 </td><td>'.$students->first_name.' '.$students->last_name.'</td>';
-							$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal.'" '.$readonly.' ></td>';
-							$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'" '.$readonly.' ></td>';
-							$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" '.$readonly.' ></td>';
+								 </td><td>'.$students->dummy_value.'</td>';
+							
 							$trdata.='<td><input type="text" name="theory_external[]"  value="" ></td></tr>';
 						}
 						else
 						{
 							$trdata.='<tr>
-								 <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
+								 <td><input type="hidden"  value="'.$students->user_unique_id.'">'.($key+1).'
 									 <input type="hidden" name="student_id[]" value="'.$students->id.'">
 								 </td>
-								  <td>'.$students->first_name.' '.$students->last_name.'</td>';
+								  <td>'.$students->dummy_value.'</td>';
 								  
-							$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="" '.$readonly.'></td>';
-							$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.@$students->assignment_mark.'" '.$readonly.' "></td>';
-							$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="" '.$readonly.'></td>';
+							
 							$trdata.='<td><input type="text" name="theory_external[]"   value="" '.$readonly.'></td></tr>';	
 						}
 					}
@@ -519,7 +502,7 @@ class Marks extends CI_Controller {
 				$m=$l+$k+$j+$cc;
 				$n=$m+$l+$k+$j+$cc;
 				$o=$n+$m+$l+$k+$j+$cc;
-			foreach($studentList as $students)
+			foreach($studentList as $key=>$students)
 			{
 				if($marks_type=='1')
 				{
@@ -551,15 +534,11 @@ class Marks extends CI_Controller {
 				$checked = 'checked';
 				$readonly='';
 				$trdata.='<tr>
-				         <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.' 
+				         <td><input type="hidden"  value="'.$students->user_unique_id.'">'.($key+1).' 
 						    <input type="hidden" name="student_id[]" value="'.$students->id.'"></td>
 						 
-						  <td>'.$students->first_name.' '.$students->last_name.'</td>';
-						  if($theory_credit >0)
-							$trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal1.'" '.$readonly.' ></td>';
-						$trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'" '.$readonly.' ></td>';
-						if($practicle_credit >0)
-							$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" '.$readonly.' ></td>';
+						  <td>'.$students->dummy_value.'</td>';
+						
 						  $trdata.='<td><input type="text" name="theory_external[]" class="theory_external_btech" value="'.$students->theory_external1.'" ></td>
 						  
 						
@@ -579,22 +558,13 @@ class Marks extends CI_Controller {
 			   
 			$trdata='';
 			    $i=0;
-				$j=$cc;
-				$k=$j+$cc;
-				$l=$k+$j+$cc;
-				$m=$l+$k+$j+$cc;
-				
+
 			
-			foreach($studentListNew as $students)
+			foreach($studentListNew as $key=>$students)
 			{	$readonly=' ';
 				if($marks_type=='1')
 				{
-					
-				 $i++;
-				 $j++;
-				 $k++;
-				 $l++;
-				 $m++;
+
 				
 				$checked = 'checked';
 				$trdata.='<tr>
@@ -611,28 +581,19 @@ class Marks extends CI_Controller {
 					$trdata.='</tr>';
 				}
 				if($marks_type=='2'){
-						
-				 $i++;
-				 $j++;
-				 $k++;
-				 $l++;
-				 $m++;
+
 				
 				$checked = 'checked';
 				$readonly=' ';
 				if($course_id==$students->course_id)
 				{
 				$trdata.='<tr>
-				         <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
+				         <td><input type="hidden"  value="'.$students->user_unique_id.'">'.($key+1).'
 						     <input type="hidden" name="student_id[]" value="'.$students->id.'"> 
 						 </td>
 						
-						<td>'.$students->first_name.' '.$students->last_name.'</td>';
-						if($theory_credit >0)
-						  $trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="'.$students->theory_internal.'" '.$readonly.' ></td>';
-					  $trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.$students->assignment_mark.'" '.$readonly.' ></td>';
-					  if($practicle_credit >0)
-						  $trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="'.$students->practical_internal.'" '.$readonly.' ></td>';
+						<td>'.$students->dummy_value.'</td>';
+						
 						   $trdata.='<td><input type="text" name="theory_external[]" class="theory_external_btech" value="" ></td>
 						  
 						
@@ -643,15 +604,11 @@ class Marks extends CI_Controller {
 				else
 				{
 				$trdata.='<tr>
-				         <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
+				         <td><input type="hidden"  value="'.$students->user_unique_id.'">'.($key+1).'
 						     <input type="hidden" name="student_id[]" value="'.$students->id.'">
 						 </td>
-						  <td>'.$students->first_name.' '.$students->last_name.'</td>';
-						  if($theory_credit >0)
-							  $trdata.='<td><input type="text" name="theory_internal[]" class="'.$theroy_class.'" value="" '.$readonly.'></td>';
-						  $trdata.='<td><input type="text" name="assignment_mark[]" class="'.$assignment_class.'" value="'.@$students->assignment_mark.'" '.$readonly.' "></td>';
-						   if($practicle_credit >0)
-							$trdata.='<td><input type="text" name="practical_internal[]" class="'.$practical_class.'" value="" '.$readonly.'></td>';
+						  <td>'.$students->dummy_value.'</td>';
+						
 						  $trdata.='<td><input type="text" name="theory_external[]" class="theory_external_btech"  value="" '.$readonly.'></td>
 						  
 						
@@ -705,7 +662,7 @@ class Marks extends CI_Controller {
 				  
 				 $ncc_status =$ncc_marks[$i];//pass fail in ncc subject
 				
-				       $this->Marks_model->delete_ug_marks($student_id,$course_id);
+				//$this->Marks_model->delete_ug_marks($student_id,$course_id);
 				 
 						$ncc_list=array(
 							'campus_id'=>$campus_id,
@@ -778,15 +735,10 @@ class Marks extends CI_Controller {
 		$practical_external_marks_sum='';
 		$external_sum='';
 		$return1='';
-		
-		//if($marks_type=='1'){
-			//echo "hello";exit;
-			           
-					  // $this->Marks_model->delete_ug_marks($student_id,$course_id); //delete old and save new
 				for($i=0; $i<count($student_ids);$i++){
 					
 					    $student_id=$student_ids[$i];
-					    //$this->Marks_model->delete_ug_marks($student_id,$course_id); //delete old and save new
+					    
 						$theory_marks1=$theory_internal1[$i];
 						$theory_marks2=$theory_internal2[$i];
 						$theory_marks3=$theory_internal3[$i];
@@ -796,94 +748,7 @@ class Marks extends CI_Controller {
 						$theory_paper3_marks=$theory_paper3[$i];
 						$theory_paper4_marks=$theory_paper4[$i];
 						
-						$get_internal_practical1=$theory_paper1_marks/3;
-						$get_internal_practical2=$theory_paper2_marks/3;
-						$get_internal_practical3=$theory_paper3_marks/3;
-						$get_internal_practical4=$theory_paper4_marks/3;
-						$sum_get_internal_practicals=$get_internal_practical1+$get_internal_practical2+$get_internal_practical3+$get_internal_practical4;
-						$sum_get_internal_practical = number_format($sum_get_internal_practicals, 2);
-						$highest_marks='';
-						$smallest_marks='';
-						$second_highest='';
-						$markArr=array();
-						//highest number
-						$markArr[] = $theory_marks1;
-						$markArr[] = $theory_marks2;
-						$markArr[] = $theory_marks3;
-						rsort($markArr);
-						//print_r($markArr);exit;
-						$highest_marks= $markArr[0];
-						/*if($theory_marks1>=$theory_marks2 && $theory_marks1>=$theory_marks3)
-						{
-							$highest_marks=$theory_marks1;
-						}
-						if($theory_marks2>=$theory_marks1 && $theory_marks2>=$theory_marks3)
-						{
-							$highest_marks=$theory_marks2;
-						}
-						if($theory_marks3>=$theory_marks2 && $theory_marks3>=$theory_marks1)
-						{
-							$highest_marks=$theory_marks3;
-						}*/
 						
-						
-						//smallest number
-						/*if($theory_marks1<=$theory_marks2 && $theory_marks1<=$theory_marks3)
-						{
-							$smallest_marks=$theory_marks1;
-						}
-						if($theory_marks2<=$theory_marks1 && $theory_marks2<=$theory_marks3)
-						{
-							$smallest_marks=$theory_marks2;
-						}
-						if($theory_marks3<=$theory_marks2 && $theory_marks3<=$theory_marks1)
-						{
-							$smallest_marks=$theory_marks3;
-						}*/
-						$smallest_marks=$markArr[2];
-						//second highest number
-						
-						/*if($theory_marks1<$highest_marks && $theory_marks1>$smallest_marks)
-						{
-							$second_highest=$theory_marks1;
-						}
-						if($theory_marks2<$highest_marks && $theory_marks2>$smallest_marks)
-						{
-							$second_highest=$theory_marks2;
-						}
-						if($theory_marks3<$highest_marks && $theory_marks3>$smallest_marks)
-						{
-							$second_highest=$theory_marks3;
-						}*/
-						$second_highest=$markArr[1];
-						$sum1=$theory_marks1+$theory_marks2;
-						$sum2=$theory_marks1+$theory_marks3;
-						$sum3=$theory_marks2+$theory_marks3;
-						if($sum1>=$sum2 && $sum1>=$sum3)
-						{
-							$largesum=$sum1;
-						}
-						if($sum2>=$sum1 && $sum2>=$sum3)
-						{
-							$largesum=$sum2;
-						}
-						if($sum3>=$sum1 && $sum3>=$sum2)
-						{
-							$largesum=$sum3;
-						}
-						//p($largesum); exit;
-						$theory_marks=$largesum;
-						
-						// $theory_external_marks=$theory_external[$i];
-						// $practical_external_marks=$practical_external[$i];
-						// $theory_external_marks_sum=$theory_external_marks/5;
-						// $practical_external_marks_sum=$practical_external_marks/5;
-						 //$external_sum = $theory_external_marks_sum+$practical_external_marks_sum;
-						//$practical_marks=$practical_internal[$i];
-						
-						
-					   //$student_id=$student_ids[$i];
-					   //$this->Marks_model->delete_ug_marks($student_id,$course_id); //delete old and save new
 						
 						$data1=array(
 							'campus_id'=>$campus_id,
@@ -894,46 +759,27 @@ class Marks extends CI_Controller {
 							'discipline_id'=>$discipline_id,
 							'student_id'=>$student_id,
 							'course_id'=>$course_id,
-							'highest_marks'=>$highest_marks,
-							'second_highest_marks'=>$second_highest,
-							'smallest_marks'=>$smallest_marks,
-							'theory_internal1'=>$theory_marks1,
-							'theory_internal2'=>$theory_marks2,
-							'theory_internal3'=>$theory_marks3,
-							'theory_paper1'=>$theory_paper1_marks,// INTERNAL PRACTICAL 60
-							'theory_paper2'=>$theory_paper2_marks, // INTERNAL PRACTICAL 60
-							'theory_paper3'=>$theory_paper3_marks, // INTERNAL PRACTICAL 60
-							'theory_paper4'=>$theory_paper4_marks, // INTERNAL PRACTICAL 60
-							'sum_internal_practical'=>$sum_get_internal_practical, //total_sum_internal_practical
+							'created_on'=>$register_date_time);
+						if($marks_type=='1'){
+							$data1['theory_internal1']=$theory_marks1;
+							$data1['theory_internal2']=$theory_marks2;
+							$data1['theory_internal3']=$theory_marks3;
+							$data1['theory_paper1']=$theory_paper1_marks;// INTERNAL PRACTICAL 60
+							$data1['theory_paper2']=$theory_paper2_marks; // INTERNAL PRACTICAL 60
+							$data1['theory_paper3']=$theory_paper3_marks; // INTERNAL PRACTICAL 60
+							$data1['theory_paper4']=$theory_paper4_marks; // INTERNAL PRACTICAL 60
 							
-							'theory_internal'=>$theory_marks,
-							
-						
-							
-							
-							
-							//'practical_internal'=>$practical_marks,
-							//'marks_sum'=>$marks_sum,
-							'created_on'=>$register_date_time
-						
-						);
+						}
 						
 						if($marks_type=='2'){
 							for($j=1;$j<=$course_idCount;$j++){
 								$var = 'theory_external'.$j;
 								$data1['theory_external'.$j]=(${$var}[$i]) ? ${$var}[$i]:'';
-							}
-							 //100
-							//$data1['practical_external']=($practical_external_marks) ? $practical_external_marks:''; //100
-							//$data1['external_sum']=($external_sum) ? $external_sum:'';
-							
+							}			
 						}
-					//	p($data1);   exit;
-						
-						
+						//print_r($data1);exit;
 						$save = $this->Marks_model->save_ug_marks_new($data1); 
-						//p($save); 
-						//echo $this->db->last_query();echo "<br/>";
+
 						if(!empty($save))
 						{
 							$return =1;
@@ -941,13 +787,9 @@ class Marks extends CI_Controller {
 						else{
 							$return =0;
 						}
-				} //exit;  
-	//echo $return;	
-	
-	
-	 // p($return); exit;
-	   echo $return;
-  }	   
+				}
+			echo $return;
+		}	   
 		
 	}
 	
@@ -1013,17 +855,17 @@ class Marks extends CI_Controller {
 	if($marks_type=='2'){
 		        
 				for($i=0;$i<count($theory_internal);$i++){
-						$theory_marks=$theory_internal[$i];
-						$practical_marks=$practical_internal[$i];
+						//$theory_marks=$theory_internal[$i];
+						//$practical_marks=$practical_internal[$i];
 						$theory_external_marks=$theory_external[$i];
-						$assignment_mark=$assignment_markArr[$i];
+						//$assignment_mark=$assignment_markArr[$i];
 						//$practical_external_marks=$practical_external[$i];
 						$student_id=$student_ids[$i];
-						if(!empty($theory_marks)){$theory_inter=$theory_marks;} else {$theory_inter=00;}
-						if(!empty($practical_marks)){$practical_inter=$practical_marks;} else {$practical_inter=00;}
+						//if(!empty($theory_marks)){$theory_inter=$theory_marks;} else {$theory_inter=00;}
+						//if(!empty($practical_marks)){$practical_inter=$practical_marks;} else {$practical_inter=00;}
 						if(!empty($theory_external_marks)){$theory_extern=$theory_external_marks;} else {$theory_extern=00;}
 						//if(!empty($practical_external_marks)){$practical_extern=$practical_external_marks;} else {$practical_extern=00;}
-						$marks_sum = $theory_inter+$practical_marks+$theory_external_marks; //adding internal and external marks
+						//$marks_sum = $theory_inter+$practical_marks+$theory_external_marks; //adding internal and external marks
 						
 						$data2=array(
 							'campus_id'=>$campus_id,
@@ -1034,15 +876,13 @@ class Marks extends CI_Controller {
 							'discipline_id'=>$discipline_id,
 							'student_id'=>$student_id,
 							'course_id'=>$course_id,
-							'theory_internal1'=>$theory_marks,
-							'practical_internal'=>$practical_marks,
-							'assignment_mark'=>$assignment_mark,
+							
 							'theory_external1'=>$theory_external_marks,
-							'marks_sum'=>$marks_sum,
+							
 							'created_on'=>$register_date_time
 						
 						);
-						//p($data1); 
+						//p($data2); 
 						$save = $this->Marks_model->update_ug_marks($data2); 
 						//print_r($save);
 						
