@@ -162,9 +162,9 @@
 				  <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
 				   <select class="form-control" name="marks_type" id="marks_type" onchange="getStudentAssignedMarks();">
 					  <option value="0">-Select Marks Type-</option>
-					  <?php if($session_data[0]->role_id==2){?>
+					  <?php if(in_array($session_data[0]->role_id,array(0,2,7,8,9,10,11,12))){ ?>
 					  <option value="1">Internal Marks</option>
-					  <?php } if($session_data[0]->role_id!=2){?>
+					  <?php } if(in_array($session_data[0]->role_id,array(0,8,9,10,11,12))){?>
 					  <option value="2">External Marks</option>
 					  <?php } ?>
 				   </select>
@@ -174,9 +174,9 @@
 				       <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
 				       <select class="form-control" name="marks_type" id="marks_type" onchange="getStudentAssignedMarks();">
 						   <option value="0">-Select Marks Type-</option>
-						   <?php if($session_data[0]->role_id==2){?>
+						    <?php if(in_array($session_data[0]->role_id,array(0,2,7,8,9,10,11,12))) { ?>
 					  <option value="1">Internal Marks</option>
-					  <?php } if($session_data[0]->role_id!=2){?>
+					  <?php } if(in_array($session_data[0]->role_id,array(0,8,9,10,11,12))){?>
 					  <option value="2">External Marks</option>
 					  <?php } ?>
 						 
