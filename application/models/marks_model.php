@@ -206,10 +206,11 @@ Class Marks_model extends CI_Model
 	 }
 	 function get_ug_students_by_ids($campus_id,$program_id,$degree_id,$batch_id)
 	 {
-		$this->db->select('u.*');
+		$this->db->select('d.dummy_value,u.*');
 		$this->db->from('users u');
-        $this->db->join('user_map_student_details  umap','u.id = umap.user_id','INNER');
-        $this->db->where(array('umap.campus_id'=>$campus_id,'umap.degree_id'=>$degree_id,'umap.batch_id'=>$batch_id));
+        $this->db->join('user_map_student_details  umap','u.id = umap.user_id','LEFT');
+		$this->db->join('tbl_dummy  d','u.id = d.student_id','LEFT');
+        $this->db->where(array('d.college_id'=>$campus_id,'d.degree_id'=>$degree_id,'d.batch_id'=>$batch_id));
 		$this->db->order_by("u.first_name,u.last_name");
 		$result	= $this->db->get()->result();
 		return $result; 

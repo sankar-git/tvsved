@@ -165,6 +165,15 @@ Class Excel_model extends CI_Model
 		//echo $this->db->last_query();
 		return $result; 
 	 }
+	 function get_student_by_dummy_no($campus_id,$degree_id,$batch_id,$dummy_no)
+	 {
+		$this->db->select('student_id');
+		$this->db->from('tbl_dummy');
+        $this->db->where(array('college_id'=>$campus_id,'degree_id'=>$degree_id,'batch_id'=>$batch_id,'dummy_value'=>$dummy_no));
+		$result	= $this->db->get()->row();
+		//echo $this->db->last_query();
+		return $result; 
+	 }
 	 function save_ug_marks_excel($data)
 	 {
 		    $this->db->insert('students_ug_marks',$data);

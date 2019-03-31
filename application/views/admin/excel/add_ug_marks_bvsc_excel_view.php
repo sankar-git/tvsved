@@ -130,7 +130,17 @@
 						
 					  </select>
 					</div>
-				 
+				  <div class="form-group col-md-4" id="itemsImport" >
+				       <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
+				       <select class="form-control" name="marks_type" id="marks_type" onchange="getStudentAssignedMarks();">
+						   <option value="0">-Select Marks Type-</option>
+						  
+					  <option value="1">Internal Marks</option>
+					 
+					  <option value="2">External Marks</option>
+					 
+					  </select>
+				     </div>
 				
 				   
 				
@@ -142,9 +152,9 @@
 			  
 			   
 			  
-			 <div id="courseList" class="courseList" style="display:none">
+			 <div class="courseList" style="display:none">
 			 <label for="campus">Download Upload Marks Excel Format<span style="color:red;font-weight: bold;">*</span></label>
-						<input style="background: #1870BB;border: none;color: #fff;padding: 5px 10px;font-size: 13px;" type="submit" value="Download Excel" name="downloadExcel" >
+						<input style="background: #1870BB;border: none;color: #fff;padding: 5px 10px;font-size: 13px;" type="submit" value="Download Excel" name="downloadExcel" id="downloadExcel" >
 			        
 				</div>
 			  
@@ -155,7 +165,7 @@
 			<!--****************************B.Tech ******************************************************************-->
 			
 			
-			 <div class="box-body">
+			 <div class="box-body courseList" style="display:none">
 				<div class="row">
 					 <form method="post" id="excel_marks_upload" name="excel_marks_upload" action="<?php echo base_url();?>excelupload/excelUploadMarks" enctype="multipart/form-data"> 
 						<div class="form-group col-md-12">
@@ -168,7 +178,15 @@
 					   <input type="file" class="form-control" name="userfile" id="userfile"/>
 					</div>
 					</div>
-					<input style="background: #1870BB;border: none;color: #fff;padding: 5px 10px;font-size: 13px;" type="submit" value="Upload Excel" name="uploadExcel">
+					<input style="background: #1870BB;border: none;color: #fff;padding: 5px 10px;font-size: 13px;" type="submit" value="Upload Excel" name="uploadExcel" id="uploadExcel">
+					<input type="hidden" name="campus_id_1" id="campus_id_1" value ="" />
+					<input type="hidden" name="program_id_1" id="program_id_1" value ="" />
+					<input type="hidden" name="degree_id_1" id="degree_id_1" value ="" />
+					<input type="hidden" name="batch_id_1" id="batch_id_1" value ="" />
+					<input type="hidden" name="semester_id_1" id="semester_id_1" value ="" />
+					<input type="hidden" name="discipline_id_1" id="discipline_id_1" value ="" />
+					<input type="hidden" name="course_id_1" id="course_id_1" value ="" />
+					<input type="hidden" name="marks_type_1" id="marks_type_1" value ="" />
 				</div>
 					</form>
 				</div>
@@ -185,6 +203,7 @@
   </div>
   <!-- /.content-wrapper -->
   <script type="text/javascript">
+ 
   	$(document).on( 'keyup', '.theory_internal',function(e) {
 		this.value = this.value.replace(/[^0-9\.]/g,'');
 		if(this.value>40)
@@ -237,7 +256,51 @@
 				e.preventDefault();
 			}
 		});*/
+		function validate_fileupload(fileName)
+		{
+			var allowed_extensions = new Array("xls");
+			var file_extension = fileName.split('.').pop().toLowerCase(); // split function will split the filename by dot(.), and pop function will pop the last element from the array which will give you the extension as well. If there will be no extension then it will return the filename.
+
+			for(var i = 0; i <= allowed_extensions.length; i++)
+			{
+				if(allowed_extensions[i]==file_extension)
+				{
+					return true; // valid file extension
+				}
+			}
+
+			return false;
+		}
 	$(document).ready(function() {
+		 $('#downloadExcel').click(function(){
+			if($("#campus_id").val()>0 && $("#program_id").val()>0 &&  $("#degree_id").val()>0 &&  $("#batch_id").val()>0 &&  $("#semester_id").val()>0 &&  $("#discipline_id").val()>0 &&  $("#course_id").val()!='' &&  $("#marks_type").val()>0){
+				return true;
+			}else{
+				alert('Please select all fields');return false;
+			}
+		 });
+		 $('#uploadExcel').click(function(){
+			 if($("#userfile").val() == ''){
+				 alert('Please upload excel file to import');return false;
+			 }
+			 if(validate_fileupload($("#userfile").val()) == false){
+				 alert('Please upload valid excel file to import');return false;
+			 }
+				 
+			if($("#campus_id").val()>0 && $("#program_id").val()>0 &&  $("#degree_id").val()>0 &&  $("#batch_id").val()>0 &&  $("#semester_id").val()>0 &&  $("#discipline_id").val()>0 &&  $("#course_id").val()!='' &&  $("#marks_type").val()>0){
+				$("#campus_id_1").val($("#campus_id").val());
+				$("#program_id_1").val($("#program_id").val());
+				$("#degree_id_1").val($("#degree_id").val());
+				$("#batch_id_1").val($("#batch_id").val());
+				$("#semester_id_1").val($("#semester_id").val());
+				$("#discipline_id_1").val($("#discipline_id").val());
+				$("#course_id_1").val($("#course_id").val());
+				$("#marks_type_1").val($("#marks_type").val());
+				return true;
+			}else{
+				alert('Please select all fields');return false;
+			}
+		 });
 		$("#sales_dob").datepicker({format: 'dd-mm-yyyy',autoclose: true});
 		$(document).on( 'keypress', 'td input[type="text"]',function(e) {
 			if (e.keyCode == 13) {
@@ -636,7 +699,7 @@
 	//alert(uploadType);
 	          // if(uploadType == 0)
 				  // return false;
-		        $("#courseList").show();
+		        $(".courseList").show();
 		var courseid=$('#course_id').val();
 		var courseArr = courseid.split("-");
 		var courseidArr = courseArr[0].split("|");
