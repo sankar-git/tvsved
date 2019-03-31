@@ -129,6 +129,7 @@ class Student extends CI_Controller {
        //**************campuses dropdown End********************************//    
 	   
 	    //**************degree dropdown********************************//
+		$default_degree='';
 	   foreach ($record['degrees'] as $key => $value) {
           $degreeid[]    = $value->id;
           $degreename[]  = $value->degree_name;
@@ -139,6 +140,21 @@ class Student extends CI_Controller {
 	   //exit;
        $finaldegreeid   = implode($degreeid, ',');
        $finaldegreename = implode($degreename, ',');
+	   //p($record['disciplines']);exit;
+	   $default_discipline='';
+	   foreach ($record['disciplines'] as $key => $value) {
+          $disciplineid[]    = $value->id;
+          $discipline_name[]  = $value->discipline_name;
+		  if($value->id == $this->input->post('discipline'))
+			$default_discipline = $value->discipline_name;
+		  
+		 
+       }//foreach
+	  // echo $default_degree;
+	   //exit;
+	   
+       $finaldisciplineid   = implode($disciplineid, ',');
+       $finaldiscipline_name = implode($discipline_name, ',');
 	   
       //**************degree dropdown End********************************//    
 	   
@@ -426,23 +442,16 @@ class Student extends CI_Controller {
       //**************monthofpassing dropdown End********************************//  
 	  
 	   //**************monthofpassing ********************************//
-	     $record['yearofpassing']  =array(
-				  '2015'     =>'2015',
-				  '2016'     =>'2016',
-				  '2017'     =>'2017',
-				  '2018'     =>'2018',
-				  '2019'     =>'2019',
-				  '2020'     =>'2020',
-				  '2021'     =>'2021'
-				  );
-				
+	   for($i=date('Y')-10;$i<=date('Y');$i++){
+	     $record['yearofpassing'][$i]=$i;
+	   }
 	 //print_r($record['types']); exit;
 	   foreach ($record['yearofpassing'] as $key => $value) {
 		  //print_r($key); exit;
           $yearofpassingid[]    = $key;
           $yearofpassingname[]  = $value;
        }//foreach
-       $finalyearofpassingid   = implode($yearofpassingid, ',');
+    $finalyearofpassingid   = implode($yearofpassingid, ',');
        $finalyearofpassingname = implode($yearofpassingname, ',');
       //**************monthofpassing dropdown End********************************//  
 	  
@@ -682,37 +691,26 @@ class Student extends CI_Controller {
       //------------Define Index ---------//
        $featurevaluee1[]    = 'campusName';
        $featurevaluee1[]    = 'degreeName'; 
+       $featurevaluee1[]    = 'discipline'; 
        $featurevaluee1[]    = 'batchName'; 
        $featurevaluee1[]    = 'Type'; 
        $featurevaluee1[]    = 'Gender'; 
-       $featurevaluee1[]    = 'Religion'; 
+       
        $featurevaluee1[]    = 'Nationality';  
-       $featurevaluee1[]    = 'Country';  
-       $featurevaluee1[]    = 'State';  
-       $featurevaluee1[]    = 'City';  
+	   $featurevaluee1[]    = 'Religion'; 
        $featurevaluee1[]    = 'Community';  
        $featurevaluee1[]    = 'Caste';  
        $featurevaluee1[]    = 'Bloodgrp';  
-       $featurevaluee1[]    = 'Mothertongue';  
-       $featurevaluee1[]    = 'residenttype';  
-	   $featurevaluee1[]    = 'LocalCountry';  
-       $featurevaluee1[]    = 'LocalState';  
-       $featurevaluee1[]    = 'LocalCity';
-	   $featurevaluee1[]    = 'Monthofpassing';
-	   $featurevaluee1[]    = 'YearofPassing';
-	   $featurevaluee1[]    = 'Mediumofinstr';
+       $featurevaluee1[]    = 'Mothertongue';
+	   $featurevaluee1[]    = 'City'; 
+	   $featurevaluee1[]    = 'State';
+	   $featurevaluee1[]    = 'Country';   	   
+       $featurevaluee1[]    = 'residenttype'; 
 	   $featurevaluee1[]    = 'Modeofadmission';
-	   $featurevaluee1[]    = 'Reserved';
-	   $featurevaluee1[]    = 'Quota';
-	   $featurevaluee1[]    = 'Studentstatus';
-	   $featurevaluee1[]    = 'Permission';
-	   $featurevaluee1[]    = 'Internship';
-	   $featurevaluee1[]    = 'Differentlyabled';
-	   $featurevaluee1[]    = 'Exservicemen';
-	   $featurevaluee1[]    = 'Freedomfighter';
-	   $featurevaluee1[]    = 'Firstgraduate';
-	   $featurevaluee1[]    = 'Academicvocational';
-	   $featurevaluee1[]    = 'Group';
+	   
+	   $featurevaluee1[]    = 'Monthofpassing';
+	  // $featurevaluee1[]    = 'YearofPassing';
+	   $featurevaluee1[]    = 'Mediumofinstr';
 	   
 	  
         
@@ -725,6 +723,9 @@ class Student extends CI_Controller {
 	  $oldfinalAttrData['degreeName']       = $finaldegreename;
       $oldfinalAttrData2['degreeName']      = $degreename;
 	  
+	  $oldfinalAttrData['discipline']       = $finaldiscipline_name;
+      $oldfinalAttrData2['discipline']      = $discipline_name;
+	  
 	  $oldfinalAttrData['batchName']       = $finalbatchname;
       $oldfinalAttrData2['batchName']      = $batchname;
 	  
@@ -734,20 +735,13 @@ class Student extends CI_Controller {
 	  $oldfinalAttrData['Gender']       = $finalgendername;
       $oldfinalAttrData2['Gender']      = $gendername;
      
-	  $oldfinalAttrData['Religion']       = $finalreligionname;
-      $oldfinalAttrData2['Religion']      = $religionname;
 	  
 	  $oldfinalAttrData['Nationality']       = $finalnationalityname;
       $oldfinalAttrData2['Nationality']      = $nationalityname;
 	  
-	  $oldfinalAttrData['Country']       = $finalcountryname;
-      $oldfinalAttrData2['Country']      = $countryname;
+	  $oldfinalAttrData['Religion']       = $finalreligionname;
+      $oldfinalAttrData2['Religion']      = $religionname;
 	  
-	  $oldfinalAttrData['State']       = $finalstatename;
-      $oldfinalAttrData2['State']      = $statename;
-	  
-	  $oldfinalAttrData['City']       = $finalcityname;
-      $oldfinalAttrData2['City']      = $cityname;
 	  
 	  $oldfinalAttrData['Community']       = $finalcommunityname;
       $oldfinalAttrData2['Community']      = $communityname;
@@ -758,65 +752,32 @@ class Student extends CI_Controller {
 	  $oldfinalAttrData['Bloodgrp']       = $finalbloodgrpname;
       $oldfinalAttrData2['Bloodgrp']      = $bloodgrpname;
 	  
-	  $oldfinalAttrData['Mothertongue']       = $finalmothertonguename;
+	   $oldfinalAttrData['Mothertongue']       = $finalmothertonguename;
       $oldfinalAttrData2['Mothertongue']      = $mothertonguename;
+	   
+	  $oldfinalAttrData['City']       = $finalcityname;
+      $oldfinalAttrData2['City']      = $cityname;
 	  
+	  $oldfinalAttrData['State']       = $finalstatename;
+      $oldfinalAttrData2['State']      = $statename;
+	  
+	  $oldfinalAttrData['Country']       = $finalcountryname;
+      $oldfinalAttrData2['Country']      = $countryname;
+	  	  
 	  $oldfinalAttrData['residenttype']       = $finalresidenttypename;
       $oldfinalAttrData2['residenttype']      = $residenttypename;
-	  
-	  $oldfinalAttrData['LocalCountry']       = $finallocalcountryname;
-      $oldfinalAttrData2['LocalCountry']      = $localcountryname;
-	  
-	  $oldfinalAttrData['LocalState']       = $finallocalstatename;
-      $oldfinalAttrData2['LocalState']      = $localstatename;
-	  
-	  $oldfinalAttrData['LocalCity']       = $finallocalcityname;
-      $oldfinalAttrData2['LocalCity']      = $localcityname;
+	 
+	 $oldfinalAttrData['Modeofadmission']       = $finalmodeofadmissionname;
+      $oldfinalAttrData2['Modeofadmission']      = $modeofadmissionname;
 	  
 	  $oldfinalAttrData['Monthofpassing']       = $finalmonthofpassingname;
       $oldfinalAttrData2['Monthofpassing']      = $monthofpassingname;
-	  
-	  $oldfinalAttrData['Yearofpassing']       = $finalyearofpassingname;
-      $oldfinalAttrData2['Yearofpassing']      = $yearofpassingname;
-	  
+	 // p($monthofpassingname);
+	 //  $oldfinalAttrData['Yearofpassing']       = $finalmonthofpassingname;
+     // $oldfinalAttrData2['Yearofpassing']      = $monthofpassingname;
+	  //p($yearofpassingname);exit;
 	  $oldfinalAttrData['Mediumofinstr']       = $finalmediumofinstrname;
       $oldfinalAttrData2['Mediumofinstr']      = $mediumofinstrname;
-	  
-	  $oldfinalAttrData['Modeofadmission']       = $finalmodeofadmissionname;
-      $oldfinalAttrData2['Modeofadmission']      = $modeofadmissionname;
-	  
-	  $oldfinalAttrData['Reserved']       = $finalreservedname;
-      $oldfinalAttrData2['Reserved']      = $reservedname;
-	  
-	  $oldfinalAttrData['Quota']       = $finalquotaname;
-      $oldfinalAttrData2['Quota']      = $quotaname;
-	  
-	  $oldfinalAttrData['Studentstatus']       = $finalstudentstatusname;
-      $oldfinalAttrData2['Studentstatus']      = $studentstatusname;
-	  
-	  $oldfinalAttrData['Permission']       = $finalpermissionname;
-      $oldfinalAttrData2['Permission']      = $permissionname;
-	  
-	  $oldfinalAttrData['Internship']       = $finalinternshipname;
-      $oldfinalAttrData2['Internship']      = $internshipname;
-	  
-	  $oldfinalAttrData['Differentlyabled']       = $finaldifferentlyabledname;
-      $oldfinalAttrData2['Differentlyabled']      = $differentlyabledname;
-	  
-	  $oldfinalAttrData['Exservicemen']       = $finalexservicemenname;
-      $oldfinalAttrData2['Exservicemen']      = $exservicemenname;
-	  
-	  $oldfinalAttrData['Freedomfighter']       = $finalfreedomfightername;
-      $oldfinalAttrData2['Freedomfighter']      = $freedomfightername;
-	  
-	  $oldfinalAttrData['Firstgraduate']       = $finalfirstgraduatename;
-      $oldfinalAttrData2['Firstgraduate']      = $firstgraduatename; 
-	  
-	  $oldfinalAttrData['Academicvocational']       = $finalacademicvocatioalid;
-      $oldfinalAttrData2['Academicvocational']      = $academicvocatioalname;
-	  
-	  $oldfinalAttrData['Group']       = $finalgroupname;
-      $oldfinalAttrData2['Group']      = $groupname;
 	  
 	  
       
@@ -829,7 +790,7 @@ class Student extends CI_Controller {
        $attCount[$k] = $valueCount+1;
 
       } 
-    
+    //p($attCount);exit;
 
        $objPHPExcel   = new PHPExcel();
     //-------------------------------- First defult Sheet -------------------------------------------------//
@@ -838,13 +799,15 @@ class Student extends CI_Controller {
 
     $finalExcelArr1 = array_merge($excelHeadArr1);
 //p($finalAttrData2);exit;
-     $cols   = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ');
+     $cols   = array('A','B','C','E','F','J','M','N','O','P','Q','R','Z','AC','AD','AM','AN','AV','AX');
         $j      = 2;
-       
+       //echo count($finalExcelArr1);
+	   //echo count($cols);exit;
         for($i=0;$i<count($finalExcelArr1);$i++){
          $objPHPExcel->getActiveSheet()->setCellValue($cols[$i].'1', $finalExcelArr1[$i]);
          foreach ($finalAttrData2 as $key => $value) {
 			//echo $key;
+			//print_r($value);
 			// if($key == 'City')$finalAttrData2['City'];
           foreach ($value as $k => $v) {
 			 // echo $v.'<br>';
@@ -861,7 +824,7 @@ class Student extends CI_Controller {
     }//exit;$featurevaluee1[]    = 'Community';  
       
      $objPHPExcel->getSheetByName('Worksheet')->setSheetState(PHPExcel_Worksheet::SHEETSTATE_HIDDEN);
-        $arrPart2 = array('campusName','degreeName','Batch','Type','Gender','Religion','Nationality','Country','State','City','Community','Caste','Blood Group','Mother Tongue','Resident Type','Local Country','Local State','Local City','Month of passing','Year of passing','Medium of instruction','Mode of admission','Reserved','Quota','Studentstatus','Permission','Internship','Differently abled','Children of Ex-service men','Children of Freedom Fighter','First Graduate','Academic/Vocational','Group','Language','English','Mathematics','Physics Theory','Physics Practical','Physics Total','Chemistry Theory','Chemistry Practical','Chemistry Total','Biology Theory','Biology Practical','Biology Total','Botany Theory','Botany Practical','Botany Total','Zoology Theory','Zoology Practical','Zoology Total','Vocational Theory','Vocational Practica1 1','Vocational Practica1 2','Vocational Total','Other theory','Other Practical','Other Total','Total','Total Aggregate','Board of Examination','Number of Attempts','Nativity','District','Aadhaar Number','Place of Birth','Place of residence','Local Address','Local Street','Annual Income','Local Zipcode','Guardian/Spouse Name','Student ID','Application No','User Name','Password','Student First Name','Student Last Name','Email','Contact Number','User Image','DOB','Parent Name','Mother Name','Father Contact','Alternate Contact','Father Email','Occupation','Address Line 1','Address Line 2','Address Line 3','Address Line 4','Zipcode','ParentPhoto','XII Registration No','Class','Section','Roll',' Last School','Last STD','%Marks Obtained','Sports','Date of Admission','Date od Passing','Ward Counsellor','Extra Curricular Activies','Remark','Course Type','XII Name and Address of school','XII Year of study','XII Place of study','XII State of study','XI Name and Address of school','XI Year of study','XI Place of study','XI State of study','X Name and Address of school','X Year of study','X Place of study','X State of study','IX Name and Address of school','IX Year of study','IX Place of study','IX State of study','VIII Name and Address of school','VIII Year of study','VIII Place of study','VIII State of study','Course Applied','Campus Preference 1','Campus Preference 2','Campus Preference 3','Campus Preference 4','Transaction Id','Transaction Date','Submission Status','Submission Date','Received Status','Received Date','Reason for Rejection','Overall Rank','Community Rank','Selected Under Category','Selected Under College','Fee Status','Receipt','Receipt Date','Receipt Remark');
+        $arrPart2 = array('Campus','Degree','Discipline','Faculty','Batch','Type','Unique ID','Student ID','Student Name','Sex','DOB','Place of Birth','Nationality','Religion','Community','Caste','Blood Group','Mother Tongue','Father Name','Mother Name','Guardian/Spouse name','Address Line 1','Address Line 2','Address Line 3','Address Line 4','City','Zipcode','District','State','Country','Student Contact Number','Student e-mail ','Parent Contact Number','Parent e-mail','Partent Occupation','Annual Family Income','Guardian/Spouse Contact Number','Guardian/Spouse e-mail','Resident Type','Mode of admission','Fees Category','Scholarship','Previous Exam/Degree Passed','Previous Exam-Group / Discipline','School / Institution last studied','Board / University last studied','Marks / Grade Obtained','Previous Exam Month of Passing','Previous Exam Year of Passing','Medium of instruction of Previous Exam','Ward Counsellor/Chairman','Extra Curricular Activies','Aadhaar Number','NAD-ID','Student Photo','User Name','Password','Student Status','Date of Admission','Date of completion','Title of Thesis','Remarks1','Remarks2','Remarks3','Remarks4','Remarks5');
           if(!empty($excelHeadArr)){
              $finalExcelArr = array_merge($arrPart2,$excelHeadArr);
          }else{
@@ -903,7 +866,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 			// print_r($finalAttrData['campusName']);exit;
             $objPHPExcel->getActiveSheet()->setCellValue($cols[$i].'1', $finalExcelArr[$i]);
 			if($this->input->post('student_count')>0)
-				$rowcount = $this->input->post('student_count');
+				$rowcount = $this->input->post('student_count')+2;
 			else
 				$rowcount = 100;
           for($k=2;$k <$rowcount;$k++){
@@ -940,8 +903,23 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation23->setFormula1('Worksheet!$'.'B$2:$'.'B$'.($attCount['degreeName']));
     $objPHPExcel->getActiveSheet()->getCell('B'.$k)->setDataValidation($objValidation23);
     $objPHPExcel->getActiveSheet()->setCellValue("B" . $k, $default_degree);
+	
+	$objValidation23 = $objPHPExcel->getActiveSheet()->getCell('C2')->getDataValidation();
+    $objValidation23->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
+    $objValidation23->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
+    $objValidation23->setAllowBlank(false);
+    $objValidation23->setShowInputMessage(true);
+    $objValidation23->setShowErrorMessage(true);
+    $objValidation23->setShowDropDown(true);
+    $objValidation23->setErrorTitle('Input error');
+    $objValidation23->setError('Value is not in list.');
+    $objValidation23->setPromptTitle('Pick from list');
+    $objValidation23->setPrompt('Please pick a value from the drop-down list.');
+    $objValidation23->setFormula1('Worksheet!$'.'C$2:$'.'C$'.($attCount['discipline']));
+    $objPHPExcel->getActiveSheet()->getCell('C'.$k)->setDataValidation($objValidation23);
+    $objPHPExcel->getActiveSheet()->setCellValue("C" . $k, $default_discipline);
    
-    $objValidation24 = $objPHPExcel->getActiveSheet()->getCell('C2')->getDataValidation();
+    $objValidation24 = $objPHPExcel->getActiveSheet()->getCell('E2')->getDataValidation();
     $objValidation24->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
     $objValidation24->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
     $objValidation24->setAllowBlank(false);
@@ -952,11 +930,11 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation24->setError('Value is not in list.');
     $objValidation24->setPromptTitle('Pick from list');
     $objValidation24->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation24->setFormula1('Worksheet!$'.'C$2:$'.'C$'.($attCount['batchName']).'');
-    $objPHPExcel->getActiveSheet()->getCell('C'.$k)->setDataValidation($objValidation24);
-	$objPHPExcel->getActiveSheet()->setCellValue("C" . $k, $default_batch);
+    $objValidation24->setFormula1('Worksheet!$'.'E$2:$'.'E$'.($attCount['batchName']).'');
+    $objPHPExcel->getActiveSheet()->getCell('E'.$k)->setDataValidation($objValidation24);
+	$objPHPExcel->getActiveSheet()->setCellValue("E" . $k, $default_batch);
 	
-	 $objValidation24 = $objPHPExcel->getActiveSheet()->getCell('D2')->getDataValidation();
+	 $objValidation24 = $objPHPExcel->getActiveSheet()->getCell('F2')->getDataValidation();
     $objValidation24->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
     $objValidation24->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
     $objValidation24->setAllowBlank(false);
@@ -967,11 +945,11 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation24->setError('Value is not in list.');
     $objValidation24->setPromptTitle('Pick from list');
     $objValidation24->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation24->setFormula1('Worksheet!$'.'D$2:$'.'D$'.($attCount['Type']).'');
-    $objPHPExcel->getActiveSheet()->getCell('D'.$k)->setDataValidation($objValidation24);
+    $objValidation24->setFormula1('Worksheet!$'.'F$2:$'.'F$'.($attCount['Type']).'');
+    $objPHPExcel->getActiveSheet()->getCell('F'.$k)->setDataValidation($objValidation24);
 	
 	
-	$objValidation25 = $objPHPExcel->getActiveSheet()->getCell('E2')->getDataValidation();
+	$objValidation25 = $objPHPExcel->getActiveSheet()->getCell('J2')->getDataValidation();
     $objValidation25->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
     $objValidation25->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
     $objValidation25->setAllowBlank(false);
@@ -982,25 +960,10 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation25->setError('Value is not in list.');
     $objValidation25->setPromptTitle('Pick from list');
     $objValidation25->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation25->setFormula1('Worksheet!$'.'E$2:$'.'E$'.($attCount['Gender']).'');
-    $objPHPExcel->getActiveSheet()->getCell('E'.$k)->setDataValidation($objValidation25);
+    $objValidation25->setFormula1('Worksheet!$'.'J$2:$'.'J$'.($attCount['Gender']).'');
+    $objPHPExcel->getActiveSheet()->getCell('J'.$k)->setDataValidation($objValidation25);
 	
-	$objValidation26 = $objPHPExcel->getActiveSheet()->getCell('F2')->getDataValidation();
-    $objValidation26->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation26->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation26->setAllowBlank(false);
-    $objValidation26->setShowInputMessage(true);
-    $objValidation26->setShowErrorMessage(true);
-    $objValidation26->setShowDropDown(true);
-    $objValidation26->setErrorTitle('Input error');
-    $objValidation26->setError('Value is not in list.');
-    $objValidation26->setPromptTitle('Pick from list');
-    $objValidation26->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation26->setFormula1('Worksheet!$'.'F$2:$'.'F$'.($attCount['Religion']).'');
-    $objPHPExcel->getActiveSheet()->getCell('F'.$k)->setDataValidation($objValidation26);
-	
-	
-	$objValidation27 = $objPHPExcel->getActiveSheet()->getCell('G2')->getDataValidation();
+	$objValidation27 = $objPHPExcel->getActiveSheet()->getCell('M2')->getDataValidation();
     $objValidation27->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
     $objValidation27->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
     $objValidation27->setAllowBlank(false);
@@ -1011,54 +974,25 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation27->setError('Value is not in list.');
     $objValidation27->setPromptTitle('Pick from list');
     $objValidation27->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation27->setFormula1('Worksheet!$'.'G$2:$'.'G$'.($attCount['Nationality']).'');
-    $objPHPExcel->getActiveSheet()->getCell('G'.$k)->setDataValidation($objValidation27);
+    $objValidation27->setFormula1('Worksheet!$'.'M$2:$'.'M$'.($attCount['Nationality']).'');
+    $objPHPExcel->getActiveSheet()->getCell('M'.$k)->setDataValidation($objValidation27);
+	
+	$objValidation26 = $objPHPExcel->getActiveSheet()->getCell('N2')->getDataValidation();
+    $objValidation26->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
+    $objValidation26->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
+    $objValidation26->setAllowBlank(false);
+    $objValidation26->setShowInputMessage(true);
+    $objValidation26->setShowErrorMessage(true);
+    $objValidation26->setShowDropDown(true);
+    $objValidation26->setErrorTitle('Input error');
+    $objValidation26->setError('Value is not in list.');
+    $objValidation26->setPromptTitle('Pick from list');
+    $objValidation26->setPrompt('Please pick a value from the drop-down list.');
+    $objValidation26->setFormula1('Worksheet!$'.'N$2:$'.'N$'.($attCount['Religion']).'');
+    $objPHPExcel->getActiveSheet()->getCell('N'.$k)->setDataValidation($objValidation26);
 	
 	
-	$objValidation28 = $objPHPExcel->getActiveSheet()->getCell('H2')->getDataValidation();
-    $objValidation28->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation28->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation28->setAllowBlank(false);
-    $objValidation28->setShowInputMessage(true);
-    $objValidation28->setShowErrorMessage(true);
-    $objValidation28->setShowDropDown(true);
-    $objValidation28->setErrorTitle('Input error');
-    $objValidation28->setError('Value is not in list.');
-    $objValidation28->setPromptTitle('Pick from list');
-    $objValidation28->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation28->setFormula1('Worksheet!$'.'H$2:$'.'H$'.($attCount['Country']).'');
-    $objPHPExcel->getActiveSheet()->getCell('H'.$k)->setDataValidation($objValidation28);
-	
-	
-	$objValidation29 = $objPHPExcel->getActiveSheet()->getCell('I2')->getDataValidation();
-    $objValidation29->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation29->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation29->setAllowBlank(false);
-    $objValidation29->setShowInputMessage(true);
-    $objValidation29->setShowErrorMessage(true);
-    $objValidation29->setShowDropDown(true);
-    $objValidation29->setErrorTitle('Input error');
-    $objValidation29->setError('Value is not in list.');
-    $objValidation29->setPromptTitle('Pick from list');
-    $objValidation29->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation29->setFormula1('Worksheet!$'.'I$2:$'.'I$'.($attCount['State']).'');
-    $objPHPExcel->getActiveSheet()->getCell('I'.$k)->setDataValidation($objValidation29);
-	
-	$objValidation30 = $objPHPExcel->getActiveSheet()->getCell('J2')->getDataValidation();
-    $objValidation30->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation30->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation30->setAllowBlank(false);
-    $objValidation30->setShowInputMessage(true);
-    $objValidation30->setShowErrorMessage(true);
-    $objValidation30->setShowDropDown(true);
-    $objValidation30->setErrorTitle('Input error');
-    $objValidation30->setError('Value is not in list.');
-    $objValidation30->setPromptTitle('Pick from list');
-    $objValidation30->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation30->setFormula1('Worksheet!$'.'J$2:$'.'J$'.($attCount['City']).'');
-    $objPHPExcel->getActiveSheet()->getCell('J'.$k)->setDataValidation($objValidation30);
-	
-	$objValidation31 = $objPHPExcel->getActiveSheet()->getCell('K2')->getDataValidation();
+	$objValidation31 = $objPHPExcel->getActiveSheet()->getCell('O2')->getDataValidation();
     $objValidation31->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
     $objValidation31->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
     $objValidation31->setAllowBlank(false);
@@ -1069,10 +1003,10 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation31->setError('Value is not in list.');
     $objValidation31->setPromptTitle('Pick from list');
     $objValidation31->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation31->setFormula1('Worksheet!$'.'K$2:$'.'K$'.($attCount['Community']).'');
-    $objPHPExcel->getActiveSheet()->getCell('K'.$k)->setDataValidation($objValidation31);
+    $objValidation31->setFormula1('Worksheet!$'.'O$2:$'.'O$'.($attCount['Community']).'');
+    $objPHPExcel->getActiveSheet()->getCell('O'.$k)->setDataValidation($objValidation31);
 	
-	$objValidation32 = $objPHPExcel->getActiveSheet()->getCell('L2')->getDataValidation();
+	$objValidation32 = $objPHPExcel->getActiveSheet()->getCell('P2')->getDataValidation();
     $objValidation32->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
     $objValidation32->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
     $objValidation32->setAllowBlank(false);
@@ -1083,10 +1017,10 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation32->setError('Value is not in list.');
     $objValidation32->setPromptTitle('Pick from list');
     $objValidation32->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation32->setFormula1('Worksheet!$'.'L$2:$'.'L$'.($attCount['Caste']).'');
-    $objPHPExcel->getActiveSheet()->getCell('L'.$k)->setDataValidation($objValidation32);
+    $objValidation32->setFormula1('Worksheet!$'.'P$2:$'.'P$'.($attCount['Caste']).'');
+    $objPHPExcel->getActiveSheet()->getCell('P'.$k)->setDataValidation($objValidation32);
 	
-	$objValidation33 = $objPHPExcel->getActiveSheet()->getCell('M2')->getDataValidation();
+	$objValidation33 = $objPHPExcel->getActiveSheet()->getCell('Q2')->getDataValidation();
     $objValidation33->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
     $objValidation33->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
     $objValidation33->setAllowBlank(false);
@@ -1097,10 +1031,10 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation33->setError('Value is not in list.');
     $objValidation33->setPromptTitle('Pick from list');
     $objValidation33->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation33->setFormula1('Worksheet!$'.'M$2:$'.'M$'.($attCount['Bloodgrp']).'');
-    $objPHPExcel->getActiveSheet()->getCell('M'.$k)->setDataValidation($objValidation33);
+    $objValidation33->setFormula1('Worksheet!$'.'Q$2:$'.'Q$'.($attCount['Bloodgrp']).'');
+    $objPHPExcel->getActiveSheet()->getCell('Q'.$k)->setDataValidation($objValidation33);
 	
-	$objValidation34 = $objPHPExcel->getActiveSheet()->getCell('N2')->getDataValidation();
+	$objValidation34 = $objPHPExcel->getActiveSheet()->getCell('R2')->getDataValidation();
     $objValidation34->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
     $objValidation34->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
     $objValidation34->setAllowBlank(false);
@@ -1111,10 +1045,58 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation34->setError('Value is not in list.');
     $objValidation34->setPromptTitle('Pick from list');
     $objValidation34->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation34->setFormula1('Worksheet!$'.'N$2:$'.'N$'.($attCount['Mothertongue']).'');
-    $objPHPExcel->getActiveSheet()->getCell('N'.$k)->setDataValidation($objValidation34);
+    $objValidation34->setFormula1('Worksheet!$'.'R$2:$'.'R$'.($attCount['Mothertongue']).'');
+    $objPHPExcel->getActiveSheet()->getCell('R'.$k)->setDataValidation($objValidation34);
 	
-	$objValidation35 = $objPHPExcel->getActiveSheet()->getCell('O2')->getDataValidation();
+	$objValidation30 = $objPHPExcel->getActiveSheet()->getCell('Z2')->getDataValidation();
+    $objValidation30->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
+    $objValidation30->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
+    $objValidation30->setAllowBlank(false);
+    $objValidation30->setShowInputMessage(true);
+    $objValidation30->setShowErrorMessage(true);
+    $objValidation30->setShowDropDown(true);
+    $objValidation30->setErrorTitle('Input error');
+    $objValidation30->setError('Value is not in list.');
+    $objValidation30->setPromptTitle('Pick from list');
+    $objValidation30->setPrompt('Please pick a value from the drop-down list.');
+    $objValidation30->setFormula1('Worksheet!$'.'Z$2:$'.'Z$'.($attCount['City']).'');
+    $objPHPExcel->getActiveSheet()->getCell('Z'.$k)->setDataValidation($objValidation30);
+	
+	$objValidation29 = $objPHPExcel->getActiveSheet()->getCell('AC2')->getDataValidation();
+    $objValidation29->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
+    $objValidation29->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
+    $objValidation29->setAllowBlank(false);
+    $objValidation29->setShowInputMessage(true);
+    $objValidation29->setShowErrorMessage(true);
+    $objValidation29->setShowDropDown(true);
+    $objValidation29->setErrorTitle('Input error');
+    $objValidation29->setError('Value is not in list.');
+    $objValidation29->setPromptTitle('Pick from list');
+    $objValidation29->setPrompt('Please pick a value from the drop-down list.');
+    $objValidation29->setFormula1('Worksheet!$'.'AC$2:$'.'AC$'.($attCount['State']).'');
+    $objPHPExcel->getActiveSheet()->getCell('AC'.$k)->setDataValidation($objValidation29);
+	
+	$objValidation28 = $objPHPExcel->getActiveSheet()->getCell('AD2')->getDataValidation();
+    $objValidation28->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
+    $objValidation28->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
+    $objValidation28->setAllowBlank(false);
+    $objValidation28->setShowInputMessage(true);
+    $objValidation28->setShowErrorMessage(true);
+    $objValidation28->setShowDropDown(true);
+    $objValidation28->setErrorTitle('Input error');
+    $objValidation28->setError('Value is not in list.');
+    $objValidation28->setPromptTitle('Pick from list');
+    $objValidation28->setPrompt('Please pick a value from the drop-down list.');
+    $objValidation28->setFormula1('Worksheet!$'.'AD$2:$'.'AD$'.($attCount['Country']).'');
+    $objPHPExcel->getActiveSheet()->getCell('AD'.$k)->setDataValidation($objValidation28);
+	
+	
+	
+	
+	
+	
+	
+	$objValidation35 = $objPHPExcel->getActiveSheet()->getCell('AM2')->getDataValidation();
     $objValidation35->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
     $objValidation35->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
     $objValidation35->setAllowBlank(false);
@@ -1125,94 +1107,10 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation35->setError('Value is not in list.');
     $objValidation35->setPromptTitle('Pick from list');
     $objValidation35->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation35->setFormula1('Worksheet!$'.'O$2:$'.'O$'.($attCount['residenttype']).'');
-    $objPHPExcel->getActiveSheet()->getCell('O'.$k)->setDataValidation($objValidation35);
+    $objValidation35->setFormula1('Worksheet!$'.'AM$2:$'.'AM$'.($attCount['residenttype']).'');
+    $objPHPExcel->getActiveSheet()->getCell('AM'.$k)->setDataValidation($objValidation35);
 	
-	$objValidation36 = $objPHPExcel->getActiveSheet()->getCell('P2')->getDataValidation();
-    $objValidation36->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation36->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation36->setAllowBlank(false);
-    $objValidation36->setShowInputMessage(true);
-    $objValidation36->setShowErrorMessage(true);
-    $objValidation36->setShowDropDown(true);
-    $objValidation36->setErrorTitle('Input error');
-    $objValidation36->setError('Value is not in list.');
-    $objValidation36->setPromptTitle('Pick from list');
-    $objValidation36->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation36->setFormula1('Worksheet!$'.'P$2:$'.'P$'.($attCount['LocalCountry']).'');
-    $objPHPExcel->getActiveSheet()->getCell('P'.$k)->setDataValidation($objValidation36);
-	
-	$objValidation37 = $objPHPExcel->getActiveSheet()->getCell('Q2')->getDataValidation();
-    $objValidation37->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation37->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation37->setAllowBlank(false);
-    $objValidation37->setShowInputMessage(true);
-    $objValidation37->setShowErrorMessage(true);
-    $objValidation37->setShowDropDown(true);
-    $objValidation37->setErrorTitle('Input error');
-    $objValidation37->setError('Value is not in list.');
-    $objValidation37->setPromptTitle('Pick from list');
-    $objValidation37->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation37->setFormula1('Worksheet!$'.'Q$2:$'.'Q$'.($attCount['LocalState']).'');
-    $objPHPExcel->getActiveSheet()->getCell('Q'.$k)->setDataValidation($objValidation37);
-	
-	$objValidation38 = $objPHPExcel->getActiveSheet()->getCell('R2')->getDataValidation();
-    $objValidation38->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation38->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation38->setAllowBlank(false);
-    $objValidation38->setShowInputMessage(true);
-    $objValidation38->setShowErrorMessage(true);
-    $objValidation38->setShowDropDown(true);
-    $objValidation38->setErrorTitle('Input error');
-    $objValidation38->setError('Value is not in list.');
-    $objValidation38->setPromptTitle('Pick from list');
-    $objValidation38->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation38->setFormula1('Worksheet!$'.'R$2:$'.'R$'.($attCount['LocalCity']).'');
-    $objPHPExcel->getActiveSheet()->getCell('R'.$k)->setDataValidation($objValidation38);
-	
-	$objValidation39 = $objPHPExcel->getActiveSheet()->getCell('S2')->getDataValidation();
-    $objValidation39->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation39->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation39->setAllowBlank(false);
-    $objValidation39->setShowInputMessage(true);
-    $objValidation39->setShowErrorMessage(true);
-    $objValidation39->setShowDropDown(true);
-    $objValidation39->setErrorTitle('Input error');
-    $objValidation39->setError('Value is not in list.');
-    $objValidation39->setPromptTitle('Pick from list');
-    $objValidation39->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation39->setFormula1('Worksheet!$'.'S$2:$'.'S$'.($attCount['Monthofpassing']).'');
-    $objPHPExcel->getActiveSheet()->getCell('S'.$k)->setDataValidation($objValidation39);
-	
-	$objValidation40 = $objPHPExcel->getActiveSheet()->getCell('T2')->getDataValidation();
-    $objValidation40->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation40->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation40->setAllowBlank(false);
-    $objValidation40->setShowInputMessage(true);
-    $objValidation40->setShowErrorMessage(true);
-    $objValidation40->setShowDropDown(true);
-    $objValidation40->setErrorTitle('Input error');
-    $objValidation40->setError('Value is not in list.');
-    $objValidation40->setPromptTitle('Pick from list');
-    $objValidation40->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation40->setFormula1('Worksheet!$'.'T$2:$'.'T$'.($attCount['Yearofpassing']).'');
-    $objPHPExcel->getActiveSheet()->getCell('T'.$k)->setDataValidation($objValidation40);
-	
-	$objValidation41 = $objPHPExcel->getActiveSheet()->getCell('U2')->getDataValidation();
-    $objValidation41->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation41->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation41->setAllowBlank(false);
-    $objValidation41->setShowInputMessage(true);
-    $objValidation41->setShowErrorMessage(true);
-    $objValidation41->setShowDropDown(true);
-    $objValidation41->setErrorTitle('Input error');
-    $objValidation41->setError('Value is not in list.');
-    $objValidation41->setPromptTitle('Pick from list');
-    $objValidation41->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation41->setFormula1('Worksheet!$'.'U$2:$'.'U$'.($attCount['Mediumofinstr']).'');
-    $objPHPExcel->getActiveSheet()->getCell('U'.$k)->setDataValidation($objValidation41);
-	
-	$objValidation42 = $objPHPExcel->getActiveSheet()->getCell('V2')->getDataValidation();
+	$objValidation42 = $objPHPExcel->getActiveSheet()->getCell('AN2')->getDataValidation();
     $objValidation42->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
     $objValidation42->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
     $objValidation42->setAllowBlank(false);
@@ -1223,162 +1121,54 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
     $objValidation42->setError('Value is not in list.');
     $objValidation42->setPromptTitle('Pick from list');
     $objValidation42->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation42->setFormula1('Worksheet!$'.'V$2:$'.'V$'.($attCount['Modeofadmission']).'');
-    $objPHPExcel->getActiveSheet()->getCell('V'.$k)->setDataValidation($objValidation42);
+    $objValidation42->setFormula1('Worksheet!$'.'AN$2:$'.'AN$'.($attCount['Modeofadmission']).'');
+    $objPHPExcel->getActiveSheet()->getCell('AN'.$k)->setDataValidation($objValidation42);
 	
-	$objValidation43 = $objPHPExcel->getActiveSheet()->getCell('W2')->getDataValidation();
-    $objValidation43->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation43->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation43->setAllowBlank(false);
-    $objValidation43->setShowInputMessage(true);
-    $objValidation43->setShowErrorMessage(true);
-    $objValidation43->setShowDropDown(true);
-    $objValidation43->setErrorTitle('Input error');
-    $objValidation43->setError('Value is not in list.');
-    $objValidation43->setPromptTitle('Pick from list');
-    $objValidation43->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation43->setFormula1('Worksheet!$'.'W$2:$'.'W$'.($attCount['Reserved']).'');
-    $objPHPExcel->getActiveSheet()->getCell('W'.$k)->setDataValidation($objValidation43);
+	$objValidation39 = $objPHPExcel->getActiveSheet()->getCell('AV2')->getDataValidation();
+    $objValidation39->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
+    $objValidation39->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
+    $objValidation39->setAllowBlank(false);
+    $objValidation39->setShowInputMessage(true);
+    $objValidation39->setShowErrorMessage(true);
+    $objValidation39->setShowDropDown(true);
+    $objValidation39->setErrorTitle('Input error');
+    $objValidation39->setError('Value is not in list.');
+    $objValidation39->setPromptTitle('Pick from list');
+    $objValidation39->setPrompt('Please pick a value from the drop-down list.');
+    $objValidation39->setFormula1('Worksheet!$'.'AV$2:$'.'AV$'.($attCount['Monthofpassing']).'');
+    $objPHPExcel->getActiveSheet()->getCell('AV'.$k)->setDataValidation($objValidation39);
 	
-	$objValidation44 = $objPHPExcel->getActiveSheet()->getCell('X2')->getDataValidation();
-    $objValidation44->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation44->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation44->setAllowBlank(false);
-    $objValidation44->setShowInputMessage(true);
-    $objValidation44->setShowErrorMessage(true);
-    $objValidation44->setShowDropDown(true);
-    $objValidation44->setErrorTitle('Input error');
-    $objValidation44->setError('Value is not in list.');
-    $objValidation44->setPromptTitle('Pick from list');
-    $objValidation44->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation44->setFormula1('Worksheet!$'.'X$2:$'.'X$'.($attCount['Quota']).'');
-    $objPHPExcel->getActiveSheet()->getCell('X'.$k)->setDataValidation($objValidation44);
+	/*$objValidation40 = $objPHPExcel->getActiveSheet()->getCell('AW2')->getDataValidation();
+    $objValidation40->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
+    $objValidation40->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
+    $objValidation40->setAllowBlank(false);
+    $objValidation40->setShowInputMessage(true);
+    $objValidation40->setShowErrorMessage(true);
+    $objValidation40->setShowDropDown(true);
+    $objValidation40->setErrorTitle('Input error');
+    $objValidation40->setError('Value is not in list.');
+    $objValidation40->setPromptTitle('Pick from list');
+    $objValidation40->setPrompt('Please pick a value from the drop-down list.');
+    $objValidation40->setFormula1('Worksheet!$'.'AW$2:$'.'AW$'.($attCount['Yearofpassing']).'');
+    $objPHPExcel->getActiveSheet()->getCell('AW'.$k)->setDataValidation($objValidation40);*/
 	
-	$objValidation45 = $objPHPExcel->getActiveSheet()->getCell('Y2')->getDataValidation();
-    $objValidation45->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation45->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation45->setAllowBlank(false);
-    $objValidation45->setShowInputMessage(true);
-    $objValidation45->setShowErrorMessage(true);
-    $objValidation45->setShowDropDown(true);
-    $objValidation45->setErrorTitle('Input error');
-    $objValidation45->setError('Value is not in list.');
-    $objValidation45->setPromptTitle('Pick from list');
-    $objValidation45->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation45->setFormula1('Worksheet!$'.'Y$2:$'.'Y$'.($attCount['Studentstatus']).'');
-    $objPHPExcel->getActiveSheet()->getCell('Y'.$k)->setDataValidation($objValidation45);
+	$objValidation41 = $objPHPExcel->getActiveSheet()->getCell('AX2')->getDataValidation();
+    $objValidation41->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
+    $objValidation41->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
+    $objValidation41->setAllowBlank(false);
+    $objValidation41->setShowInputMessage(true);
+    $objValidation41->setShowErrorMessage(true);
+    $objValidation41->setShowDropDown(true);
+    $objValidation41->setErrorTitle('Input error');
+    $objValidation41->setError('Value is not in list.');
+    $objValidation41->setPromptTitle('Pick from list');
+    $objValidation41->setPrompt('Please pick a value from the drop-down list.');
+    $objValidation41->setFormula1('Worksheet!$'.'AX$2:$'.'AX$'.($attCount['Mediumofinstr']).'');
+    $objPHPExcel->getActiveSheet()->getCell('AX'.$k)->setDataValidation($objValidation41);
 	
-	$objValidation46 = $objPHPExcel->getActiveSheet()->getCell('Z2')->getDataValidation();
-    $objValidation46->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation46->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation46->setAllowBlank(false);
-    $objValidation46->setShowInputMessage(true);
-    $objValidation46->setShowErrorMessage(true);
-    $objValidation46->setShowDropDown(true);
-    $objValidation46->setErrorTitle('Input error');
-    $objValidation46->setError('Value is not in list.');
-    $objValidation46->setPromptTitle('Pick from list');
-    $objValidation46->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation46->setFormula1('Worksheet!$'.'Z$2:$'.'Z$'.($attCount['Permission']).'');
-    $objPHPExcel->getActiveSheet()->getCell('Z'.$k)->setDataValidation($objValidation46);
 	
-	$objValidation47 = $objPHPExcel->getActiveSheet()->getCell('AA2')->getDataValidation();
-    $objValidation47->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation47->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation47->setAllowBlank(false);
-    $objValidation47->setShowInputMessage(true);
-    $objValidation47->setShowErrorMessage(true);
-    $objValidation47->setShowDropDown(true);
-    $objValidation47->setErrorTitle('Input error');
-    $objValidation47->setError('Value is not in list.');
-    $objValidation47->setPromptTitle('Pick from list');
-    $objValidation47->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation47->setFormula1('Worksheet!$'.'AA$2:$'.'AA$'.($attCount['Internship']).'');
-    $objPHPExcel->getActiveSheet()->getCell('AA'.$k)->setDataValidation($objValidation47);
 	
-	$objValidation48 = $objPHPExcel->getActiveSheet()->getCell('AB2')->getDataValidation();
-    $objValidation48->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation48->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation48->setAllowBlank(false);
-    $objValidation48->setShowInputMessage(true);
-    $objValidation48->setShowErrorMessage(true);
-    $objValidation48->setShowDropDown(true);
-    $objValidation48->setErrorTitle('Input error');
-    $objValidation48->setError('Value is not in list.');
-    $objValidation48->setPromptTitle('Pick from list');
-    $objValidation48->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation48->setFormula1('Worksheet!$'.'AB$2:$'.'AB$'.($attCount['Differentlyabled']).'');
-    $objPHPExcel->getActiveSheet()->getCell('AB'.$k)->setDataValidation($objValidation48);
 	
-	$objValidation49 = $objPHPExcel->getActiveSheet()->getCell('AC2')->getDataValidation();
-    $objValidation49->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation49->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation49->setAllowBlank(false);
-    $objValidation49->setShowInputMessage(true);
-    $objValidation49->setShowErrorMessage(true);
-    $objValidation49->setShowDropDown(true);
-    $objValidation49->setErrorTitle('Input error');
-    $objValidation49->setError('Value is not in list.');
-    $objValidation49->setPromptTitle('Pick from list');
-    $objValidation49->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation49->setFormula1('Worksheet!$'.'AC$2:$'.'AC$'.($attCount['Exservicemen']).'');
-    $objPHPExcel->getActiveSheet()->getCell('AC'.$k)->setDataValidation($objValidation49);
-	
-	$objValidation50 = $objPHPExcel->getActiveSheet()->getCell('AD2')->getDataValidation();
-    $objValidation50->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation50->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation50->setAllowBlank(false);
-    $objValidation50->setShowInputMessage(true);
-    $objValidation50->setShowErrorMessage(true);
-    $objValidation50->setShowDropDown(true);
-    $objValidation50->setErrorTitle('Input error');
-    $objValidation50->setError('Value is not in list.');
-    $objValidation50->setPromptTitle('Pick from list');
-    $objValidation50->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation50->setFormula1('Worksheet!$'.'AD$2:$'.'AD$'.($attCount['Freedomfighter']).'');
-    $objPHPExcel->getActiveSheet()->getCell('AD'.$k)->setDataValidation($objValidation50);
-	
-	$objValidation51 = $objPHPExcel->getActiveSheet()->getCell('AE2')->getDataValidation();
-    $objValidation51->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation51->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation51->setAllowBlank(false);
-    $objValidation51->setShowInputMessage(true);
-    $objValidation51->setShowErrorMessage(true);
-    $objValidation51->setShowDropDown(true);
-    $objValidation51->setErrorTitle('Input error');
-    $objValidation51->setError('Value is not in list.');
-    $objValidation51->setPromptTitle('Pick from list');
-    $objValidation51->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation51->setFormula1('Worksheet!$'.'AE$2:$'.'AE$'.($attCount['Firstgraduate']).'');
-    $objPHPExcel->getActiveSheet()->getCell('AE'.$k)->setDataValidation($objValidation51);
-	
-	$objValidation52 = $objPHPExcel->getActiveSheet()->getCell('AF2')->getDataValidation();
-    $objValidation52->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation52->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation52->setAllowBlank(false);
-    $objValidation52->setShowInputMessage(true);
-    $objValidation52->setShowErrorMessage(true);
-    $objValidation52->setShowDropDown(true);
-    $objValidation52->setErrorTitle('Input error');
-    $objValidation52->setError('Value is not in list.');
-    $objValidation52->setPromptTitle('Pick from list');
-    $objValidation52->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation52->setFormula1('Worksheet!$'.'AF$2:$'.'AF$'.($attCount['Academicvocational']).'');
-    $objPHPExcel->getActiveSheet()->getCell('AF'.$k)->setDataValidation($objValidation52);
-	
-	$objValidation53 = $objPHPExcel->getActiveSheet()->getCell('AG2')->getDataValidation();
-    $objValidation53->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
-    $objValidation53->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION );
-    $objValidation53->setAllowBlank(false);
-    $objValidation53->setShowInputMessage(true);
-    $objValidation53->setShowErrorMessage(true);
-    $objValidation53->setShowDropDown(true);
-    $objValidation53->setErrorTitle('Input error');
-    $objValidation53->setError('Value is not in list.');
-    $objValidation53->setPromptTitle('Pick from list');
-    $objValidation53->setPrompt('Please pick a value from the drop-down list.');
-    $objValidation53->setFormula1('Worksheet!$'.'AG$2:$'.'AG$'.($attCount['Group']).'');
-    $objPHPExcel->getActiveSheet()->getCell('AG'.$k)->setDataValidation($objValidation53);
 	
 	
   
@@ -1417,17 +1207,18 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 			  $updateuser = 0;
 		   //echo "<br>---------------------".$m."-------------------------<br>";
 		   $firstrow = $rowsold[$m];
-		   // p($firstrow[32]);
+		   // p($firstrow[6]);
+		  //  p($firstrow[7]);exit;
 		 
 		//  echo "<br>---------------------".$m."-------------------------<br>";
 		 // echo "<pre>";  p($rowsold[$m]); exit;
 		  //check already exist
-		   $isuser= $this->type_model->isuser($firstrow[72]);
-		   
+		   $isuser= $this->type_model->isuser($firstrow[7],$firstrow[8]);
+		   //$isuser1= $this->type_model->isuser($firstrow[8]);
 		  // print_r($isuser->id);
 		   if($isuser)
 			   $updateuser = 1;
-		   else
+		    else
 			   $updateuser = 0;
 		   //echo $updateuser;
 		  // exit;
@@ -1435,50 +1226,38 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 			{
 		    $campusLists=$this->type_model->get_campus_info($firstrow[0]);
 		    $degreeLists=$this->type_model->get_degree_info($firstrow[1]);
-		    $batchLists=$this->type_model->get_batch_info($firstrow[2]);
-		    $countryLists=$this->type_model->get_country_info($firstrow[7]);
-		    $stateLists=$this->type_model->get_state_info($firstrow[8]);
-			$cityLists=$this->type_model->get_city_info($firstrow[9]);
+		    $disciplineLists=$this->type_model->get_discipline_info($firstrow[2]);
+		    $batchLists=$this->type_model->get_batch_info($firstrow[4]);
+		    $countryLists=$this->type_model->get_country_info($firstrow[29]);
+		    $stateLists=$this->type_model->get_state_info($firstrow[28]);
+			$cityLists=$this->type_model->get_city_info($firstrow[25]);
 		//	print_r($cityLists);
-			$communityLists=$this->type_model->get_community_info($firstrow[10]);
-			$casteLists=$this->type_model->get_caste_info($firstrow[11]);
-			$LcountryLists=$this->type_model->get_country_info($firstrow[15]);
-		    $LstateLists=$this->type_model->get_state_info($firstrow[16]);
-			$LcityLists=$this->type_model->get_city_info($firstrow[17]);
-			$courseLists=$this->type_model->get_degree_info($firstrow[128]);
-			$campusLists1=$this->type_model->get_campus_info($firstrow[129]);
-			$campusLists2=$this->type_model->get_campus_info($firstrow[130]);
-			$campusLists3=$this->type_model->get_campus_info($firstrow[131]);
-			$campusLists4=$this->type_model->get_campus_info($firstrow[132]);
+			$communityLists=$this->type_model->get_community_info($firstrow[14]);
+			$casteLists=$this->type_model->get_caste_info($firstrow[15]);
+			//$LcountryLists=$this->type_model->get_country_info($firstrow[15]);
+		    //$LstateLists=$this->type_model->get_state_info($firstrow[16]);
+			//$LcityLists=$this->type_model->get_city_info($firstrow[17]);
+			//$courseLists=$this->type_model->get_degree_info($firstrow[128]);
+			//$campusLists1=$this->type_model->get_campus_info($firstrow[129]);
+			//$campusLists2=$this->type_model->get_campus_info($firstrow[130]);
+			//$campusLists3=$this->type_model->get_campus_info($firstrow[131]);
+			//$campusLists4=$this->type_model->get_campus_info($firstrow[132]);
 			//echo "dfasf";print_r($firstrow);
 			if(count($campusLists) == 0)
 				$campusListsid = '0';
 			else
 				$campusListsid = $campusLists->id;
-			if(count($campusLists1) == 0)
-				$campusListsid1 = '0';
-			else
-				$campusListsid1= $campusLists1->id;
-			if(count($campusLists2) == 0)
-				$campusListsid2 = '0';
-			else
-				$campusListsid2 = $campusLists2->id;
-			if(count($campusLists3) == 0)
-				$campusListsid3 = '0';
-			else
-				$campusListsid3 = $campusLists3->id;
-			if(count($campusLists4) == 0)
-				$campusListsid4 = '0';
-			else
-				$campusListsid4 = $campusLists4->id;
+			
 			if(count($degreeLists) == 0)
 				$degreeListsid = '0';
 			else
 				$degreeListsid = $degreeLists->id;
-			if(count($courseLists) == 0)
-				$courseListsid = '0';
+			
+			if(count($disciplineLists) == 0)
+				$disciplineListsid = '0';
 			else
-				$courseListsid = $courseLists->id;
+				$disciplineListsid = $disciplineLists->id;
+			
 			if(count($batchLists) == 0)
 				$batchListsid = '0';
 						else
@@ -1495,36 +1274,26 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 				$cityListsid = '0';
 						else
 				$cityListsid = $cityLists->city_id;
-			if(count($LcountryLists) == 0)
-				$LcountryListsid = '0';
-						else
-				$LcountryListsid = $LcountryLists->id;
-			if(count($LstateLists) == 0)
-				$LstateListsid = '0';
-						else
-				$LstateListsid = $LstateLists->id;
-			if(count($LcityLists) == 0)
-				$LcityListsid = '0';
-						else
-				$LcityListsid = $LcityLists->city_id;
+			
 			
 				
 			//echo $firstrow[32];
 			$dataArr1= array(
 			                'role_id'=>'1',
-			                'user_unique_id'=>$firstrow[72],
-			                'application_no'=>$firstrow[73],
-			                'username'=>$firstrow[74],
-			                'password'=>$firstrow[75],
-			                'first_name'=>$firstrow[76],
-			                'last_name'=>$firstrow[77],
-							'aadhaar_no'=>$firstrow[64],
-			                'user_image'=>$firstrow[80],
-			                'contact_number'=>$firstrow[79],
-			                'email'=>$firstrow[78],
-			                'gender'=>$firstrow[4],
-			                'dob'=>$firstrow[81],
-							'permission_status'=>$firstrow[25]
+			                'user_unique_id'=>$firstrow[6],
+			                'application_no'=>$firstrow[7],
+			                'username'=>$firstrow[55],
+			                'password'=>$firstrow[56],
+			                'first_name'=>$firstrow[8],
+			                'last_name'=>'',
+							'aadhaar_no'=>$firstrow[52],
+							'nad_id'=>$firstrow[53],
+			                'user_image'=>$firstrow[54],
+			                'contact_number'=>$firstrow[30],
+			                'email'=>$firstrow[31],
+			                'gender'=>$firstrow[9],
+			                'dob'=>$firstrow[10],
+							'permission_status'=>'1'
 			);
 			//p($dataArr1); exit;
 			if($updateuser == '0')
@@ -1537,78 +1306,77 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 				$updatedetails= $this->type_model->add_unique_id_of_student($insertid,$dataArr1);
 			}
 
-				if($firstrow[3] != '' && $firstrow[3] == 'Full Time')
+				if($firstrow[5] == '' || $firstrow[5] == 'Full Time')
 					$coursetype = '1';
 				else
 					$coursetype = '2';
 			$dataArr2= array(
 			                'user_id'=>$insertid,
 							'role_id'=>'1',
-			                'parent_name'=>$firstrow[82],
-			                'mother_name'=>$firstrow[83],
-			                'occupation'=>$firstrow[87],
-			                'father_contact'=>$firstrow[84],
-			                'alternate_contact'=>$firstrow[85],
-			                'father_email'=>$firstrow[86],
+			                'parent_name'=>$firstrow[18],
+			                'mother_name'=>$firstrow[19],
+			                'occupation'=>$firstrow[34],
+			                'father_contact'=>$firstrow[32],
+			                'alternate_contact'=>$firstrow[36],
+			                'spouse_email'=>$firstrow[37],
+			                'father_email'=>$firstrow[33],
 							//'father_password'=>$firstrow[21],
-			                'religion'=>$firstrow[5],
-			                'nationality'=>$firstrow[6],
-			                'nativity'=>$firstrow[62],
-			                'district'=>$firstrow[63],
-			                'address'=>$firstrow[88],
-			                'address2'=>$firstrow[89],
-			                'address3'=>$firstrow[90],
-			                'address4'=>$firstrow[91],
+			                'religion'=>$firstrow[13],
+			                'nationality'=>$firstrow[12],
+			                'nativity'=>'',
+			                'district'=>$firstrow[27],
+			                'address'=>$firstrow[21],
+			                'address2'=>$firstrow[22],
+			                'address3'=>$firstrow[23],
+			                'address4'=>$firstrow[24],
 			                'country_id'=>$countryListsid,
 			                'city_id'=>$cityListsid,
 			                'state_id'=>$stateListsid,
-			                'zip_code'=>$firstrow[92],
-			                'parent_image'=>$firstrow[93],
-			                'registration'=>$firstrow[94],
-			                'class_name'=>$firstrow[95],
-			                'section_id'=>$firstrow[96],
-			                'roll'=>$firstrow[97],
-			                'last_school'=>$firstrow[98],
-			                'last_std'=>$firstrow[99],
-			                'marks_obtained'=>$firstrow[100],
-			                'sports_id'=>$firstrow[101],
+			                'zip_code'=>$firstrow[26],
+			                'parent_image'=>'',
+			                'registration'=>'',
+			                'class_name'=>'',
+			                'section_id'=>'',
+			                'roll'=>'',
+			                'last_school'=>$firstrow[44],
+			                'last_std'=>$firstrow[45],
+			                'marks_obtained'=>$firstrow[46],
+			                'sports_id'=>'',
 			                'batch_id'=>$batchListsid,
 			                'campus_id'=>$campusListsid,
 			                'degree_id'=>$degreeListsid,
 							'course_type'=>$coursetype,
-							'blood_group'=>$firstrow[12],
-							'mother_tongue'=>$firstrow[13],
+							'blood_group'=>$firstrow[16],
+							'mother_tongue'=>$firstrow[17],
 							'resident_type'=>$firstrow[14],
-							'annual_income'=>$firstrow[29],
-							'guardian_name'=>$firstrow[71],
-							'address_local'=>$firstrow[67],
-							'street_local'=>$firstrow[68],
-							'country_id_local'=>$LcountryListsid,
-							'state_id_local'=>$stateListsid,
-							'city_id_local'=>$LcityListsid,
-							'zip_code_local'=>$firstrow[70],
-							//'scholarship'=>$firstrow[51],
-							'month_passing'=>$firstrow[18],
-							'year_passing'=>$firstrow[19],
-							'medium_instr'=>$firstrow[20],
-							'mode_of_admission'=>$firstrow[21],
-							'reserved'=>$firstrow[22],
-							'quota'=>$firstrow[23],
-							'student_status'=>$firstrow[24],
-							'medical_permission'=>$firstrow[25],
+							'annual_income'=>$firstrow[35],
+							'guardian_name'=>$firstrow[20],
+							
+							'month_passing'=>$firstrow[47],
+							'year_passing'=>$firstrow[48],
+							'medium_instr'=>$firstrow[49],
+							'mode_of_admission'=>$firstrow[39],
+							'reserved'=>$firstrow[40],
+							'quota'=>$firstrow[41],
+							'student_status'=>$firstrow[57],
+							
 							'doa'=>$firstrow[58],
 							'dop'=>$firstrow[59],
-							'internship_grade'=>$firstrow[26],
-							'ward_counsellor'=>$firstrow[104],
-							'extra_activites'=>$firstrow[105],
-							'remark'=>$firstrow[106],
-							'place_of_birth'=>$firstrow[65],
-							'differently_abled'=>$firstrow[27],
-							'children_of_exserviceman'=>$firstrow[28],
-							'children_of_freedom_fighter'=>$firstrow[29],
-							'first_graduate'=>$firstrow[30],
-							'place_of_residence'=>$firstrow[66],
-							'academicvocational'=>$firstrow[31]
+							
+							'ward_counsellor'=>$firstrow[50],
+							'extra_activites'=>$firstrow[51],
+							'remark'=>$firstrow[61],
+							'remark2'=>$firstrow[62],
+							'remark3'=>$firstrow[63],
+							'remark4'=>$firstrow[64],
+							'remark5'=>$firstrow[65],
+							'place_of_birth'=>$firstrow[11],
+							'differently_abled'=>'',
+							'children_of_exserviceman'=>'',
+							'children_of_freedom_fighter'=>'',
+							'first_graduate'=>'',
+							'place_of_residence'=>'',
+							'academicvocational'=>''
 			);
 			
 			if($updateuser == '0')
@@ -1621,7 +1389,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 			}
 			
 		//school details
-		
+		/*
 		$dataArr3= array(
 			'student_id'=>$insertid,
 			'xii_school_name'=>$firstrow[108],
@@ -1732,7 +1500,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 			else
 			{
 				$updatetransdetails= $this->type_model->update_user_transaction_detail($dataArr5);
-			}
+			}*/
 			
 	   }  //$m++;
 	  

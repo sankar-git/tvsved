@@ -73,7 +73,7 @@
 					</div>
 					<div class="form-group col-md-4">
 					  <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
-					  <select class="form-control" name="degree_id" id="degree_id" onchange="getBatchbyDegree();">
+					  <select class="form-control" name="degree_id" id="degree_id" onchange="getBatchbyDegree(),getDisciplinebyDegree();">
 						  <option value="">--Select Degree--</option>
 						 
 					  </select>
@@ -84,11 +84,16 @@
 			   <div class="row">
 				    <div class="form-group col-md-4">
 					  <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="batch_id" id="batch_id" class="form-control"  onchange="showTemplate();">
+					  <select name="batch_id" id="batch_id" class="form-control"  >
 						  <option value="">Select Batch</option>
 						</select>
 					</div>
-					
+					 <div class="form-group col-md-4">
+					  <label for="exampleInputEmail1">Discipline<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="discipline" id="discipline" class="form-control"  onchange="showTemplate();">
+						  <option value="">Select Discipline</option>
+						</select>
+					</div>
 					
 					
 					
@@ -154,8 +159,8 @@
 			success: function(data){
 				//alert(data); 
 			var  option_brand = '<option value="">--Select Discipline--</option>';
-			$('#discipline_id').empty();
-			$("#discipline_id").append(option_brand+data);
+			$('#discipline').empty();
+			$("#discipline").append(option_brand+data);
 			 }
 		});
 	}

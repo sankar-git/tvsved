@@ -6,9 +6,9 @@ Class Type_model extends CI_Model
 		$result = $this->db->where(['username'=>$username])->from("users")->count_all_results();
 		return $result;
 	}
-	function isuser($user_unique_id)
+	function isuser($user_unique_id,$application_no)
 	{
-		$result = $this->db->where(['user_unique_id'=>$user_unique_id])->from("users")->get()->row();
+		$result = $this->db->where(['user_unique_id'=>$user_unique_id])->or_where(['application_no'=>$application_no])->from("users")->get()->row();
 		return $result;
 	}
 	function get_user_details($username)
