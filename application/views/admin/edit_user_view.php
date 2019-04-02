@@ -133,15 +133,15 @@ function setgroup(val)
 					  <label for="user_type"><i class="fa fa-intersex custom"></i> Gender</label>
 					  <select name="gender" id="gender" class="form-control">
 					  <option value="">--Select Gender--</option>
-					  <option value="male" <?php if($user_row->gender=='male') {echo "selected";} ?>>Male</option>
-					  <option value="female" <?php if($user_row->gender=='female')  {echo "selected";} ?>>Female</option>
+					  <option value="Male" <?php if(strtolower($user_row->gender)=='male') {echo "selected";} ?>>Male</option>
+					  <option value="Female" <?php if(strtolower($user_row->gender)=='female')  {echo "selected";} ?>>Female</option>
 					  </select>
 					</div>
 					
 					<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1"><i class="fa fa-image"></i> User Image</label>
 					  <input type="file" class="form-control" id="user_image" name="user_image">
-					  <?php if($user_row->user_image == '') $image = 'no_image.jpg'; else $image = $user_row->user_image;?>
+					  <?php if($user_row->user_image == '' || !file_exists('uploads/user_images/student/'.$user_row->user_image)) $image = 'no_image.jpg'; else $image = $user_row->user_image;?>
 					  <span><img src="<?php echo base_url();?>uploads/user_images/student/<?php echo $image;?>" height="50px" width="50px"></span>
 					   <input type="hidden" class="form-control" id="user_old_image" name="user_old_image" value="<?php echo $user_row->user_image;?>">
 					</div>
@@ -199,17 +199,21 @@ function setgroup(val)
 						  <label for="religion"><i class="fa fa-venus custom"></i> Religion</label>
 						   <select name="religion" id="religion" class="form-control">
 						      <option value="">--Select Religion--</option>
-							  <option value="1" <?php if($user_row->religion=="1"){echo "selected";}?>>Muslim</option>
-							  <option value="2" <?php if($user_row->religion=="2"){echo "selected";}?>>Hindu</option>
-							  <option value="3" <?php if($user_row->religion=="3"){echo "selected";}?>>Christian</option>
+							   <option value="Hindu" <?php if($user_row->religion=="Hindu"){echo "selected";}?>>Hindu</option>
+							  <option value="Muslim" <?php if($user_row->religion=="Muslim"){echo "selected";}?>>Muslim</option>
+							  <option value="Christian" <?php if($user_row->religion=="Christian"){echo "selected";}?>>Christian</option>
+							  <option value="Sikhism" <?php if($user_row->religion=="Sikhism"){echo "selected";}?>>Sikhism </option>
+							  <option value="Jainism" <?php if($user_row->religion=="Jainism"){echo "selected";}?>>Jainism</option>
+							  <option value="Buddhism" <?php if($user_row->religion=="Buddhism"){echo "selected";}?>>Buddhism</option>
+							  <option value="Others" <?php if($user_row->religion=="Others"){echo "selected";}?>>Others</option>
 						   </select> 
 						</div>
 						<div class="form-group col-md-3">
 						  <label for="nationality"><i class="fa fa-flag"></i> Nationality</label>
 						   <select name="nationality" id="nationality" class="form-control">
 						      <option value="">--Select Nationality--</option>
-							  <option value="1"  <?php if($user_row->nationality=="1"){echo "selected";}?>>Indian</option>
-							  <option value="2"  <?php if($user_row->nationality=="2"){echo "selected";}?>>Non-Indian</option>
+							  <option value="Indian"  <?php if($user_row->nationality=="Indian"){echo "selected";}?>>Indian</option>
+							  <option value="Non-Indian"  <?php if($user_row->nationality=="Non-Indian"){echo "selected";}?>>Non-Indian</option>
 							
 						   </select> 
 						</div>
@@ -218,7 +222,7 @@ function setgroup(val)
 					   <select name="community" id="community" class="form-control" onchange="getCaste();">
 					  <option value="">--Select Community--</option>
 					  <?php foreach($community as $rescom){?>
-					  <option value="<?php echo $rescom->id;?>" <?php if($user_row->community == $rescom->id) echo "selected";?>><?php echo $rescom->name;?></option>
+					  <option value="<?php echo $rescom->name;?>" <?php if($user_row->community == $rescom->name) echo "selected";?>><?php echo $rescom->name;?></option>
 					 
 					  <?php } ?>
 					  </select>
@@ -227,14 +231,13 @@ function setgroup(val)
 					  <label for="caste"><i class="fa fa-birthday-cake"></i> Caste</label>
 					  <select name="caste" id="caste" class="form-control" >
 					  <option value="">--Select Caste--</option>
+					   <?php foreach($caste as $rescom){?>
+					  <option value="<?php echo $rescom->name;?>" <?php if($user_row->community == $rescom->name) echo "selected";?>><?php echo $rescom->name;?></option>
+					 
+					  <?php } ?>
 					  </select>
 					</div>
-					
-					
-				</div>
-				
-				<div class="row">
-						<div class="form-group col-md-3">
+					<div class="form-group col-md-3">
 						  <label for="parent"><i class="fa fa-user-circle-o"></i>Batch</label>
 						  <select name="batch_id" id="batch_id" class="form-control">
 							  <option value="">--Select Batch--</option>
@@ -244,6 +247,11 @@ function setgroup(val)
 						  </select>
 						 
 						</div>
+					
+				</div>
+				
+				<div class="row">
+						
 						<div class="form-group col-md-3">
 						  <label for="mother"><i class="fa fa-female"></i>Campus</label>
 						 <select name="campus_id" id="campus_id" class="form-control" onchange="getDegree();">
@@ -255,10 +263,21 @@ function setgroup(val)
 						</div>
 						<div class="form-group col-md-3">
 						  <label for="occupation"><i class="fa fa-tasks"></i>Degree</label>
-						   <select name="degree_id" id="degree_id" class="form-control">
+						   <select name="degree_id" id="degree_id" class="form-control"  onchange="getDisciplinebyDegree();">
 							  <option value="">--Select Degree--</option>
-							  <option value="A" <?php if($user_row->degree_id == "1") echo "selected";?>>A</option>
-							  <option value="B" <?php if($user_row->degree_id == "2") echo "selected";?>>B</option>
+							 <?php foreach($degrees as $degree){?>
+							  <option value="<?php echo $degree->id;?>" <?php if($user_row->degree_id == $degree->id) echo "selected";?>><?php echo $degree->degree_name;?></option>
+							  <?php }?>
+							 
+						  </select>
+						</div>
+						<div class="form-group col-md-3">
+						  <label for="occupation"><i class="fa fa-tasks"></i>Discipline</label>
+						   <select name="discipline_id" id="discipline_id" class="form-control">
+							  <option value="">--Select Discipline--</option>
+							 <?php foreach($disciplines as $discipline){?>
+							  <option value="<?php echo $discipline->id;?>" <?php if($user_row->discipline_id == $discipline->id) echo "selected";?>><?php echo $discipline->discipline_name;?></option>
+							  <?php }?>
 							 
 						  </select>
 						</div>
@@ -276,18 +295,26 @@ function setgroup(val)
 				
 				
 				     <div class="row">
-					 <div class="form-group col-md-12"><i class="fa fa-book"></i> Permanent Address</div>
+					 <div class="form-group col-md-12"><i class="fa fa-book"></i> Other Details</div>
 						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Address</label>
+						  <label for="address"><i class="fa fa-address-book-o"></i> Address Line1</label>
 						  <input type="text" class="form-control" id="address" name="address" placeholder="Enter Address" value="<?=$user_row->address?>">
+						 
+						</div><div class="form-group col-md-3">
+						  <label for="address"><i class="fa fa-address-book-o"></i> Address Line2</label>
+						  <input type="text" class="form-control" id="address2" name="address2" placeholder="Enter Address" value="<?=$user_row->address2?>">
+						 
+						</div><div class="form-group col-md-3">
+						  <label for="address"><i class="fa fa-address-book-o"></i> Address Line3</label>
+						  <input type="text" class="form-control" id="address3" name="address3" placeholder="Enter Address" value="<?=$user_row->address3?>">
+						 
+						</div><div class="form-group col-md-3">
+						  <label for="address"><i class="fa fa-address-book-o"></i> Address Line4</label>
+						  <input type="text" class="form-control" id="address4" name="address4" placeholder="Enter Address" value="<?=$user_row->address4?>">
 						 
 						</div>
 						
-						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Street</label>
-						  <input type="text" class="form-control" id="street" name="street" placeholder="Enter Street" value="<?=@$user_row->street?>">
-						 
-						</div>
+						
 						
 						<div class="form-group col-md-3">
 						  <label for="religion"><i class="fa fa-flag"></i> Country</label>
@@ -306,8 +333,7 @@ function setgroup(val)
 						      <option value="">--Select State--</option>
 							</select> 
 						</div>
-						</div>
-				   <div class="row">
+						
 						<div class="form-group col-md-3">
 						  <label for="religion"><i class="fa fa-flag"></i> City</label>
 						   <select name="city_id" id="city_id" class="form-control" >
@@ -328,95 +354,7 @@ function setgroup(val)
 						  <label for="mother"><i class="fa fa-female"></i> Guardian/Spouse Name</label>
 						  <input type="text" class="form-control" id="guardian_name" name="guardian_name" placeholder="Enter Guardian/Spouse Name" value="<?=@$user_row->guardian_name?>">
 						</div>
-				   </div>
-				   
-				     <div class="row">
-					  <div class="form-group col-md-12"><i class="fa fa-book"></i> Local Address</div>
-					  
-						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Address</label>
-						  <input type="text" class="form-control" id="address_local" name="address_local" placeholder="Enter Address" value="<?=@$user_row->address_local?>">
-						 
-						</div>
-						
-						<div class="form-group col-md-3">
-						  <label for="address"><i class="fa fa-address-book-o"></i> Street</label>
-						  <input type="text" class="form-control" id="street_local" name="street_local" placeholder="Enter Street" value="<?=@$user_row->street_local?>">
-						 
-						</div>
-						
-						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> Country</label>
-						   <select name="country_id_local" id="country_id_local" class="form-control" onchange="getState('state_id_local');">
-						      <option value="">--Select Country--</option>
-							  <?php foreach($countries as $country) { ?>
-							  <option value="<?php echo $country->id;?>" <?php if($user_row->country_id_local == $country->id){echo "selected";}?>><?php echo $country->country_name;?></option>
-							
-							  <?php } ?>
-						   </select> 
-						</div>
-										   
-						<div class="form-group col-md-3">
-						  <label for="state"><i class="fa fa-flag"></i> State</label>
-						   <select name="state_id_local" id="state_id_local" class="form-control">
-						      <option value="">--Select State--</option>
-							</select> 
-						</div>
-						</div>
-				   <div class="row">
-						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> City</label>
-						   <select name="city_id_local" id="city_id_local" class="form-control" >
-						      <option value="">--Select City--</option>
-							  <?php foreach($city as $cities) { ?>
-							  <option value="<?php echo $cities->city_id;?>" <?php if($user_row->city_id_local == $cities->city_id){echo "selected";}?>><?php echo $cities->city;?></option>
-							
-							  <?php } ?>
-						   </select> 
-						</div>
-						<div class="form-group col-md-3">
-						  <label for="zip"><i class="fa fa-map-pin"></i> Zip Code</label>
-						  <input type="text" class="form-control" id="zip_code_local" maxlength="6" name="zip_code_local" placeholder="Enter Zip Code" value="<?=@$user_row->zip_code_local?>">
-						 
-						</div>
-						
-						<div class="form-group col-md-3">
-						  <label for="state"><i class="fa fa-flag"></i> Type of scholarship Received</label>
-						   <select name="scholarship" id="scholarship" class="form-control">
-						      <option value="">--Select Type of scholarship Received--</option>
-						      <option value="A"  <?php if($user_row->scholarship == "A"){echo "selected";}?>>A</option>
-						      <option value="B"  <?php if($user_row->scholarship == "B"){echo "selected";}?>>B</option>
-							</select> 
-						</div>
-						
-						
-				   </div>
-				   
-				 <div class="form-group col-md-12"><i class="fa fa-book"></i> Pre Academic Info</div>
-				  <div class="row">
-				   <div class="form-group col-md-3">
-					  <label for="registration"><i class="fa fa-registered"></i> Registration</label>
-					    <input type="text" class="form-control" id="registration" name="registration" placeholder="Enter Registration" value="<?php echo $user_row->registration;?>">
-					</div>
-					 <div class="form-group col-md-3">
-					  <label for="class"><i class="fa fa-list-alt"></i> Class</label>
-					    <input type="text" class="form-control" id="class_name" name="class_name" placeholder="Enter Class" value="<?php echo $user_row->class_name;?>">
-					</div>
-					<div class="form-group col-md-3">
-					  <label for="section"><i class="fa fa-bell-o"></i> Section</label>
-					     <select name="section_id" id="section_id" class="form-control">
-						      <option value="">--Select Section--</option>
-							  <option value="A" <?php if($user_row->section_id == "A"){echo "selected";}?>>A</option>
-							  <option value="B" <?php if($user_row->section_id == "B"){echo "selected";}?>>B</option>
-							</select>
-					</div>
-					<div class="form-group col-md-3">
-					  <label for="roll"><i class="fa fa-ship"></i>Roll</label>
-					    <input type="text" class="form-control" id="roll" name="roll" placeholder="Enter Roll" value="<?php echo $user_row->roll;?>">
-					</div>
-				  </div>
 				  
-				  <div class="row">
 						<div class="form-group col-md-3">
 					  <label for="section"><i class="fa fa-bell-o"></i> Month of Passing</label>
 					     <select name="monthpassing" id="monthpassing" class="form-control">
@@ -471,77 +409,39 @@ function setgroup(val)
 						      <option value="Reserved" <?php if($user_row->mode_of_admission == "Reserved"){echo "selected";}?>>Reserved</option>
 							</select> 
 						</div>
-						</div>
-				    <div class="row">
-				   <div class="form-group col-md-3">
-					  <label for="section"><i class="fa fa-bell-o"></i>Group</label>
-					     <select name="group" id="group" class="form-control" onchange="setgroup(this.value);">
-						      <option value="">--Select Group--</option>
-							  <option value="group1" <?php if(@$user_education[0]['group'] == "group1"){echo "selected";}?>>Group 1</option>
-							<option value="group2" <?php if(@$user_education[0]['group'] == "group2"){echo "selected";}?> >Group 2</option>
-							  <option value="vocational" <?php if(@$user_education[0]['group'] == "vocational"){echo "selected";}?>>Vocational</option>
-							 
-							</select>
-					</div>
-					</div>
-					<div class="row">
-					<div class="form-group col-md-3" id="phydiv" style="display:none">
-					  <label for="roll"><i class="fa fa-ship"></i>Physics</label>
-					    <input type="text" class="form-control" id="physics" name="physics" placeholder="Enter Marks" value="<?=$user_education[0]['physics_theory']?>">
-					</div>
-					
-					<div class="form-group col-md-3" id="chediv" style="display:none">
-					  <label for="roll"><i class="fa fa-ship"></i>Chemistry</label>
-					    <input type="text" class="form-control" id="chemistry" name="chemistry" placeholder="Enter Marks" value="<?=$user_education[0]['chemistry_theory']?>">
-					</div>
-					
-					<div class="form-group col-md-3" id="biodiv" style="display:none">
-					  <label for="roll"><i class="fa fa-ship"></i>Biology</label>
-					    <input type="text" class="form-control" id="biology" name="biology" placeholder="Enter Marks" value="<?=$user_education[0]['biology_theory']?>">
-					</div>
-					
-					<div class="form-group col-md-3" id="botdiv" style="display:none">
-					  <label for="roll"><i class="fa fa-ship"></i>Botany</label>
-					    <input type="text" class="form-control" id="botany" name="botany" placeholder="Enter Marks" value="<?=$user_education[0]['botany_theory']?>">
-					</div>
-					
-					<div class="form-group col-md-3" id="zoodiv" style="display:none">
-					  <label for="roll"><i class="fa fa-ship"></i>Zoology</label>
-					    <input type="text" class="form-control" id="zoology" name="zoology" placeholder="Enter Marks" value="<?=$user_education[0]['zoology_theory']?>">
-					</div>
-					<div class="form-group col-md-3" id="fishdiv" style="display:none">
-					  <label for="roll"><i class="fa fa-ship"></i>Fisheries</label>
-					    <input type="text" class="form-control" id="fisheries" name="fisheries" placeholder="Enter Marks" value="<?=$user_education[0]['vocational_theory']?>">
-					</div>
-				   </div>
-				   <div class="row">
+						
 						<div class="form-group col-md-3">
-					  <label for="section"><i class="fa fa-bell-o"></i>Reserved</label>
-					     <select name="reserved" id="reserved" class="form-control">
-						      <option value="">--Select Reserved--</option>
-							   <option value="A" <?php if($user_row->reserved == "A"){echo "selected";}?>>A</option>
-							    <option value="B" <?php if($user_row->reserved == "B"){echo "selected";}?>>B</option>
-							</select>
+					  <label for="reserved"><i class="fa fa-bell-o"></i>Fees Category</label>
+						  <input type="text" class="form-control" id="reserved" name="reserved" placeholder="Fees Category" value="<?=@$user_row->reserved?>">
 					</div>
 						
 						<div class="form-group col-md-3">
-					  <label for="section"><i class="fa fa-bell-o"></i> Quota</label>
-					     <select name="quota" id="quota" class="form-control">
-						      <option value="">--Select Quota--</option>
-							  <option value="A" <?php if($user_row->quota == "A"){echo "selected";}?>>A</option>
-							    <option value="B" <?php if($user_row->quota == "B"){echo "selected";}?>>B</option>
-							</select>
+					  <label for="quota"><i class="fa fa-bell-o"></i> Scholarship</label>
+					     <input type="text" class="form-control" id="quota" name="quota" placeholder="Scholarship" value="<?=@$user_row->quota?>">
 					</div>
 						
 						<div class="form-group col-md-3">
-						  <label for="religion"><i class="fa fa-flag"></i> Remarks</label>
+						  <label for="religion"><i class="fa fa-flag"></i> Remarks1</label>
 						   <textarea name="remark" id="remark" class="form-control"><?php echo $user_row->remark;?></textarea> 
 						</div>
 										   
-						
+						<div class="form-group col-md-3">
+						  <label for="remark2"><i class="fa fa-flag"></i> Remarks2</label>
+						   <textarea name="remark2" id="remark2" class="form-control"><?php echo $user_row->remark2;?></textarea> 
 						</div>
-				  
-				   <div class="row">
+						<div class="form-group col-md-3">
+						  <label for="remark3"><i class="fa fa-flag"></i> Remarks3</label>
+						   <textarea name="remark3" id="remark3" class="form-control"><?php echo $user_row->remark3;?></textarea> 
+						</div>
+						<div class="form-group col-md-3">
+						  <label for="remark4"><i class="fa fa-flag"></i> Remarks4</label>
+						   <textarea name="remark4" id="remark4" class="form-control"><?php echo $user_row->remark4;?></textarea> 
+						</div>
+						<div class="form-group col-md-3">
+						  <label for="remark5"><i class="fa fa-flag"></i> Remarks5</label>
+						   <textarea name="remark5" id="remark5" class="form-control"><?php echo $user_row->remark5;?></textarea> 
+						</div>
+					
 				   <div class="form-group col-md-3">
 					  <label for="last_school"><i class="fa fa-address-book"></i>Last School</label>
 					    <input type="text" class="form-control" id="last_school" name="last_school" placeholder="Enter School" value="<?php echo $user_row->last_school;?>">
@@ -554,19 +454,9 @@ function setgroup(val)
 					  <label for="marks_obtained"><i class="fa fa-percent"></i> Marks Obtained</label>
 					    <input type="text" class="form-control" id="marks_obtained" name="marks_obtained" placeholder="Enter %Marks" value="<?php echo $user_row->marks_obtained;?>">
 					</div>
-					<div class="form-group col-md-3">
-					  <label for="class"><i class="fa fa-life-bouy"></i> Sports</label>
-					     <select name="sports_id" id="sports_id" class="form-control">
-						      <option value="">--Select Sport--</option>
-							  <option value="cricket" <?php if($user_row->sports_id == "cricket"){echo "selected";}?>>Cricket</option>
-							  <option value="football" <?php if($user_row->sports_id == "football"){echo "selected";}?>>Football</option>
-							  <option value="tenis" <?php if($user_row->sports_id == "tenis"){echo "selected";}?>>Tenis</option>
-						</select>
-					</div>
-				  </div>
-				  
-				    <div class="row">
-					<div class="form-group col-md-12"><i class="fa fa-book"></i>Academic Info</div>
+					
+				
+				
 				  <div class="form-group col-md-3">
 					  <label for="section"><i class="fa fa-bell-o"></i> Student Status</label>
 					     <select name="student_status" id="student_status" class="form-control">
@@ -578,14 +468,6 @@ function setgroup(val)
 							</select>
 					</div>
 					
-					<div class="form-group col-md-3">
-					  <label for="section"><i class="fa fa-bell-o"></i> Medical Ground with Permission</label>
-					     <select name="medical_permission" id="medical_permission" class="form-control">
-						      <option value="">--Select Permission--</option>
-							  <option value="Yes" <?php if($user_row->medical_permission == "Yes"){echo "selected";}?>>Yes</option>
-							  <option value="No" <?php if($user_row->medical_permission == "No"){echo "selected";}?>>No</option>
-							</select>
-					</div>
 					
 					 <div class="form-group col-md-3">
 					  <label for="class"><i class="fa fa-list-alt"></i> Date Of Admission</label>
@@ -596,20 +478,8 @@ function setgroup(val)
 					  <label for="roll"><i class="fa fa-ship"></i>Date Of Passing</label>
 					    <input type="text" class="form-control" id="dop" name="dop" placeholder="Enter Date Of Passing" value="<?php echo $user_row->dop;?>">
 					</div>
-				  </div>
-				  
-				  
-				    <div class="row">
-				  <div class="form-group col-md-3">
-					  <label for="section"><i class="fa fa-bell-o"></i>Internship Grade</label>
-					     <select name="internship_grade" id="internship_grade" class="form-control">
-						      <option value="">--Select Internship Grade--</option>
-							  <option value="A" <?php if($user_row->internship_grade == "A"){echo "selected";}?>>A</option>
-							<option value="B" <?php if($user_row->internship_grade == "B"){echo "selected";}?>>B</option>
-							  <option value="C" <?php if($user_row->internship_grade == "C"){echo "selected";}?>>C</option>
-							  <option value="D" <?php if($user_row->internship_grade == "D"){echo "selected";}?>>D</option>
-							</select>
-					</div>
+				
+				 
 					
 					 <div class="form-group col-md-3">
 					  <label for="class"><i class="fa fa-list-alt"></i>Ward Counsellor</label>
@@ -638,11 +508,7 @@ function setgroup(val)
 						</div>
 						<div class="form-group col-md-3">
 						  <label for="occupation"><i class="fa fa-tasks"></i> Occupation</label>
-						   <select name="occupation" id="occupation" class="form-control">
-							  <option value="">--Select Occupation--</option>
-							  <option value="1" <?php if($user_row->occupation=='1') {echo "selected";}?>>Cultivation</option>
-							  <option value="2" <?php if($user_row->occupation=='2') {echo "selected";}?>>Business</option>
-						  </select>
+						     <input type="text" class="form-control" id="occupation" name="occupation" value="<?php echo $user_row->occupation;?>" placeholder="Enter occupation">
 						</div>
 						<div class="form-group col-md-3">
 						  <label for="father_contact"><i class="fa fa-phone"></i> Father Contact</label>
@@ -665,14 +531,6 @@ function setgroup(val)
 					  <input type="text" class="form-control" id="annualincome" name="annualincome" placeholder="Enter Annual Income" value="<?=$user_row->annual_income?>">
 					</div>
 						
-						 <div class="form-group col-md-3">
-					  <label for="parent_image"><i class="fa fa-image"></i> Parent Photo</label>
-					  <input type="file" class="form-control" id="parent_image" name="parent_image" >
-					   <?php if($user_row->user_image == '') $image = 'no_image.jpg'; else $image = $user_row->parent_image;?>
-					  <span><img src="<?php echo base_url();?>uploads/user_images/parent/<?php echo $image;?>" height="50px" width="50px"></span>
-					   <!-- <span><img src="<?php echo base_url();?>uploads/user_images/parent/<?php echo $user_row->parent_image;?>" height="50px" width="50px"></span>-->
-						  <input type="hidden" class="form-control" id="parent_old_image" name="parent_old_image" value="<?php echo $user_row->parent_image;?>">
-					</div>
 				   </div>
 				  
 				   <div class="row">
@@ -719,19 +577,38 @@ function setgroup(val)
 			getCaste(); 
 		}
 		<?php if($user_row->country_id != '')?>
-			getState('state_id');
-		<?php if($user_row->country_id_local != '')?>
-			getState('state_id_local');	
+			getState('state_id',"<?php echo $user_row->state_id;?>");
+		
 		<?php if($user_row->group != '')?>
 			setgroup(<?=$user_row->group?>);	
+		<?php if($user_row->discipline_id != '')?>
+			getDisciplinebyDegree();
 	});
 	
 	
 	
 	
-	
+	function getDisciplinebyDegree()
+	{
+		var degree_id =$('#degree_id').val();
+		//alert(degree_id); 
+		$.ajax({
+			type:'POST',
+			url:'<?php echo base_url();?>course/getDisciplineByDegreeId',
+			data: {'degree_id':degree_id},
+			success: function(data){
+				//alert(data); 
+			var  option_brand = '<option value="">--Select Discipline--</option>';
+			$('#discipline_id').empty();
+			$("#discipline_id").append(option_brand+data);
+				<?php if($user_row->discipline_id != '') {?>
+				$('#discipline_id').val(<?php echo $user_row->discipline_id;?>);
+			<?php } ?>
+			 }
+		});
+	}
    
-	function getState(id)
+	function getState(id,state_id)
 	{
 		var country_id =$('#country_id').val();
 		$.ajax({
@@ -742,6 +619,7 @@ function setgroup(val)
 			var  option_brand = '<option value="">--Select State--</option>';
 			$('#'+id).empty();
 			$("#"+id).append(option_brand+data);
+			$("#"+id).val(state_id);
 			 }
 		});
 	}
@@ -963,7 +841,7 @@ function setgroup(val)
 			$("#caste").append(option_brand+data);
 			
 			
-			document.getElementById("caste").value = <?=$user_row->caste;?>;
+			document.getElementById("caste").value = "<?=$user_row->caste;?>";
 			 }
 		});
 	}

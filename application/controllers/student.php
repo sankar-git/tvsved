@@ -1222,7 +1222,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 			   $updateuser = 0;
 		   //echo $updateuser;
 		  // exit;
-		    if(!empty($firstrow[72]))
+		    if(!empty($firstrow[55]))
 			{
 		    $campusLists=$this->type_model->get_campus_info($firstrow[0]);
 		    $degreeLists=$this->type_model->get_degree_info($firstrow[1]);
@@ -1292,6 +1292,8 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 			                'contact_number'=>$firstrow[30],
 			                'email'=>$firstrow[31],
 			                'gender'=>$firstrow[9],
+			                'caste'=>$firstrow[15],
+			                'community'=>$firstrow[14],
 			                'dob'=>$firstrow[10],
 							'permission_status'=>'1'
 			);
@@ -1348,7 +1350,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 							'course_type'=>$coursetype,
 							'blood_group'=>$firstrow[16],
 							'mother_tongue'=>$firstrow[17],
-							'resident_type'=>$firstrow[14],
+							'resident_type'=>$firstrow[38],
 							'annual_income'=>$firstrow[35],
 							'guardian_name'=>$firstrow[20],
 							
