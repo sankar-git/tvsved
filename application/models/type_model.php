@@ -24,28 +24,15 @@ Class Type_model extends CI_Model
 	}
 	function save_user_details($data,$type)
 	{       
-	        if($type=='1')
+	        if($type=='1' || $type=='6')
 			{
 				$this->db->insert('user_map_student_details',$data);
 				$parent_id = $this->db->insert_id();
 				return $parent_id; 
 				
-			}
-			if($type=='2')
+			}else
 			{
 				$this->db->insert('user_map_teacher_details',$data);
-				$insert_id = $this->db->insert_id();
-				return $insert_id; 
-			}
-			if($type=='3')
-			{
-				$this->db->insert('user_map_userdetail_details',$data);
-				$insert_id = $this->db->insert_id();
-				return $insert_id; 
-			}
-			if($type=='4')
-			{
-				$this->db->insert('user_map_subadmin_details',$data);
 				$insert_id = $this->db->insert_id();
 				return $insert_id; 
 			}
@@ -385,20 +372,8 @@ Class Type_model extends CI_Model
 	}
 	function get_user_by_id($id,$role_id)
 	{   
-	    if($role_id=='0' || $role_id=='10' || $role_id=='9' || $role_id=='11' || $role_id=='12'){
-			$this->db->select('u.*,umd.user_id,umd.parent_name,umd.mother_name,umd.occupation,umd.father_contact,
-			umd.alternate_contact,umd.father_email,umd.religion,umd.nationality,umd.address,umd.country_id,umd.state_id,
-			umd.zip_code,umd.parent_image,umd.registration,umd.class_name,umd.section_id,umd.roll,umd.last_school,
-			umd.last_std,umd.marks_obtained,umd.sports_id,umd.semester_id');
-			$this->db->from('users as u');
-			$this->db->join('user_map_student_details as umd','umd.user_id = u.id','LEFT');
-			$this->db->where(array('u.id' => $id));
-			$result	= $this->db->get()->row();
-			return $result;
-		}
-	
-		if($role_id=='1'){
-			$this->db->select('u.*,umd.*,u.id as uid,u.role_id as urole_id,
+	    if($role_id=='1' || $role_id=='6'){
+			$this->db->select('u.*,umd.*,u.id as uid,u.role_id as urole_id,u.role_id as role_id,
 			d.degree_code,d.degree_name,d.id,dis.discipline_code,dis.discipline_name,p.program_code,p.program_name,d.program_id,umd.semester_id');
 			$this->db->from('users as u');
 			$this->db->join('user_map_student_details as umd','umd.user_id = u.id','LEFT');
@@ -408,81 +383,18 @@ Class Type_model extends CI_Model
 			$this->db->where(array('u.id' => $id));
 			$result	= $this->db->get()->row();//echo $this->db->last_query();exit;
 			return $result;
-		}
-			if($role_id=='6'){
-			$this->db->select('u.*,umd.user_id,umd.parent_name,umd.mother_name,umd.occupation,umd.father_contact,
-			umd.alternate_contact,umd.father_email,umd.religion,umd.nationality,umd.address,umd.country_id,umd.state_id,
-			umd.zip_code,umd.parent_image,umd.registration,umd.class_name,umd.section_id,umd.roll,umd.last_school,
-			umd.last_std,umd.marks_obtained,umd.sports_id,umd.course_type,umd.batch_id,umd.campus_id,umd.degree_id,
-			d.degree_code,d.degree_name,d.id,dis.discipline_code,dis.discipline_name,p.program_code,p.program_name,d.program_id');
-			$this->db->from('users as u');
-			$this->db->join('user_map_student_details as umd','umd.user_id = u.id','LEFT');
-			$this->db->join('degrees d','d.id=umd.degree_id','LEFT');
-			$this->db->join('disciplines dis','d.discipline_id=dis.id','LEFT');
-			$this->db->join('programs p','p.id=d.program_id','LEFT');
-			$this->db->where(array('u.id' => $id));
-			$result	= $this->db->get()->row();
-			return $result;
-		}
-		
-		
-		if($role_id=='2'){
+		}else{
 			$this->db->select('u.*,utd.user_id,utd.address_line1,
 			                   utd.address_line2,utd.address_line3,utd.address_line4,
 							   utd.landline_number,utd.employee_id,utd.qualification,
 							   utd.date_of_joining,utd.designation,utd.department,utd.campus,utd.discipline,');
 			$this->db->from('users as u');
-			$this->db->join('user_map_teacher_details as utd','utd.user_id = u.id','INNER');
+			$this->db->join('user_map_teacher_details as utd','utd.user_id = u.id','LEFT');
 			$this->db->where(array('u.id' => $id));
 			$result	= $this->db->get()->row();
 			return $result;
-		}
-		if($role_id=='3'){
-			$this->db->select('u.*,umd.user_id,umd.address_line1,umd.address_line2,umd.address_line3,
-			umd.address_line4,umd.landline_number');
-			$this->db->from('users as u');
-			$this->db->join('user_map_userdetail_details as umd','umd.user_id = u.id','INNER');
-			$this->db->where(array('u.id' => $id));
-			$result	= $this->db->get()->row();
-			return $result;
-		}
-		if($role_id=='9'){
-			$this->db->select('u.*,us.id as studentid, us.user_unique_id as student_unique_id,us.first_name as stufirstname,
-			                   us.last_name as stulastname,us.contact_number as stucontactnumber,us.email as stuemail,
-							   us.dob as studob,us.gender as stugender,umsd.batch_id,umsd.campus_id,umsd.degree_id');
-			$this->db->from('users as u');
-			$this->db->join('users as us','us.id = u.parents_student_id','INNER');
-			$this->db->join('user_map_student_details as umsd','umsd.user_id = u.parents_student_id','LEFT');
-			$this->db->where(array('u.id' => $id));
-			$result	= $this->db->get()->row();
-			return $result;
-		}
-		if($role_id=='5')
-		{
-		$this->db->select('u.*');
-        $this->db->from('users as u');
-		//$this->db->join('user_map_student_details as umsd','umsd.user_id = u.id','LEFT');
-		$this->db->where(array('id' => $id));
-		$result	= $this->db->get()->row();
-		return $result;					   
 		}
 		
-		if($role_id=='8' || $role_id=='4'){
-			$this->db->select('u.*,umd.*');
-			$this->db->from('users as u');
-			$this->db->join('user_map_subadmin_details as umd','umd.user_id = u.id','LEFT');
-			$this->db->where(array('u.id' => $id));
-			$result	= $this->db->get()->row();
-			return $result;
-		}
-		if($role_id=='7'){
-			$this->db->select('u.*,umd.*');
-			$this->db->from('users as u');
-			$this->db->join('user_map_subadmin_details as umd','umd.user_id = u.id','LEFT');
-			$this->db->where(array('u.id' => $id));
-			$result	= $this->db->get()->row();
-			return $result;
-		}
 	}
 	function update_user_id($data,$user_id)
 	{
@@ -504,9 +416,12 @@ Class Type_model extends CI_Model
 	{
 		if( !empty($id) )
 		{
-		$this->db->where('id',$id);
-		$this->db->update('users',$data);
-		return true;			
+			$this->db->where('id',$id);
+			$this->db->update('users',$data);
+			return $id;			
+		}else{
+			$this->db->insert('users',$data);
+			return $this->db->insert_id();
 		}
 		
 	}
@@ -514,21 +429,37 @@ Class Type_model extends CI_Model
 	{
 		//print_r($id);
 		//print_r($data); exit;
-		if( !empty($id) )
+		$this->db->select('id');
+		  $this->db->from('user_map_student_details');
+		  $this->db->where(array('user_id'=>$id));
+		  $result=$this->db->get()->result();
+		if( count($result)>0 )
 		{
-		$this->db->where('user_id',$id);
-		$this->db->update('user_map_teacher_details',$data);
-		return true;			
+			$this->db->where('user_id',$id);
+			$this->db->update('user_map_teacher_details',$data);
+			return $id;			
+		}else{
+			$data['user_id'] = $id;
+			$this->db->insert('user_map_teacher_details',$data);
+			return $this->db->insert_id();
 		}
 		
 	}
 	function update_student_detail_by_id($id,$data)
 	{
-		if( !empty($id) )
+			$this->db->select('id');
+		  $this->db->from('user_map_student_details');
+		  $this->db->where(array('user_id'=>$id));
+		  $result=$this->db->get()->result();
+		if( count($result)>0 )
 		{
-		$this->db->where('user_id',$id);
-		$this->db->update('user_map_student_details',$data);
-		return true;			
+			$this->db->where('user_id',$id);
+			$this->db->update('user_map_student_details',$data);
+			return $id;			
+		}else{
+			$data['user_id'] = $id;
+			$this->db->insert('user_map_student_details',$data);
+			return $this->db->insert_id();
 		}
 	}
 	function student_status($id,$status)
@@ -812,6 +743,20 @@ Class Type_model extends CI_Model
 	}
 	function save_parent_login($data)
 	{
+		$this->db->select('u.id');
+		$this->db->from('users as u');
+		$this->db->where('u.username',$data['username']);
+		$result = $this->db->get()->result();
+		if(count($result)>0)
+		{
+			$id = $result[0]->id;
+			$this->db->where('id',$id);
+			$this->db->update('users',$data);
+			return $id;			
+		}else{
+			$this->db->insert('users',$data);
+			return $this->db->insert_id();
+		}
 		$this->db->insert('users',$data);
 		$insert_id = $this->db->insert_id();
 		return $insert_id;

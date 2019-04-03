@@ -289,7 +289,7 @@
 			    <?php } } else{?>
 			   <img src="<?php echo base_url();?>uploads/user_images/student/no_image.jpg" style="margin-right: 6px !important" class="user-image" alt="User Image">
 			  <?php }?>
-              <span class="hidden-xs" style="font-size: 17px"><?php echo ucfirst($session_data[0]->first_name).' '.ucfirst($session_data[0]->last_name);?></span>
+              <span class="hidden-xs" style="font-size: 17px"><?php echo ucfirst($session_data[0]->first_name);?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -304,7 +304,7 @@
                 
 
                 <p>
-                  <?php echo ucfirst($session_data[0]->first_name).' '.ucfirst($session_data[0]->last_name);?>
+                  <?php echo ucfirst($session_data[0]->first_name);?>
                  
                 </p>
 				 <p>Last Login: <?php echo $newDate = date("d-m-Y h:m:s A", strtotime($session_data[0]->last_login_time));

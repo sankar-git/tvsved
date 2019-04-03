@@ -135,7 +135,7 @@
 						
 											<!-- <a class="btn btn-sm btn-danger" href="<?php echo base_url(); ?>admin/deleteUser/<?php echo $users->uid.'/2'; ?>" onclick="return areyousure();" title="Delete" data-toggle="tooltip"><i class="fa fa-trash-o"></i> </a>-->
 
-											 <a class="btn btn-sm btn-primary inner" href="<?php echo base_url(); ?>admin/userDetails/<?php echo $users->uid.'/'.$users->role_id; ?>" title="View Detail" data-toggle="tooltip"><!-- <i class="fa fa-eye"></i> -->View Details</a>
+											 <a class="btn btn-sm btn-primary inner" href="<?php echo base_url(); ?>admin/editUser/<?php echo $users->uid.'/'.$users->role_id; ?>" title="View Detail" data-toggle="tooltip"><!-- <i class="fa fa-eye"></i> -->View Details</a>
 											 
 											 <a class="btn btn-sm  inner <?php echo $btnClass; ?>" href="<?php echo base_url(); ?>admin/studentStatus/<?php echo $users->uid.'/'.$users->status; ?>" title="<?php echo $title; ?>" data-toggle="tooltip"><i class="fa fa-undo"></i><?php if($users->status=='1') { ?> Active<?php }else { ?> Inactive<?php } ?></a>
 											 <a class="btn btn-sm  inner btn-danger" onclick="return confirm('Are you sure to delete?');" href="<?php echo base_url(); ?>admin/deleteUser/<?php echo $users->uid.'/2'; ?>" title="<?php echo $title; ?>" data-toggle="tooltip"><i class="fa fa-trash"></i>Delete</a>

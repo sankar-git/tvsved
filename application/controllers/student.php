@@ -1343,10 +1343,12 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 			                'last_school'=>$firstrow[44],
 			                'last_std'=>$firstrow[45],
 			                'marks_obtained'=>$firstrow[46],
+			                'faculty'=>$firstrow[3],
 			                'sports_id'=>'',
 			                'batch_id'=>$batchListsid,
 			                'campus_id'=>$campusListsid,
 			                'degree_id'=>$degreeListsid,
+			                'discipline_id'=>$disciplineListsid,
 							'course_type'=>$coursetype,
 							'blood_group'=>$firstrow[16],
 							'mother_tongue'=>$firstrow[17],
@@ -1364,9 +1366,12 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 							
 							'doa'=>$firstrow[58],
 							'dop'=>$firstrow[59],
+							'prev_exam_degree'=>$firstrow[42],
+							'prev_exam_discipline'=>$firstrow[43],
 							
 							'ward_counsellor'=>$firstrow[50],
 							'extra_activites'=>$firstrow[51],
+							'title_of_thesis'=>$firstrow[60],
 							'remark'=>$firstrow[61],
 							'remark2'=>$firstrow[62],
 							'remark3'=>$firstrow[63],
@@ -1524,7 +1529,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 	{
 	   //echo "hello"; exit;
 	   $fileName    = $_FILES['userfile']['tmp_name'];
-	   print_r($fileName); exit;
+	  // print_r($fileName); exit;
 	   $objPHPExcel = PHPExcel_IOFactory::load($fileName);
 	   $maxCell = $objPHPExcel->getActiveSheet()->getHighestRowAndColumn();
 	   $rowsold     = $objPHPExcel->getActiveSheet()->rangeToArray('A2:' . $maxCell['column'] . $maxCell['row']); 
@@ -1535,7 +1540,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 		$m =0;
 	  //--------Insret Data Form Excel File --------//
 	  foreach($rowsold as $firstrow){
-		  p($firstrow);
+		  //p($firstrow);
 	 
 		//$studentExcel           =array();
 	

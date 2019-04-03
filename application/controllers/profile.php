@@ -207,6 +207,7 @@ class Profile extends CI_Controller {
 		   $data['batches']=$this->Discipline_model->get_batches();
 		   $data['campuses']=$this->Discipline_model->get_campus();
 		   $data['degrees']=$this->Discipline_model->get_degree();
+		   $data['disciplines'] = $this->Discipline_model->get_discipline(); 
 		   $data['countries']=$this->type_model->get_country();
 		   $data['states']=$this->type_model->get_state();
 		  //$data['students']=$this->type_model->get_students();
@@ -231,17 +232,11 @@ class Profile extends CI_Controller {
 				
 			}
 		    $this->load->view('admin/profile_student_view',$data); //student edit view
-		   }
-		    if($role_id=='6')
+		   }else
 		   {
 			$data['page_title']="My Profile";
-		    $this->load->view('admin/profile_student_view',$data); //student edit view
-		   }
-		    if($role_id=='2' )
-		   {
-			$data['page_title']="Teacher Profile";
-			$data['disciplines'] = $this->Discipline_model->get_discipline(); 
-			$data['campuses']=$this->type_model->get_campus();
+			
+			
 			$user_pending_array = $this->type_model->get_pending_user_by_id($id);
 			$data['email_pending'] =false;
 			$data['mobile_pending'] =false;
@@ -253,94 +248,7 @@ class Profile extends CI_Controller {
 		}
 		    $this->load->view('admin/profile_teacher_view',$data);
 		   }
-		   if($role_id=='3')
-		   {
-			$data['page_title']="My Profile";
-			$this->load->view('admin/profile_view13',$data);  //user edit view
-		   }
-		   if($role_id=='0')
-		   { 
-			$data['page_title']="Super Admin";
-			$this->load->view('admin/profile_admin_view',$data);  //user edit view
-		   }
-		   if($role_id=='10')
-		   { 
-			$data['page_title']="Faculty Admin (VC)";
-			$user_pending_array = $this->type_model->get_pending_user_by_id($id);
-			$data['email_pending'] =false;
-			$data['mobile_pending'] =false;
-			foreach($user_pending_array as $userval){
-				if($data['user_row']->email !=$userval['email'])
-					$data['email_pending'] =true;
-				if($data['user_row']->contact_number !=$userval['contact_number'])
-			$data['mobile_pending'] =true;
-		}
-			$this->load->view('admin/profile_faculty_view',$data);  //user edit view
-		   }
-		   if($role_id=='9')
-		   { 
-			$data['page_title']="Faculty Admin (COE)";
-			$this->load->view('admin/profile_faculty_view',$data);  //user edit view
-		   } if($role_id=='11')
-		   { 
-			$data['page_title']="Faculty Admin (Registrar)";
-			$user_pending_array = $this->type_model->get_pending_user_by_id($id);
-			$data['email_pending'] =false;
-			$data['mobile_pending'] =false;
-			foreach($user_pending_array as $userval){
-				if($data['user_row']->email !=$userval['email'])
-					$data['email_pending'] =true;
-				if($data['user_row']->contact_number !=$userval['contact_number'])
-			$data['mobile_pending'] =true;
-		}
-			$this->load->view('admin/profile_faculty_view',$data);  //user edit view
-		   }if($role_id=='12')
-		   { 
-			$data['page_title']="Faculty Admin (Dean)";
-			$user_pending_array = $this->type_model->get_pending_user_by_id($id);
-			$data['email_pending'] =false;
-			$data['mobile_pending'] =false;
-			foreach($user_pending_array as $userval){
-				if($data['user_row']->email !=$userval['email'])
-					$data['email_pending'] =true;
-				if($data['user_row']->contact_number !=$userval['contact_number'])
-			$data['mobile_pending'] =true;
-			}
-			$this->load->view('admin/profile_faculty_view',$data);  //user edit view
-		   }
-		    if($role_id=='5')
-		   { 
-			$data['page_title']="Parent Profile";
-			$data['programs'] = $this->Discipline_model->get_program();
-			$data['semesters'] = $this->Discipline_model->get_semester();
-			$data['student_row'] = $this->type_model->get_user_by_id($sessdata[0]->parents_student_id,1);
-			//p($data['student_row']);exit;
-			$user_pending_array = $this->type_model->get_pending_user_by_id($id);
-			$data['email_pending'] =false;
-			$data['mobile_pending'] =false;
-			foreach($user_pending_array as $userval){
-				if($data['user_row']->email !=$userval['email'])
-					$data['email_pending'] =true;
-				if($data['user_row']->contact_number !=$userval['contact_number'])
-					$data['mobile_pending'] =true;
-				
-			}
-			$this->load->view('admin/profile_parent_view',$data);  //user edit view
-		   }
-		    if($role_id=='8')
-		   {
-			$data['page_title']="Junior Admin";
-			$data['programs'] = $this->Discipline_model->get_program();
-			$data['semesters'] = $this->Discipline_model->get_semester();
-			$this->load->view('admin/profile_admin_view',$data);  //user edit view
-		   }
-		   if($role_id=='7' )
-		   {
-			$data['page_title']="Faculty Admin";
-			$data['programs'] = $this->Discipline_model->get_program();
-			$data['semesters'] = $this->Discipline_model->get_semester();
-			$this->load->view('admin/profile_admin_view',$data);  //user edit view
-		   }
+		   
 		
 		
 		 }

@@ -42,17 +42,27 @@ $this->load->view('admin/helper/header');?>
 
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" name="userform" id="userform" method="post" action="<?php echo base_url();?>admin/updateTeacher/<?php echo $userid;?>" enctype="multipart/form-data">
+            <form role="form" name="userform" id="userform" method="post" action="<?php echo base_url();?>admin/updateTeacher/<?php echo $userid;?>/<?php echo $user_row->role_id;?>" enctype="multipart/form-data">
               <div class="box-body">
+			   <div class="box-header float-right  col-md-8">
+                 <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+			  <div class="box-header float-right  col-md-4">
+                 <button type="button" onclick="history.go(-1);" class="btn btn-secondary"><< Back</button>
+              </div>
 			    <div class="row">
 					
 					<div class="form-group col-md-3">
-					  <label for="exampleInputEmail1"><i class="fa fa-user-circle-o"></i>First Name<span style="color:red;font-weight: bold;">*</span></label>
-					  <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo $user_row->first_name?>" placeholder="Enter First Name">
+					  <label for="exampleInputEmail1"><i class="fa fa-user-circle-o"></i>Name<span style="color:red;font-weight: bold;">*</span></label>
+					  <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo @$user_row->first_name?>" placeholder="Enter First Name">
+					</div>
+						<div class="form-group col-md-3">
+					  <label for="exampleInputEmail1"><i class="fa fa-user-circle-o"></i>Username</label>
+					  <input type="text" class="form-control" id="username" name="username" value="<?php echo @$user_row->username;?>" placeholder="Enter Username" <?php if($userid>0){?> readonly <?php } ?>>
 					</div>
 					<div class="form-group col-md-3">
-					  <label for="exampleInputPassword1"><i class="fa fa-user-circle-o"></i>Last Name<span style="color:red;font-weight: bold;">*</span></label>
-					  <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo $user_row->last_name;?>" placeholder="Enter Last Name">
+					  <label for="exampleInputPassword1"><i class="fa fa-user-circle-o"></i>Password</label>
+					  <input type="text" class="form-control" id="password" name="password" value="<?php echo @$user_row->password;?>" placeholder="Enter Password" >
 					</div>
 					 <div class="form-group col-md-3">
 					  <label for="exampleInputPassword1"><i class="fa fa-envelope"></i>Email<span style="color:red;font-weight: bold;">*</span></label>
@@ -62,9 +72,7 @@ $this->load->view('admin/helper/header');?>
 					  <label for="exampleInputPassword1"><i class="fa fa-phone"></i>Contact No.<span style="color:red;font-weight: bold;">*</span></label>
 					  <input type="text" class="form-control" id="contact_number" name="contact_number" value="<?php echo $user_row->contact_number?>" placeholder="Enter Contact Number">
 					</div>
-               </div>
-			   
-			    <div class="row">
+              
 				   
 					<div class="form-group col-md-3">
 					  <label for="user_type"><i class="fa fa-universal-access" aria-hidden="true"></i> Role<span style="color:red;font-weight: bold;">*</span></label>
@@ -78,19 +86,7 @@ $this->load->view('admin/helper/header');?>
 					</div>
 					
 					
-					<div class="form-group col-md-3">
-					  <label for="exampleInputEmail1"><i class="fa fa-image"></i> User Image</label>
-					  <input type="file" class="form-control" id="user_image" name="user_image" class="demoInputBox" onchange="return imageSizeValidation();">
-					  <span id="file_error"></span>
-					  <span>
-					  <?php if(!empty($user_row->user_image)){?>
-					    <img src="<?php echo base_url();?>uploads/user_images/student/<?php echo $user_row->user_image;?>" height="50px" width="50px">
-					  <?php } else {?>
-					   <img src="<?php echo base_url();?>uploads/user_images/student/no_image.jpg" height="50px" width="50px">
-					  <?php }?>
-					  </span>
-					   <input type="hidden" class="form-control" id="user_old_image" name="user_old_image" value="<?php echo $user_row->user_image;?>">
-					</div>
+					
 					
 					<div class="form-group col-md-3">
 					  <label for="user_type"><i class="fa fa-intersex custom"></i> Gender<span style="color:red;font-weight: bold;">*</span></label>
@@ -105,7 +101,19 @@ $this->load->view('admin/helper/header');?>
 					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> DOB<span style="color:red;font-weight: bold;">*</span></label>
 					  <input type="text" class="form-control" id="dob" name="dob" value="<?php echo $user_row->dob;?>" placeholder="Enter Date Of Birth">
 					</div>
-					
+					<div class="form-group col-md-3">
+					  <label for="exampleInputEmail1"><i class="fa fa-image"></i> User Image</label>
+					  <input type="file" class="form-control" id="user_image" name="user_image" class="demoInputBox" onchange="return imageSizeValidation();">
+					  <span id="file_error"></span>
+					  <span>
+					  <?php if(!empty($user_row->user_image)){?>
+					    <img src="<?php echo base_url();?>uploads/user_images/student/<?php echo $user_row->user_image;?>" height="50px" width="50px">
+					  <?php } else {?>
+					   <img src="<?php echo base_url();?>uploads/user_images/student/no_image.jpg" height="50px" width="50px">
+					  <?php }?>
+					  </span>
+					   <input type="hidden" class="form-control" id="user_old_image" name="user_old_image" value="<?php echo $user_row->user_image;?>">
+					</div>
                </div>
 			
                <!--teacher other details start-->
@@ -167,7 +175,7 @@ $this->load->view('admin/helper/header');?>
 						</div>
 						<div class="form-group col-md-3">
 						  <label for="address_line2">Department<span style="color:red;font-weight: bold;">*</span></label>
-						  <input type="text" class="form-control" id="department" name="department" value="<?php echo $user_row->first_name?>" placeholder="Department">
+						  <input type="text" class="form-control" id="department" name="department" value="<?php echo $user_row->department;?>" placeholder="Department">
 						</div>
 						<div class="form-group col-md-3">
 						  <label for="address_line3">Campus<span style="color:red;font-weight: bold;">*</span></label>
@@ -195,7 +203,7 @@ $this->load->view('admin/helper/header');?>
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Save</button>
               </div>
             </form>
           </div>

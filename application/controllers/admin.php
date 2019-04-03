@@ -128,9 +128,11 @@ class Admin extends CI_Controller {
 	function addUser()
 	{
 		   $data['title'] ='Add User';
+		   $data['page_title']="Add User";
 		   $data['disciplines'] = $this->Discipline_model->get_discipline(); 
 		   $data['batches'] = $this->Discipline_model->get_batch(); 
 		   $data['campuses'] = $this->Discipline_model->get_campus(); 
+		   $data['userid'] = ''; 
 		  // dd( $data['campuses']); 
 		   $data['degrees'] = $this->Discipline_model->get_degree(); 
 		   $data['roles']=$this->type_model->get_role();
@@ -140,7 +142,7 @@ class Admin extends CI_Controller {
 		   $data['community']=$this->type_model->get_community();
 		   
 		   //print_r( $data['countries']); exit;
-		   $this->load->view('admin/add_user_view',$data);
+		   $this->load->view('admin/edit_user_view',$data);
 	}
 
 	function listUser()
@@ -806,20 +808,17 @@ class Admin extends CI_Controller {
 		   $data['states']=$this->type_model->get_state();
 		   $data['city']=$this->type_model->get_city();
 		   $data['community']=$this->type_model->get_community();
+		   
 		   $data['userid'] = $id;
 		   $data['user_row']=$this->type_model->get_user_by_id($id,$role_id);
-		// echo "<pre>";print_r( $data); echo $this->db->last_query();exit;exit;
+		 //echo "<pre>";print_r( $data); echo $this->db->last_query();exit;exit;
 			//echo $role_id;exit;
 		   if($role_id=='1' || $role_id=='6')
 		   {
 			    $data['user_school']=$this->type_model->get_user_school_by_id($id,$role_id);
 				 $data['user_education']=$this->type_model->get_user_education_by_id($id,$role_id);
 				  $data['user_transaction']=$this->type_model->get_user_transaction_by_id($id,$role_id);
-		    $this->load->view('admin/edit_user_view',$data); //student edit view
-		   }else  if($role_id=='3')
-		   {
-			   //print_r($data); exit;
-		    $this->load->view('admin/user_edit_view',$data);  //user edit view
+				$this->load->view('admin/edit_user_view',$data); //student edit view
 		   }else{
 			$data['disciplines'] = $this->Discipline_model->get_discipline(); 
 			$data['campuses']=$this->type_model->get_campus();
@@ -840,38 +839,53 @@ class Admin extends CI_Controller {
 		else
 		 	redirect('admin/listUser?rnd='.rand(0,10).'&msg=success','refresh'); 
 	}
-	function updateUser($id)
+	function updateUser($id='',$role_id='')
 	{
 		    $register_date_time=date('Y-m-d H:i:s');
             $username = $this->input->post('username');
 			$password   = $this->input->post('password');
 			$unique_id  = $this->input->post('unique_id');
 		    $first_name = $this->input->post('first_name');
-            $last_name  = $this->input->post('last_name');
+          //  $last_name  = $this->input->post('last_name');
             $caste      = $this->input->post('caste');
             $community      = $this->input->post('community');
-			
+			//p($_FILES);exit;
 			$email = $this->input->post('email');
 			$contact_number=$this->input->post('contact_number');
 			$user_type = $this->input->post('user_type');
+			if(empty($user_type))
+				$user_type = $role_id;
 			$dob= $this->input->post('dob');
 			$gender = $this->input->post('gender');
-			$user_image = $_FILES['user_image']['name'];
-			//print_r($_FILES); exit;
-			$config['upload_path']          = './uploads/user_images/student';
-			$config['allowed_types']        = 'gif|jpg|png|GIF|JPG|PNG|JPEG';
-			$config['max_size']             = 6096;
-			$config['max_width']            = 1024;
-			$config['max_height']           = 768;
-			$config['encrypt_name']			= TRUE;
-			$this->load->library('upload', $config);
-			$this->upload->initialize($config);
-			$this->upload->do_upload('user_image');
-			$user_image = $this->upload->data();
-			$user_file=$user_image['file_name'];
+			if(isset($_FILES['user_image']['name']) && !empty($_FILES['user_image']['name'])){
+				$user_image = $_FILES['user_image']['name'];
+				//print_r($_FILES); exit;
+				$config['upload_path']          = './uploads/user_images/student';
+				$config['allowed_types']        = 'gif|jpg|jpeg|png|GIF|JPG|PNG|JPEG';
+				//$config['max_size']             = 6096;
+				//$config['max_width']            = 1024;
+				//$config['max_height']           = 768;
+				$config['encrypt_name'] = FALSE;
+				$config['remove_spaces'] = TRUE;
+				$this->load->library('upload', $config);
+				$this->upload->initialize($config);
+				 if(!$this->upload->do_upload('user_image'))
+				{ 
+					$data['imageError'] =  $this->upload->display_errors();
+
+				}
+				else
+				{
+					
+					$user_image = $this->upload->data();
+					$user_file=$user_image['file_name'];
+				}
+			}
+			//print_r($data); 
 			//print_r($user_file); exit;
 			
 			//user other details
+			
 			$batch_id=$this->input->post('batch_id');
 			$campus_id=$this->input->post('campus_id');
 			$degree_id=$this->input->post('degree_id');
@@ -888,7 +902,7 @@ class Admin extends CI_Controller {
 			$country_id=$this->input->post('country_id');
 			$state_id=$this->input->post('state_id');
 			$zip_code=$this->input->post('zip_code');
-			$parent_image=$_FILES['parent_image']['name'];
+			
 			
 			$blood_group=$this->input->post('bloodgroup');
 			$mother_tongue=$this->input->post('mothertongue');
@@ -901,7 +915,7 @@ class Admin extends CI_Controller {
 			$country_id_local=$this->input->post('country_id_local');
 			$state_id_local=$this->input->post('state_id_local');
 			$zip_code_local=$this->input->post('zip_code_local');
-			$scholarship=$this->input->post('scholarship');
+			$quota=$this->input->post('quota');
 			
 			
 			//Academic Info
@@ -938,7 +952,7 @@ class Admin extends CI_Controller {
 			$remark=$this->input->post('remark');
 		
 			
-			$config['upload_path']          = './uploads/user_images/parent';
+			/*$config['upload_path']          = './uploads/user_images/parent';
 			$config['allowed_types']        = 'gif|jpg|png|GIF|JPG|PNG|JPEG';
 			$config['max_size']             = 6096;
 			$config['max_width']            = 1024;
@@ -948,7 +962,7 @@ class Admin extends CI_Controller {
 			$this->upload->initialize($config);
 			$this->upload->do_upload('parent_image');
 			$parent_image = $this->upload->data();
-			$parent_file=$parent_image['file_name'];
+			$parent_file=$parent_image['file_name'];*/
 			
 			
 			if(empty($user_file))
@@ -959,39 +973,46 @@ class Admin extends CI_Controller {
 				$save_file=$user_file;
 			}
 			
-			if(empty($parent_file))
+			/*if(empty($parent_file))
 			{
 				$save_parent_file=$this->input->post('parent_old_image');
 			}
 			else{
 				$save_parent_file=$parent_file;
-			}
+			}*/
 			
 			
 			
 			
 			$save['first_name']=$first_name;
-			$save['last_name']=$last_name;
+			//$save['last_name']=$last_name;
 			$save['caste']=$caste;
 			$save['community']=$community;
 			$save['email']=$email;
 			$save['contact_number']=$contact_number;
-			//$save['role_id']=$user_type;
+			if($user_type>0)
+				$save['role_id']=$user_type;
 			$save['dob']=$dob;
 			$save['gender']=$gender;
-			
-			$save['user_image']=$user_file;
-			
-			
-			$save['permission_status']=@$permission;
-			$save['subadmin_campus_id']=@$subadmin_campus_id;
-			$save['upload_type']=@$marks_upload_permission;
+			if(isset($_FILES['user_image']['name']) && !empty($_FILES['user_image']['name']))
+				$save['user_image']=$save_file;
 			
 			
+			$save['permission_status']=$this->input->post('student_status');
+			$save['user_unique_id']=$this->input->post('user_unique_id');
+			$save['application_no']=$this->input->post('application_no');
+			$save['username']=$this->input->post('username');
+			$save['password']=$this->input->post('password');
+			$save['aadhaar_no']=$this->input->post('aadhaar_no');
+			$save['nad_id']=$this->input->post('nad_id');
 			
 			
 			
-			//print_r($save); //exit;
+			
+			
+			//echo count($_POST); 
+			//echo count($save); 
+			//p($save); 
 			if($state_id == '')
 				$state_id = 0;
 			if($country_id_local == '')
@@ -1000,70 +1021,138 @@ class Admin extends CI_Controller {
 				$state_id_local = 0;
 			if($zip_code_local == '')
 				$zip_code_local = 0;
-			$data = $this->type_model->update_common_user_by_id($id,$save);
+			$userid = $this->type_model->update_common_user_by_id($id,$save);//echo $this->db->last_query();
 			//echo $this->db->last_query();exit;
-			$saved['parent_name']=$parent_name;
-			$saved['mother_name']=$mother_name;
-			$saved['occupation']=$occupation;
-			$saved['father_contact']=$father_contact;
-			$saved['alternate_contact']=$alternate_contact;
-			$saved['father_email']=$father_email;
-			$saved['religion']=$religion;
-			$saved['nationality']=$nationality;
-			$saved['address']=$address;
-			$saved['country_id']=$country_id;
-			$saved['state_id']=$state_id;
-			$saved['zip_code']=$zip_code;
-			$saved['parent_image']=$save_parent_file;
-			$saved['registration']=$registration;
-			$saved['class_name']=$class_name;
-			$saved['section_id']=$section_id;
-			$saved['roll']=$roll;
-			$saved['last_school']=$last_school;
-			$saved['last_std']=$last_std;
-			$saved['sports_id']=$sports_id;
-			$saved['blood_group']= $blood_group;
-			$saved['mother_tongue']=$mother_tongue;
-			$saved['resident_type']=$resident_type;
-			$saved['annual_income']=$annual_income;
-			$saved['street']=$street;
-			$saved['guardian_name']=$guardian_name;
-			$saved['address_local']=$address_local;
-			$saved['street_local']=$street_local;
-			$saved['country_id_local']=$country_id_local;
-			$saved['state_id_local']=$state_id_local;
-			$saved['zip_code_local']=$zip_code_local;
-			$saved['scholarship']=$scholarship;
 			
-			$saved['month_passing']=$monthpassing;
-			$saved['year_passing']=$yearpassing;
-			$saved['medium_instr']=$medium_instr;
-			$saved['mode_of_admission']=$modeofadmission;
-			$saved['group']=$group;
-			$saved['physics']=$physics;
-			$saved['chemistry']=$chemistry;
-			$saved['biology']=$biology;
-			$saved['botany']=$botany;
-			$saved['zoology']=$zoology;
-			$saved['fisheries']=$fisheries;
-			$saved['reserved']=$reserved;
-			$saved['quota']=$quota;
-			$saved['student_status']=$student_status;
-			$saved['medical_permission']=$medical_permission;
-			$saved['doa']=$doa;
-			$saved['dop']=$dop;
-			$saved['internship_grade']=$internship_grade;
-			$saved['ward_counsellor']=$ward_counsellor;
-			$saved['extra_activites']=$extra_activites;
-			$saved['remark']=$remark;
+			if($user_type=='1' || $user_type == '6'){
+				$saved['batch_id']=$this->input->post('batch_id');
+				$saved['campus_id']=$this->input->post('campus_id');
+				$saved['degree_id']=$this->input->post('degree_id');
+				$saved['discipline_id']=$this->input->post('discipline_id');
+				$saved['parent_name']=$parent_name;
+				$saved['mother_name']=$mother_name;
+				$saved['occupation']=$occupation;
+				$saved['father_contact']=$father_contact;
+				$saved['alternate_contact']=$alternate_contact;
+				$saved['father_email']=$father_email;
+				$saved['religion']=$religion;
+				$saved['nationality']=$nationality;
+				$saved['address']=$address;
+				$saved['address2']=$this->input->post('address2');
+				$saved['address3']=$this->input->post('address3');
+				$saved['address4']=$this->input->post('address4');
+				$saved['prev_exam_degree']=$this->input->post('prev_exam_degree');
+				$saved['prev_exam_discipline']=$this->input->post('prev_exam_discipline');
+				$saved['title_of_thesis']=$this->input->post('title_of_thesis');
+				$saved['remark']=$this->input->post('remark');
+				$saved['remark2']=$this->input->post('remark2');
+				$saved['remark3']=$this->input->post('remark3');
+				$saved['remark4']=$this->input->post('remark4');
+				$saved['remark5']=$this->input->post('remark5');
+				$saved['place_of_birth']=$this->input->post('place_of_birth');
+				$saved['course_type']=$this->input->post('course_type');
+				$saved['spouse_email']=$this->input->post('spouse_email');
+				$saved['faculty']=$this->input->post('faculty');
+				$saved['city_id']=$this->input->post('city_id');
+				$saved['marks_obtained']=$this->input->post('marks_obtained');
+				$saved['country_id']=$country_id;
+				$saved['state_id']=$state_id;
+				if($user_type>0)
+					$save['role_id']=$user_type;
+				$saved['zip_code']=$zip_code;
+				//$saved['parent_image']=$save_parent_file;
+				//$saved['registration']=$registration;
+				
+				$saved['last_school']=$last_school;
+				$saved['last_std']=$last_std;
+				//$saved['sports_id']=$sports_id;
+				$saved['blood_group']= $blood_group;
+				$saved['mother_tongue']=$mother_tongue;
+				$saved['resident_type']=$resident_type;
+				$saved['annual_income']=$annual_income;
+				//$saved['street']=$street;
+				$saved['guardian_name']=$guardian_name;
+				//$saved['address_local']=$address_local;
+				//$saved['street_local']=$street_local;
+				//$saved['country_id_local']=$country_id_local;
+				//$saved['state_id_local']=$state_id_local;
+				//$saved['zip_code_local']=$zip_code_local;
+				$saved['quota']=$quota;
+				
+				$saved['month_passing']=$monthpassing;
+				$saved['year_passing']=$yearpassing;
+				$saved['medium_instr']=$medium_instr;
+				$saved['mode_of_admission']=$modeofadmission;
+
+				$saved['reserved']=$reserved;
+				$saved['quota']=$quota;
+				$saved['student_status']=$student_status;
+				
+				$saved['doa']=$doa;
+				$saved['dop']=$dop;
+				
+				$saved['ward_counsellor']=$ward_counsellor;
+				$saved['extra_activites']=$extra_activites;
+				$detail_id = $this->type_model->update_student_detail_by_id($userid,$saved);
+			}else{
+				$saved['user_id']=$userid;
+				$saved['address_line1']=$address_line1;
+				$saved['address_line2']=$address_line2;
+				$saved['address_line3']=$address_line3;
+				$saved['address_line4']=$address_line4;
+				$saved['landline_number']=$landline_number;
+				$saved['employee_id']=$employee_id;
+				$saved['qualification']=$qualification;
+				$saved['date_of_joining']=$date_of_joining;
+				$saved['designation']=$designation;
+				$saved['department']=$department;
+				$saved['campus']=$campus;
+				$saved['discipline']=$discipline_id;
+				$detail_id = $this->type_model->update_teacher_details_by_id($userid,$saved);
+			}
+			//$saved['remark']=$remark;
 			//echo "<pre>";
-			//print_r($saved); exit;
-			$data = $this->type_model->update_student_detail_by_id($id,$saved);
-			$this->session->set_flashdata('message', 'Details updated successfully');
-	        redirect('admin/listUser'); 
+			//echo count($saved); 
+			//$newarr = array_merge($save,$saved);
+			//$result=array_diff($_POST,$newarr);
+			//p($result);
+			//p($saved); exit;
+			//exit;
+			//echo $this->db->last_query();
+			if($user_type=='1' || $user_type=='6'){
+				$parentsaved['username']=$this->input->post('parent_username');
+				$parentsaved['password']=$this->input->post('parent_password');
+				if(!empty($parentsaved['username']) && !empty($parentsaved['password'])){
+					$parentsaved['user_unique_id']='';
+					$parentsaved['first_name']=$this->input->post('parent_name');
+					$parentsaved['gender']='male';
+					
+					$parentsaved['email']=$this->input->post('father_email');
+					$parentsaved['contact_number']=$this->input->post('father_contact');
+					$parentsaved['role_id']=5;
+					$parentsaved['parents_student_id']=$userid;
+					$parentsaved['created_on']=$register_date_time;
+				
+					$parentsaved['permission_status']=$this->input->post('student_status');
+					//$parentsaved['subadmin_campus_id']=$subadmin_campus_id;
+					//$parentsaved['upload_type']=$marks_upload_permission;
+					//$parentsaved['user_image']=$parent_file;
+					$parent_last_id=$this->type_model->save_parent_login($parentsaved);// save common user details
+					//echo $this->db->last_query();
+					//$parent_unique_id='PAR'.$parent_last_id;
+					//$uinquePar['parent_unique_id']=$parent_unique_id;
+					//$this->type_model->update_parent_login($uinquePar,$detail_id);// update parent_unique_id;
+				}
+			}
+			//exit;
+			if($id>0)
+				$this->session->set_flashdata('message', 'Details updated successfully');
+			else
+				$this->session->set_flashdata('message', 'User created successfully');
+	        redirect('admin/listStudent','refresh'); 
 			
 	}
-	function updateTeacher($id)
+	function updateTeacher($id,$role_id)
 	{
 		//print_r($id); exit;
 		    $register_date_time=date('Y-m-d H:i:s');
@@ -1092,11 +1181,12 @@ class Admin extends CI_Controller {
 			
 			
 			$config['upload_path']          = './uploads/user_images/student';
-			$config['allowed_types']        = 'gif|jpg|png|GIF|JPG|PNG|JPEG';
-			$config['max_size']             = 6096;
-			$config['max_width']            = 1024;
-			$config['max_height']           = 768;
-			$config['encrypt_name']			= TRUE;
+			$config['allowed_types']        = 'gif|jpg|jpeg|png|GIF|JPG|PNG|JPEG';
+			//$config['max_size']             = 6096;
+			//$config['max_width']            = 1024;
+			//$config['max_height']           = 768;
+			$config['encrypt_name']			= FALSE;
+			$config['remove_spaces'] = TRUE;
 			$this->load->library('upload', $config);
 			$this->upload->initialize($config);
 			$this->upload->do_upload('user_image');
@@ -1132,11 +1222,16 @@ class Admin extends CI_Controller {
 			$saved['discipline']= $discipline_id;
 			//print_r($saved); exit;
 			$data = $this->type_model->update_teacher_details_by_id($id,$saved);
-		    $this->session->set_flashdata('message', 'Teacher updated successfully');
-			if($user_type == 2)
-				redirect('admin/listTeacher'); 
-			else
-				redirect('admin/listUser'); 
+			
+		   
+			if($role_id == 2){
+				$this->session->set_flashdata('message', 'Teacher updated successfully');
+				redirect('admin/listTeacher','refresh'); 
+			}else{
+				 $this->session->set_flashdata('message', 'User updated successfully');
+				redirect('admin/listUser','refresh'); 
+				
+			}
 	}
 	
 	function studentStatus($id,$status)
@@ -1162,7 +1257,7 @@ class Admin extends CI_Controller {
 			    $data['user_school']=$this->type_model->get_user_school_by_id($id,$role_id);
 				 $data['user_education']=$this->type_model->get_user_education_by_id($id,$role_id);
 				  $data['user_transaction']=$this->type_model->get_user_transaction_by_id($id,$role_id);
-		    $this->load->view('admin/detail_user_view',$data);
+		    $this->load->view('admin/edit_user_view',$data);
 		   }
 		    if($role_id=='2')  //teacher
 		   {

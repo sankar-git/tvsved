@@ -66,7 +66,7 @@ class Authenticate extends CI_Controller {
 	$data_fromdatabase=$this->common_model->admin_login('users', $user_data) ;
 //	echo "<pre>";p($data_fromdatabase);exit();
 	//count($data_fromdatabase); exit;
-	//p($data_fromdatabase); exit;
+	//echo $this->db->last_query();p($data_fromdatabase); exit;
 	if(count($data_fromdatabase) >0)
 	{
 		//echo "hello"; exit;
@@ -75,16 +75,16 @@ class Authenticate extends CI_Controller {
 		//$data_fromdatabase['0]->
         if($data_fromdatabase[0]->role_id == 1 || $data_fromdatabase[0]->role_id == 6)
             $data_fromdatabase = $this->common_model->do_student_login($user_data) ;
-        elseif($data_fromdatabase[0]->role_id == 2)
+        else
             $data_fromdatabase = $this->common_model->do_teacher_login($user_data) ;
-        elseif($data_fromdatabase[0]->role_id == 3)
-            $data_fromdatabase=$this->common_model->do_parent_login('user_map_student_details', $user_data) ;
-        elseif($data_fromdatabase[0]->role_id == 4)
-            $data_fromdatabase=$this->common_model->do_junior_login($user_data) ; //junior admin
-        elseif(in_array($data_fromdatabase[0]->role_id,array(7,9,10,11,12)))
-            $data_fromdatabase = $this->common_model->do_dean_login($user_data) ;
-        elseif($data_fromdatabase[0]->role_id == 8)
-            $data_fromdatabase=$this->common_model->do_junior_login($user_data) ; //junior admin
+       // elseif($data_fromdatabase[0]->role_id == 3)
+        //    $data_fromdatabase=$this->common_model->do_parent_login('user_map_student_details', $user_data) ;
+       // elseif($data_fromdatabase[0]->role_id == 4)
+         //   $data_fromdatabase=$this->common_model->do_junior_login($user_data) ; //junior admin
+        //elseif(in_array($data_fromdatabase[0]->role_id,array(7,9,10,11,12)))
+          //  $data_fromdatabase = $this->common_model->do_dean_login($user_data) ;
+        //elseif($data_fromdatabase[0]->role_id == 8)
+          //  $data_fromdatabase=$this->common_model->do_junior_login($user_data) ; //junior admin
 			//echo $this->db->last_query();
 		//echo "<pre>";print_r($data_fromdatabase); exit;
         $this->session->set_userdata('sms',$data_fromdatabase);

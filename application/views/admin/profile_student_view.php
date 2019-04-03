@@ -30,7 +30,7 @@
           <div class="box box-primary">
 		    
             <div class="box-body box-profile">
-			 <?php if($user_row->user_image == '') $image = 'no_image.jpg'; else $image = $user_row->user_image;?>
+			 <?php if($user_row->user_image == '' || !file_exists('uploads/user_images/student/'.$user_row->user_image)) $image = 'no_image.jpg'; else $image = $user_row->user_image;?>
 					 
               <img   height="50px;" width="50px;"  class="profile-user-img img-responsive img-circle" src="<?php echo base_url();?>uploads/user_images/student/<?php echo $image;?>" alt="User profile picture">
 
@@ -75,7 +75,7 @@
 						</div>
                     </div>
 					<div class="col-sm-6">
-					<label for="inputName" class="col-sm-4 bg-info  control-label">Firstname</label>
+					<label for="inputName" class="col-sm-4 bg-info  control-label">Name</label>
                     <div class="col-sm-8">
                       <!--<input type="first_name" class="form-control" id="first_name" name="first_name" value="<?php echo $user_row->first_name;?>" placeholder="First Name" readonly>-->
 					  <h5><?php echo $user_row->first_name;?></h5>
@@ -83,11 +83,12 @@
                     </div>
                     </div>
 					<div class="col-sm-6">
-					  <label for="inputName" class="col-sm-4  bg-info control-label">Lastname</label>
+					 <label for="email" class="col-sm-4  control-label bg-info">Email</label>
 
-                    <div class="col-sm-8">
-                      <!--<input type="last_name" class="form-control"  id="last_name" name="last_name" value="<?php echo $user_row->last_name;?>" placeholder="Last Name" readonly>-->
-					  <h5><?php echo $user_row->last_name;?></h5>
+                      <div class="col-sm-8" style="padding-left:2px;padding-right:0px;">
+					 <!-- <h5><?php echo $user_row->email;?></h5>-->
+                      <input type="email" style="width:80%" class="form-control"  id="email" name="email" value="<?php echo $user_row->email;?>" placeholder="Email" />
+					  <div style="position:absolute;right:-20px;top:0px;"><?php if($email_pending == true){ ?><span class="error">Approval<br>Pending</span><?php }else{?><a class="btn btn-success" style="padding:5px 8px" role="button" href="javascript:updateEmail();" >Update</a><?php } ?></div>
                     </div>
                     </div>
                  <div class="col-sm-6">
@@ -117,27 +118,23 @@
                     </div>	
 					</div>
 					<div class="clearfix"></div>
+					
 					<div class="col-sm-6">
-					 <label for="email" class="col-sm-4  control-label bg-info">Email</label>
-
-                      <div class="col-sm-8" style="padding-left:2px;padding-right:0px;">
-					 <!-- <h5><?php echo $user_row->email;?></h5>-->
-                      <input type="email" style="width:80%" class="form-control"  id="email" name="email" value="<?php echo $user_row->email;?>" placeholder="Email" />
-					  <div style="position:absolute;right:-20px;top:0px;"><?php if($email_pending == true){ ?><span class="error">Approval<br>Pending</span><?php }else{?><a class="btn btn-success" style="padding:5px 8px" role="button" href="javascript:updateEmail();" >Update</a><?php } ?></div>
-                    </div>
-                    </div>
-					<div class="col-sm-6">
-					<label for="inputName" class="col-sm-4 control-label bg-info">Batch</label>
+					<label for="inputName" class="col-sm-4 control-label bg-info">Aadhaar Number</label>
                     <div class="col-sm-8">
-                       <!--<select name="batch_id" id="batch_id" class="form-control" disabled>
-						      <option value="">--Select Batch--</option>
-							  <?php $batch_name=''; foreach($batches as $batch){?>
-							  <option value="<?php echo $batch->id;?>" <?php if($user_row->batch_id==$batch->id){ $batch_name=$batch->batch_name; echo "selected";}?>><?php echo $batch->batch_name;?></option>
-							  <?php } ?>
-					   </select> -->
-					   <h5><?php echo $batch_name;?> </h5>
+                      
+					   <h5><?php echo $user_row->aadhaar_no;?> </h5>
                     </div>
                     </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">NAD-ID</label>
+                    <div class="col-sm-8">
+					   <h5><?php echo $user_row->nad_id;?> </h5>
+                    </div>
+                    </div>
+					<div class="clearfix"></div>
+					
+					
 					<div class="col-sm-6">
 					<label for="inputName" class="col-sm-4 control-label bg-info">Campus</label>
 
@@ -161,13 +158,43 @@
 						 <!--<select name="degree_id" id="degree_id" class="form-control" disabled>
 								  <option value="">--Select Degree--</option>
 							<?php $degree_name=''; foreach($degrees as $degree){?>
-							  <option value="<?php echo $degree->id;?>" <?php if($user_row->degree_id==$degree->id){ $degree_name = $degree->degree_code;echo "selected"; }?>><?php echo $degree->degree_name;?></option>
+							  <option value="<?php echo $degree->id;?>" <?php if($user_row->degree_id==$degree->id){ $degree_name = $degree->degree_name;echo "selected"; }?>><?php echo $degree->degree_name;?></option>
 							<?php } ?>
 						</select> -->
 						<h5><?php echo $degree_name;?> </h5>
                     </div>
                     </div>
-                    
+					<div class="clearfix"></div>
+                    <div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Discipline</label>
+                    <div class="col-sm-8">
+                       <!--<select name="batch_id" id="batch_id" class="form-control" disabled>
+						      <option value="">--Select Batch--</option>
+							  <?php $discipline_name=''; foreach($disciplines as $discipline){?>
+							  <option value="<?php echo $discipline->id;?>" <?php if(@$user_row->discipline_id == $discipline->id){$discipline_name = $discipline->discipline_name; echo "selected";}?>><?php echo $discipline->discipline_name;?></option>
+							  <?php }?>
+					   </select> -->
+					   <h5><?php echo $discipline_name;?> </h5>
+                    </div>
+                    </div>
+						<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Faculty</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $user_row->faculty;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Batch</label>
+                    <div class="col-sm-8">
+                       <!--<select name="batch_id" id="batch_id" class="form-control" disabled>
+						      <option value="">--Select Batch--</option>
+							  <?php $batch_name=''; foreach($batches as $batch){?>
+							  <option value="<?php echo $batch->id;?>" <?php if($user_row->batch_id==$batch->id){ $batch_name=$batch->batch_name; echo "selected";}?>><?php echo $batch->batch_name;?></option>
+							  <?php } ?>
+					   </select> -->
+					   <h5><?php echo $batch_name;?> </h5>
+                    </div>
+                    </div>
 					<div class="col-sm-6">
 					<label for="inputName" class="col-sm-4  control-label bg-info">Type</label>
 					 <div class="col-sm-8">
@@ -183,9 +210,51 @@
                     </div>
                     </div>
 					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Blood Group</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $user_row->blood_group;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Mother Tongue</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $user_row->mother_tongue;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Day Scholar / Hosteller</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $user_row->resident_type;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Place of Birth</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $user_row->place_of_birth;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Nationality</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $user_row->nationality;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Religion</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $user_row->religion;?></h5>
+                    </div>
+                    </div>
+					 <div class="col-sm-6">
 					<label for="inputName" class="col-sm-4 control-label bg-info">Community</label>
 					 <div class="col-sm-8">
                      <h5 ><?php echo $user_row->community;?></h5>
+                    </div>
+                    </div>
+					 <div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Caste</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $user_row->caste;?></h5>
                     </div>
                     </div>
 					<div class="col-sm-6">
@@ -194,20 +263,30 @@
                      <h5 ><?php echo $user_row->caste;?></h5>
                     </div>
                     </div>
-					 
-				<div class="col-sm-6">
-					<label for="inputName" class="col-sm-4 control-label bg-info">Religion</label>
+					 <div class="col-sm-6">
+                    <label for="inputName" class="col-sm-4 control-label bg-info">Country</label>
                     <div class="col-sm-8">
-                       <!--<select name="religion" id="religion" class="form-control" disabled>
-						      <option value="">--Select Religion--</option>
-							  <option value="1" <?php if($user_row->religion=='1'){echo "selected";}?>>Muslim</option>
-							  <option value="2" <?php if($user_row->religion=='2'){echo "selected";}?>>Hindu</option>
-							  <option value="3" <?php if($user_row->religion=='3'){echo "selected";}?>>Christian</option>
-					   </select>-->
-					   <h5><?php 
-						if($user_row->religion=='1'){echo "Muslim";}
-						if($user_row->religion=='2'){echo "Hindu";}
-						if($user_row->religion=='3'){echo "Christian";}?></h5>
+                     <!--<select name="country" id="country" class="form-control" disabled>
+						  <option value="">Select Country</option>
+						  <?php $country_name=''; foreach($countries as $country){?>
+							  <option value="<?php echo $country->id;?>" <?php if($user_row->country_id==$country->id){ $country_name =$country->country_name ;echo "selected"; }?>><?php echo $country->country_name;?></option>
+						  <?php } ?>
+					  </select>-->
+					  <h5><?php echo $country_name;?> </h5>
+                    </div>
+					
+					</div>
+					<div class="col-sm-6">
+					 <label for="inputName" class="col-sm-4 control-label bg-info">State</label>
+                    <div class="col-sm-8">
+                      <!--<select name="state" id="state" class="form-control" disabled>
+						   <option value="1">Select Country</option>
+						  <?php $state_name=''; foreach($states as $state){ ?>
+							  <option value="<?php echo $state->id;?>"<?php if($user_row->state_id==$state->id){ $state_name =  $state->state; echo "selected"; }?>><?php echo $state->state;?></option>
+							
+						  <?php } ?>
+					  </select>-->
+					  <h5><?php echo $state_name;?> </h5>
                     </div>
                     </div>
 					<div class="col-sm-6">
@@ -237,32 +316,8 @@
 					  <h5><?php echo $user_row->zip_code;?> </h5>
                     </div>
                     </div>
-					<div class="col-sm-6">
-					 <label for="inputName" class="col-sm-4 control-label bg-info">State</label>
-                    <div class="col-sm-8">
-                      <!--<select name="state" id="state" class="form-control" disabled>
-						   <option value="1">Select Country</option>
-						  <?php $state_name=''; foreach($states as $state){ ?>
-							  <option value="<?php echo $state->id;?>"<?php if($user_row->state_id==$state->id){ $state_name =  $state->state; echo "selected"; }?>><?php echo $state->state;?></option>
-							
-						  <?php } ?>
-					  </select>-->
-					  <h5><?php echo $state_name;?> </h5>
-                    </div>
-                    </div>
-					<div class="col-sm-6">
-                    <label for="inputName" class="col-sm-4 control-label bg-info">Country</label>
-                    <div class="col-sm-8">
-                     <!--<select name="country" id="country" class="form-control" disabled>
-						  <option value="">Select Country</option>
-						  <?php $country_name=''; foreach($countries as $country){?>
-							  <option value="<?php echo $country->id;?>" <?php if($user_row->country_id==$country->id){ $country_name =$country->country_name ;echo "selected"; }?>><?php echo $country->country_name;?></option>
-						  <?php } ?>
-					  </select>-->
-					  <h5><?php echo $country_name;?> </h5>
-                    </div>
 					
-					</div>
+					
 				  
 				  <div class="form-group">
                     
