@@ -305,7 +305,7 @@
                   <?php echo ucfirst($session_data[0]->first_name);?>
                  
                 </p>
-				 <p>Last Login: <?php echo $newDate = date("d-m-Y h:m:s A", strtotime($session_data[0]->last_login_time));
+				 <p>Last Login: <?php  if(!empty($session_data[0]->last_login_time)){ echo $newDate = date("d-m-Y h:m:s A", strtotime($session_data[0]->last_login_time));}else echo '-';
 //echo $session_data[0]->last_login_time;?></p>
               </li>
               <!-- Menu Body -->
