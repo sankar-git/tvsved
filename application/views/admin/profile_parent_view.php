@@ -11,7 +11,7 @@ $sessdata= $this->session->userdata('sms');
 .error{
  color:red;	
 }
-.bg-info{padding:7px;background-color:#c3c3c3;}
+.bg-info{padding:7px 3px;background-color:#c3c3c3;}
 .form-control{padding:0px;}
 .col-sm-6{ margin-top:2px;}
 </style>
@@ -123,30 +123,29 @@ $sessdata= $this->session->userdata('sms');
 			   <form class="form-horizontal" method="post" name="user_update_form" id="user_update_form" action="<?php echo base_url();?>profile/updateProfile" enctype="multipart/form-data">
 				<input type="hidden" class="form-control" id="role_id" name="role_id" value="<?php echo $student_row->role_id;?>">
 				<div class="col-sm-6">
-						<label for="inputName" class=" col-sm-6  bg-info control-label">Student ID</label>
-						<div class="col-sm-6">
+						<label for="inputName" class=" col-sm-4  bg-info control-label">Student ID</label>
+						<div class="col-sm-8">
 							<h5>&nbsp;<?php echo $student_row->user_unique_id;?></h5>
 						</div>
                     </div>
 					<div class="col-sm-6">
-					<label for="inputName" class="col-sm-6 bg-info  control-label">Firstname</label>
-                    <div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 bg-info  control-label">Name</label>
+                    <div class="col-sm-8">
                       <!--<input type="first_name" class="form-control" id="first_name" name="first_name" value="<?php echo $student_row->first_name;?>" placeholder="First Name" readonly>-->
 					  <h5><?php echo $student_row->first_name;?></h5>
 					  
                     </div>
                     </div>
 					<div class="col-sm-6">
-					  <label for="inputName" class="col-sm-6  bg-info control-label">Lastname</label>
-
-                    <div class="col-sm-6">
-                      <!--<input type="last_name" class="form-control"  id="last_name" name="last_name" value="<?php echo $student_row->last_name;?>" placeholder="Last Name" readonly>-->
-					  <h5><?php echo $student_row->last_name;?></h5>
+					 <label for="email" class="col-sm-4  control-label bg-info">Email</label>
+					<div class="col-sm-8" >
+					 <h5><?php echo $student_row->email;?></h5>
                     </div>
+                      
                     </div>
                  <div class="col-sm-6">
-				 <label for="inputName" class="col-sm-6  control-label  bg-info">Gender</label>
-                    <div class="col-sm-6">
+				 <label for="inputName" class="col-sm-4 control-label  bg-info">Gender</label>
+                    <div class="col-sm-8">
                       <!--<select name="gender" id="gender" class="form-control" disabled>
 						      <option value="">--Select Gender--</option>
 							  <option value="male" <?php if($student_row->gender=='male'){ echo "selected"; }?> >Male</option>
@@ -156,27 +155,297 @@ $sessdata= $this->session->userdata('sms');
                     </div>
                     </div>
 					<div class="col-sm-6">
-					  <label for="inputName" class="col-sm-6 control-label bg-info">DOB</label>
-                    <div class="col-sm-6">
+					  <label for="inputName" class="col-sm-4 control-label bg-info">DOB</label>
+                    <div class="col-sm-8">
                       <!--<input type="last_name" class="form-control"  id="last_name" name="last_name" value="<?php echo $student_row->last_name;?>" placeholder="Last Name" readonly>-->
 					  <h5><?php echo $student_row->dob;?></h5>
                     </div>
                     </div>
 					 <div class="col-sm-6">
-                    <label for="inputName" class="col-sm-6 control-label bg-info">Contact No</label>
-                     <div class="col-sm-6" > <h5><?php echo $student_row->contact_number;?> </h5>
-                    </div>
+                    <label for="inputName" class="col-sm-4 control-label bg-info">Contact No</label>
+                     <div class="col-sm-8" >
+					 <h5><?php echo $student_row->contact_number;?></h5>
+                    </div>	
 					</div>
-				
+					<div class="clearfix"></div>
+					
 					<div class="col-sm-6">
-					 <label for="email" class="col-sm-6  control-label bg-info">Email</label>
-
-                      <div class="col-sm-6" > <h5><?php echo $student_row->email;?> </h5>
+					<label for="inputName" class="col-sm-4 control-label bg-info">Aadhaar Number</label>
+                    <div class="col-sm-8">
+                      
+					   <h5><?php echo $student_row->aadhaar_no;?> </h5>
                     </div>
                     </div>
 					<div class="col-sm-6">
-					<label for="inputName" class="col-sm-6 control-label bg-info">Batch</label>
-                    <div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">NAD-ID</label>
+                    <div class="col-sm-8">
+					   <h5><?php echo $student_row->nad_id;?> </h5>
+                    </div>
+                    </div>
+					<div class="clearfix"></div>
+					
+					
+					
+                    
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Blood Group</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $student_row->blood_group;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Mother Tongue</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $student_row->mother_tongue;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">DayScholar/Hostell</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $student_row->resident_type;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Place of Birth</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $student_row->place_of_birth;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Nationality</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $student_row->nationality;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Religion</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $student_row->religion;?></h5>
+                    </div>
+                    </div>
+					 <div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Community</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $student_row->community;?></h5>
+                    </div>
+                    </div>
+					 <div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Caste</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $student_row->caste;?></h5>
+                    </div>
+                    </div>
+					
+					 <div class="col-sm-6">
+                    <label for="inputName" class="col-sm-4 control-label bg-info">Country</label>
+                    <div class="col-sm-8">
+                     <!--<select name="country" id="country" class="form-control" disabled>
+						  <option value="">Select Country</option>
+						  <?php $country_name=''; foreach($countries as $country){?>
+							  <option value="<?php echo $country->id;?>" <?php if($student_row->country_id==$country->id){ $country_name =$country->country_name ;echo "selected"; }?>><?php echo $country->country_name;?></option>
+						  <?php } ?>
+					  </select>-->
+					  <h5><?php echo $country_name;?> </h5>
+                    </div>
+					
+					</div>
+					<div class="col-sm-6">
+					 <label for="inputName" class="col-sm-4 control-label bg-info">State</label>
+                    <div class="col-sm-8">
+                      <!--<select name="state" id="state" class="form-control" disabled>
+						   <option value="1">Select Country</option>
+						  <?php $state_name=''; foreach($states as $state){ ?>
+							  <option value="<?php echo $state->id;?>"<?php if($student_row->state_id==$state->id){ $state_name =  $state->state; echo "selected"; }?>><?php echo $state->state;?></option>
+							
+						  <?php } ?>
+					  </select>-->
+					  <h5><?php echo $state_name;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">City</label>
+					 <div class="col-sm-8">
+					 <?php $city_name=''; foreach($city as $cities) { 
+								if(@$student_row->city_id == $cities->city_id){ $city_name =  $cities->city; }
+							 } ?>
+                     <h5 ><?php echo $city_name;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+						<label for="inputName" class="col-sm-4 control-label bg-info">Address1</label>
+						<div class="col-sm-8"><h5><?php echo $student_row->address;?></h5>
+						</div>					
+					</div>
+					<div class="col-sm-6">
+						<label for="inputName" class="col-sm-4 control-label bg-info">Address2</label>
+						<div class="col-sm-8"><h5><?php echo $student_row->address2;?></h5>
+						</div>					
+					</div>
+					<div class="col-sm-6">
+						<label for="inputName" class="col-sm-4 control-label bg-info">Address3</label>
+						<div class="col-sm-8"><h5><?php echo $student_row->address3;?></h5>
+						</div>					
+					</div>
+					<div class="col-sm-6">
+						<label for="inputName" class="col-sm-4 control-label bg-info">Address4</label>
+						<div class="col-sm-8"><h5><?php echo $student_row->address4;?></h5>
+						</div>					
+					</div>					
+					
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Pin Code</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->zip_code;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info"> Month of Passing</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->month_passing;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info"> Year of Passing</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->year_passing;?> </h5>
+                    </div>
+                    </div>
+					
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Medium of Instruction</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->medium_instr;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Mode of Admission</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->mode_of_admission;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Fees Category</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->reserved;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Scholarship</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->quota;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Prev Exam/Degree Passed</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->prev_exam_degree;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Previous Exam-Group / Discipline</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->prev_exam_discipline;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">School /Institution last studied</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->last_school;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Board / University last studied</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->last_std;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">% Marks Obtained</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->marks_obtained;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Date Of Admission</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->doa;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Date Of Passing</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->dop;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Ward Counsellor</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->ward_counsellor;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Title of Thesis</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->title_of_thesis;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Remarks1</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->remark;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Remarks1</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->remark2;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Remarks3</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->remark3;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Remarks4</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->remark4;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Remarks5</label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->remark5;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4  control-label bg-info">Extra curricular </label>
+                    <div class="col-sm-8">
+					  <h5><?php echo $student_row->extra_activites;?> </h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Discipline</label>
+                    <div class="col-sm-8">
+                       <!--<select name="batch_id" id="batch_id" class="form-control" disabled>
+						      <option value="">--Select Batch--</option>
+							  <?php $discipline_name=''; foreach($disciplines as $discipline){?>
+							  <option value="<?php echo $discipline->id;?>" <?php if(@$student_row->discipline_id == $discipline->id){$discipline_name = $discipline->discipline_name; echo "selected";}?>><?php echo $discipline->discipline_name;?></option>
+							  <?php }?>
+					   </select> -->
+					   <h5><?php echo $discipline_name;?> </h5>
+                    </div>
+                    </div>
+						<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Faculty</label>
+					 <div class="col-sm-8">
+                     <h5 ><?php echo $student_row->faculty;?></h5>
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Batch</label>
+                    <div class="col-sm-8">
                        <!--<select name="batch_id" id="batch_id" class="form-control" disabled>
 						      <option value="">--Select Batch--</option>
 							  <?php $batch_name=''; foreach($batches as $batch){?>
@@ -187,9 +456,23 @@ $sessdata= $this->session->userdata('sms');
                     </div>
                     </div>
 					<div class="col-sm-6">
-					<label for="inputName" class="col-sm-6 control-label bg-info">Campus</label>
+					<label for="inputName" class="col-sm-4  control-label bg-info">Type</label>
+					 <div class="col-sm-8">
+						<!--<select name="type_id" id="type_id" class="form-control" disabled>
+							  <option value="">--Select Type--</option>
+							  <option value="1" <?php if($student_row->course_type=='1'){echo "selected";}?>>Full Time</option>
+							  <option value="2" <?php if($student_row->course_type=='2'){echo "selected";}?>>Part Time</option>
+						</select> -->
+						<h5><?php 
+						if($student_row->course_type=='1'){echo "Regular";}
+						if($student_row->course_type=='2'){echo "Part Time";}?></h5>
+						
+                    </div>
+                    </div>
+					<div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 control-label bg-info">Campus</label>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
 						 <!--<select name="campus_id" id="campus_id" class="form-control" disabled>
 								  <option value="">--Select Campus--</option>
 							 <?php $campus_name=''; foreach($campuses as $campus){?>
@@ -203,114 +486,18 @@ $sessdata= $this->session->userdata('sms');
 					
 				 
 				 <div class="col-sm-6">
-                     <label for="inputName" class="col-sm-6  control-label bg-info">Degree</label>
+                     <label for="inputName" class="col-sm-4  control-label bg-info">Degree</label>
 				
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
 						 <!--<select name="degree_id" id="degree_id" class="form-control" disabled>
 								  <option value="">--Select Degree--</option>
 							<?php $degree_name=''; foreach($degrees as $degree){?>
-							  <option value="<?php echo $degree->id;?>" <?php if($student_row->degree_id==$degree->id){ $degree_name = $degree->degree_code;echo "selected"; }?>><?php echo $degree->degree_name;?></option>
+							  <option value="<?php echo $degree->id;?>" <?php if($student_row->degree_id==$degree->id){ $degree_name = $degree->degree_name;echo "selected"; }?>><?php echo $degree->degree_name;?></option>
 							<?php } ?>
 						</select> -->
 						<h5><?php echo $degree_name;?> </h5>
                     </div>
                     </div>
-                    
-					<div class="col-sm-6">
-					<label for="inputName" class="col-sm-6  control-label bg-info">Type</label>
-					 <div class="col-sm-6">
-						<!--<select name="type_id" id="type_id" class="form-control" disabled>
-							  <option value="">--Select Type--</option>
-							  <option value="1" <?php if($student_row->course_type=='1'){echo "selected";}?>>Full Time</option>
-							  <option value="2" <?php if($student_row->course_type=='2'){echo "selected";}?>>Part Time</option>
-						</select> -->
-						<h5><?php 
-						if($student_row->course_type=='1'){echo "Regular";}
-						if($student_row->course_type=='2'){echo "Part Time";}?></h5>
-						
-                    </div>
-                    </div>
-					<div class="col-sm-6">
-					<label for="inputName" class="col-sm-6 control-label bg-info">Community</label>
-					 <div class="col-sm-6">
-                     <h5 ><?php echo $student_row->community;?></h5>
-                    </div>
-                    </div>
-					<div class="col-sm-6">
-					<label for="inputName" class="col-sm-6 control-label bg-info">Caste</label>
-					 <div class="col-sm-6">
-                     <h5 ><?php echo $student_row->caste;?></h5>
-                    </div>
-                    </div>
-					 
-				<div class="col-sm-6">
-					<label for="inputName" class="col-sm-6 control-label bg-info">Religion</label>
-                    <div class="col-sm-6">
-                       <!--<select name="religion" id="religion" class="form-control" disabled>
-						      <option value="">--Select Religion--</option>
-							  <option value="1" <?php if($student_row->religion=='1'){echo "selected";}?>>Muslim</option>
-							  <option value="2" <?php if($student_row->religion=='2'){echo "selected";}?>>Hindu</option>
-							  <option value="3" <?php if($student_row->religion=='3'){echo "selected";}?>>Christian</option>
-					   </select>-->
-					   <h5><?php 
-						if($student_row->religion=='1'){echo "Muslim";}
-						if($student_row->religion=='2'){echo "Hindu";}
-						if($student_row->religion=='3'){echo "Christian";}?></h5>
-                    </div>
-                    </div>
-					<div class="col-sm-6">
-						<label for="inputName" class="col-sm-6 control-label bg-info">Address</label>
-						<div class="col-sm-6"><h5><?php echo $student_row->address;?></h5>
-						</div>					
-					</div>					
-					<div class="col-sm-6">
-						<label for="inputName" class="col-sm-6 control-label bg-info">Nationality</label>
-						<div class="col-sm-6">
-						 <!--<select name="nationality" id="nationality" class="form-control" disabled>
-								  <option value="">--Select Nationality--</option>
-								  <option value="1" <?php if($student_row->nationality=='1'){echo "selected";}?>>Indian</option>
-								  <option value="2" <?php if($student_row->nationality=='2'){echo "selected";}?>>Hindu</option>
-								  <option value="3" <?php if($student_row->nationality=='3'){echo "selected";}?>>Christian</option>
-						</select> -->
-						<h5><?php 
-						if($student_row->nationality=='1'){echo "Indian";}
-						if($student_row->nationality=='2'){echo "Hindu";}
-						if($student_row->nationality=='3'){echo "Christian";}?></h5>
-						</div>
-					</div>
-					<div class="col-sm-6">
-					<label for="inputName" class="col-sm-6  control-label bg-info">Pin Code</label>
-                    <div class="col-sm-6">
-                      <!--<input type="zip_code" class="form-control" id="zip_code" name="zip_code" value="<?php echo $student_row->zip_code;?>" placeholder="Zip" readonly>-->
-					  <h5><?php echo $student_row->zip_code;?> </h5>
-                    </div>
-                    </div>
-					<div class="col-sm-6">
-					 <label for="inputName" class="col-sm-6 control-label bg-info">State</label>
-                    <div class="col-sm-6">
-                      <!--<select name="state" id="state" class="form-control" disabled>
-						   <option value="1">Select Country</option>
-						  <?php $state_name=''; foreach($states as $state){ ?>
-							  <option value="<?php echo $state->id;?>"<?php if($student_row->state_id==$state->id){ $state_name =  $state->state; echo "selected"; }?>><?php echo $state->state;?></option>
-							
-						  <?php } ?>
-					  </select>-->
-					  <h5><?php echo $state_name;?> </h5>
-                    </div>
-                    </div>
-					<div class="col-sm-6">
-                    <label for="inputName" class="col-sm-6 control-label bg-info">Country</label>
-                    <div class="col-sm-6">
-                     <!--<select name="country" id="country" class="form-control" disabled>
-						  <option value="">Select Country</option>
-						  <?php $country_name=''; foreach($countries as $country){?>
-							  <option value="<?php echo $country->id;?>" <?php if($student_row->country_id==$country->id){ $country_name =$country->country_name ;echo "selected"; }?>><?php echo $country->country_name;?></option>
-						  <?php } ?>
-					  </select>-->
-					  <h5><?php echo $country_name;?> </h5>
-                    </div>
-					
-					</div>
 				  <div class="form-group">
                     
 					<div class="col-sm-6">

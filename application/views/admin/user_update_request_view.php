@@ -78,10 +78,10 @@
 								
 								 
 										
-									<?php $title = 'Activate';
+									<?php $title = 'Approved';
 									if($users->status==0){
 										$btnClass = 'btn-warning';
-										$title = 'De-activate';
+										$title = 'Pending Update';
 									}else {
 										$btnClass = 'btn-success';
 									}?>

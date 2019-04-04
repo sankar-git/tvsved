@@ -598,7 +598,7 @@ class common_model extends CI_Model {
 		$this->db->select('u.*,umtd.employee_id,umtd.qualification,umtd.date_of_joining,umtd.designation,
 		                   umtd.department,umtd.campus,umtd.discipline');
 		$this->db->from('users as u');
-		$this->db->join('user_map_teacher_details as umtd','umtd.user_id=u.id','INNER');
+		$this->db->join('user_map_teacher_details as umtd','umtd.user_id=u.id','LEFT');
 		$this->db->where($where);
 		$result = $this->db->get()->result();
 		return $result;
@@ -607,7 +607,7 @@ class common_model extends CI_Model {
 	{
 		$this->db->select('u.*,umtd.batch_id,umtd.campus_id,umtd.degree_id,umtd.course_type');
 		$this->db->from('users as u');
-		$this->db->join('user_map_student_details as umtd','umtd.user_id=u.id','INNER');
+		$this->db->join('user_map_student_details as umtd','umtd.user_id=u.id','LEFT');
 		$this->db->where($where);
 		$result = $this->db->get()->result();
 		return $result;

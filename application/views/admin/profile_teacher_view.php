@@ -30,8 +30,8 @@
            <!-- Profile Image -->
           <div class="box box-primary">
             <div class="box-body box-profile">
-			<?php if(!empty($user_row->parent_image)){?>
-              <img   height="50px;" width="50px;"  class="profile-user-img img-responsive img-circle" src="<?php echo base_url();?>uploads/user_images/student/" alt="User profile picture">
+			<?php if(!empty($user_row->user_image)){?>
+              <img   height="50px;" width="50px;"  class="profile-user-img img-responsive img-circle" src="<?php echo base_url();?>uploads/user_images/student/<?php echo $user_row->user_image;?>" alt="User profile picture">
 			<?php } else {?>
 			
               <img   height="50px;" width="50px;"  class="profile-user-img img-responsive img-circle" src="<?php echo base_url();?>uploads/user_images/student/no_image.jpg" alt="User profile picture">
@@ -67,13 +67,13 @@
             <div class="tab-content">
 			   <div class="active tab-pane mydetails" id="activity">
 			    <form  class="form-horizontal" method="post" name="user_update_form" id="user_update_form" action="<?php echo base_url();?>profile/updateTeacherProfile" enctype="multipart/form-data">
-				<input type="hidden" class="form-control" id="first_name" name="first_name" value="<?php echo  $user_row->first_name.' '.$user_row->last_name;?>">
+				<input type="hidden" class="form-control" id="first_name" name="first_name" value="<?php echo  $user_row->first_name;?>">
 				<input type="hidden" class="form-control" id="user_id" name="user_id" value="<?php echo $user_row->user_id;?>">
 				  <input type="hidden" class="form-control" id="role_id" name="role_id" value="<?php echo $user_row->role_id;?>">
 				  <input type="hidden" class="form-control" id="otp_flag" name="otp_flag" value="<?php echo $otp_flag;?>">
 				  <div class="col-sm-6">
 					<label for="inputName" class="col-sm-4 bg-info  control-label">Name</label>
-                    <div class="col-sm-8"><h5><?php echo  $user_row->first_name.' '.$user_row->last_name;?></h5></div>
+                    <div class="col-sm-8"><h5><?php echo  $user_row->first_name;?></h5></div>
                   </div>
                  <div class="col-sm-6">
 					<label for="inputName" class="col-sm-4 bg-info  control-label">Email</label>
@@ -97,19 +97,42 @@
                   </div>
 				  <div class="col-sm-6">
 					<label for="inputName" class="col-sm-4 bg-info  control-label">DOB</label>
-                    <div class="col-sm-8"><h5><?php echo  $user_row->dob;?></h5></div>
+                    <div class="col-sm-8"><h5><?php echo  $user_row->dob;?>&nbsp;</h5></div>
+				 </div>
+				 
+				 <div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 bg-info  control-label">Address Line1</label>
+                    <div class="col-sm-8"><h5><?php echo  $user_row->address_line1;?>&nbsp;</h5></div>
 				 </div>
 				 <div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 bg-info  control-label">Address Line2</label>
+                    <div class="col-sm-8"><h5><?php echo  $user_row->address_line2;?>&nbsp;</h5></div>
+				 </div>
+				 <div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 bg-info  control-label">Address Line3</label>
+                    <div class="col-sm-8"><h5><?php echo  $user_row->address_line3;?>&nbsp;</h5></div>
+				 </div>
+				 
+				 <div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 bg-info  control-label">Address Line4</label>
+                    <div class="col-sm-8"><h5><?php echo  $user_row->address_line4;?>&nbsp;</h5></div>
+				 </div>
+				 <div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 bg-info  control-label">Landline No</label>
+                    <div class="col-sm-8"><h5><?php echo  $user_row->landline_number;?>&nbsp;</h5></div>
+				 </div>
+				 
+				 <div class="col-sm-6">
 					<label for="inputName" class="col-sm-4 bg-info  control-label">Employee Id</label>
-                    <div class="col-sm-8"><h5><?php echo  $user_row->employee_id;?></h5></div>
+                    <div class="col-sm-8"><h5><?php echo  $user_row->employee_id;?>&nbsp;</h5></div>
 				 </div>
 				 <div class="col-sm-6">
 					<label for="inputName" class="col-sm-4 bg-info  control-label">Qualification</label>
-                    <div class="col-sm-4"><h5><?php echo  $user_row->qualification;?></h5></div>
+                    <div class="col-sm-4"><h5><?php echo  $user_row->qualification;?>&nbsp;</h5></div>
 				 </div>
 				 <div class="col-sm-6">
 					<label for="inputName" class="col-sm-4 bg-info  control-label">DOJ</label>
-                    <div class="col-sm-8"><h5><?php echo  $user_row->date_of_joining;?></h5></div>
+                    <div class="col-sm-8"><h5><?php echo  $user_row->date_of_joining;?>&nbsp;</h5></div>
 				 </div>
 				 <div class="col-sm-6">
 					<label for="inputName" class="col-sm-4 bg-info  control-label">Designation</label>
@@ -125,11 +148,21 @@
 						<option value="7" <?php if($user_row->designation=='7'){$designation = 'Assistant Librarian';echo "selected";}?>>Assistant Librarian</option>
 					</select>-->
 					
-					<h5><?php echo  @$designation;?></h5></div>
+					<h5><?php echo  @$designation;?>&nbsp;</h5></div>
 				 </div>
 				  <div class="col-sm-6">
 					<label for="inputName" class="col-sm-4 bg-info  control-label">Department</label>
-                    <div class="col-sm-8"><h5><?php echo  $user_row->department;?></h5></div>
+                    <div class="col-sm-8"><h5><?php echo  $user_row->department;?>&nbsp;</h5></div>
+				 </div>
+				  <div class="col-sm-6">
+					<label for="inputName" class="col-sm-4 bg-info  control-label">Discipline</label>
+                    <div class="col-sm-8">
+					<!--<select name="discipline_id" id="discipline_id" disabled class="form-control">
+						    <option value="">--Select Discipline--</option>
+						 <?php $discipline_name=''; foreach($disciplines as $discipline){?>
+					      <option value="<?php echo $discipline->id;?>" <?php if($user_row->discipline==$discipline->id){ $discipline_name =$discipline->discipline_name;echo "selected";}?>><?php echo $discipline->discipline_name;?></option>
+					     <?php } ?>-->
+					<h5><?php echo  $discipline_name;?>&nbsp;</h5></div>
 				 </div>
 				 <div class="col-sm-6">
 					<label for="inputName" class="col-sm-4 bg-info  control-label">Campus</label>
@@ -141,18 +174,9 @@
 							   <option value="<?php echo $campus_Val->id;?>" <?php if($user_row->campus==$campus_Val->id){ $campus =$campus_Val->campus_name; echo "selected";}?>><?php echo $campus_Val->campus_name;?></option>
 							  <?php }?>
 				       </select>-->
-					<h5><?php echo  $campus;?></h5></div>
+					<h5><?php echo  $campus;?>&nbsp;</h5></div>
 				 </div>
-				 <div class="col-sm-6">
-					<label for="inputName" class="col-sm-4 bg-info  control-label">Discipline</label>
-                    <div class="col-sm-8">
-					<!--<select name="discipline_id" id="discipline_id" disabled class="form-control">
-						    <option value="">--Select Discipline--</option>
-						 <?php $discipline_name=''; foreach($disciplines as $discipline){?>
-					      <option value="<?php echo $discipline->id;?>" <?php if($user_row->discipline==$discipline->id){ $discipline_name =$discipline->discipline_name;echo "selected";}?>><?php echo $discipline->discipline_name;?></option>
-					     <?php } ?>-->
-					<h5><?php echo  $discipline_name;?></h5></div>
-				 </div>
+				
 				 <div class="form-group">
 				     <div class="col-sm-3">
                    

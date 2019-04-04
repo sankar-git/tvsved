@@ -280,13 +280,11 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-			  <?php if(!empty($session_data[0]->user_image) ){  if(!empty($session_data[0]->role_id==5 && file_exists('uploads/user_images/parent/'.$session_data[0]->user_image))){?>
+			  <?php if(!empty($session_data[0]->user_image) && file_exists('uploads/user_images/parent/'.$session_data[0]->user_image)){?>
               <img src="<?php echo base_url();?>uploads/user_images/parent/<?php echo $session_data[0]->user_image;?>" style="margin-right: 6px !important" class="user-image" alt="User Image">
-			   <?php } elseif(file_exists('uploads/user_images/student/'.$session_data[0]->user_image)){ ?>
+			   <?php } elseif(!empty($session_data[0]->user_image) && file_exists('uploads/user_images/student/'.$session_data[0]->user_image)){ ?>
               <img src="<?php echo base_url();?>uploads/user_images/student/<?php echo $session_data[0]->user_image;?>" style="margin-right: 6px !important" class="user-image" alt="User Image">
-			   <?php }else{?>
-					<img src="<?php echo base_url();?>uploads/user_images/student/no_image.jpg" style="margin-right: 6px !important" class="user-image" alt="User Image">
-			    <?php } } else{?>
+			   <?php } else{?>
 			   <img src="<?php echo base_url();?>uploads/user_images/student/no_image.jpg" style="margin-right: 6px !important" class="user-image" alt="User Image">
 			  <?php }?>
               <span class="hidden-xs" style="font-size: 17px"><?php echo ucfirst($session_data[0]->first_name);?></span>
@@ -294,11 +292,11 @@
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-			      <?php if(!empty($session_data[0]->user_image)  ){ if(!empty($session_data[0]->role_id==5 && file_exists('uploads/user_images/parent/'.$session_data[0]->user_image))){?>
+			      <?php if(!empty($session_data[0]->user_image &&  file_exists('uploads/user_images/parent/'.$session_data[0]->user_image))){?>
               <img src="<?php echo base_url();?>uploads/user_images/parent/<?php echo $session_data[0]->user_image;?>" class="img-circle" alt="User Image">
-			  <?php } else{ ?>
+			  <?php } elseif(!empty($session_data[0]->user_image) && file_exists('uploads/user_images/student/'.$session_data[0]->user_image)){ ?>
               <img src="<?php echo base_url();?>uploads/user_images/student/<?php echo $session_data[0]->user_image;?>" class="img-circle" alt="User Image">
-			  <?php } }  else{?>
+			  <?php }  else{?>
 			   <img src="<?php echo base_url();?>uploads/user_images/student/no_image.jpg" class="img-circle" alt="User Image">
 			  <?php }?>
                 

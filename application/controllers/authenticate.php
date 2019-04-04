@@ -64,16 +64,16 @@ class Authenticate extends CI_Controller {
 		//p($user_data)	; exit;	
 	//$data_fromdatabase=$this->common_model->selectWhere('users', $user_data) ;
 	$data_fromdatabase=$this->common_model->admin_login('users', $user_data) ;
-//	echo "<pre>";p($data_fromdatabase);exit();
+echo "<pre>";p($data_fromdatabase);//exit();
 	//count($data_fromdatabase); exit;
-	//echo $this->db->last_query();p($data_fromdatabase); exit;
+	echo $this->db->last_query();//p($data_fromdatabase); exit;
 	if(count($data_fromdatabase) >0)
 	{
 		//echo "hello"; exit;
 		//$this->common_model->update_logondateTime($username);
 		//echo "<pre>";print_r($data_fromdatabase); 
 		//$data_fromdatabase['0]->
-        if($data_fromdatabase[0]->role_id == 1 || $data_fromdatabase[0]->role_id == 6)
+        if($data_fromdatabase[0]->role_id == 1 || $data_fromdatabase[0]->role_id == 6 || $data_fromdatabase[0]->role_id == 5)
             $data_fromdatabase = $this->common_model->do_student_login($user_data) ;
         else
             $data_fromdatabase = $this->common_model->do_teacher_login($user_data) ;

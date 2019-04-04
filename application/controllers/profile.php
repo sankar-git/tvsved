@@ -210,6 +210,7 @@ class Profile extends CI_Controller {
 		   $data['disciplines'] = $this->Discipline_model->get_discipline(); 
 		   $data['countries']=$this->type_model->get_country();
 		   $data['states']=$this->type_model->get_state();
+		   $data['city']=$this->type_model->get_city();
 		  //$data['students']=$this->type_model->get_students();
 		  // $data['student_parent']=$this->type_model->get_students_relates_parent($id,$role_id);
 		   
@@ -218,9 +219,10 @@ class Profile extends CI_Controller {
 		   $data['otp_flag'] = $otp;
 		   //echo $this->db->last_query();
 		   //p($data['user_row']); exit;
-		   if($role_id=='1')
+		   $data['page_title']="My Profile";
+		   if($role_id=='1' || $role_id=='6')
 		   {
-			$data['page_title']="My Profile";
+			
 			$user_pending_array = $this->type_model->get_pending_user_by_id($id);
 			$data['email_pending'] =false;
 			$data['mobile_pending'] =false;
@@ -232,10 +234,11 @@ class Profile extends CI_Controller {
 				
 			}
 		    $this->load->view('admin/profile_student_view',$data); //student edit view
+		   }elseif($role_id=='5'){
+			   	$data['student_row'] = $this->type_model->get_user_by_id($sessdata[0]->parents_student_id,1);
+			   $this->load->view('admin/profile_parent_view',$data); //student edit view
 		   }else
 		   {
-			$data['page_title']="My Profile";
-			
 			
 			$user_pending_array = $this->type_model->get_pending_user_by_id($id);
 			$data['email_pending'] =false;
