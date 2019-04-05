@@ -6,9 +6,13 @@ Class Type_model extends CI_Model
 		$result = $this->db->where(['username'=>$username])->from("users")->count_all_results();
 		return $result;
 	}
-	function isuser($user_unique_id,$application_no)
+	function isuser($user_unique_id,$application_no='')
 	{
-		$result = $this->db->where(['user_unique_id'=>$user_unique_id])->or_where(['application_no'=>$application_no])->from("users")->get()->row();
+		$this->db->select('id')->from("users");
+		$this->db->where(['user_unique_id'=>$user_unique_id]);
+		if(!empty($application_no))
+			$this->db->or_where(['application_no'=>$application_no]);
+		$result = $this->db->get()->row();
 		return $result;
 	}
 	function get_user_details($username)
@@ -373,7 +377,7 @@ Class Type_model extends CI_Model
 	function get_user_by_id($id,$role_id)
 	{   
 	    if($role_id=='1' || $role_id=='6'){
-			$this->db->select('u.*,umd.*,u.id as uid,u.role_id as urole_id,u.role_id as role_id,
+			$this->db->select('u.*,umd.*,u.id as uid,u.role_id as urole_id,u.role_id as role_id,u.id as user_id,
 			d.degree_code,d.degree_name,d.id,dis.discipline_code,dis.discipline_name,p.program_code,p.program_name,d.program_id,umd.semester_id');
 			$this->db->from('users as u');
 			$this->db->join('user_map_student_details as umd','umd.user_id = u.id','LEFT');
@@ -384,10 +388,10 @@ Class Type_model extends CI_Model
 			$result	= $this->db->get()->row();//echo $this->db->last_query();exit;
 			return $result;
 		}else{
-			$this->db->select('u.*,utd.user_id,utd.address_line1,
+			$this->db->select('u.*,utd.address_line1,u.id as uid,u.role_id as urole_id,u.role_id as role_id,u.id as user_id,
 			                   utd.address_line2,utd.address_line3,utd.address_line4,
 							   utd.landline_number,utd.employee_id,utd.qualification,
-							   utd.date_of_joining,utd.designation,utd.department,utd.campus,utd.discipline,');
+							   utd.date_of_joining,utd.designation,utd.department,utd.campus,utd.discipline');
 			$this->db->from('users as u');
 			$this->db->join('user_map_teacher_details as utd','utd.user_id = u.id','LEFT');
 			$this->db->where(array('u.id' => $id));

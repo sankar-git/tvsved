@@ -554,41 +554,41 @@ class Profile extends CI_Controller {
 	  	
 		
 		$save['id'] = $user_id;
-		$save['role_id'] = $role_id;
-		$save['first_name'] = $first_name;
-		$save['last_name'] = $last_name;
+		//$save['role_id'] = $role_id;
+		//$save['first_name'] = $first_name;
+		//$save['last_name'] = $last_name;
 		//$save['contact_number'] = $contact_number;
-		$save['gender'] = $gender;
-		$save['dob'] = $dob;
-		$save['email'] = $email;
+		//$save['gender'] = $gender;
+		//$save['dob'] = $dob;
+		//$save['email'] = $email;
 		
 		//$saveO['id'] = $user_id;
 		$saveO['user_id'] = $user_id;
-		$saveO['roll'] = $role_id;
-		$saveO['first_name'] = $first_name;
-		$saveO['last_name'] = $last_name;
+		//$saveO['roll'] = $role_id;
+		//$saveO['first_name'] = $first_name;
+		//$saveO['last_name'] = $last_name;
 		$saveO['contact_number'] = $contact_number;
-		$saveO['gender'] = $gender;
-		$saveO['dob'] = $dob;
+		//$saveO['gender'] = $gender;
+		//$saveO['dob'] = $dob;
 		$saveO['email'] = $email;
 		
-		$saveT['employee_id'] = $employee_id;
-		$saveT['id'] = $employee_id;
-		$saveT['qualification'] = $qualification;
-		$saveT['date_of_joining'] = $doj;
-		$saveT['designation'] = $designation;
-		$saveT['department'] = $department;
-		$saveT['campus'] = $campus;
-		$saveT['department'] = $discipline_id;
+	//	$saveT['employee_id'] = $employee_id;
+		//$saveT['id'] = $employee_id;
+		//$saveT['qualification'] = $qualification;
+		//$saveT['date_of_joining'] = $doj;
+		//$saveT['designation'] = $designation;
+	//	$saveT['department'] = $department;
+		//$saveT['campus'] = $campus;
+		//$saveT['department'] = $discipline_id;
 		$otp = strtoupper(substr(md5(uniqid()), 0, 4));
 		$saveO['otp']=$otp;
-		$this->type_model->update_teacher_profile($save);
-		$this->type_model->update_details_teacher_profile($saveT);
+		//$this->type_model->update_teacher_profile($save);
+		//$this->type_model->update_details_teacher_profile($saveT);
 		
 		$last_id = $this->type_model->save_update_request($saveO);
 		$otp_flag = $this->otp_msg($contact_number,$email,$otp);
 		//echo $otp_flag;
-		$this->session->set_flashdata('message', 'Teacher Profile Updated Successfully');
+		$this->session->set_flashdata('message', 'Profile Updated Successfully');
 		if($otp_flag)
 			redirect('profile/userProfile/1');
 		else

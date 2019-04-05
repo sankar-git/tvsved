@@ -1190,7 +1190,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 	   //----------Upload Student Excel ---------------------//	
 	if($this->input->post('uploadStuExcel'))
 	{
-		//echo "<pre>";//print_r($_FILES);
+		//echo "<pre>";print_r($_FILES);exit;
 	   $fileName    = $_FILES['userfile']['tmp_name'];
 	   $objPHPExcel = PHPExcel_IOFactory::load($fileName);
 	   $maxCell = $objPHPExcel->getActiveSheet()->getHighestRowAndColumn();
@@ -1201,7 +1201,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 	   	$m =0;
 	  //--------Insret Data Form Excel File --------//
 	  
-	  
+	 //p($rowsold);exit;
 	  //foreach($rowsold as $firstrow){
 		  for($m=0;$m<count($rowsold);$m++){
 			  $updateuser = 0;
@@ -1213,14 +1213,16 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 		//  echo "<br>---------------------".$m."-------------------------<br>";
 		 // echo "<pre>";  p($rowsold[$m]); exit;
 		  //check already exist
-		   $isuser= $this->type_model->isuser($firstrow[7],$firstrow[8]);
+		   $isuser= $this->type_model->isuser($firstrow[7],$firstrow[6]);
 		   //$isuser1= $this->type_model->isuser($firstrow[8]);
-		  // print_r($isuser->id);
+		   //echo $this->db->last_query();
+		 // print_r($isuser->id);
+		 //print_r($isuser);
 		   if($isuser)
 			   $updateuser = 1;
 		    else
 			   $updateuser = 0;
-		   //echo $updateuser;
+		 //  echo $updateuser;
 		  // exit;
 		    if(!empty($firstrow[55]))
 			{
@@ -1280,8 +1282,8 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 			//echo $firstrow[32];
 			$dataArr1= array(
 			                'role_id'=>'1',
-			                'user_unique_id'=>$firstrow[6],
-			                'application_no'=>$firstrow[7],
+			                'user_unique_id'=>$firstrow[7],
+			                'application_no'=>$firstrow[6],
 			                'username'=>$firstrow[55],
 			                'password'=>$firstrow[56],
 			                'first_name'=>$firstrow[8],

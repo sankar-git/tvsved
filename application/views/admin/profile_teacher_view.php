@@ -1,4 +1,4 @@
-<?php //p($user_row); exit;?>
+<?php //echo "<!--";p($user_row); echo "-->";?>
 <?php $this->load->view('admin/helper/header');?>
 <?php $this->load->view('admin/helper/sidebar');?>
 <style >

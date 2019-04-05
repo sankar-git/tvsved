@@ -1,6 +1,4 @@
 <?php
-
-
 Class Marks_model extends CI_Model
 {	
      function get_program_by_campus($campus_id)
@@ -34,7 +32,7 @@ Class Marks_model extends CI_Model
 			$this->db->from('courses c');
 			$this->db->join('student_assigned_courses ca','c.id = ca.course_id','LEFT');
 			$this->db->join('course_subject_groups  csg','csg.id = c.course_subject_id','LEFT');
-			$this->db->where(array('ca.program_id'=>$program_id,'ca.semester_id'=>$semester_id,'ca.degree_id'=>$degree_id));
+			$this->db->where(array('c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id));
 			$this->db->group_by('c.course_subject_id');
 		 }else{
 			 $this->db->select("c.id , c.course_title, `c`.`course_group_id`,c.course_subject_id,c.course_code",false);
