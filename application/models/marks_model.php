@@ -28,7 +28,7 @@ Class Marks_model extends CI_Model
 	 function get_course_group_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id)
 	 { //echo "coming";
 		 if($program_id == 1 && $degree_id==1){
-			$this->db->select("case when `course_subject_name` IS NULL then c.id else concat(GROUP_CONCAT( DISTINCT  c.id order by c.id SEPARATOR '|'),'-',course_subject_id) end as id,  case when `course_subject_name` IS NULL then course_title else course_subject_name end as course_title, `c`.`course_group_id`,c.course_subject_id,csg.course_subject_name,csg.course_subject_title,GROUP_CONCAT( DISTINCT  course_code order by course_code SEPARATOR ',') as course_code",false);
+			$this->db->select("case when `course_subject_name` IS NULL then c.id else concat(GROUP_CONCAT( distinct c.course_subject_id order by c.course_subject_id SEPARATOR '|'), '|', GROUP_CONCAT( DISTINCT c.id order by c.id SEPARATOR '-')) end as id,  case when `course_subject_name` IS NULL then course_title else course_subject_name end as course_title, `c`.`course_group_id`,c.course_subject_id,csg.course_subject_name,csg.course_subject_title,GROUP_CONCAT( DISTINCT  course_code order by course_code SEPARATOR ',') as course_code",false);
 			$this->db->from('courses c');
 			$this->db->join('student_assigned_courses ca','c.id = ca.course_id','LEFT');
 			$this->db->join('course_subject_groups  csg','csg.id = c.course_subject_id','LEFT');

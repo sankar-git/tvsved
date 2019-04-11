@@ -765,7 +765,7 @@ class Result extends CI_Controller {
 									   $numbers = array( $subjectVal->theory_internal1,$subjectVal->theory_internal2,$subjectVal->theory_internal3); 
 									   rsort($numbers);
 									 //  print_r($numbers);exit;
-									  $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
+									  $theory_internal_total = $numbers[0] + $numbers[1];
 									   $data['first_internal']    				= $numbers[0]/4;
 									   $data['second_internal']    				= $numbers[1]/4;
 									   $data['theory_internal']    				= $theory_internal_total;
@@ -795,7 +795,7 @@ class Result extends CI_Controller {
 									   $data['theory_external']    				= $subjectVal->theory_external;
 									   $data['practical_external'] 				= $subjectVal->practical_external;
 									   $data['marks_sum']          				= $subjectVal->marks_sum;
-									   $data['external_sum']          			= round_two_digit($theory_internal_total+$theory_marks_40+$paper_20);
+									   $data['external_sum']          			= round_two_digit($data['first_internal']+$data['second_internal']+$data['sum_internal_practical']+$data['internal_sum']);
 									    $data['ncc_status']          			= $subjectVal->ncc_status;
 									   $data['course_group_id']          			= $subjectVal->course_group_id;
 									   $sum_internal                            = $data['theory_internal'] + $data['sum_internal_practical'];//100

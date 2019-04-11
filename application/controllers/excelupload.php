@@ -113,13 +113,13 @@ class Excelupload extends CI_Controller {
 				 $course_Arr = explode("|",$course_id);
 				 $course_group_id = $course_Arr[0];
 				 $course_idArr = explode("-",$course_Arr[1]);
-				// print_r( $course_idArr);
-				 $courses_group = $this->Excel_model->get_course_group_by_id($course_id);
+				//print_r( $course_Arr);
+				 $courses_group = $this->Excel_model->get_course_group_by_id($course_group_id);
 				 $courses1 = $this->Excel_model->get_course_by_id($course_idArr[0]);
 				 $courses2 = $this->Excel_model->get_course_by_id($course_idArr[1]);
-				$course_title = $courses_group->course_subject_title.' ('.$courses1->course_code.','.$courses2->course_code.')';
+				$course_title = $courses_group->course_subject_title.' ('.$courses2->course_code.','.$courses1->course_code.')';
 			 }
-			 
+			 //exit;
 			 /*$dos = $this->Generate_model->get_date_by_degree($degree_id); 
 			// echo $dos[1]->id;
 			 for($j=0;$j<count($dos);$j++)

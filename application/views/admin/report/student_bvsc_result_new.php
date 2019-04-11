@@ -132,9 +132,12 @@
 					$subject_credit_points='';
 					$sum_subjects_credit_point='';
 					$resultStatus='';
+					$external_sum='';
+					$count_subject=0;
 					$i=0; foreach($student_marks['subjectList'] as $subject_data){
 						$resultStatus=$subject_data['passfail_status'];
-						$sum_subjects_credit_point+=$subject_data['creditval'];
+						$sum_subjects_credit_point+=$subject_data['creditval'];$count_subject++;
+						$external_sum+=$subject_data['external_sum'];
 						$credithours+=$subject_data['theory_credit']+$subject_data['practicle_credit'];
 					  
 						?>
@@ -145,9 +148,9 @@
 			<td style="text-align:center"><?php echo $subject_data['theory_credit'].'+'.$subject_data['practicle_credit'];?></td>
 			<td style="text-align:center"><?php if($subject_data['first_internal']==''){echo 'N/A';}else{echo $subject_data['first_internal'];}?></td>
 			<td style="text-align:center"><?php if($subject_data['second_internal']==''){echo 'N/A';}else{echo $subject_data['second_internal'];}?></td>
-			<td style="text-align:center"><?php if($subject_data['theory_internal']==''){echo 'N/A';}else{echo $subject_data['theory_internal'];}?></td>
 			<td style="text-align:center"><?php if($subject_data['sum_internal_practical']==''){echo 'N/A';}else{echo $subject_data['sum_internal_practical'];}?></td>
 			<td style="text-align:center"><?php if($subject_data['internal_sum']==''){echo 'N/A';}else{echo $subject_data['internal_sum'];}?></td>
+			<td style="text-align:center"><?php if($subject_data['external_sum']==''){echo 'N/A';}else{echo $subject_data['external_sum'];}?></td>
 			<td style="text-align:center"><?php if($subject_data['external_sum']==''){echo 'N/A';}else{echo $subject_data['external_sum'];}?></td>
 			<td style="text-align:center"><?php if($subject_data['creditval']==''){echo 'N/A';}else{echo $subject_data['creditval'];}?></td>
 			<td style="text-align:center"><?php echo $subject_data['passfail_status'];?></td>
@@ -192,7 +195,7 @@
                                 </tr>
                                 <tr>
                                     <td>Grade Point Average</td>
-                                    <td align="center"><?php if(!empty($sum_subjects_credit_point)){ echo $sum_subjects_credit_point;}else{echo 'N/A';} ?></td>
+                                    <td align="center"><?php if(!empty($external_sum)){ echo $external_sum/$count_subject;}else{echo 'N/A';} ?></td>
                                 </tr>
                             </table>
                         
