@@ -56,8 +56,17 @@
             <form role="form"  name="ug_marks_upload_view" id="ug_marks_upload_view" method="post" action="return false;" enctype="multipart/form-data">
               <div class="box-body">
 			    <div class="row">
-				
 				<div class="form-group col-md-4">
+					  <label for="upload_type">Type<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="upload_type" id="upload_type" class="form-control" onchange="window.location.href='marksUpload?upload_type='+this.value;">
+						  <option value="" >Select Type</option>
+						  <option value="coursewise" <?php if($upload_type == 'coursewise'){?>selected<?php } ?>>Course Wise</option>
+						  <option value="studentwise" <?php if($upload_type == 'studentwise'){?>selected<?php } ?> >Student Wise</option>
+					  </select>
+					</div>
+				</div>
+				<div class="row" <?php if(empty($upload_type)){?> style="display:none" <?php } ?>>
+				<div class="form-group col-md-4" >
 					  <label for="program">Campus<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="campus_id" id="campus_id" class="form-control" onchange="getProgram();">
 						  <option value="">--Select Campus--</option>
@@ -87,10 +96,7 @@
 						 
 					  </select>
 					</div>
-				</div>
 				
-				
-			   <div class="row">
 				    <div class="form-group col-md-4">
 					  <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="batch_id" id="batch_id" class="form-control">
@@ -115,7 +121,7 @@
 					
 					<div class="form-group col-md-4">
 					  <label for="course-group">Discipline<span style="color:red;font-weight: bold;">*</span></label>
-					   <select class="form-control" name="discipline_id" id="discipline_id" onchange="getCourseByIds();">
+					   <select class="form-control" name="discipline_id" id="discipline_id"  onchange="<?php if($upload_type == 'coursewise'){?>getCourseByIds()<?php }else{?>getStudentList()<?php } ?>;">
 					   
 						  <option value="">Select Discipline</option>
 						  <?php foreach($disciplines as $discipline){?>
@@ -128,14 +134,21 @@
 					
 				
 					
-               </div>
-			   
-               <div class="row">
-			     <div class="form-group col-md-4">
+               
+			     <div class="form-group col-md-4" <?php if($upload_type != 'coursewise'){?> style="display:none" <?php } ?>>
 					  <label for="course-group">Course<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="course_id" id="course_id" onchange="getCourseCredit();">
 					   
 						  <option value="">Select Course</option> 
+						
+						
+					  </select>
+					</div>
+					 <div class="form-group col-md-4" <?php if($upload_type != 'studentwise'){?> style="display:none" <?php } ?>>
+					  <label for="course-group">Student<span style="color:red;font-weight: bold;">*</span></label>
+					   <select class="form-control" name="student_id" id="student_id" >
+					   
+						  <option value="">Select Student</option> 
 						
 						
 					  </select>
@@ -200,7 +213,7 @@
 			  <div class="row"><div class="form-group col-md-4"><p class="credit_points" style="font-weight:bold">&nbsp;</p></div></div>
 			  
 			  </div>
-			  <div class="box-footer">
+			  <div class="box-footer"  <?php if(empty($upload_type)){?> style="display:none" <?php } ?>>
                <button type="button" class="btn btn-success" onclick="saveUGInternalMarksNew();">Save</button>
 			  </div>
 			    <div id="ncc">
@@ -236,7 +249,7 @@
 							 <table id="example" class="table table-bordered table-hover">
 								<thead>
 								<tr id="internal" class="internal" style="display:none">
-								    <th>Unique Id</th>
+								    <th>Id</th>
 								    <!--<th>Student Id</th>-->
 								    <th>Student Name</th>
 									<th><span style="margin-left: 47px;">INTERNAL</span></br><span >FIRST(40)</span><span>SECOND(40)</span><span>THIRD(40)</span></th>
@@ -246,7 +259,7 @@
 								</tr>
 								
 								<tr id="external" class="external" style="display:none">
-								    <th>Sno</th>
+								    <th>Id</th>
 								   <!-- <th>Student Id</th>-->
 								    <th>Dummy No</th>
 									<!--<th><span style="margin-left: 47px;">INTERNAL</span></br><span>FIRST(40)</span><span>SECOND(40)</span><span>THIRD(40)</span></th>
@@ -270,14 +283,14 @@
 						    <table id="example" class="table table-bordered table-hover">
 							<thead>
 								<tr id="internal" class="internal" style="display:none">
-								    <th>Unique Id</th>
+								    <th>Id</th>
 								    <th>Student Name</th>
 									<th>Internal Theory(25)</th>
 									<th>Assignment(5)</th>
 									<th>Internal Practical(20)</th>
 								</tr>
 								<tr id="external" class="external" style="display:none">
-								    <th>Unique Id</th>
+								    <th>Id</th>
 								    <th>Student Name</th>
 									<th>Theory(25)</th>
 									<th>Assignment(5)</th>
@@ -296,7 +309,7 @@
 			  
               <!-- /.box-body -->
 
-              <div class="box-footer">
+              <div class="box-footer"  <?php if(empty($upload_type)){?> style="display:none" <?php } ?>>
                <button type="button" class="btn btn-success" onclick="saveUGInternalMarksNew();">Save</button>
 			  </div>
 			  
@@ -408,7 +421,7 @@
 					$('.credit_points').html('Credit Points: '+obj.theory_credit+' + '+obj.practicle_credit);
 					var non_credit_val = $('#course_id').val();
 					 //alert(non_credit_val[1]);
-					 if(non_credit_val==32){ // courseid
+					 if(obj.non_credit==true){ // courseid
 						//$('#itemsImport').val().empty(); 
 						//$('#marks_type').reset();
 						 $('#marks_type').prop('selectedIndex',0);
@@ -601,6 +614,28 @@
 			 }
 		});
 	}
+	function getStudentList()
+	{
+		var $form =$("#ug_marks_upload_view");
+		$.ajax({
+			type:'POST',
+			url:'<?php echo base_url();?>marks/get_student_list',
+			data: $form.serialize(),
+			success: function(data){
+				//alert(data); 
+				if (!$.trim(data)){   
+					 $("#itemsImport").hide();
+				}
+				else{   
+					
+					 $("#itemsImport").show();
+				}
+			var  option_brand = '<option value="">--Select Student--</option>';
+			$('#student_id').empty();
+			$("#student_id").append(option_brand+data);
+			 }
+		});
+	}
 	
 	function getCourseByIdss()
 	{
@@ -708,7 +743,7 @@
 		$('#bvsc').hide();
 		$("#ncc").hide();
 		$("#bvscwewew").hide();
-			
+var upload_type=$('#upload_type').val();
 		var bvsc = [ "1", "2", "3", "4" ];
 		if($.inArray($('#campus_id').val(),bvsc)>=0 && $('#program_id').val()==1){ //console.log("Campus="+$('#campus_id').val()) 
 			var uploadType=$('#marks_type').val();
@@ -731,13 +766,19 @@
 			 if(uploadType=='1')
 			 {
 				 $(".internal").show();
-				 
-									
+				 if(upload_type == 'studentwise')
+					$("#bvsc .internal th").eq(1).html('Course Name');
+				else
+					$("#bvsc .internal th").eq(1).html('Student Name');
 				 $(".external").hide(); 
 			 }
 			 if(uploadType=='2')
 			 {
 				$(".external").show(); 
+				 if(upload_type == 'studentwise')
+					$("#bvsc .external th").eq(1).html('Course Name');
+				else
+					$("#bvsc .external th").eq(1).html('Student Name');
 				$(".internal").hide();
 			 }
 			 
@@ -752,6 +793,8 @@
 						semester_id: $('#semester_id').val(),
 						discipline_id: $('#discipline_id').val(),
 						course_id: $('#course_id').val(),
+						upload_type: $('#upload_type').val(),
+						student_id: $('#student_id').val(),
 						//date_of_start: $('#date_of_start').val(),
 						marks_type_ncc: $('#marks_type_ncc').val(),
 				marks_type: $('#marks_type').val() },
@@ -775,7 +818,7 @@
 	function getStudentAssignedPGMarks(){
 		$("#bvscwewew").show();
 		var uploadType=$('#marks_type').val();
-				   
+		var upload_type=$('#upload_type').val();
 		$(".courseList").show();
 
 		if(uploadType=='1')
@@ -793,7 +836,10 @@
 			//$("#bvscwewew .external th").eq(2).show().html('Internal Theory(20)');
 			//$("#bvscwewew .external th").eq(3).html('TermPaper(10)');
 			//$("#bvscwewew .external th").eq(4).show().html('Internal Practical(50/100)');
-			$("#bvscwewew .external th").eq(1).html('Dummy No');
+			if(upload_type == 'studentwise')
+				$("#bvscwewew .external th").eq(1).html('Dummy No');
+			else
+				$("#bvscwewew .external th").eq(1).html('Course Name');
 			$("#bvscwewew .external th").eq(2).hide();
 			$("#bvscwewew .external th").eq(3).hide();
 			$("#bvscwewew .external th").eq(4).hide();
@@ -805,7 +851,7 @@
 			type:'POST',
 			cache:false,
 			url:'<?php echo base_url();?>marks/getStudentAssignedPGMarkss',
-			data: {"campus_id": $('#campus_id').val(),"program_id": $('#program_id').val(),"degree_id": $('#degree_id').val(),"batch_id": $('#batch_id').val(),"semester_id": $('#semester_id').val(),"discipline_id": $('#discipline_id').val(),"course_id": $('#course_id').val(),"marks_type_ncc": $('#marks_type_ncc').val(),"marks_type": $('#marks_type').val(),"practicle_credit": $('#practicle_credit').val(),"theory_credit": $('#theory_credit').val()},
+			data: {"campus_id": $('#campus_id').val(),"program_id": $('#program_id').val(),"degree_id": $('#degree_id').val(),"batch_id": $('#batch_id').val(),"semester_id": $('#semester_id').val(),"discipline_id": $('#discipline_id').val(),"course_id": $('#course_id').val(),"marks_type_ncc": $('#marks_type_ncc').val(),"marks_type": $('#marks_type').val(),"practicle_credit": $('#practicle_credit').val(),"theory_credit": $('#theory_credit').val(),"student_id": $('#student_id').val(),"upload_type": $('#upload_type').val()},
 			success: function(data){
 				//alert(data); return false;
 				$('.trlist').empty();	
@@ -817,13 +863,17 @@
 	{   
 		$("#bvscwewew").show();
 		var uploadType=$('#marks_type').val();
+		var upload_type=$('#upload_type').val();
 				   
 		$(".courseList").show();
 
 		if(uploadType=='1')
 		{
 			$(".internal").show();
-			$("#bvscwewew .external th").eq(1).html('Student Name');
+			if(upload_type == 'studentwise')
+				$("#bvscwewew .external th").eq(1).html('Student Name');
+			else
+				$("#bvscwewew .external th").eq(1).html('Course Name');
 			if($('#practicle_credit').val() == 0) { 
 				$("#bvscwewew .internal th").eq(2).show().html('Internal Theory(40)');
 				$("#bvscwewew .internal th").eq(3).html('Assignment(10)');
@@ -859,7 +909,10 @@
 				$("#bvscwewew .external th").eq(3).hide();
 				
 			}*/
-			$("#bvscwewew .external th").eq(1).html('Dummy No');
+			if(upload_type == 'studentwise')
+				$("#bvscwewew .external th").eq(1).html('Dummy No');
+			else
+				$("#bvscwewew .external th").eq(1).html('Course Name');
 			$("#bvscwewew .external th").eq(2).hide();
 			$("#bvscwewew .external th").eq(4).hide();
 			$("#bvscwewew .external th").eq(3).hide();
@@ -870,7 +923,7 @@
 			type:'POST',
 			cache:false,
 			url:'<?php echo base_url();?>marks/getStudentAssignedMarkss',
-			data: {"campus_id": $('#campus_id').val(),"program_id": $('#program_id').val(),"degree_id": $('#degree_id').val(),"batch_id": $('#batch_id').val(),"semester_id": $('#semester_id').val(),"discipline_id": $('#discipline_id').val(),"course_id": $('#course_id').val(),"marks_type_ncc": $('#marks_type_ncc').val(),"marks_type": $('#marks_type').val(),"practicle_credit": $('#practicle_credit').val(),"theory_credit": $('#theory_credit').val()},
+			data: {"campus_id": $('#campus_id').val(),"program_id": $('#program_id').val(),"degree_id": $('#degree_id').val(),"batch_id": $('#batch_id').val(),"semester_id": $('#semester_id').val(),"discipline_id": $('#discipline_id').val(),"course_id": $('#course_id').val(),"marks_type_ncc": $('#marks_type_ncc').val(),"marks_type": $('#marks_type').val(),"practicle_credit": $('#practicle_credit').val(),"theory_credit": $('#theory_credit').val(),"student_id": $('#student_id').val(),"upload_type": $('#upload_type').val()},
 			success: function(data){
 				//alert(data); return false;
 				$('.trlist').empty();	
