@@ -256,7 +256,7 @@ class Marks extends CI_Controller {
 			
 		}
 		$studentList= $this->Marks_model->get_student_assigned_marks($send);
-		echo $this->db->last_query();
+		//echo $this->db->last_query();
 		$trdata='';
 		$i=0;
 		if(count($studentList)>0){
@@ -274,11 +274,13 @@ class Marks extends CI_Controller {
 						$course_idCount = count($course_idCountArr);
 						$course_id = $course_idCountArr[0];
 						$courseList = $this->Marks_model->get_course_group($course_subject_id);
-					}else
+						$students->course_subject_title = $courseList[0]->course_subject_title;
+					}else{
 						$courseList = $this->Marks_model->get_course_credit_points($course_id);
+						$students->course_title = $courseList[0]->course_title;
+					}
 					//echo $this->db->last_query();print_r($courseList);echo "<br/>";
 					$students->courseid = $courseList[0]->id;
-					$students->course_subject_title = $courseList[0]->course_subject_title;
 					$students->course_code = $courseList[0]->course_code;
 					$students->theory_credit = $courseList[0]->theory_credit;
 					$students->practicle_credit = $courseList[0]->practicle_credit;
@@ -305,18 +307,46 @@ class Marks extends CI_Controller {
 								$trdata.='<td>'.$students->course_title.'('.$students->course_code.') <b>'.$students->theory_credit.'+'.$students->practicle_credit.'</b></td>';
 							}
 					}
-							
-					$trdata.='<td><input type="text" name="theory_internal1[]" class="theory_internal"  value="'.$students->theory_internal1.'" style="width:60px;" >
-								<input type="text" name="theory_internal2[]" class="theory_internal"  value="'.$students->theory_internal2.'" style="width:60px;" >
-								<input type="text" name="theory_internal3[]" class="theory_internal"  value="'.$students->theory_internal3.'" style="width:60px;" >
-							</td>
-							<td>';
-					for($j=1;$j<=$course_idCount;$j++){
-						$var = "theory_paper{$j}";
-						$trdata.='<input type="text" name="theory_paper'.$j.'[]"  class="practical_exam" value="'.$students->{$var}.'" style="width:60px;" >&nbsp;';
+					if($courseList[0]->course_subject_id == 22){
+						if($students->ncc_status=='1')
+						{
+							 $passstatus='selected';
+						}
+						else
+						{
+							 $passstatus='';
+						}
+						if($students->ncc_status=='0')
+						{
+							 $failstatus='selected';
+						}
+						else
+						{
+							 $failstatus='';
+						}
+						$trdata.='<td>
+							<select class="form-control" name="ncc_subject[]" id="ncc_subject">
+							<option value="">--Select Option--</option>
+							<option value="1" '.$passstatus.'>Pass</option>
+							<option value="0" '.$failstatus.'>Fail</option>
+							</select>
+						</td>';
 						
+					}else{
+						$trdata.='<td><input type="text" name="theory_internal1[]" class="theory_internal"  value="'.$students->theory_internal1.'" style="width:60px;" >
+									<input type="text" name="theory_internal2[]" class="theory_internal"  value="'.$students->theory_internal2.'" style="width:60px;" >
+									<input type="text" name="theory_internal3[]" class="theory_internal"  value="'.$students->theory_internal3.'" style="width:60px;" >
+								</td>
+								<td>';
+						for($j=1;$j<=$course_idCount;$j++){
+							$var = "theory_paper{$j}";
+							$trdata.='<input type="text" name="theory_paper'.$j.'[]"  class="practical_exam" value="'.$students->{$var}.'" style="width:60px;" >&nbsp;';
+							
+						}
+						$trdata.='</td>';
 					}
-					$trdata.='</td></tr>';
+					$trdata.='</tr>';
+					
 				}
 				if($marks_type=='2'){
 					$i++;
@@ -336,12 +366,40 @@ class Marks extends CI_Controller {
 							}
 						  
 					}
-					$trdata.=' <td>';
-					for($j=1;$j<=$course_idCount;$j++){
-						$var = "theory_external{$j}";
-						$trdata.='<input type="text" name="theory_external'.$j.'[]" class="theory_external" value="'.$students->{$var}.'" style="width:60px;">&nbsp;';
+					if($courseList[0]->course_subject_id == 22){
+						if($students->ncc_status=='1')
+						{
+							 $passstatus='selected';
+						}
+						else
+						{
+							 $passstatus='';
+						}
+						if($students->ncc_status=='0')
+						{
+							 $failstatus='selected';
+						}
+						else
+						{
+							 $failstatus='';
+						}
+						$trdata.='<td>
+							<select class="form-control" name="ncc_subject[]" id="ncc_subject">
+							<option value="">--Select Option--</option>
+							<option value="1" '.$passstatus.'>Pass</option>
+							<option value="0" '.$failstatus.'>Fail</option>
+							</select>
+						</td>';
+						
+					}else{
+						$trdata.=' <td>';
+						for($j=1;$j<=$course_idCount;$j++){
+							$var = "theory_external{$j}";
+							$trdata.='<input type="text" name="theory_external'.$j.'[]" class="theory_external" value="'.$students->{$var}.'" style="width:60px;">&nbsp;';
+						}
+						$trdata.='</td>';
 					}
-					$trdata.='<td></tr>';
+					$trdata.='</tr>';
 				}
 			}
 		}else{

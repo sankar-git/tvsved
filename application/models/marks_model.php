@@ -92,7 +92,7 @@ Class Marks_model extends CI_Model
 			
 			$this->db->where(array('ug.student_id'=>$student_id));
 			$this->db->group_by('ug.course_id');
-			$this->db->order_by('c.id');
+			$this->db->order_by('ug.id');
 			//
 		}
 		
