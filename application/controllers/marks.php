@@ -325,7 +325,7 @@ class Marks extends CI_Controller {
 							 $failstatus='';
 						}
 						$trdata.='<td>
-							<select class="form-control" name="ncc_subject[]" id="ncc_subject">
+							<select class="form-control" style="width:40%" name="ncc_subject[]" id="ncc_subject">
 							<option value="">--Select Option--</option>
 							<option value="1" '.$passstatus.'>Pass</option>
 							<option value="0" '.$failstatus.'>Fail</option>
@@ -384,7 +384,7 @@ class Marks extends CI_Controller {
 							 $failstatus='';
 						}
 						$trdata.='<td>
-							<select class="form-control" name="ncc_subject[]" id="ncc_subject">
+							<select class="form-control"  style="width:40%" name="ncc_subject[]" id="ncc_subject">
 							<option value="">--Select Option--</option>
 							<option value="1" '.$passstatus.'>Pass</option>
 							<option value="0" '.$failstatus.'>Fail</option>
