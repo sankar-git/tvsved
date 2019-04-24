@@ -445,13 +445,13 @@ class Marks extends CI_Controller {
 				{
 					if($upload_type == 'coursewise'){
 						$trdata.='<tr>
-				            <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
+				            <td><input type="hidden"  value="'.$students->user_unique_id.'">'.($key+1).'
 							<input type="hidden" name="student_id[]" value="'.$students->id.'">
 							</td>
 							<td>'.$students->first_name.'</td>';
 					}else{
 						$trdata.='<tr>
-				            <td><input type="hidden"  value="'.$students->courseid.'">'.$students->courseid.'
+				            <td><input type="hidden"  value="'.$students->courseid.'">'.($key+1).'
 							<input type="hidden" name="course_id[]" value="'.$students->courseid.'">
 							</td>
 							<td>'.$students->course_title.'('.$students->course_code.') <b>'.$students->theory_credit.'+'.$students->practicle_credit.'</b></td>';
@@ -493,13 +493,13 @@ class Marks extends CI_Controller {
 					{
 						if($upload_type == 'coursewise'){
 							$trdata.='<tr>
-				        <td><input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
+				        <td><input type="hidden"  value="'.$students->user_unique_id.'">'.($key+1).'
 						    <input type="hidden" name="student_id[]" value="'.$students->id.'">
 						</td>
 				          <td>'.$students->first_name.'</td>';
 						}else{
 							$trdata.='<tr>
-				            <td><input type="hidden"  value="'.$students->courseid.'">'.$students->courseid.'
+				            <td><input type="hidden"  value="'.$students->courseid.'">'.($key+1).'
 							<input type="hidden" name="course_id[]" value="'.$students->courseid.'">
 							</td>
 							<td>'.$students->course_title.'('.$students->course_code.') <b>'.$students->theory_credit.'+'.$students->practicle_credit.'</b></td>';
@@ -520,7 +520,7 @@ class Marks extends CI_Controller {
 								 </td><td>'.$students->dummy_value.'</td>';
 							}else{
 								$trdata.='<tr>
-								<td><input type="hidden"  value="'.$students->courseid.'">'.$students->courseid.'
+								<td><input type="hidden"  value="'.$students->courseid.'">'.($key+1).'
 								<input type="hidden" name="course_id[]" value="'.$students->courseid.'">
 								</td>
 								<td>'.$students->course_title.'('.$students->course_code.') <b>'.$students->theory_credit.'+'.$students->practicle_credit.'</b></td>';
@@ -538,7 +538,7 @@ class Marks extends CI_Controller {
 								  <td>'.$students->dummy_value.'</td>';
 							}else{
 								$trdata.='<tr>
-								<td><input type="hidden"  value="'.$students->courseid.'">'.$students->courseid.'
+								<td><input type="hidden"  value="'.$students->courseid.'">'.($key+1).'
 								<input type="hidden" name="course_id[]" value="'.$students->courseid.'">
 								</td>
 								<td>'.$students->course_title.'('.$students->course_code.') <b>'.$students->theory_credit.'+'.$students->practicle_credit.'</b></td>';
