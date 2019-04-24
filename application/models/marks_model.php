@@ -43,7 +43,7 @@ Class Marks_model extends CI_Model
 			$this->db->from('courses c');
 			$this->db->join('student_assigned_courses ca','c.id = ca.course_id','LEFT');
 			$this->db->join('course_subject_groups  csg','csg.id = c.course_subject_id','LEFT');
-			$this->db->where(array('c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id));
+			$this->db->where(array('c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,'c.discipline_id'=>$discipline_id,'ca.batch_id'=>$batch_id));
 			$this->db->group_by('c.course_subject_id');
 		 }else{
 			 $this->db->select("c.id , c.course_title, `c`.`course_group_id`,c.course_subject_id,c.course_code",false);
@@ -58,7 +58,7 @@ Class Marks_model extends CI_Model
 			//$this->db->group_by('c.course_subject_id');
 		 }
 		 //
-		$result	= $this->db->get()->result();//echo $this->db->last_query();exit;
+		$result	= $this->db->get()->result(); //echo $this->db->last_query();exit;
 		return $result;
 	 }
 	 
@@ -133,11 +133,12 @@ Class Marks_model extends CI_Model
 		}
 		 
 	 }
-	 function get_course_group($course_group_id){
+	 function get_course_group($course_group_id,$program_id,$semester_id,$degree_id){
 		$this->db->select("case when `course_subject_name` IS NULL then c.id else concat(GROUP_CONCAT( distinct c.course_subject_id order by c.course_subject_id SEPARATOR '|'), '|', GROUP_CONCAT( DISTINCT c.id order by c.id SEPARATOR '-')) end as id, case when `course_subject_name` IS NULL then course_title else course_subject_name end as course_title, `c`.`course_group_id`, c.course_subject_id, csg.course_subject_name, csg.course_subject_title, GROUP_CONCAT( DISTINCT course_code order by course_code SEPARATOR ', ') as course_code,theory_credit,practicle_credit",false);
 		 $this->db->from('courses c');
 		 $this->db->join('course_subject_groups csg','csg.id = c.course_subject_id','LEFT');
 		 $this->db->where(array('c.course_subject_id'=>$course_group_id));
+		 $this->db->where(array('c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id));
 		 return $this->db->get()->result(); 
 	 }
 	 function get_course_credit_points($courseid){

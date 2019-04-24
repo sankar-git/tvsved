@@ -134,8 +134,8 @@
 					
 				
 					
-               
-			     <div class="form-group col-md-4" <?php if($upload_type != 'coursewise'){?> style="display:none" <?php } ?>>
+               <?php if($upload_type != 'studentwise'){?>
+			     <div class="form-group col-md-4" >
 					  <label for="course-group">Course<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="course_id" id="course_id" onchange="getCourseCredit();">
 					   
@@ -144,7 +144,8 @@
 						
 					  </select>
 					</div>
-					 <div class="form-group col-md-4" <?php if($upload_type != 'studentwise'){?> style="display:none" <?php } ?>>
+			   <?php } if($upload_type != 'coursewise'){?>
+					 <div class="form-group col-md-4"  >
 					  <label for="course-group">Student<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="student_id" id="student_id" >
 					   
@@ -153,6 +154,7 @@
 						
 					  </select>
 					</div>
+					<?php } ?>
 				  <!--<div class="form-group col-md-4">
 				  <label for="course-group">Date Of Start<span style="color:red;font-weight: bold;">*</span></label>
 				   <select class="form-control" name="date_of_start" id="date_of_start">
@@ -778,7 +780,7 @@ var upload_type=$('#upload_type').val();
 				 if(upload_type == 'studentwise')
 					$("#bvsc .external th").eq(1).html('Course Name');
 				else
-					$("#bvsc .external th").eq(1).html('Student Name');
+					$("#bvsc .external th").eq(1).html('Dummy No');
 				$(".internal").hide();
 			 }
 			 
@@ -837,9 +839,9 @@ var upload_type=$('#upload_type').val();
 			//$("#bvscwewew .external th").eq(3).html('TermPaper(10)');
 			//$("#bvscwewew .external th").eq(4).show().html('Internal Practical(50/100)');
 			if(upload_type == 'studentwise')
-				$("#bvscwewew .external th").eq(1).html('Dummy No');
-			else
 				$("#bvscwewew .external th").eq(1).html('Course Name');
+			else
+				$("#bvscwewew .external th").eq(1).html('Dummy No');
 			$("#bvscwewew .external th").eq(2).hide();
 			$("#bvscwewew .external th").eq(3).hide();
 			$("#bvscwewew .external th").eq(4).hide();
@@ -910,9 +912,9 @@ var upload_type=$('#upload_type').val();
 				
 			}*/
 			if(upload_type == 'studentwise')
-				$("#bvscwewew .external th").eq(1).html('Dummy No');
-			else
 				$("#bvscwewew .external th").eq(1).html('Course Name');
+			else
+				$("#bvscwewew .external th").eq(1).html('Dummy No');
 			$("#bvscwewew .external th").eq(2).hide();
 			$("#bvscwewew .external th").eq(4).hide();
 			$("#bvscwewew .external th").eq(3).hide();

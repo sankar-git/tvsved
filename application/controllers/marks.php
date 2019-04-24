@@ -253,7 +253,6 @@ class Marks extends CI_Controller {
 		    $send['course_id']=$course_id;
 		}else{
 			 $send['student_id']=$student_id;
-			
 		}
 		$studentList= $this->Marks_model->get_student_assigned_marks($send);
 		//echo $this->db->last_query();
@@ -273,13 +272,13 @@ class Marks extends CI_Controller {
 						$course_idCountArr = explode("-",$course_idArr[1]);
 						$course_idCount = count($course_idCountArr);
 						$course_id = $course_idCountArr[0];
-						$courseList = $this->Marks_model->get_course_group($course_subject_id);
+						$courseList = $this->Marks_model->get_course_group($course_subject_id,$program_id,$semester_id,$degree_id);
 						$students->course_subject_title = $courseList[0]->course_subject_title;
 					}else{
 						$courseList = $this->Marks_model->get_course_credit_points($course_id);
 						$students->course_title = $courseList[0]->course_title;
 					}
-					//echo $this->db->last_query();print_r($courseList);echo "<br/>";
+					//echo $this->db->last_query();//print_r($courseList);echo "<br/>";
 					$students->courseid = $courseList[0]->id;
 					$students->course_code = $courseList[0]->course_code;
 					$students->theory_credit = $courseList[0]->theory_credit;
@@ -307,7 +306,7 @@ class Marks extends CI_Controller {
 								$trdata.='<td>'.$students->course_title.'('.$students->course_code.') <b>'.$students->theory_credit.'+'.$students->practicle_credit.'</b></td>';
 							}
 					}
-					if($courseList[0]->course_subject_id == 22){
+					if(@$courseList[0]->course_subject_id == 22){
 						if($students->ncc_status=='1')
 						{
 							 $passstatus='selected';
@@ -366,7 +365,7 @@ class Marks extends CI_Controller {
 							}
 						  
 					}
-					if($courseList[0]->course_subject_id == 22){
+					if(@$courseList[0]->course_subject_id == 22){
 						if($students->ncc_status=='1')
 						{
 							 $passstatus='selected';
@@ -735,7 +734,7 @@ class Marks extends CI_Controller {
 		
 	function saveUGInternalMarksNew()
 	{
-		//print_r($_POST); exit;
+		
 		$register_date_time=date('Y-m-d H:i:s');
 		$campus_id=$this->input->post('campus_id');
 		$program_id=$this->input->post('program_id');
@@ -746,64 +745,22 @@ class Marks extends CI_Controller {
 		
 		$course_id=$this->input->post('course_id');
 		
+		//print_r($_POST); exit;
 		$course_idCount=1;
-		if(strpos($course_id,"-") !== false){
-			$course_idArr = explode("-",$course_id);
-			$course_subject_id= $course_idArr[1];
-			$course_idCountArr = explode("|",$course_idArr[0]);
-			$course_idCount = count($course_idCountArr);
-			//$course_id = $course_idCountArr[0];
+		if(!is_array($course_id)){
+			if(strpos($course_id,"-") !== false){
+				$course_idArr = explode("-",$course_id);
+				$course_subject_id= $course_idArr[1];
+				$course_idCountArr = explode("|",$course_idArr[0]);
+				$course_idCount = count($course_idCountArr);
+				//$course_id = $course_idCountArr[0];
+			}
 		}
-		
-		//$courseid=explode('-',$course_input);
-	   // $course_id=$courseid[0]; 
-	    //$course_credit=$courseid[1]; 
 		$marks_type=$this->input->post('marks_type');
 		$student_ids=$this->input->post('student_id');
 		//print_r($student_ids
 		$marks_type_ncc = $this->input->post('marks_type_ncc');
-		if($marks_type_ncc==3)
-		{
-		 	$ncc_marks = $this->input->post('ncc_subject');//pass fail ncc array
-			
-			for($i=0; $i<count($student_ids);$i++)
-			{
-				 $student_id=$student_ids[$i];
-				  if(isset($ncc_marks[$i])){
-					$ncc_status =$ncc_marks[$i];//pass fail in ncc subject
-				
-				//$this->Marks_model->delete_ug_marks($student_id,$course_id);
-				 
-						$ncc_list=array(
-							'campus_id'=>$campus_id,
-							'program_id'=>$program_id,
-							'degree_id'=>$degree_id,
-							'batch_id'=>$batch_id,
-							'semester_id'=>$semester_id,
-							'discipline_id'=>$discipline_id,
-							'student_id'=>$student_id,
-							'course_id'=>$course_id,
-							'ncc_status'=>$ncc_status,
-							
-							'created_on'=>$register_date_time
-						
-						);
-						//p($ncc_list);  exit; 
-						$save = $this->Marks_model->save_ug_marks_new($ncc_list); 
-						if(!empty($save))
-						{
-							$ncc =1;
-						}
-						else{
-							$ncc =0;
-						}
-				  }
-			} 
-		echo $ncc;	
-		}
-		else
-		{
-		
+		$ncc_marks = $this->input->post('ncc_subject');
 		//print_r($_POST);
 		$theory_internal1=$this->input->post('theory_internal1');
 		//p($theory_internal1); exit;
@@ -846,61 +803,85 @@ class Marks extends CI_Controller {
 		$practical_external_marks_sum='';
 		$external_sum='';
 		$return1='';
-				for($i=0; $i<count($student_ids);$i++){
-					
-					    $student_id=$student_ids[$i];
-					    
-						$theory_marks1=$theory_internal1[$i];
-						$theory_marks2=$theory_internal2[$i];
-						$theory_marks3=$theory_internal3[$i];
-						
-						$theory_paper1_marks=$theory_paper1[$i];
-						$theory_paper2_marks=$theory_paper2[$i];
-						$theory_paper3_marks=$theory_paper3[$i];
-						$theory_paper4_marks=$theory_paper4[$i];
-						
-						
-						
-						$data1=array(
-							'campus_id'=>$campus_id,
-							'program_id'=>$program_id,
-							'degree_id'=>$degree_id,
-							'batch_id'=>$batch_id,
-							'semester_id'=>$semester_id,
-							'discipline_id'=>$discipline_id,
-							'student_id'=>$student_id,
-							'course_id'=>$course_id,
-							'created_on'=>$register_date_time);
-						if($marks_type=='1'){
-							$data1['theory_internal1']=$theory_marks1;
-							$data1['theory_internal2']=$theory_marks2;
-							$data1['theory_internal3']=$theory_marks3;
-							$data1['theory_paper1']=$theory_paper1_marks;// INTERNAL PRACTICAL 60
-							$data1['theory_paper2']=$theory_paper2_marks; // INTERNAL PRACTICAL 60
-							$data1['theory_paper3']=$theory_paper3_marks; // INTERNAL PRACTICAL 60
-							$data1['theory_paper4']=$theory_paper4_marks; // INTERNAL PRACTICAL 60
+		if(!is_array($this->input->post('course_id'))){
+			$loop_count = count($student_ids);
+		}else{
+			$loop_count = count($this->input->post('course_id'));
+		}
+		for($i=0; $i<$loop_count;$i++){ 
+			if(!is_array($this->input->post('course_id'))){
+				 $student_id=$student_ids[$i];
+			}else{
+				 $course_id=$this->input->post('course_id')[$i];
+				 $student_id=$student_ids;
+			}
+		   
+			$theory_marks1=isset($theory_internal1[$i])?$theory_internal1[$i]:'';
+			$theory_marks2=isset($theory_internal2[$i])?$theory_internal2[$i]:'';
+			$theory_marks3=isset($theory_internal3[$i])?$theory_internal3[$i]:'';
+			
+			
+			$theory_paper1_marks=isset($theory_paper1[$i])?$theory_paper1[$i]:'';
+			$theory_paper2_marks=isset($theory_paper2[$i])?$theory_paper2[$i]:'';
+			$theory_paper3_marks=isset($theory_paper3[$i])?$theory_paper3[$i]:'';
+			$theory_paper4_marks=isset($theory_paper4[$i])?$theory_paper4[$i]:'';
 							
-						}
-						
-						if($marks_type=='2'){
-							for($j=1;$j<=$course_idCount;$j++){
-								$var = 'theory_external'.$j;
-								$data1['theory_external'.$j]=(${$var}[$i]) ? ${$var}[$i]:'';
-							}			
-						}
-						//print_r($data1);exit;
-						$save = $this->Marks_model->save_ug_marks_new($data1); 
-
-						if(!empty($save))
-						{
-							$return =1;
-						}
-						else{
-							$return =0;
-						}
+			$data1=array(
+				'campus_id'=>$campus_id,
+				'program_id'=>$program_id,
+				'degree_id'=>$degree_id,
+				'batch_id'=>$batch_id,
+				'semester_id'=>$semester_id,
+				'discipline_id'=>$discipline_id,
+				'student_id'=>$student_id,
+				'course_id'=>$course_id,
+				'created_on'=>$register_date_time);
+			if($marks_type=='1'){
+				$data1['theory_internal1']=$theory_marks1;
+				$data1['theory_internal2']=$theory_marks2;
+				$data1['theory_internal3']=$theory_marks3;
+				$data1['theory_paper1']=$theory_paper1_marks;// INTERNAL PRACTICAL 60
+				$data1['theory_paper2']=$theory_paper2_marks; // INTERNAL PRACTICAL 60
+				$data1['theory_paper3']=$theory_paper3_marks; // INTERNAL PRACTICAL 60
+				$data1['theory_paper4']=$theory_paper4_marks; // INTERNAL PRACTICAL 60
+				
+			}
+			
+			if($marks_type=='2'){
+				//for($j=1;$j<=4;$j++){
+					//$var = 'theory_external'.$j;
+					$data1['theory_external1']=isset($theory_external1[$i])?$theory_external1[$i]:'';
+					$data1['theory_external2']=isset($theory_external2[$i])?$theory_external2[$i]:'';
+					$data1['theory_external3']=isset($theory_external3[$i])?$theory_external3[$i]:'';
+					$data1['theory_external4']=isset($theory_external4[$i])?$theory_external4[$i]:'';
+				//}			
+			}
+			if($marks_type_ncc==3)
+			{
+				$ncc_status='';
+				if(isset($ncc_marks[$i]))
+					$ncc_status =$ncc_marks[$i];
+				$data1['ncc_status']=$ncc_status;
+			}else{
+				if (strpos($course_id, "22|") !== false) {
+					if(isset($ncc_marks[0])){
+						$ncc_status =$ncc_marks[0];
+						$data1['ncc_status']=$ncc_status;
+					}
 				}
-			echo $return;
-		}	   
+			}
+			//print_r($data1);
+			$save = $this->Marks_model->save_ug_marks_new($data1); 
+
+			if(!empty($save))
+			{
+				$return =1;
+			}
+			else{
+				$return =0;
+			}
+		}
+		echo $return;
 		
 	}
 	
