@@ -419,6 +419,7 @@ class Marks extends CI_Controller {
 		$theory_credit=$this->input->post('theory_credit');
 		$upload_type=$this->input->post('upload_type');
 		$student_id=$this->input->post('student_id');
+		$marks_type=$this->input->post('marks_type');
 		
 	    $send['campus_id']=$campus_id;
 	    $send['program_id']=$program_id;
@@ -435,10 +436,11 @@ class Marks extends CI_Controller {
 	    $practical_class='';
 	    $assignment_class='';
 	    $trdata='';
-		$studentList= $this->Marks_model->get_student_assigned_marks($send);
+		$studentList= $this->Marks_model->get_student_assigned_marks($send);//echo $this->db->last_query();
 		if(!empty($studentList[0]->course_id)){
 		  foreach($studentList as $key=>$students)
 			{
+				
 				if($marks_type=='1')
 				{
 					if($upload_type == 'coursewise'){
@@ -906,85 +908,102 @@ class Marks extends CI_Controller {
 		//$practical_external=$this->input->post('practical_external');
 		//print_r($practical_external); exit;
 		$return='';
+		if(!is_array($this->input->post('course_id'))){
+			$loop_count = count($student_ids);
+		}else{
+			$loop_count = count($this->input->post('course_id'));
+		}
 		if($marks_type=='1'){
-				for($i=0;$i<count($theory_internal);$i++){
-						$theory_marks=$theory_internal[$i];
-						$practical_marks=$practical_internal[$i];
-						$assignment_mark=$assignment_markArr[$i];
-						$student_id=$student_ids[$i];
-						//$this->Marks_model->delete_ug_marks($student_id,$course_id); //delete old and save new
-						$marks_sum=$theory_marks+$practical_marks;//adding internal marks
-						$data=array(
-							'campus_id'=>$campus_id,
-							'program_id'=>$program_id,
-							'degree_id'=>$degree_id,
-							'batch_id'=>$batch_id,
-							'semester_id'=>$semester_id,
-							'discipline_id'=>$discipline_id,
-							'student_id'=>$student_id,
-							'course_id'=>$course_id,
-							'theory_internal1'=>$theory_marks,
-							'assignment_mark'=>$assignment_mark,
-							'practical_internal'=>$practical_marks,
-							'marks_sum'=>$marks_sum,
-							'created_on'=>$register_date_time
-						
-						);
-						//p($data); 
-						
-						
-						$save = $this->Marks_model->update_ug_marks($data); 
-						//print_r($save);
-						if(!empty($save))
-						{
-							$return =1;
-						}
-						else{
-							$return =0;
-						}
+				for($i=0;$i<$loop_count;$i++){
+					if(!is_array($this->input->post('course_id'))){
+						 $student_id=$student_ids[$i];
+					}else{
+						 $course_id=$this->input->post('course_id')[$i];
+						 $student_id=$student_ids;
+					}
+					$theory_marks=$theory_internal[$i];
+					$practical_marks=$practical_internal[$i];
+					$assignment_mark=$assignment_markArr[$i];
+					
+					//$this->Marks_model->delete_ug_marks($student_id,$course_id); //delete old and save new
+					$marks_sum=$theory_marks+$practical_marks;//adding internal marks
+					$data=array(
+						'campus_id'=>$campus_id,
+						'program_id'=>$program_id,
+						'degree_id'=>$degree_id,
+						'batch_id'=>$batch_id,
+						'semester_id'=>$semester_id,
+						'discipline_id'=>$discipline_id,
+						'student_id'=>$student_id,
+						'course_id'=>$course_id,
+						'theory_internal1'=>$theory_marks,
+						'assignment_mark'=>$assignment_mark,
+						'practical_internal'=>$practical_marks,
+						'marks_sum'=>$marks_sum,
+						'created_on'=>$register_date_time
+					
+					);
+					//p($data); 
+					
+					
+					$save = $this->Marks_model->update_ug_marks($data); 
+					//print_r($save);
+					if(!empty($save))
+					{
+						$return =1;
+					}
+					else{
+						$return =0;
+					}
 				}//exit; 
 	}
 	if($marks_type=='2'){
 		        
-				for($i=0;$i<count($theory_internal);$i++){
-						//$theory_marks=$theory_internal[$i];
-						//$practical_marks=$practical_internal[$i];
-						$theory_external_marks=$theory_external[$i];
-						//$assignment_mark=$assignment_markArr[$i];
-						//$practical_external_marks=$practical_external[$i];
-						$student_id=$student_ids[$i];
-						//if(!empty($theory_marks)){$theory_inter=$theory_marks;} else {$theory_inter=00;}
-						//if(!empty($practical_marks)){$practical_inter=$practical_marks;} else {$practical_inter=00;}
-						if(!empty($theory_external_marks)){$theory_extern=$theory_external_marks;} else {$theory_extern=00;}
-						//if(!empty($practical_external_marks)){$practical_extern=$practical_external_marks;} else {$practical_extern=00;}
-						//$marks_sum = $theory_inter+$practical_marks+$theory_external_marks; //adding internal and external marks
+				for($i=0;$i<$loop_count;$i++){
+					if(!is_array($this->input->post('course_id'))){
+						 $student_id=$student_ids[$i];
+					}else{
+						 $course_id=$this->input->post('course_id')[$i];
+						 $student_id=$student_ids;
+					}
+					//$theory_marks=$theory_internal[$i];
+					//$practical_marks=$practical_internal[$i];
+					$theory_external_marks=$theory_external[$i];
+					//$assignment_mark=$assignment_markArr[$i];
+					//$practical_external_marks=$practical_external[$i];
+					
+					//if(!empty($theory_marks)){$theory_inter=$theory_marks;} else {$theory_inter=00;}
+					//if(!empty($practical_marks)){$practical_inter=$practical_marks;} else {$practical_inter=00;}
+					if(!empty($theory_external_marks)){$theory_extern=$theory_external_marks;} else {$theory_extern=00;}
+					//if(!empty($practical_external_marks)){$practical_extern=$practical_external_marks;} else {$practical_extern=00;}
+					//$marks_sum = $theory_inter+$practical_marks+$theory_external_marks; //adding internal and external marks
+					
+					$data2=array(
+						'campus_id'=>$campus_id,
+						'program_id'=>$program_id,
+						'degree_id'=>$degree_id,
+						'batch_id'=>$batch_id,
+						'semester_id'=>$semester_id,
+						'discipline_id'=>$discipline_id,
+						'student_id'=>$student_id,
+						'course_id'=>$course_id,
 						
-						$data2=array(
-							'campus_id'=>$campus_id,
-							'program_id'=>$program_id,
-							'degree_id'=>$degree_id,
-							'batch_id'=>$batch_id,
-							'semester_id'=>$semester_id,
-							'discipline_id'=>$discipline_id,
-							'student_id'=>$student_id,
-							'course_id'=>$course_id,
-							
-							'theory_external1'=>$theory_external_marks,
-							
-							'created_on'=>$register_date_time
+						'theory_external1'=>$theory_external_marks,
 						
-						);
-						//p($data2); 
-						$save = $this->Marks_model->update_ug_marks($data2); 
-						//print_r($save);
-						
-						if(!empty($save))
-						{
-							$return =1;
-						}
-						else{
-							$return =0;
-						}
+						'created_on'=>$register_date_time
+					
+					);
+					//p($data2); 
+					$save = $this->Marks_model->update_ug_marks($data2); 
+					//print_r($save);
+					
+					if(!empty($save))
+					{
+						$return =1;
+					}
+					else{
+						$return =0;
+					}
 				}  
 	}
 		echo $return;	

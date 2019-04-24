@@ -75,14 +75,24 @@ Class Marks_model extends CI_Model
 		else{
 			$student_id=$data['student_id'];
 		  }
+		  if($data['degree_id']!=1){
+			  $this->db->select('co.id as courseid,co.course_code,co.theory_credit,co.practicle_credit,co.course_title');
+		  }
 		$this->db->select('d.dummy_value,u.user_unique_id,u.id,u.first_name,ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark');
 		$this->db->from('student_assigned_courses c');
         $this->db->join('users  u','u.id = c.student_id','LEFT');
         $this->db->join('tbl_dummy  d','u.id = d.student_id','LEFT');
+		if($data['degree_id']!=1){
+			$this->db->join('courses co','co.id = c.course_id','LEFT');
+		}
 		if(isset($data['course_id']) && $data['course_id']!=''){
 			$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.course_id ='$course_id'",'LEFT');
 		}else{
-			$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id ",'LEFT');
+			if($data['degree_id']!=1){
+					$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id and ug.course_id=c.course_id",'LEFT');
+			}else{
+				$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id ",'LEFT');
+			}
 		}
 		$this->db->where(array('c.campus_id'=>$campus_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,'c.batch_id'=>$batch_id,'u.role_id'=>1));
 		if(isset($data['course_id']) && $data['course_id']!=''){
@@ -90,9 +100,9 @@ Class Marks_model extends CI_Model
 			$this->db->order_by('u.first_name');
 		}else{
 			
-			$this->db->where(array('ug.student_id'=>$student_id));
-			$this->db->group_by('ug.course_id');
-			$this->db->order_by('ug.id');
+			$this->db->where(array('c.student_id'=>$student_id));
+			//$this->db->group_by('c.course_id');
+			//$this->db->order_by('ug.id');
 			//
 		}
 		
@@ -117,12 +127,21 @@ Class Marks_model extends CI_Model
 		 $batch_id      = $data['batch_id'];
 		 $semester_id   = $data['semester_id'];
 		 $discipline_id = $data['discipline_id'];
-		 $course_id     = $data['course_id'];
+		 if(isset($data['course_id']))
+			$course_id     = $data['course_id'];
+		if(isset($data['student_id']))
+		 $student_id     = $data['student_id'];
 		 
 		$this->db->select('u.*,ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,ug.theory_paper1,ug.theory_paper2,ug.theory_internal,ug.practical_internal,ug.theory_external1,ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status');
 		$this->db->from('student_assigned_courses c');
         $this->db->join('users  u','u.id = c.student_id','INNER');
-        $this->db->join('students_ug_marks  ug',"c.student_id = ug.student_id AND ug.course_id = '$course_id'",'LEFT');
+		if(isset($data['course_id']))
+			$this->db->join('students_ug_marks  ug',"c.student_id = ug.student_id AND ug.course_id = '$course_id'",'LEFT');
+		if(isset($data['student_id'])){
+			$this->db->join('students_ug_marks  ug',"c.student_id = ug.student_id",'LEFT');
+			$this->db->where(array('c.student_id'=>$student_id));
+		}
+		
 		
 		$this->db->where(array('c.campus_id'=>$campus_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,'c.batch_id'=>$batch_id,'u.role_id'=>1));
 		$this->db->group_by('c.student_id');

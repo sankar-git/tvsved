@@ -826,6 +826,10 @@ var upload_type=$('#upload_type').val();
 		if(uploadType=='1')
 		{
 			$(".internal").show();
+			if(upload_type == 'studentwise')
+				$("#bvscwewew .internal th").eq(1).html('Course Name');
+			else
+				$("#bvscwewew .internal th").eq(1).html('Student Name');
 			$("#bvscwewew .internal th").eq(2).show().html('Internal Theory(20)');
 			$("#bvscwewew .internal th").eq(3).html('TermPaper(10)');
 			$("#bvscwewew .internal th").eq(4).show().html('Internal Practical(50/100)');
