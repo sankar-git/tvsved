@@ -27,7 +27,7 @@
                 border: 1px solid black;
                 border-collapse: collapse;
                 font-size: 12px;
-				font-weight:bold;
+				font-weight:normal;
                 padding: 0px 0px 0px 0px !important;
 				height:31px;
 				text-align:center;
@@ -74,17 +74,17 @@
 
         <div class="table_holder">
            
-		<table class="table" width="852" style="border:solid 1px black; font-size:10px; ">
+		<table class="table" width="100%" style="border:solid 1px black; ">
                 <tr>
-                    <th  style="font-weight:bold;">S.No.</th>
-                    <th  style="font-weight:bold;">ID No.</th>
-                    <th  style="font-weight:bold;">NAME</th>
+                    <th width="10%" style="font-weight:bold;">S.No.</th>
+                    <th width="10%" style="font-weight:bold;">ID No.</th>
+                    <th width="30%" style="font-weight:bold;">NAME</th>
 					<?php foreach($courseGroup as $key=>$value){?>
-                    <th  style="font-weight:bold;"><?php echo $value;?></th>
+                    <th width="10%" style="font-weight:bold;"><?php echo $value;?></th>
 					<?php } ?>
-					<th  style="font-weight:bold;">RESULT</th>
+					<th width="10%" style="font-weight:bold;">RESULT</th>
                 </tr>
-<?php foreach($result_marks as $name=>$courseGroupArr){
+<?php $counter=0; foreach($result_marks as $name=>$courseGroupArr){ 
 			$result_str ='';
 			foreach($courseGroupArr as $groupname=>$marksArr){
 				//print_r($marks);exit;
@@ -96,12 +96,14 @@
 					$result[$name][$groupname] = 'FAIL';
 				else
 					$result[$name][$groupname] = $result[$name][$groupname][0];
+				
 			}
 			//print_r($result[$name]);exit;
+			$counter++;
 			?>
 				<tr>	
 					
-					<td  style="padding:2px;"><?php echo $key+1;?></td>
+					<td  style="padding:2px;"><?php echo $counter;?></td>
                     <td  style="padding:2px;"><?php echo $marks->user_unique_id;?></td>
                     <td  align="left" style="padding:2px;"> <?php echo ucfirst($marks->first_name).' '.ucfirst($marks->last_name);?></td>
                     <?php $passcnt=0; foreach($courseGroup as $key=>$value){ if($result[$name][$value] == 'PASS' || $result[$name][$value] == 'P') $passcnt++;?>

@@ -521,7 +521,7 @@ class Grade extends CI_Controller {
 	     //  print_r($course_id); exit;
 		 
 		  $data['aggregate_marks'] = $this->Gradechart_model->get_aggregate_marks($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id);
-		// p($data['aggregate_marks']); exit;
+			//p($data['aggregate_marks']); exit;
 		  //getting batch and year
 	      
 			//load the view and saved it into $html variable

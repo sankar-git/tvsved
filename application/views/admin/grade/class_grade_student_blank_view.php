@@ -77,7 +77,7 @@
 			<table class="sub-detail-tbl" style="width:100%;padding:20px 0px; margin:0px; border-collapse: collapse; margin:20px 0px;Lline-height:1.5">
 				<tr>
                     <td align="left" width="80px" style="vertical-align:top;font-weight:bold;">College &nbsp;:&nbsp;</td>
-					<td align="left" width="250px" style="vertical-align:top;font-weight:bold;margin-left:1px;"><?php echo $aggregate_marks[0]->campus_name;?></td>					
+					<td align="left" width="250px" style="vertical-align:top;font-weight:bold;margin-left:1px;"><?php echo $aggregate_marks[0]->campus_code;?></td>					
 					<td align="right" width="240px" style="vertical-align:top;font-weight:bold;">Batch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;</td>
 					<td align="left"width="250px" style="vertical-align:top;font-weight:bold;"><?php echo $aggregate_marks[0]->batch_name;?></td>                
                    

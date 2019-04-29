@@ -100,9 +100,10 @@ Class Marks_model extends CI_Model
 			$this->db->order_by('u.first_name');
 		}else{
 			
-			$this->db->where(array('c.student_id'=>$student_id));
-			//$this->db->group_by('c.course_id');
-			//$this->db->order_by('ug.id');
+			$this->db->where_in('c.student_id',$student_id);
+			//group by ug.student_id,ug.course_id order by ug.id
+			$this->db->group_by('ug.student_id,ug.course_id');
+			$this->db->order_by('ug.id');
 			//
 		}
 		

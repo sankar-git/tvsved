@@ -14,7 +14,7 @@ Class Result_model extends CI_Model
 	}
 	function get_student_marks_by_id($student_id,$semester_id='')
 	{
-		$this->db->select('um.assignment_mark,um.theory_internal1,um.highest_marks,um.second_highest_marks,um.smallest_marks,um.theory_internal2,um.theory_internal3,
+		/*$this->db->select('um.assignment_mark,um.theory_internal1,um.highest_marks,um.second_highest_marks,um.smallest_marks,um.theory_internal2,um.theory_internal3,
 		                   um.theory_internal,um.theory_paper1,um.theory_paper2,um.theory_paper3,um.theory_paper4,um.sum_internal_practical,
 		                   um.external_sum,um.practical_internal,um.theory_external1,um.theory_external2,um.theory_external3,um.theory_external4,um.practical_external,
 		                   um.marks_sum,um.student_id,um.course_id,um.ncc_status,c.id,c.course_code,c.course_title,
@@ -28,7 +28,46 @@ Class Result_model extends CI_Model
 			$this->db->where(array('um.semester_id'=>$semester_id));
 		$this->db->order_by("c.id,um.course_id", "asc");
         $result	= $this->db->get()->result();//echo $this->db->last_query();exit;
-		return $result;
+		return $result;*/
+		$this->db->select('discipline_id,program_id,degree_id,campus_id,batch_id,semester_id,r.course_id,r.theory_internal1,r.theory_internal2,r.theory_internal3,r.theory_internal,r.theory_paper1,
+		                   r.theory_paper2,r.theory_paper3,r.theory_paper4,r.sum_internal_practical,r.practical_internal,r.theory_external1,r.theory_external2,r.theory_external3,r.theory_external4,r.practical_external,
+						   r.marks_sum,r.external_sum,assignment_mark,student_id,ncc_status');
+		$this->db->from('students_ug_marks as r');
+		$this->db->where('r.student_id',$student_id);
+		if(!empty($semester_id))
+			$this->db->where('r.semester_id',$semester_id);
+		$this->db->order_by('student_id,id');
+		$resultArr=$this->db->get()->result_array();
+		$final_array=array();
+		foreach($resultArr as $key=>$result_val){
+			if($result_val['program_id'] == 1 && $result_val['degree_id'] == 1){
+				$course_arr = explode("|",$result_val['course_id']);
+				$courseArr = explode("-",$course_arr[1]);
+				$courseid = $courseArr;
+			}else{
+				$courseid = $result_val['course_id'];
+			}
+			$this->db->select('c.id as courseid,
+						 group_concat(distinct c.course_title) as course_title,group_concat(distinct c.course_code) as course_code,c.theory_credit,c.practicle_credit,cp.campus_code,cp.campus_name,
+						   b.batch_name,s.semester_name,d.degree_name,csg.course_subject_name,csg.course_subject_title,csg.id as coure_group_id,dis.discipline_name,dis.discipline_code,u.first_name,u.last_name,u.user_unique_id,student_id',true);
+			$this->db->from('courses as c','c.id=r.course_id');
+			$this->db->join('student_assigned_courses as sa',"sa.course_id=c.id");
+			$this->db->join('disciplines as dis','dis.id=c.discipline_id');
+			$this->db->join('users u','u.id=sa.student_id');
+			$this->db->join('campuses cp','cp.id=sa.campus_id');
+			$this->db->join('batches b','b.id=sa.batch_id');
+			$this->db->join('semesters s','s.id=c.semester_id');
+			$this->db->join('course_subject_groups csg','csg.id=c.course_subject_id','LEFT');
+			$this->db->join('degrees d','d.id=c.degree_id');
+			$this->db->where_in('sa.course_id',$courseid);
+			$this->db->where('sa.student_id',$result_val['student_id']);
+			$this->db->where(array('sa.campus_id'=>$result_val['campus_id'],'sa.program_id'=>$result_val['program_id'],'sa.degree_id'=>$result_val['degree_id'],'sa.batch_id'=>$result_val['batch_id'],'sa.semester_id'=>$result_val['semester_id']));
+			if($result_val['program_id'] == 1 && $result_val['degree_id'] == 1)
+				$this->db->group_by('c.course_subject_id');
+			$courseresult=$this->db->get()->result_array();
+			$final_array[] = (object) array_merge($courseresult[0], $result_val);		
+		}
+		return $final_array;
 	}
 	
 	function get_student_marks_by_id_change($student_id,$semester_id)

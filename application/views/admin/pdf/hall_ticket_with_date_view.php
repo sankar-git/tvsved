@@ -12,7 +12,7 @@
                                         <div>
                                             <!--<img src="<?php echo base_url('');?>assets/admin/dist/img/logo.jpg"  alt="loading..." height="50px"/>-->
                                             
-                                    <?php if($halldata['user_image']){?>
+                                    <?php if(!empty($halldata['user_image']) && file_exists('uploads/user_images/student/'. $halldata['user_image'])){?>
 									<img style="height:70px;width:70px;" src="<?php echo base_url('uploads/user_images/student/'. $halldata['user_image']);?>" alt="current"/>
 									<?php } else {?>
 									<img style="height:50px;width:50px;" src="<?php echo base_url('uploads/user_images/student/');?>/no_image.jpg" alt="current"/>

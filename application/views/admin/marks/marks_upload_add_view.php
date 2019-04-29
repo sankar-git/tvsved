@@ -752,10 +752,13 @@ var upload_type=$('#upload_type').val();
 				   if(uploadType == 0)
 					   return false;
 					$(".courseList").show();
-			var courseid=$('#course_id').val();
-			var courseArr = courseid.split("-");
-			var courseidArr = courseArr[0].split("|");
-			var length = courseidArr.length;
+			if(upload_type == 'coursewise'){
+				var courseid=$('#course_id').val();
+				var courseArr = courseid.split("-");
+				var courseidArr = courseArr[0].split("|");
+				var length = courseidArr.length;
+			}else
+				var length=2;
 			var numeralCodes = ["","I","II","III","IV","V","VI","VII","VIII","IX"];
 			var i;
 			$(".practical_head_cont").html('<span style="margin-left: 47px;">PRACTICAL</span></br>');

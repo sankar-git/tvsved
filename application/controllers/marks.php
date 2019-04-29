@@ -255,7 +255,7 @@ class Marks extends CI_Controller {
 			 $send['student_id']=$student_id;
 		}
 		$studentList= $this->Marks_model->get_student_assigned_marks($send);
-		//echo $this->db->last_query();
+		//echo $this->db->last_query();exit;
 		$trdata='';
 		$i=0;
 		if(count($studentList)>0){
@@ -440,7 +440,6 @@ class Marks extends CI_Controller {
 		if(!empty($studentList[0]->course_id)){
 		  foreach($studentList as $key=>$students)
 			{
-				
 				if($marks_type=='1')
 				{
 					if($upload_type == 'coursewise'){

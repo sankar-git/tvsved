@@ -701,7 +701,7 @@ class Generate extends CI_Controller {
 			$courseGroup=array();
 			$resultArray=array();
 		 foreach($data['aggregate_marks'] as $subject_wise_val){
-			 //p($subject_wise_val);exit;
+			// p($subject_wise_val);
 			 if($degree_id=='1'){
 				 if(!empty($subject_wise_val->course_subject_name)){
 					 if(!in_array($subject_wise_val->course_subject_name, $courseGroup, true)){
@@ -711,16 +711,28 @@ class Generate extends CI_Controller {
 						$name = $subject_wise_val->first_name.' '.$subject_wise_val->last_name;
 						
 						$numbers = array( $subject_wise_val->theory_internal1,$subject_wise_val->theory_internal2,$subject_wise_val->theory_internal3); 
-						  $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
+						rsort($numbers);
+						//print_r($numbers);exit;
+						 $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
 						  $theory_externals=$subject_wise_val->theory_external1/5;
-						  $practical_externals=$subject_wise_val->practical_external/5;
-						  $theory_marks_40=$theory_externals+$practical_externals;
+						  $practical_externals=$subject_wise_val->theory_external2/5;
+						 $theory_marks_40=$theory_externals+$practical_externals;
 						  $paper1_20=$subject_wise_val->theory_paper1/3;
 						  $paper1_20s=number_format($paper1_20,2);
 						  $paper2_20=$subject_wise_val->theory_paper2/3;
 						  $paper2_20s=number_format($paper2_20,2);
 						  $paper_20=$paper1_20s+$paper2_20s;
-						  if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) $subject_wise_val->result = "PASS"; else $subject_wise_val->result =  "FAIL";
+						  if($subject_wise_val->coure_group_id == 22){
+							  if($subject_wise_val->ncc_status == 1)
+								   $subject_wise_val->result = "PASS"; 
+							  else 
+								  $subject_wise_val->result =  "FAIL";
+						  }else{
+							  if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) 
+								  $subject_wise_val->result = "PASS"; 
+							  else 
+								  $subject_wise_val->result =  "FAIL";
+						  }
 					$resultArray[$name][$subject_wise_val->course_subject_name][]=$subject_wise_val;
 					//print_r($resultArray);exit;
 				 }
@@ -745,7 +757,7 @@ class Generate extends CI_Controller {
 				 //print_r($resultArray);exit;
 			 }
 			 
-		  }
+		  }//exit;
 		   if($degree_id=='1')
 			ksort($courseGroupArr);
 		 $data['result_marks'] =$resultArray;
