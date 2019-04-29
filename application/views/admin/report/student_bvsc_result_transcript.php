@@ -230,9 +230,9 @@
 				if(count($result_data) == 0)
 					$row_count = 38;
 				elseif($counter >=19)
-					$row_count = 37;
+					$row_count = 38;
 				elseif($counter <19)
-					$row_count = 39;
+					$row_count = 38;
 				for($j=1;$j<$row_count-$count;$j++){ $counter = $j+$count;
 				if($counter >=19 && $flag == false){ $flag=true;
 	              ?>

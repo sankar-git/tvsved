@@ -16,7 +16,7 @@
                 </tr>
                 <tr>
                     <td align="left" width="20%" style="vertical-align:top;font-weight:bold;">Date Of Examination</td>
-					<td align="left" width="20%" style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;</td>
+					<td align="left" width="20%" style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;<?php echo $date_of_exam;?></td>
                     <td align="left" width="20%" style="vertical-align:top;font-weight:bold;">Session</td>
 					<td align="left" width="20%" style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;F.N / A.N</td>
                     

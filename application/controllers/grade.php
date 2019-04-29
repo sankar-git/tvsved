@@ -75,6 +75,7 @@ class Grade extends CI_Controller {
 	       $semester_id=$this->input->post('semester_id');
 	       $discipline_id=$this->input->post('discipline_id');
 	       $course_input=$this->input->post('course_id');
+	       $data['date_of_exam']=$this->input->post('date_of_exam');
 		  // p($course_id); exit;
 		  //===========================Subject Wise Mark====================================// 
 		  if(!empty($this->input->post('subject_wise_mark')))
@@ -120,15 +121,19 @@ class Grade extends CI_Controller {
 		  //===========================Registered Students====================================// 
 		  if(!empty($this->input->post('reg_students')))
 		  {  
-	      
-		   $course_id=$course_input;
+			  if($degree_id=='1'){
+				  $courseArr = explode("|",$course_input);
+				$courseArr = explode("-",$courseArr[1]);
+			  }
+		   $course_id=$courseArr;
+		   
 		   //p($courseid); exit;
 	       //$course_id=$courseid[0]; 
 	       //$course_credit=$courseid[1]; 
 	     //  print_r($course_id); exit;
 		 
 		  $data['registered_students'] = $this->Gradechart_model->get_registered_student($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id);
-		  //p($data['registered_students']); exit;
+		 // p($data['registered_students']); exit;
 		  //getting batch and year
 	      
 			//load the view and saved it into $html variable

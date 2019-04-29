@@ -27,7 +27,7 @@
                     <td align="left" width="25px" style="vertical-align:top;font-weight:bold;">College</td>
 					<td align="left" width="300px" style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;<?php echo $dummy_number_report[0]['campus_code'];?></td>					
 					<td align="right" width="200px" style="vertical-align:top;font-weight:bold;">Month & Year of Exam</td>
-					<td align="right"width="70px" style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;<?php  echo $dummy_number_report[0]['month_year'];?></td>                
+					<td align="right"width="70px" style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;<?php  echo $month.' '.$year;?></td>                
                    
                 </tr>
                 <tr>

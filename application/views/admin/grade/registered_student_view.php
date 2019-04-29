@@ -41,7 +41,7 @@
                                 <tr><td><div><div style="margin-left:30px; font-weight:bold; font-size:16px;"><p>TAMIL NADU  VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></div></div></td></tr>
                                 <tr>
                                     <td align="center">
-                                            <p align="center" style=" font-size:14px;"><?php echo $registered_students[0]->degree_name;?></p>
+                                            <p align="center" style=" font-size:14px;"><?php echo $registered_students[0]->degree_code;?></p>
 											
                                             <p align="center" style=" font-size:14px; padding:10px 0px 0px 0px;">
 											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -63,14 +63,16 @@
             <hr />
             <table width="100%" style="font-size:12px;">
                 <tr>
-                    <td><b>College :</b>&nbsp;<?php echo $registered_students[0]->campus_name;?></td>
-                    <td><b>Subject :</b>&nbsp;<?php echo $registered_students[0]->degree_name;?></td>
-                    
+                    <td width="10%"><b>College</b></td>
+					<td width="40%"> : <?php echo $registered_students[0]->campus_name;?></td>
+                    <td width="10%"><b>Subject</b></td>
+					<td width="40%"> : <?php echo $registered_students[0]->course_title;?></td>
                 </tr>
                 <tr>
-                   <td><b >Batch :</b>&nbsp;<?php echo $registered_students[0]->batch_name;?></td>
-                  
-                    <td><b>Semester:</b>&nbsp;<?php echo $registered_students[0]->semester_name;?></td>
+                   <td><b >Batch</b></td>
+				   <td> : <?php echo $registered_students[0]->batch_name;?></td>
+                    <td><b>Semester</b></td>
+					<td> : <?php echo $registered_students[0]->semester_name;?></td>
                 </tr>
             </table>
 

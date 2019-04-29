@@ -3,22 +3,32 @@ Class Gradechart_model extends CI_Model
 {	
 	function get_registered_student($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id)
 	{
-		$this->db->select('u.user_unique_id,u.first_name,u.last_name,u.user_unique_id,b.batch_name,c.course_title,cp.campus_name,d.degree_name,s.semester_name');
-		$this->db->from('students_ug_marks sum');
-		$this->db->join('users u','u.id = sum.student_id','INNER');
-		$this->db->join('batches b','b.id = sum.batch_id','INNER');
-		$this->db->join('courses c','c.id = sum.course_id','INNER');
-		$this->db->join('campuses cp','cp.id = sum.campus_id','INNER');
-		$this->db->join('degrees d','d.id = sum.degree_id','INNER');
-		$this->db->join('semesters s','s.id = sum.semester_id','INNER');
-		
-		$this->db->where(array('sum.campus_id'=>$campus_id,'sum.program_id'=>$program_id,'sum.degree_id'=>$degree_id,'sum.batch_id'=>$batch_id,'sum.semester_id'=>$semester_id));
-		if($program_id == 1 && $degree_id == 1){
-			$this->db->where("(c.course_subject_id = 0 || sum.course_id like '%$course_id%')");
-		}else{
-			$this->db->where('sum.course_id',$course_id);
+		if($degree_id=='1'){
+			$this->db->select('u.user_unique_id,u.first_name,u.last_name,u.user_unique_id,b.batch_name,csg.course_subject_title as course_title,cp.campus_name,cp.campus_code,d.degree_name,d.degree_code,s.semester_name');
+			
+		}else
+			$this->db->select('u.user_unique_id,u.first_name,u.last_name,u.user_unique_id,b.batch_name,c.course_title,cp.campus_name,cp.campus_code,d.degree_name,d.degree_code,s.semester_name');
+		$this->db->from('student_assigned_courses sac');
+		$this->db->join('users u','u.id = sac.student_id','INNER');
+		$this->db->join('batches b','b.id = sac.batch_id','INNER');
+		$this->db->join('courses c','c.id = sac.course_id','INNER');
+		$this->db->join('campuses cp','cp.id = sac.campus_id','INNER');
+		$this->db->join('degrees d','d.id = sac.degree_id','INNER');
+		$this->db->join('semesters s','s.id = sac.semester_id','INNER');
+		if($degree_id=='1'){
+			$this->db->join('course_subject_groups csg','csg.id = c.course_subject_id','LEFT');
 		}
+		$this->db->where(array('sac.campus_id'=>$campus_id,'sac.program_id'=>$program_id,'sac.degree_id'=>$degree_id,'sac.batch_id'=>$batch_id,'sac.semester_id'=>$semester_id));
+		//if($program_id == 1 && $degree_id == 1){
+			//$this->db->where("(c.course_subject_id = 0 || sum.course_id like '%$course_id%')");
+		//}else{
+			if($degree_id=='1')
+				$this->db->where_in('sac.course_id',$course_id);
+			else
+				$this->db->where('sac.course_id',$course_id);
+	//	}
 		
+	    $this->db->group_by('sac.student_id');
 	    $this->db->order_by('u.first_name,u.last_name');
 		
         $result	= $this->db->get()->result();//echo $this->db->last_query(); die;

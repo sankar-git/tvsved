@@ -115,6 +115,11 @@
 						
 					  </select>
 					</div>
+					<div class="form-group col-md-4">
+					 <label for="date_of_exam">Date of Exam</label>
+					  <input type="text" class="form-control" id="date_of_exam" name="date_of_exam" value="" placeholder="Enter Date Of Exam">
+					  
+					</div>
 			    </div>
 			   
 			   
@@ -167,6 +172,7 @@
   <script type="text/javascript">
 	
 	$(document).ready(function() {
+		$("#date_of_exam").datepicker({format: 'dd-mm-yyyy',autoclose: true});
 		$("#sales_dob").datepicker({format: 'dd-mm-yyyy',autoclose: true});
 		
 	});
