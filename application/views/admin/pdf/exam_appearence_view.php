@@ -53,7 +53,7 @@
                                     <td align="center">
                                          <p align="center" style=" font-size:13px;">
                                                 APPLICATION FOR ADMISSION TO THE
-                                                <b><?php echo $appearData['semester_name'];?> </b> SEMESTER EXAMINATION FOR <b><?php echo $appearData['batch_name'];?></b> TO BE HELD IN THE MONTH OF <b><?php  echo $appearData['month_year'];?> </b>
+                                                <b><?php echo $appearData['semester_name'];?> </b> SEMESTER EXAMINATION FOR <b><?php echo $appearData['batch_name'];?></b> TO BE HELD IN THE MONTH OF <b><?php  echo $month. ' '.$year;?> </b>
                                             </p>
                                     </td>
                                 </tr>
