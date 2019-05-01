@@ -807,112 +807,21 @@ class Result extends CI_Controller {
 					//echo "hello"; exit;
 					foreach($students as $stuData)
 					 {
-						$subjectList = $this->Result_model->get_student_marks_by_id($stuData->user_id,$semester_id);
-						
-						     $list['first_name']  =$stuData->first_name;
-						     $list['last_name']  =$stuData->last_name;
-						     $list['user_unique_id']  =$stuData->user_unique_id;
-						     $list['user_image']  =$stuData->user_image;
-						     $list['batch_name']  =$stuData->batch_name;
-						     $list['campus_name']  =$stuData->campus_name;
-						     $list['campus_code']  =$stuData->campus_code;
-						     $list['degree_name']  =$stuData->degree_name;
-						     $list['semester_name']  =$semesterRow->semester_name;
-						     $list['month_year']  =$monthYrr;
-						    
-								 $dataList =array();
-								 $prevSemsList=array();
-								 $total_marks='';
-								 $total_credits='';
-								 $percentval='';
-								 $gradeval='';
-								 $gradepercent='';
-								 $roundpercent='';
-								 $creditpoint='';
-								 $creditval='';
-								 $total_all_subject_sum='';
-								 $allpercent ='';
-								 $total_theory_credit='';
-								 $total_practical_credit='';
-								 $total_credit_sum='';
-								 $roundoverallpercent='';
-								 $sum_subject_credit_val='';
-								 $sum_total_credits ='';
-								 $grade_point_average ='';
-								 $internal_sum='';
-								 $external_marks='';
-								 $sum_internal='';
-								 $sum_external='';
-								 $sum_theory_practical_credit='';
-								 $total_internal_external='';
-								 $final_statusss='';
-								 
-								 foreach($subjectList as $subjectVal)
-								 {  
-                                    
-							           $data['course_id']               		= $subjectVal->id;
-									   $data['course_code']        				= $subjectVal->course_code;
-									   $data['course_title']       				= $subjectVal->course_title;
-									   $data['theory_credit']      				= $subjectVal->theory_credit;
-									   $data['practicle_credit']   				= $subjectVal->practicle_credit;
-									   $sum_theory_practical_credit             = $data['theory_credit'] + $data['practicle_credit'];
-									   $data['theory_practical_credit']    		= $sum_theory_practical_credit;
-									   $data['theory_internal']    				= $subjectVal->theory_internal;
-									   $data['sum_internal_practical']    		= $subjectVal->sum_internal_practical;
-									   $data['practical_internal'] 				= $subjectVal->practical_internal;
-									   $data['theory_external']    				= $subjectVal->theory_external;
-									   $data['practical_external'] 				= $subjectVal->practical_external;
-									   $data['marks_sum']          				= $subjectVal->marks_sum;
-									   $data['external_sum']          			= $subjectVal->external_sum;
-									   $data['ncc_status']          			= $subjectVal->ncc_status;
-									   $data['course_group_id']          			= $subjectVal->course_group_id;
-									   $sum_internal                            = $data['theory_internal'] + $data['sum_internal_practical'];//100
-									   $data['internal_sum']       				= $sum_internal; 
-									   $sum_interna_passcondition30= $data['theory_internal']+ $data['external_sum']; //internal 20+external  100
-									    $sum_practical_pass_condition20=$data['sum_internal_practical'];//practical 60
-									   //p($sum_interna_passcondition1); exit;
-									   //subjectwise status of pass or fail of btech result
-									    $total_internal_external = $sum_internal + $data['external_sum'];//total sum subject wise 100
-										//p($total_internal_external);
-									    $external_marks   =   $data['external_sum'];
-										$ncc_status=$data['ncc_status'];
-										$course_group_id=$data['course_group_id'];
-										
-										if($sum_interna_passcondition30 >=30 && $sum_practical_pass_condition20 >=20){$passfail_status='P';}
-										 elseif($ncc_status==1 and $course_group_id==2)
-									   {
-										  $passfail_status='P'; 
-									   }
-										else{$passfail_status='F';}
-										//calculating percent,grade and credit points
-									    $total_credits = $data['theory_credit'] + $data['practicle_credit'];
-									    $percentval = ($total_internal_external/100)*100;
-									    $roundpercent = number_format($percentval,2);
-									    $gradeval = $roundpercent/10;
-									    $gradepercent = number_format($gradeval, 2);
-										$creditpoint = $gradepercent*$total_credits;
-										$creditval = number_format($creditpoint,2);
-										
-									   $data['percentval'] = $roundpercent;
-									   $data['gradeval']   = $gradepercent;
-									   $data['creditval']  = $creditval;
-									   $data['credithour'] = $total_credits;
-									   $data['result_status'] = $result_status;
-									   $data['passfail_status'] = $passfail_status;
-									   
-									   $total_all_subject_sum = $total_all_subject_sum+$total_internal_external;
-									   $sum_subject_credit_val = $sum_subject_credit_val+$data['creditval'];
-									   $sum_total_credits = $sum_total_credits+$total_credits;
-									   $grade_point_average = $sum_subject_credit_val/$sum_total_credits;
-									   $gpa=number_format($grade_point_average,2);
-									   if(!empty($gpa)){ $savegpa=$gpa;}
-									   else{$savegpa='';}
-									   //getting final loop
-									   $dataList[] = $data;
-									  
-								 }      
-								 
-						    $list['subjectList'] = $dataList;
+						$list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id);
+						$list['first_name']  =$stuData->first_name;
+						 $list['father_name']  =$stuData->parent_name;
+						 $list['mother_name']  =$stuData->mother_name;
+						 $list['last_name']  =$stuData->last_name;
+						 $list['user_unique_id']  =$stuData->user_unique_id;
+						 $list['user_image']  =$stuData->user_image;
+						 $list['batch_name']  =$stuData->batch_name;
+						 $list['batch_start_year']  =$stuData->batch_start_year;
+						 $list['campus_name']  =$stuData->campus_name;
+						 $list['campus_code']  =$stuData->campus_code;
+						 $list['degree_code']  =$stuData->degree_code;
+						 $list['degree_name']  =$stuData->degree_name;
+						  $list['semester_name'] =$semesterRow->semester_name;
+						 $list['month_year']  =$monthYrr;
 							$allData[] = $list;  
 							//p($allData);
 					 } //exit;
@@ -1085,108 +994,22 @@ class Result extends CI_Controller {
 					// p($students); exit;
 					 foreach($students as $stuData)
 					 {
-						     $subjectList = $this->Result_model->get_student_marks_by_id($stuData->user_id,$semester_id);
-						// p($subjectList); exit;
-						     $list['first_name']  =$stuData->first_name;
-						     $list['last_name']  =$stuData->last_name;
-						     $list['user_unique_id']  =$stuData->user_unique_id;
-						     $list['user_image']  =$stuData->user_image;
-						     $list['batch_name']  =$stuData->batch_name;
-						     $list['campus_name']  =$stuData->campus_name;
-						     $list['campus_code']  =$stuData->campus_code;
-						     $list['degree_name']  =$stuData->degree_name;
-						     $list['semester_name'] =$semesterRow->semester_name;
-						     $list['month_year']  =$monthYrr;
-						    
-								 $dataList =array();
-								 $prevSemsList=array();
-								 
-								
-								 $total_marks='';
-								 $total_credits='';
-								 $percentval='';
-								 $gradeval='';
-								 $gradepercent='';
-								 $roundpercent='';
-								 $creditpoint='';
-								 $creditval='';
-								 $total_all_subject_sum='';
-								 $allpercent ='';
-								 $total_theory_credit='';
-								 $total_practical_credit='';
-								 $total_credit_sum='';
-								 $roundoverallpercent='';
-								 $sum_subject_credit_val='';
-								 $sum_total_credits ='';
-								 $grade_point_average ='';
-								 $internal_sum='';
-								 $external_marks='';
-								 $sum_internal='';
-								 $sum_external='';
-								 $sum_theory_practical_credit='';
-								 $total_internal_external='';
-								 $final_statusss='';
-								 
-								 foreach($subjectList as $subjectVal)
-								 {  
-                                    
-							           $data['course_id']               		= $subjectVal->id;
-									   $data['course_code']        				= $subjectVal->course_code;
-									   $data['course_title']       				= $subjectVal->course_title;
-									   $data['theory_credit']      				= $subjectVal->theory_credit;
-									   $data['practicle_credit']   				= $subjectVal->practicle_credit;
-									   $sum_theory_practical_credit             = $data['theory_credit'] + $data['practicle_credit'];
-									   $data['theory_practical_credit']    		= $sum_theory_practical_credit;
-									   $data['theory_internal']    				= $subjectVal->theory_internal;
-									   $data['sum_internal_practical']    		= $subjectVal->sum_internal_practical;
-									   $data['practical_internal'] 				= $subjectVal->practical_internal;
-									   $data['theory_external']    				= $subjectVal->theory_external;
-									   $data['practical_external'] 				= $subjectVal->practical_external;
-									   $data['marks_sum']          				= $subjectVal->marks_sum;
-									   $data['external_sum']          			= $subjectVal->external_sum;
-									   $sum_internal                            = $data['theory_internal'] + $data['sum_internal_practical'];//100
-									   $data['internal_sum']       				= $sum_internal; 
-									  
-									   //subjectwise status of pass or fail of btech result
-									    $total_internal_external = $sum_internal + $data['external_sum'];//total sum subject wise
-										//p($total_internal_external);
-									    $external_marks   =   $data['external_sum'];
-										 $sum_interna_passcondition30= $data['theory_internal']+ $data['external_sum']; //internal 20+external  100
-									    $sum_practical_pass_condition20=$data['sum_internal_practical'];//practical 60
-										if($sum_interna_passcondition30 >=30 && $sum_practical_pass_condition20 >=20){$passfail_status='P';}
-										
-										else{$passfail_status='F';}
-										//calculating percent,grade and credit points
-									    $total_credits = $data['theory_credit'] + $data['practicle_credit'];
-									    $percentval = ($total_internal_external/100)*100;
-									    $roundpercent = number_format($percentval,2);
-									    $gradeval = $roundpercent/10;
-									    $gradepercent = number_format($gradeval, 2);
-										$creditpoint = $gradepercent*$total_credits;
-										$creditval = number_format($creditpoint,2);
-										
-									   $data['percentval'] = $roundpercent;
-									   $data['gradeval']   = $gradepercent;
-									   $data['creditval']  = $creditval;
-									   $data['credithour'] = $total_credits;
-									   $data['result_status'] = $result_status;
-									   $data['passfail_status'] = $passfail_status;
-									   
-									   $total_all_subject_sum = $total_all_subject_sum+$total_internal_external;
-									   $sum_subject_credit_val = $sum_subject_credit_val+$data['creditval'];
-									   $sum_total_credits = $sum_total_credits+$total_credits;
-									   $grade_point_average = $sum_subject_credit_val/$sum_total_credits;
-									   $gpa=number_format($grade_point_average,2);
-									   if(!empty($gpa)){ $savegpa=$gpa;}
-									   else{$savegpa='';}
-									   //getting final loop
-									   $dataList[] = $data;
-									  
-								
-								 } //exit;
-							 //p($dataList); exit;
-						    $list['subjectList'] = $dataList;
-							$allData[] = $list;  
+						$list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id);
+						$list['first_name']  =$stuData->first_name;
+						 $list['father_name']  =$stuData->parent_name;
+						 $list['mother_name']  =$stuData->mother_name;
+						 $list['last_name']  =$stuData->last_name;
+						 $list['user_unique_id']  =$stuData->user_unique_id;
+						 $list['user_image']  =$stuData->user_image;
+						 $list['batch_name']  =$stuData->batch_name;
+						 $list['batch_start_year']  =$stuData->batch_start_year;
+						 $list['campus_name']  =$stuData->campus_name;
+						 $list['campus_code']  =$stuData->campus_code;
+						 $list['degree_code']  =$stuData->degree_code;
+						 $list['degree_name']  =$stuData->degree_name;
+						  $list['semester_name'] =$semesterRow->semester_name;
+						 $list['month_year']  =$monthYrr;
+						$allData[] = $list;  
 					 }  
 				     $data['result_list']=$allData;
 					//p($data['result_list']);
@@ -1241,10 +1064,13 @@ class Result extends CI_Controller {
 					//echo "hello"; exit;
 					foreach($students as $stuData)
 					 {
-						$subjectList = $this->Result_model->get_student_marks_by_id($stuData->user_id,$semester_id);
+						 //print_r($semesterRow);
+						//$subjectList = $this->Result_model->get_student_marks_by_id($stuData->user_id,$semester_id);
 						//echo $this->db->last_query();exit;
 						
-						     $list['first_name']  =$stuData->first_name;
+						     
+						    $list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id);
+							$list['first_name']  =$stuData->first_name;
 						     $list['last_name']  =$stuData->last_name;
 						     $list['user_unique_id']  =$stuData->user_unique_id;
 						     $list['user_image']  =$stuData->user_image;
@@ -1255,142 +1081,11 @@ class Result extends CI_Controller {
 						     $list['degree_name']  =$stuData->degree_name;
 							  $list['semester_name'] =$semesterRow->semester_name;
 						     $list['month_year']  =$monthYrr;
-						    
-								 $dataList =array();
-								 $prevSemsList=array();
-								 $total_marks='';
-								 $total_credits='';
-								 $percentval='';
-								 $gradeval='';
-								 $gradepercent='';
-								 $roundpercent='';
-								 $creditpoint='';
-								 $creditval='';
-								 $total_all_subject_sum='';
-								 $allpercent ='';
-								 $total_theory_credit='';
-								 $total_practical_credit='';
-								 $total_credit_sum='';
-								 $roundoverallpercent='';
-								 $sum_subject_credit_val='';
-								 $sum_total_credits ='';
-								 $grade_point_average ='';
-								 $internal_sum='';
-								 $external_marks='';
-								 $sum_internal='';
-								 $sum_external='';
-								 $sum_theory_practical_credit='';
-								 $total_internal_external='';
-								 $final_statusss='';
-								 
-								 foreach($subjectList as $subjectVal)
-								 {  
-                                    
-							           $data['course_id']               		= $subjectVal->id;
-									   if(empty($subjectVal->course_subject_name))
-										   $course_code = $subjectVal->course_code;
-									   else
-										   $course_code = $subjectVal->course_subject_name;
-									   
-									   if(empty($subjectVal->course_subject_title))
-										   $course_title = $subjectVal->course_title;
-									   else
-										   $course_title = $subjectVal->course_subject_title;
-									   $data['course_code']        				= $course_code;
-									   $data['course_title']       				= $course_title;
-									   $data['theory_credit']      				= $subjectVal->theory_credit;
-									   $data['practicle_credit']   				= $subjectVal->practicle_credit;
-									   $sum_theory_practical_credit             = $data['theory_credit'] + $data['practicle_credit'];
-									   $data['theory_practical_credit']    		= $sum_theory_practical_credit;
-									   $numbers = array( $subjectVal->theory_internal1,$subjectVal->theory_internal2,$subjectVal->theory_internal3); 
-									   rsort($numbers);
-									  $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
-									   $data['theory_internal']    				= $theory_internal_total;
-									   $theory_marks_40=0; 
-									   $course_id = $subjectVal->course_id;
-									    $courseArr = explode("-",$course_id);
-									   $courseArr = explode("|",$courseArr[0]);
-									  $course_count=  count($courseArr);
-									   for($j=1;$j<=$course_count;$j++){ 
-										$var = "theory_external".$j; 
-										$theory_marks_40+=$subjectVal->{$var}/5;
-									   }
-									   if($course_count == 1) 
-										   $theory_marks_40=$theory_marks_40*2;  
-									   elseif($course_count > 2) 
-										$theory_marks_40=$theory_marks_40*2/$course_count; 
-									   
-									   $data['sum_internal_practical']    		= round_two_digit($theory_marks_40);
-									   $paper_20=0; 
-									   for($j=1;$j<=$course_count;$j++){ 
-										$var = "theory_paper".$j; 
-										$paper_20+=$subjectVal->{$var}/3;
-									   }
-									   $paper_20=($paper_20*2)/$course_count;  
-									   $data['internal_sum']       				= round_two_digit($paper_20); 
-									   $data['practical_internal'] 				= $subjectVal->practical_internal1;
-									   $data['theory_external']    				= $subjectVal->theory_external1;
-									   $data['practical_external'] 				= $subjectVal->practical_external;
-									   $data['marks_sum']          				= $subjectVal->marks_sum;
-									   $data['external_sum']          			= round_two_digit($theory_internal_total+$theory_marks_40+$paper_20);
-									    $data['ncc_status']          			= $subjectVal->ncc_status;
-									   $data['course_group_id']          			= $subjectVal->course_group_id;
-									   $sum_internal                            = $data['theory_internal1'] + $data['sum_internal_practical'];//100
-									   
-									   //p($data['external_sum']  ); exit;
-									   //subjectwise status of pass or fail of btech result
-									    $total_internal_external =  $data['internal_sum'] + $data['external_sum'];//total sum subject wise
-										//p($total_internal_external); exit;
-										 $sum_interna_passcondition30= $data['theory_internal1']+ $data['external_sum']; //internal 20+external  100
-									    $sum_practical_pass_condition20=$data['sum_internal_practical'];//practical 60
-										
-										$data['total_internal_external'] = $total_internal_external;
-									    $external_marks   =   $data['external_sum'];
-										$ncc_status=$data['ncc_status'];
-										$course_group_id=$data['course_group_id'];
-										
-									  if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50){
-										   $passfail_status='P';
-										}
-										 elseif($ncc_status==1 and $course_group_id==2)
-									   {
-										  $passfail_status='P'; 
-									   }
-										else{$passfail_status='F';}
-										//calculating percent,grade and credit points
-									    $total_credits = $data['theory_credit'] + $data['practicle_credit'];
-									    $percentval = ($total_internal_external/100)*100;
-									    $roundpercent = number_format($percentval,2);
-									    $gradeval = $roundpercent/10;
-									    $gradepercent = number_format($gradeval, 2);
-										$creditpoint = $gradepercent*$total_credits;
-										$creditval = number_format($creditpoint,2);
-										
-									   $data['percentval'] = $total_credits;
-									   $data['gradeval']   = number_format($data['external_sum']/10,2);
-									   $data['creditval']  = number_format(($data['external_sum']/10)*$total_credits,2);
-									   $data['credithour'] = $total_credits;
-									   $data['result_status'] = $result_status;
-									   $data['passfail_status'] = $passfail_status;
-									   
-									   $total_all_subject_sum = $total_all_subject_sum+$total_internal_external;
-									   $sum_subject_credit_val = $sum_subject_credit_val+$data['creditval'];
-									   $sum_total_credits = $sum_total_credits+$total_credits;
-									   $grade_point_average = $sum_subject_credit_val/$sum_total_credits;
-									   $gpa=number_format($grade_point_average,2);
-									   if(!empty($gpa)){ $savegpa=$gpa;}
-									   else{$savegpa='';}
-									   //getting final loop
-									   $dataList[] = $data;
-									  
-								 }      
-								 
-						    $list['subjectList'] = $dataList;
 							$allData[] = $list;  
-							//p($allData);
+							//p($allData);exit;
 					 } //exit;
 				     $data['aggregate_marks']=$allData;
-					// p($data['aggregate_marks']); exit;
+					//p($data['aggregate_marks']); exit;
 			
 			  
 			//load the view and saved it into $html variable
@@ -2260,7 +1955,7 @@ class Result extends CI_Controller {
 				$overallReport['count_subject']=$count_subject;
 			}
 			$dataList[] = $data;
-			echo $count_subject;
+			//echo $count_subject;
 		}
 			//p($subjectVal);exit;
 		$list['subjectList'] = $dataList;

@@ -115,17 +115,17 @@
 					foreach($result_val['subjectList'] as $subjectData)
 					      {
 							 //p($subjectData);
-							 $grandSum=$grandSum+$subjectData['total_sum'];
+							// $grandSum=$grandSum+$subjectData['total_sum'];
 							// p($subjectData['student_id']);
 							// p($subjectData['course_id']);
 							 //p($subjectData['course_code']);
 							 //p($subjectData['results_status']);
 						     //p($subjectData['total_sum']); 
 							 //p($grandSum);
-							  $grandpercent=($grandSum/1200)*100;
-							 $roundGrandPercent= number_format($grandpercent,2);
+							  //$grandpercent=($grandSum/1200)*100;
+							//$roundGrandPercent= number_format($grandpercent,2);
 							 
-							 if($subjectData['passfail_status']=='P')
+							 if($subjectData['passfail_status']=='Pass' || $subjectData['passfail_status']=='Satisfactory')
 							 {
 								 $values='Passed In   '.'-'.$subjectData['course_code'];
 								// p($values);
@@ -133,7 +133,7 @@
 								echo '<p>'.$values.'</p>';
 								
 							 }
-							  if($subjectData['passfail_status']=='F')
+							  if($subjectData['passfail_status']=='Fail'  || $subjectData['passfail_status']=='Not Satisfactory')
 							 {
 								 $values='Failed In   '.'-'.$subjectData['course_code'];
 								echo '<p>'.$values.'</p>';

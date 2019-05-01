@@ -89,16 +89,16 @@
 				?>
 				<tr>	
 					
-					<td><?php if($subject_data['course_code']==''){ echo 'N/A';} else{ echo $subject_data['course_code'];}?></td>
+					<td><?php if($subject_data['course_code']==''){ echo '';} else{ echo $subject_data['course_code'];}?></td>
 			<td><?php echo $subject_data['theory_credit'].'+'.$subject_data['practicle_credit'];?></td>
-			<td><?php if($subject_data['theory_internal']==''){echo 'N/A';}else{echo $subject_data['theory_internal'];}?></td>
-			<td><?php if($subject_data['sum_internal_practical']==''){echo 'N/A';}else{echo $subject_data['sum_internal_practical'];}?></td>
-			<td><?php if($subject_data['internal_sum']==''){echo 'N/A';}else{echo $subject_data['internal_sum'];}?></td>
-			<td><?php if($subject_data['external_sum']==''){echo 'N/A';}else{echo $subject_data['external_sum'];}?></td>
-			<!--<td><?php if($subject_data['percentval']==''){echo 'N/A';}else{echo $subject_data['percentval'];}?></td>-->
-			<td><?php if($subject_data['gradeval']==''){echo 'N/A';}else{echo $subject_data['gradeval'];}?></td>
-			<td><?php if($subject_data['creditval']==''){echo 'N/A';}else{echo $subject_data['creditval'];}?></td>
-			<td><?php if($subject_data['passfail_status']==''){echo 'N/A';}else{echo $subject_data['passfail_status'];}?></td>			
+			<td><?php if($subject_data['theory_internal']==''){echo '';}else{echo $subject_data['theory_internal'];}?></td>
+			<td><?php if($subject_data['sum_theory']==''){echo '';}else{echo $subject_data['sum_theory'];}?></td>
+			<td><?php if($subject_data['sum_practical']==''){echo '';}else{echo $subject_data['sum_practical'];}?></td>
+			<td><?php if($subject_data['sum_total']==''){echo '';}else{echo $subject_data['sum_total'];}?></td>
+			<!--<td><?php if($subject_data['percentval']==''){echo '';}else{echo $subject_data['percentval'];}?></td>-->
+			<td><?php if($subject_data['gradeval']==''){echo '';}else{echo $subject_data['gradeval'];}?></td>
+			<td><?php if($subject_data['creditval']==''){echo '';}else{echo $subject_data['creditval'];}?></td>
+			<td><?php if($subject_data['passfail_status']==''){echo '';}else{echo $subject_data['passfail_status'];}?></td>			
 				</tr>				
 <?php } 	?>
 			

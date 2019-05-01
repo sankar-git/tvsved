@@ -130,7 +130,7 @@
 					   ?>
                     <td><?php echo $subject_status['passfail_status'];?></td>
 				   <?php } ?>
-                    <td><?php if(in_array('F',$resultStatus)) {echo 'FAIL';} else{ echo 'PASS';}?></td>
+                    <td><?php if(in_array('Fail',$resultStatus) || in_array('Not Satisfactory',$resultStatus)) {echo 'FAIL';} else{ echo 'PASS';}?></td>
 					
                 </tr>
 			  <?php }     ?>
