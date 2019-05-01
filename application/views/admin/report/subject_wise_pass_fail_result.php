@@ -108,7 +108,7 @@
                     <th rowspan="1">ID NO.</th>
                     <th rowspan="1">NAME</th>
 					<?php foreach($pass_fail_list[0]['subjectList'] as $subjectVal){  ?>
-                    <th rowspan="1" ><?php echo $subjectVal['course_code'];?></th>
+                    <th rowspan="1" ><?php if($subjectVal['course_group_id'] == 22) echo 'NCC/NSS/CCA' ;else  echo $subjectVal['course_code'];?></th>
                     <?php }?>
                     <th rowspan="1">RESULT</th>
                 </tr>
