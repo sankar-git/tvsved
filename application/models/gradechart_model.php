@@ -119,7 +119,7 @@ Class Gradechart_model extends CI_Model
 		$this->db->order_by('student_id,id');
 		$resultArr=$this->db->get()->result_array();
 		$final_array=array();
-		//echo $this->db->last_query();
+		//echo $this->db->last_query();echo "<br>";
 		//echo "<pre>";
 		foreach($resultArr as $key=>$result_val){
 			if($program_id == 1 && $degree_id == 1){
@@ -151,7 +151,7 @@ Class Gradechart_model extends CI_Model
 			//	$this->db->order_by('c.id,u.first_name,u.last_name');
 			$courseresult=$this->db->get()->result_array();
 			//if($key == 3){
-				//echo $this->db->last_query();exit;
+				//echo $this->db->last_query();echo "<br>";
 		//}
 			//print_r($courseresult[$key]);
 			//print_r($courseresult);exit;

@@ -200,7 +200,7 @@
                                 </tr>
                                 <tr>
                                     <td>Grade Point Average</td>
-                                    <td align="center"><?php if(!empty($student_marks['overallReport']['gradeval_avergage'])){ echo round($student_marks['overallReport']['gradeval_avergage']/$student_marks['overallReport']['count_subject'],2);}else{echo 'N/A';} ?></td>
+                                    <td align="center"><?php if(!empty($student_marks['overallReport']['sum_subjects_credit_point'])){ echo round($student_marks['overallReport']['sum_subjects_credit_point']/$student_marks['overallReport']['credithours'],3);}else{echo 'N/A';} ?></td>
                                 </tr>
                             </table>
                         
@@ -223,7 +223,7 @@
                                 </tr>
                                 <tr>
                                     <td>Grade Point Average</td>
-                                    <td align="center"><?php if(!empty($student_marks['previous']['overallReport']['gradeval_avergage'])){ echo round($student_marks['previous']['overallReport']['gradeval_avergage']/$student_marks['previous']['overallReport']['count_subject'],2);}else{echo 'N/A';} ?></td>
+                                    <td align="center"><?php if(!empty($student_marks['previous']['overallReport']['sum_subjects_credit_point'])){ echo round($student_marks['previous']['overallReport']['sum_subjects_credit_point']/$student_marks['previous']['overallReport']['credithours'],3);}else{echo 'N/A';} ?></td>
                                 </tr>
                             </table>
                        
@@ -246,7 +246,7 @@
                                 </tr>
                                 <tr>
                                     <td>Grade Point Average</td>
-                                    <td align="center"><?php if(!empty($student_marks['overall']['gradeval_avergage'])){ echo round($student_marks['overall']['gradeval_avergage']/$student_marks['overall']['count_subject'],2);}else{echo 'N/A';} ?></td>
+                                    <td align="center"><?php if(!empty($student_marks['overall']['sum_subjects_credit_point'])){ echo round($student_marks['overall']['sum_subjects_credit_point']/$student_marks['overall']['credithours'],3);}else{echo 'N/A';} ?></td>
                                 </tr>
                             </table>
                        

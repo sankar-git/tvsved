@@ -537,13 +537,13 @@ class Result extends CI_Controller {
 									   $percentval=($total_subject_marks/100)*100;
 									 // p($percentval); 
 									 // $roundpercent=round($percentval,2);
-									  $roundpercent = number_format($percentval, 2);
+									  $roundpercent = number_format($percentval, 3);
 									 // p($roundpercent); exit;
 									 
 									  $gradeval = $roundpercent/10;
-									  $gradepercent = number_format($gradeval, 2);
+									  $gradepercent = number_format($gradeval, 3);
 									  $creditpoint = $gradepercent*$total_credits;
-									  $creditval = number_format($creditpoint,2);
+									  $creditval = number_format($creditpoint,3);
 									 // p($roundpercent);
 									 // p($gradeval); 
 									  // $data['sum_total'] = $internal_sum;
@@ -558,7 +558,7 @@ class Result extends CI_Controller {
 									   $sum_subject_credit_val = $sum_subject_credit_val + $data['creditval'];
 									   $sum_total_credits      = $sum_total_credits + $total_credits;
 									   $grade_point_average    = $sum_subject_credit_val/$sum_total_credits;
-									   $gpa                    = number_format($grade_point_average,2);
+									   $gpa                    = number_format($grade_point_average,3);
 									   if(!empty($gpa))
 									   {
 										   $savegpa=$gpa;
@@ -1933,8 +1933,8 @@ class Result extends CI_Controller {
 				$data['sum_theory'] = round_two_digit(($subjectVal->theory_external1/5)+($subjectVal->theory_external2/5));
 				$data['sum_practical'] = round_two_digit(($subjectVal->theory_paper1/3)+($subjectVal->theory_paper2/3));
 				$data['sum_total'] = round_two_digit($data['first_internal']+$data['second_internal']+$data['sum_theory']+$data['sum_practical']);
-				$data['gradeval']   = number_format(($data['first_internal']+$data['second_internal']+$data['sum_theory']+$data['sum_practical'])/10,2);
-				$data['creditval']  = number_format($data['gradeval']*$data['theory_practical_credit'],2);
+				$data['gradeval']   = number_format(($data['first_internal']+$data['second_internal']+$data['sum_theory']+$data['sum_practical'])/10,3);
+				$data['creditval']  = number_format($data['gradeval']*$data['theory_practical_credit'],3);
 			}
 			$passfail_status='Fail';
 			if($data['first_internal']+$data['second_internal']+$data['sum_theory']>=30 && $data['sum_practical']>=20){
