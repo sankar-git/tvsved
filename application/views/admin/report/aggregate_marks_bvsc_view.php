@@ -53,7 +53,7 @@
 			   <span align="center" style=" font-size:14px; padding-top:0px;"><?php echo $aggregate_marks[0]['semester_name']; ?> (<?php echo $aggregate_marks[0]['degree_code']; ?>)</span><br /><br />			  
 		</div>
         <div class="pdf_container">
-		<?php $i=0;foreach($aggregate_marks as $key=>$student_marks){ ?>
+		<?php foreach($aggregate_marks as $key=>$student_marks){ ?>
 		<div align="center" style="border:1px solid;margin-bottom:75px;">
             <table style="font-size:14px;">
                 <tr>
@@ -81,6 +81,7 @@
 				<?php 
 			$total_cp='';
 			$total_gp='';
+			
 			foreach($student_marks['subjectList'] as $subject_data){
 				//p($subject_data); exit;
 				     $total_cp = $total_cp+$subject_data['creditval'];
@@ -104,7 +105,7 @@
 			
             </table>
 			</div>
-<?php  $i++; if($i-1%2==1) echo "<pagebreak>";  }  ?>
+<?php   if((($key+1)%3)==0) echo "<pagebreak>";  }  ?>
 
     </div>
 </body>

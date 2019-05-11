@@ -30,7 +30,12 @@
     }
 
   }
-  
+  function get_student_marks($student_id,$semester_id,$course_id){
+	  $ci = &get_instance();
+        $ci->load->model('gradechart_model');
+		$result = $ci->gradechart_model->get_student_marks($student_id,$semester_id,$course_id);
+        return $result; 
+  }
   function fun_global_admin($userType='')
   { 
 	    $ci = &get_instance();

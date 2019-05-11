@@ -401,11 +401,11 @@ class Grade extends CI_Controller {
 	       $program_id=$data['program_id']=$this->input->post('program_id');
 	       $degree_id=$data['degree_id']=$this->input->post('degree_id');
 	       $batch_id=$this->input->post('batch_id');
-	       $semester_id=$this->input->post('semester_id');
+	       $data['semester_id']= $semester_id=$this->input->post('semester_id');
 	       $discipline_id=$this->input->post('discipline_id');
 	       $data['month']=$month=$this->input->post('month');
 	       $data['year']=$year=$this->input->post('year');
-	       $course_input=$this->input->post('course_id');
+	      $data['course_id']= $course_input=$this->input->post('course_id');
 		  // p($course_id); exit;
 		  //===========================Subject Wise Mark====================================// 
 		  if(!empty($this->input->post('subject_wise_mark')))
@@ -416,10 +416,13 @@ class Grade extends CI_Controller {
 	       //$course_id=$courseid[0]; 
 	      // $course_credit=$courseid[1]; 
 	     //print_r($course_id); exit;
-		 
-		   $courseArr = explode("-",$course_input);
-		   $courseArr = explode("|",$courseArr[0]);
+		  $data['course_count'] =  1;
+		 if($degree_id == 1){
+		   $courseArr = explode("|",$course_input);
+		   $courseArr = explode("-",$courseArr[1]);
+		   $course_input=$courseArr[0];
 		  $data['course_count'] =  count($courseArr);
+		 }
 		   $data['numeralCodes'] =  array("I","II","III","IV","V","VI","VII","VIII","IX");
 		   $data['students_attendance'] = $this->Gradechart_model->get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_input,$semester_id);
 		   //echo $this->db->last_query();exit;
@@ -683,6 +686,7 @@ class Grade extends CI_Controller {
 			  
 		   $data['numeralCodes'] =  array("I","II","III","IV","V","VI","VII","VIII","IX");
 		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		//	p($data['subject_wise_list']);exit;
 		    $subject_name=@$data['subject_wise_list'][0]->course_title;
 			$data['display'] = 'fail_list';
 			$data['title'] = "Failed Student's Report";

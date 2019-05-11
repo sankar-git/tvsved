@@ -75,7 +75,7 @@
 									<td><?php echo ucfirst($users->first_name);?></td>
 									
 									<td>
-									<?php if($users->user_image){?>
+									<?php if($users->user_image!='' && file_exists('uploads/user_images/student/'.$users->user_image)){?>
 									<img style="width:50px;height:50px;" src="<?php echo base_url('uploads/user_images/student/'.$users->user_image);?>" alt="current"/>
 									<?php } else {?>
 									<img style="width:50px;height:50px;" src="<?php echo base_url('uploads/user_images/student/');?>/no_image.jpg" alt="current"/>

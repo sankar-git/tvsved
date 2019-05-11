@@ -53,7 +53,7 @@
                                     <td align="center">
                                          <p align="center" style=" font-size:13px;">
                                                 APPLICATION FOR ADMISSION TO THE
-                                                <b><?php echo $appearData['semester_name'];?> </b> SEMESTER EXAMINATION FOR <b><?php echo $appearData['batch_name'];?></b> TO BE HELD IN THE MONTH OF <b><?php  echo $month. ' '.$year;?> </b>
+                                                <b><?php echo $appearData['semester_name'];?> </b> EXAMINATION FOR <b><?php echo $appearData['batch_name'];?></b> TO BE HELD IN THE MONTH OF <b><?php  echo $month. ' '.$year;?> </b>
                                             </p>
                                     </td>
                                 </tr>
@@ -73,7 +73,7 @@
 					<td align="left">4. Year of Admission:  <b><?php  echo $appearData['admission_year'];?></b></td>
 				</tr>
 				<tr>
-					<td >5. College: <b><?php echo $appearData['campus_name'];?></b></td>
+					<td >5. College: <b><?php echo $appearData['campus_code'];?></b></td>
 					<td align="left">6. Degree: <b><?php  echo $appearData['degree_name'];?></b></td>
 				</tr>
 				<tr>
@@ -97,18 +97,19 @@
 				 $sum_theory=0;
 				 $sum_practical=0;
 				$i=0;foreach($appearData['subjectList'] as $courseData){$i++;
-				             
+				             if($courseData['course_subject_id']!=22){
 							  $sum_theory=$sum_theory+$courseData['theory_credit'];
 							  $sum_practical=$sum_practical+$courseData['practical_credit'];
 							  $sumTotal=$sum_theory+$sum_practical;
+							 }
 							 
 							 //print_r($sumTotal.'('.$sum_theory.'+'.$sum_practical.')'); 
 				
 				?>
                 <tr style=" font-size:12px; font-weight:bold;">
                     <td align="center"><?php echo $i;?></td>
-                    <td align="center"><?php echo $courseData['course_code'];?></td>
-                    <td style="padding-left:20px;"><?php echo $courseData['course_title'];?></td>
+                    <td align="center"><?php echo str_replace(",","<br/>",$courseData['course_code']);?></td>
+                    <td style="padding-left:20px;"><?php echo str_replace(",","<br/>",$courseData['course_title']);?></td>
                     <td style="padding-left:20px;"><?php echo $courseData['theory_credit'].'+'.$courseData['practical_credit'];?></td>
                     <td style="padding-left:20px;">First Time</td>
                 </tr>

@@ -14,7 +14,7 @@
                 </tr>
                 <tr>
                     <td align="left" style="vertical-align:top;font-weight:bold;">Subject ID</td>
-					<td align="left"  style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;<?php if(empty($students_attendance[0]->course_subject_name)) echo $students_attendance[0]->course_code; else echo $students_attendance[0]->course_subject_name;?></td>
+					<td align="left"  style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;<?php if(empty($students_attendance[0]->course_subject_name)) echo $students_attendance[0]->course_code; else echo $students_attendance[0]->course_subject_name;?> (<?php echo $students_attendance[0]->theory_credit.'+'.$students_attendance[0]->practicle_credit;?>)</td>
 					
                     <td align="right"  style="vertical-align:top;font-weight:bold;">Exam</td>
 					<td align="left"  style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;<?php if(in_array($campus_id,array(1,2,3,4))){?>Annual Board <?php }else{ ?>Semester<?php }?></td>

@@ -814,8 +814,11 @@ class Generate extends CI_Controller {
 					//p($students); exit;
 					 foreach($students as $stuData)
 					 {
-						
-						$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id);
+						if($degree_id == 1){
+							$subjectList = $this->Generate_model->get_student_assigned_subjects_bvsc($stuData->user_id,$semester_id);
+						}else{
+							$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id);
+						}
 						// p($subjectList); 
 						     
 						     $list['student_unique_id']  =$stuData->user_unique_id;
@@ -823,6 +826,7 @@ class Generate extends CI_Controller {
 						     $list['last_name']  =$stuData->last_name;
 						     $list['batch_name']  =$stuData->batch_name;
 						     $list['campus_name']  =$stuData->campus_name;
+						     $list['campus_code']  =$stuData->campus_code;
 						     $list['degree_name']  =$stuData->degree_name;
 						     $list['semester_name']  =$stuData->semester_name;
 						     $list['gender']  =$stuData->gender;
@@ -838,6 +842,7 @@ class Generate extends CI_Controller {
 									   $data['course_title']   = $subjectVal->course_title;
 									   $data['theory_credit']   = $subjectVal->theory_credit;
 									   $data['practical_credit']   = $subjectVal->practicle_credit;
+									   $data['course_subject_id']   = $subjectVal->course_subject_id;
 									   $dataList[] = $data;
 								 }
 								// p($dataList); exit;

@@ -52,10 +52,17 @@ Class Gradechart_model extends CI_Model
         $result	= $this->db->get()->result();
 		return $result;
 	}
-	
+	function get_student_marks($student_id,$semester_id,$course_id){
+		$this->db->select('r.theory_internal1,r.theory_internal2,r.theory_internal3,r.theory_internal,r.theory_paper1,
+		                   r.theory_paper2,r.theory_paper3,r.theory_paper4,r.sum_internal_practical,r.practical_internal,r.theory_external1,r.theory_external2,r.theory_external3,r.theory_external4,r.practical_external,
+						   r.marks_sum,r.external_sum');
+		$this->db->from('students_ug_marks as r');
+		 $this->db->where(array('r.student_id'=>$student_id,'r.course_id'=>$course_id,'r.semester_id'=>$semester_id));
+		return $this->db->get()->result();
+	}
 	function get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_id,$semester_id)
 	{
-	    	$this->db->select('u.first_name,u.last_name,u.user_unique_id,cp.campus_code,b.batch_name,c.course_title,c.course_code,du.dummy_value,d.degree_name,d.degree_code,sem.semester_name,csg.course_subject_name,csg.course_subject_title,c.theory_credit,c.practicle_credit');
+	    	$this->db->select('u.id as student_id,u.first_name,u.last_name,u.user_unique_id,cp.campus_code,b.batch_name,c.course_title,c.course_code,du.dummy_value,d.degree_name,d.degree_code,sem.semester_name,csg.course_subject_name,csg.course_subject_title,c.theory_credit,c.practicle_credit');
 	    	$this->db->from('users u');
 	    	//$this->db->from('courses c');
 	    	$this->db->join('user_map_student_details ud','ud.user_id = u.id','LEFT');
