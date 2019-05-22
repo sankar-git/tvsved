@@ -150,9 +150,9 @@
 					  <!--<<input type="submit"  name="reg_students" style="margin-left:10px;" id="reg_students" value="REG Students" class="btn btn-primary" formtarget="_blank">-->
 					  <input type="submit"  name="class_grade" style="margin-left:10px;" id="class_grade" value="Final Subject Wise Mark " class="btn btn-primary" formtarget="_blank">
 					
-					  <!--<input type="submit"  name="empty" style="margin-left:10px;" id="empty" value="Final Subject Result" class="btn btn-primary" formtarget="_blank">-->
+					  <!--<input type="submit"  name="empty" style="margin-left:10px;" id="empty" value="Final Subject Result" class="btn btn-primary" formtarget="_blank">
 					  <input type="submit"  name="blank" style="margin-left:10px;" id="blank" value="Moderation Mark" class="btn btn-primary" formtarget="_blank">
-					  <input type="submit"  name="dummy" style="margin-left:10px;" id="dummy" value="Deficit" class="btn btn-primary" formtarget="_blank">
+					  <input type="submit"  name="dummy" style="margin-left:10px;" id="dummy" value="Deficit" class="btn btn-primary" formtarget="_blank">-->
 					  <input type="submit"  name="pass_fail_list" style="margin-left:10px;" id="pass_fail_list" value="Subject Wise Pass Fail List" class="btn btn-primary" formtarget="_blank">
 					  <input type="submit"  name="failed_list" style="margin-left:10px;" id="failed_list" value="Failed List" class="btn btn-primary" formtarget="_blank">
 					  <!--<<input type="submit"  name="attendance" style="margin-left:10px;" id="attendance" value="Attendance" class="btn btn-primary" formtarget="_blank">-->

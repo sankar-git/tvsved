@@ -148,7 +148,8 @@ $this->load->view('admin/helper/header');?>
 					  <input type="submit"  name="gally" id="gally" value="Gally" class="btn btn-primary" formtarget="_blank">
 					  <input type="submit"  name="dummy" id="dummy" value="Dummy" class="btn btn-primary" formtarget="_blank">
 					  <input type="submit"  name="exam_appearence" id="exam_appearence" value="Exam Appearance" class="btn btn-primary" formtarget="_blank">
-						<input type="submit" name="empty" style="margin-left:10px;" id="empty" value="Final Subject Result" class="btn btn-primary" formtarget="_blank">
+						<input type="submit" name="empty"  id="empty" value="Final Subject Result" class="btn btn-primary" formtarget="_blank">
+						<input type="submit" name="moderation"  id="moderation" value="Moderation Mark" class="btn btn-primary" formtarget="_blank">
 				
 				</div>
 						<table id="example" class="table table-bordered table-hover">

@@ -498,8 +498,9 @@ class Grade extends CI_Controller {
 		 //====================Generate Blank Start=====================================//
 		  if(!empty($this->input->post('blank')))
 		  {  
-			if($program_id > 1){
+			if($degree_id > 1){
 				 $course_id=$course_input;
+				 
 		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
 		    $subject_name=$data['subject_wise_list'][0]->course_title;
 			$data['display'] = 'pass_fail_list';
@@ -523,18 +524,66 @@ class Grade extends CI_Controller {
 		   }
 		  }	else{
 	        $course_id=$course_input;
+		  // p($_POST); exit;
+	       //$course_id=$courseid[0]; 
+	       //$course_credit=$courseid[1]; 	  
+		   $courseArr = explode("-",$course_input);
+		   $courseArr = explode("|",$courseArr[0]);
+		  $data['course_count'] =  count($courseArr);
 		   //p($courseid); exit;
 	      // $course_id=$courseid[0]; 
 	       //$course_credit=$courseid[1]; 
 	     //  print_r($course_id); exit;
 		 
-		  $data['aggregate_marks'] = $this->Gradechart_model->get_aggregate_marks($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id);
+		  $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		 $courseGroup=array();
+			$resultArray=array();
+		 foreach($data['subject_wise_list'] as $subject_wise_val){
+				 if(!empty($subject_wise_val->course_subject_name)){
+					 if(!in_array($subject_wise_val->course_subject_name, $courseGroup, true)){
+							array_push($courseGroup, $subject_wise_val->course_subject_name);
+							$courseGroupArr[$subject_wise_val->coure_group_id]=$subject_wise_val->course_subject_name;
+						}
+						$name = $subject_wise_val->first_name.' '.$subject_wise_val->last_name;
+						
+						$numbers = array( $subject_wise_val->theory_internal1,$subject_wise_val->theory_internal2,$subject_wise_val->theory_internal3); 
+						rsort($numbers);
+						//print_r($numbers);exit;
+						 $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
+						  $theory_externals=$subject_wise_val->theory_external1/5;
+						  $practical_externals=$subject_wise_val->theory_external2/5;
+						 $theory_marks_40=$theory_externals+$practical_externals;
+						  $paper1_20=$subject_wise_val->theory_paper1/3;
+						  $paper1_20s=number_format($paper1_20,2);
+						  $paper2_20=$subject_wise_val->theory_paper2/3;
+						  $paper2_20s=number_format($paper2_20,2);
+						  $paper_20=$paper1_20s+$paper2_20s;
+						  if($subject_wise_val->coure_group_id == 22){
+							  if($subject_wise_val->ncc_status == 1)
+								   $subject_wise_val->result = "SATISFACTORY"; 
+							  else 
+								  $subject_wise_val->result =  "NOT SATISFACTORY";
+						  }else{
+							  if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) 
+								  $subject_wise_val->result = "PASS"; 
+							  else 
+								  $subject_wise_val->result =  "FAIL";
+						  }
+					$resultArray[$name][$subject_wise_val->course_subject_name][]=$subject_wise_val;
+					//print_r($resultArray);exit;
+				 }
+		 }
+		 if($degree_id=='1')
+			ksort($courseGroupArr);
+		 $data['result_marks'] =$resultArray;
+		 $data['courseGroup'] =$courseGroupArr;
+		  //echo $this->db->last_query();exit;
 			//p($data['aggregate_marks']); exit;
 		  //getting batch and year
 	      
 			//load the view and saved it into $html variable
 			$html=$this->load->view('admin/grade/class_grade_student_blank_view.php',$data, true);
-			// print_r($html); exit;
+			echo $html; exit;
 			//this the the PDF filename that user will get to download
 			$pdfFilePath = "registered_students.pdf";
 	 

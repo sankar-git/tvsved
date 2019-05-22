@@ -34,6 +34,7 @@
 	  $ci = &get_instance();
         $ci->load->model('gradechart_model');
 		$result = $ci->gradechart_model->get_student_marks($student_id,$semester_id,$course_id);
+		//echo $ci->db->last_query();
         return $result; 
   }
   function fun_global_admin($userType='')

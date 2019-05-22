@@ -114,7 +114,7 @@ Class Gradechart_model extends CI_Model
 		return $result;
 	}
 	
-	function get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id='',$course_id='')
+	function get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id='',$course_id='',$student_id='')
 	{
 		$this->db->select('r.course_id,r.theory_internal1,r.theory_internal2,r.theory_internal3,r.theory_internal,r.theory_paper1,
 		                   r.theory_paper2,r.theory_paper3,r.theory_paper4,r.sum_internal_practical,r.practical_internal,r.theory_external1,r.theory_external2,r.theory_external3,r.theory_external4,r.practical_external,
@@ -123,6 +123,8 @@ Class Gradechart_model extends CI_Model
 		$this->db->where(array('r.campus_id'=>$campus_id,'r.program_id'=>$program_id,'r.degree_id'=>$degree_id,'r.batch_id'=>$batch_id,'r.semester_id'=>$semester_id));
 		if($course_id>0)
 			$this->db->where(array('r.course_id'=>$course_id));
+		if($student_id>0)
+			$this->db->where_in('r.student_id',$student_id);
 		$this->db->order_by('student_id,id');
 		$resultArr=$this->db->get()->result_array();
 		$final_array=array();

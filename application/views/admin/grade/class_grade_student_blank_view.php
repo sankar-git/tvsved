@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Blank View</title>
+    <title>Moderation Mark</title>
 
 
  <style>
@@ -77,9 +77,9 @@
 			<table class="sub-detail-tbl" style="width:100%;padding:20px 0px; margin:0px; border-collapse: collapse; margin:20px 0px;Lline-height:1.5">
 				<tr>
                     <td align="left" width="80px" style="vertical-align:top;font-weight:bold;">College &nbsp;:&nbsp;</td>
-					<td align="left" width="250px" style="vertical-align:top;font-weight:bold;margin-left:1px;"><?php echo $aggregate_marks[0]->campus_code;?></td>					
+					<td align="left" width="250px" style="vertical-align:top;font-weight:bold;margin-left:1px;"><?php echo $subject_wise_list[0]->campus_code;?></td>					
 					<td align="right" width="240px" style="vertical-align:top;font-weight:bold;">Batch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;</td>
-					<td align="left"width="250px" style="vertical-align:top;font-weight:bold;"><?php echo $aggregate_marks[0]->batch_name;?></td>                
+					<td align="left"width="250px" style="vertical-align:top;font-weight:bold;"><?php echo $subject_wise_list[0]->batch_name;?></td>                
                    
                 </tr>
                 <tr>
@@ -91,7 +91,7 @@
                 </tr>
 				<tr>
                     <td align="left" width="80px" style="vertical-align:top;font-weight:bold;">Subject &nbsp;:&nbsp;</td>
-					<td align="left" width="250px" style="vertical-align:top;font-weight:bold;"><?php echo $aggregate_marks[0]->course_code;?></td>
+					<td align="left" width="250px" style="vertical-align:top;font-weight:bold;"><?php echo $subject_wise_list[0]->course_code;?></td>
                     <td align="right" width="240px" style="vertical-align:top;font-weight:bold;">Annual Board&nbsp;&nbsp;:&nbsp;&nbsp;</td>
 					<td align="left"width="250px" style="vertical-align:top;font-weight:bold;">First</td>
                     
@@ -131,14 +131,51 @@
                     <th scope="col"  style="padding:2px;">(100)</th>
 
                 </tr>
-
+					<?php $i=0;
+                      $theory_externals='';
+                      $practical_externals='';
+					  $theory_marks_40='';
+					  $internal_plus_theory='';
+					  $paper1_20='';
+					  $paper2_20='';
+					  $paper1_20s='';
+					  $paper2_20s='';
+					  $paper_20='';
+					  $total_subject_aggregate='';
+					  $display = 'fail_list';
+				      foreach($subject_wise_list as $key=>$subject_wise_val){
+						  
+						  
+				                       
+				      $theory_externals=$subject_wise_val->theory_external1/5;
+				      $practical_externals=$subject_wise_val->theory_external2/5;
+					  $theory_marks_40=$theory_externals+$practical_externals;
+					  $internal_plus_theory=$subject_wise_val->theory_internal+$theory_marks_40;
+					  
+					  $paper1_20=$subject_wise_val->theory_paper1/3;
+					  $paper1_20s=number_format($paper1_20,2);
+					  $paper2_20=$subject_wise_val->theory_paper2/3;
+					  $paper2_20s=number_format($paper2_20,2);
+					  $paper_20=$paper1_20s+$paper2_20s;
+					  $total_subject_aggregate=$internal_plus_theory+$paper_20;
+					   $numbers = array( $subject_wise_val->theory_internal1,$subject_wise_val->theory_internal2,$subject_wise_val->theory_internal3); 
+					   rsort($numbers);
+					  $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
+					  if($display == 'fail_list'){
+						if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50)
+						  continue;
+					  }
+					  $i++;
+				?>
 				<tr>	
 					
-					<td  align="center" style="padding:2px;">01</td>
+					<td  align="center" style="padding:2px;"><?php echo $i;?></td>
                     <td  align="center" style="padding:2px;"></td>
-                    <td  align="left" style="padding:2px; vertical-align:bottom;">BVT17001</td>
-                    <td  align="center" style="padding:2px;">-</td>
-					<td  align="center" style="padding:2px;">-</td>
+                    <td  align="left" style="padding:2px; vertical-align:bottom;"><?php echo $subject_wise_val->first_name.' '.$subject_wise_val->last_name;?></td>
+                    <?php $theory_marks_40=0; for($j=1;$j<=$course_count;$j++){ $var = "theory_external".$j; $theory_marks_40+=$subject_wise_val->{$var}/5;?>
+                    <td  align="center" style="padding:2px;"><?php echo round_two_digit($subject_wise_val->{$var});?></td>
+                    <td  align="center" style="padding:2px;"><?php echo round_two_digit($subject_wise_val->{$var}/5);?></td>
+					<?php }?>
                     <td  align="center" style="padding:2px;">-</td>
                     <td  align="center" style="padding:2px;">-</td>
                     <td  align="center" style="padding:2px;">-</td>
@@ -148,7 +185,7 @@
                     <td  align="center" style="padding:2px;">-</td>
                     <td  align="center" style="padding:2px;">-</td>
 				</tr>				
-
+<?php }?>
             </table>    
              
         </div>
@@ -162,222 +199,3 @@
 </body>
 
 </html>
-
-        .table {
-             
-            border-collapse: collapse;
-            padding:0px !important;
-        }
-
-            .table th {
-                border: 1px solid black;
-                border-collapse: collapse;
-                padding: 0px 0px 0px 0px !important;
-                font-size: 13px;
-            }
-
-                .table th td {
-                     
-                    border-collapse: collapse;
-                    padding: 0px 0px 0px 0px !important;
-                }
-
-            .table tr td {
-                border: 1px solid black;
-                border-collapse: collapse;
-                font-size: 11px;
-                padding: 0px 0px 0px 0px !important;
-            }
-    </style>
-</head>
-
-
-<body>
-    <div style="padding:10px 10px 10px 10px; width:852px; font-family:Arial, Helvetica, sans-serif;">
-        <div id="dummy">
-            <table>
-                <tr>
-                    <td><div><span class="logo"><img height="110" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></span></div></td>
-                    <td>
-                        <div>
-                            <table>
-                                <tr><td><div><div style="margin-left:30px; font-weight:bold; font-size:14px;"><p>TAMIL NADU  VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></div></div></td></tr>
-                                <tr>
-                                    <td>
-                                        <div>
-                                            <p align="center" style=" font-size:14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-											&nbsp;&nbsp;<?php echo $aggregate_marks[0]->degree_name;?></p>
-                                            <p align="center" style=" font-size:14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-											&nbsp;&nbsp;<?php echo $aggregate_marks[0]->semester_name;?> SEMESTER FINAL EXAMINATION</p>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                            </table>
-                        </div>
-
-
-                    </td>
-                </tr>
-            </table>
-
-            <hr />
-            <table style="font-size:11px;">
-                <tr>
-                    <td><div><b>College &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b><?php echo $aggregate_marks[0]->campus_name;?></div></td>
-                     
-                    <td align="right"><div><b>Month & Year :</b>MAR-2016</div></td>
-
-                </tr>
-                <tr>
-                    <td><div><b>Subject Code&nbsp;&nbsp;:</b><?php echo $aggregate_marks[0]->course_code;?> (<?php echo $aggregate_marks[0]->theory_credit ;?> + <?php echo $aggregate_marks[0]->practicle_credit ;?>)</div></td>
-                    <td align="right"><div><b>Batch :</b>&nbsp;<?php echo $aggregate_marks[0]->batch_name;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></td>
-                </tr>
-                <tr>
-                    <td><div><b>Subject &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b><?php echo $aggregate_marks[0]->course_title;?></div></td>
-                    <td>
-                        <div>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </div>
-                    </td>
-                    <td><div><b> </b>&nbsp;&nbsp; </div></td>
-                </tr>
-            </table>
-            <br/>
-            <table id="table" width="100%" class="table">
-                <tr>
-                    <th>
-                        <div>
-                            ID No.
-                        </div>
-                    </th>
-                    <th>
-                        <div>
-                            Name of the Student
-                        </div>
-                    </th>
-                    <th>
-                        <div>
-                            <table width="100%" class="table">
-                                <tr>
-                                    <th colspan="2">
-                                        <div>
-                                            THEORY
-                                        </div>
-                                    </th>
-
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <div>
-                                            INT.
-                                            (Max. 20)
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div>
-                                            EXT.
-                                            (Max. 80)
-                                        </div>
-                                    </th>
-                                </tr>
-                            </table>
-                        </div>
-                    </th>
-                    <th>
-                        <div>
-                            <table width="100%" class="table">
-                                <tr>
-                                    <th colspan="2">
-                                        <div>
-                                            PRACTICAL
-                                        </div>
-                                    </th>
-
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <div>
-                                            INT.
-                                            (Max. 20)
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div>
-                                            EXT.
-                                            (Max. 80)
-                                        </div>
-                                    </th>
-                                </tr>
-                            </table>
-                        </div>
-                    </th>
-                </tr>
-				
-				<?php foreach($aggregate_marks as $marks){?>
-                <tr>
-                    <td>
-                        <div>
-                            <?php echo $marks->user_unique_id;?>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                          <?php echo ucfirst($marks->first_name).' '.ucfirst($marks->first_name);?>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <table width="100%" class="table">
-                                <tr>
-                                    <td>
-                                        <div>
-                                            <?php echo $marks->theory_internal;?>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div>
-                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <table width="100%" class="table">
-                                <tr>
-                                    <td >
-                                        <div>
-                                          <?php echo $marks->practical_internal;?>
-                                        </div>
-                                    </td>
-                                    <td >
-                                        <div>
-                                       &nbsp;&nbsp;&nbsp;&nbsp;
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </td>
-
-                </tr>
-				
-				<?php } ?>
-            </table>
-
-
-            
-             
-        </div>
-    </div>
-</body>
-
-
-
-
-</html> -->

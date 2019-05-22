@@ -49,7 +49,7 @@
 	<p align="center">
 	     <h5 align="center">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY </h5>
          <h6 align="center"><?php echo $aggregate_marks[0]->discipline_code.'. ('.strtoupper($aggregate_marks[0]->discipline_name).')';?></h6>
-         <h6 align="center"><?php echo strtoupper($aggregate_marks[0]->semester_name);?> FINAL EXAMINATION RESULTS</h6>
+         <h6 align="center"><?php echo strtoupper($aggregate_marks[0]->semester_name);?> Moderation Marks</h6>
 		
 	</p>
     <div style="padding:0px; width:100%; font-family:Arial, Helvetica, sans-serif; ">
@@ -76,29 +76,33 @@
            
 		<table class="table" width="100%" style="border:solid 1px black; ">
                 <tr>
-                    <th width="10%" style="font-weight:bold;">S.No.</th>
-                    <th width="10%" style="font-weight:bold;">ID No.</th>
-                    <th width="30%" style="font-weight:bold;">NAME</th>
+                    <th rowspan="2" width="5%" style="font-weight:bold;">SI.No.</th>
+                    <th rowspan="2" width="15%" style="font-weight:bold;">ID No.</th>
+                    <th rowspan="2" width="30%" style="font-weight:bold;">NAME</th>
 					<?php foreach($courseGroup as $key=>$value){?>
-                    <th width="10%" style="font-weight:bold;"><?php echo $value;?></th>
+                    <th colspan="2" width="10%" style="font-weight:bold;"><?php echo $value;?></th>
 					<?php } ?>
-					<th width="10%" style="font-weight:bold;">RESULT</th>
+					<th rowspan="2" width="20%" style="font-weight:bold;">Remarks</th>
                 </tr>
+				<tr>
+				<?php foreach($courseGroup as $key=>$value){?>
+					<th width="10%" style="font-weight:bold;">Theroy</th>
+					<th  width="10%" style="font-weight:bold;">Prac</th>
+				<?php } ?>
+				</tr>
+				
 <?php $counter=0; foreach($result_marks as $name=>$courseGroupArr){ 
-			$result_str ='';
+			$result_str ='';	//echo "<pre>";print_r($courseGroupArr);exit;
 			foreach($courseGroupArr as $groupname=>$marksArr){
-				//print_r($marks);exit;
+				
 				foreach($marksArr as $key=>$marks){
-					$result[$name][$groupname][] = $marks->result;
+					$result[$name][$groupname]['prac'] = $marks->prac_diff;
+					$result[$name][$groupname]['theroy'] = $marks->theory_diff;
 				}
-				$result[$name][$groupname] = array_unique($result[$name][$groupname]);
-				if(count($result[$name][$groupname])>1)
-					$result[$name][$groupname] = 'FAIL';
-				else
-					$result[$name][$groupname] = $result[$name][$groupname][0];
+				
 				
 			}
-			//print_r($result[$name]);exit;
+		//	p($result);exit;
 			$counter++;
 			?>
 				<tr>	
@@ -106,15 +110,12 @@
 					<td  style="padding:2px;"><?php echo $counter;?></td>
                     <td  style="padding:2px;"><?php echo $marks->user_unique_id;?></td>
                     <td  align="left" style="padding:2px;"> <?php echo ucfirst($marks->first_name).' '.ucfirst($marks->last_name);?></td>
-                    <?php $passcnt=0;$failcnt=0; foreach($courseGroup as $key=>$value){ 
-					if($result[$name][$value] == 'PASS' || $result[$name][$value] == 'P' || $result[$name][$value] == 'SATISFACTORY') 
-						$passcnt++;
-					else
-						$failcnt++;
+                    <?php $passcnt=0;$failcnt=0; foreach($courseGroup as $key=>$value){  
 					?>
-					<td  style="padding:2px;"><?php echo $result[$name][$value];?></td>
+					<td  style="padding:2px;"><?php echo $result[$name][$value]['theroy'];?></td>
+					<td  style="padding:2px;"><?php echo $result[$name][$value]['prac'];?></td>
 					<?php } ?>
-                    <td  style="padding:2px;"><?php if($passcnt == count($courseGroup)) echo "PASS";elseif($failcnt<=2) echo "CAP"; else echo "FAIL";?> </td>
+                    <td  style="padding:2px;">-</td>
 				</tr>			
 			<?php  } ?>
             </table>

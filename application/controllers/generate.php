@@ -696,7 +696,7 @@ class Generate extends CI_Controller {
 	      // $course_credit=$courseid[1]; 
 	     //  print_r($course_id); exit;
 		 
-		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id);
+		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'',$student_id);
 		  //echo $this->db->last_query();exit;
 			$courseGroup=array();
 			$resultArray=array();
@@ -724,9 +724,9 @@ class Generate extends CI_Controller {
 						  $paper_20=$paper1_20s+$paper2_20s;
 						  if($subject_wise_val->coure_group_id == 22){
 							  if($subject_wise_val->ncc_status == 1)
-								   $subject_wise_val->result = "PASS"; 
+								   $subject_wise_val->result = "SATISFACTORY"; 
 							  else 
-								  $subject_wise_val->result =  "FAIL";
+								  $subject_wise_val->result =  "NOT SATISFACTORY";
 						  }else{
 							  if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) 
 								  $subject_wise_val->result = "PASS"; 
@@ -762,6 +762,7 @@ class Generate extends CI_Controller {
 			ksort($courseGroupArr);
 		 $data['result_marks'] =$resultArray;
 		 $data['courseGroup'] =$courseGroupArr;
+		 
 		  //echo $this->db->last_query();exit;
 		 //p( $resultArray); 
 		// p( $courseGroupArr); exit;
@@ -783,6 +784,116 @@ class Generate extends CI_Controller {
 			$this->m_pdf->pdf->Output($pdfFilePath, "I");
             exit;			
 		 }
+		 
+		 
+		 if(!empty($this->input->post('moderation')))
+		  {  
+	        //$course_id=$course_input;
+		   //p($courseid); exit;
+	       //$course_id=$courseid[0]; 
+	      // $course_credit=$courseid[1]; 
+	     //  print_r($course_id); exit;
+		 
+		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'',$student_id);
+		  //echo $this->db->last_query();exit;
+			$courseGroup=array();
+			$resultArray=array();
+		 foreach($data['aggregate_marks'] as $subject_wise_val){
+			// p($subject_wise_val);
+			 if($degree_id=='1'){
+				 if(!empty($subject_wise_val->course_subject_name) && $subject_wise_val->coure_group_id != 22){
+					 if(!in_array($subject_wise_val->course_subject_name, $courseGroup, true)){
+							array_push($courseGroup, $subject_wise_val->course_subject_name);
+							$courseGroupArr[$subject_wise_val->coure_group_id]=$subject_wise_val->course_subject_name;
+						}
+						$name = $subject_wise_val->first_name.' '.$subject_wise_val->last_name;
+						
+						$numbers = array( $subject_wise_val->theory_internal1,$subject_wise_val->theory_internal2,$subject_wise_val->theory_internal3); 
+						rsort($numbers);
+						//print_r($numbers);exit;
+						 $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
+						  $theory_externals=$subject_wise_val->theory_external1/5;
+						  $practical_externals=$subject_wise_val->theory_external2/5;
+						 $theory_marks_40=$theory_externals+$practical_externals;
+						  $paper1_20=$subject_wise_val->theory_paper1/3;
+						  $paper1_20s=number_format($paper1_20,2);
+						  $paper2_20=$subject_wise_val->theory_paper2/3;
+						  $paper2_20s=number_format($paper2_20,2);
+						  $paper_20=$paper1_20s+$paper2_20s;
+						  if($subject_wise_val->coure_group_id == 22){
+							  if($subject_wise_val->ncc_status == 1)
+								   $subject_wise_val->result = "SATISFACTORY"; 
+							  else 
+								  $subject_wise_val->result =  "NOT SATISFACTORY";
+						  }else{
+							  if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) {
+								  $subject_wise_val->result = "PASS"; 
+								  $subject_wise_val->theory_diff='-';
+								  $subject_wise_val->prac_diff='-';
+							  }else {
+								  $subject_wise_val->result =  "FAIL";
+								  if($theory_internal_total+$theory_marks_40<30)
+									$subject_wise_val->theory_diff = round_two_digit(30 - ($theory_internal_total+$theory_marks_40),2);
+								  else
+									$subject_wise_val->theory_diff = '-';
+								if($paper_20<20)
+								  $subject_wise_val->prac_diff = round_two_digit(20 - $paper_20,2);
+							  else
+								$subject_wise_val->prac_diff ='-';
+							  }
+						  }
+					$resultArray[$name][$subject_wise_val->course_subject_name][]=$subject_wise_val;
+					//print_r($resultArray);exit;
+				 }
+			 }else{
+				 $name = $subject_wise_val->first_name.' '.$subject_wise_val->last_name;
+				  if(!in_array($subject_wise_val->course_code, $courseGroup, true)){
+							array_push($courseGroup, $subject_wise_val->course_code);
+							$courseGroupArr[$subject_wise_val->course_code]=$subject_wise_val->course_code;
+						}
+				 if($subject_wise_val->theory_credit > 0 && $subject_wise_val->practicle_credit > 0) 
+					$total_internal_sum = number_format($subject_wise_val->theory_internal1 + $subject_wise_val->practical_internal,2);
+				elseif($subject_wise_val->theory_credit > 0 ) 
+					$total_internal_sum = $subject_wise_val->theory_internal1;
+				elseif($subject_wise_val->practicle_credit > 0 )
+					$total_internal_sum = $subject_wise_val->practical_internal;
+				$total_internal_sum = $total_internal_sum+$subject_wise_val->assignment_mark;
+					if($total_internal_sum>=25 && $subject_wise_val->theory_external1>=25)
+						$subject_wise_val->result = "P"; 
+					else 
+						$subject_wise_val->result =  "F";
+				 $resultArray[$name][$subject_wise_val->course_code][]=$subject_wise_val;
+				 //print_r($resultArray);exit;
+			 }
+			 
+		  }
+		   if($degree_id=='1')
+			ksort($courseGroupArr);
+		 $data['result_marks'] =$resultArray;
+		 $data['courseGroup'] =$courseGroupArr;
+		 
+		  //echo $this->db->last_query();exit;
+		 //p( $resultArray); 
+		// p( $courseGroupArr); exit;
+		  //getting batch and year
+	      
+			//load the view and saved it into $html variable;
+			 $html=$this->load->view('admin/grade/class_grade_moderation_view.php',$data, true);
+			// print_r($html); exit;
+			//this the the PDF filename that user will get to download
+			$pdfFilePath = "registered_students.pdf";
+	 
+			//load mPDF library
+			$this->load->library('m_pdf');
+	       //generate the PDF from the given html
+			$this->m_pdf->pdf->setTitle('Moderation Mark');
+			$this->m_pdf->pdf->WriteHTML($html);
+	 
+			//download it.
+			$this->m_pdf->pdf->Output($pdfFilePath, "I");
+            exit;			
+		 }
+		 
 		 //*************************Rules End*********************************//
 		 
 		 //*************************Exam Appearance Start*********************************//
