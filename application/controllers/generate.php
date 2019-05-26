@@ -842,7 +842,8 @@ class Generate extends CI_Controller {
 								$subject_wise_val->prac_diff ='-';
 							  }
 						  }
-					$resultArray[$name][$subject_wise_val->course_subject_name][]=$subject_wise_val;
+					if($subject_wise_val->result == 'FAIL')
+						$resultArray[$name][$subject_wise_val->course_subject_name][]=$subject_wise_val;
 					//print_r($resultArray);exit;
 				 }
 			 }else{

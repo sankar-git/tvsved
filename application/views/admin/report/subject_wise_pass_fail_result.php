@@ -69,14 +69,20 @@
 			  <hr />
 			 <table width="100%" style="font-size:12px;">
                 <tr>
-                    <td width="33%" align="left" ><b>College :</b><?php 
+                    <td width="70%" align="left" ><b>College :</b><?php 
 					                         if(!empty($pass_fail_list[0]['campus_name']))
 											 { echo $pass_fail_list[0]['campus_name'];}
 										     else{
 												 echo '';
 											 }
 										 ?></td>
-                    <td align="left" ><b>Degree :</b><?php 
+										  <td ><b>Batch :</b><?php echo $pass_fail_list[0]['batch_name'];?></td>
+                    
+                    
+                </tr>
+                <tr>
+                  
+                   <td align="left" ><b>Degree :</b><?php 
 					if(!empty($pass_fail_list[0]['degree_name']))
 					{ 
 					    echo $pass_fail_list[0]['degree_name'];
@@ -85,11 +91,6 @@
 						echo '';
 					}
 					?></td>
-                    
-                </tr>
-                <tr>
-                   <td ><b>Batch :</b><?php echo $pass_fail_list[0]['batch_name'];?></td>
-                   
                     <td  ><b>Semester :</b><?php 
                      if($pass_fail_list[0]['semester_name']){
 					echo $pass_fail_list[0]['semester_name'];
@@ -123,14 +124,21 @@
 					<td><?php echo $student_val['first_name'];?></td>
                    <?php $res_status='';
 				         $resultStatus=array();
+						 $fail_cnt = 0;
+						 $sub_cnt = 0;
  				         foreach($student_val['subjectList'] as $subject_status){
+							 if($subject_status['course_group_id'] != 22)
+								 $sub_cnt++;
+							 if($subject_status['passfail_status'] == 'Fail')
+								 $fail_cnt++;
+							 
 					         array_push($resultStatus,$subject_status['passfail_status']);
 							 //p($resultStatus);
 							 
 					   ?>
                     <td><?php echo $subject_status['passfail_status'];?></td>
 				   <?php } ?>
-                    <td><?php if(in_array('Fail',$resultStatus) || in_array('Not Satisfactory',$resultStatus)) {echo 'FAIL';} else{ echo 'PASS';}?></td>
+                    <td><?php if( $sub_cnt == $fail_cnt) {echo 'FAIL';} elseif($fail_cnt>0){ echo "CAP";}else { echo 'PASS';}?></td>
 					
                 </tr>
 			  <?php }     ?>
