@@ -93,7 +93,7 @@
 				<tr>
 				
 					
-					<td  align="center" style="padding:2px;height:30px;"><?php echo $i;?></td>
+					<td  align="center" style="padding:2px;height:30px;"><?php echo $i;?><input type="hidden" name="student_id[]" value="<?php echo $subject_wise_val->student_id;?>" /></td>
                     <td  align="center" style="padding:2px;"><?php echo $subject_wise_val->user_unique_id;?></td>
                     <td  align="left" style="padding:2px;"><?php echo $subject_wise_val->first_name;?></td>
                     <!--<td  align="center" style="padding:2px;"><?php echo round_two_digit($subject_wise_val->theory_internal1/4);?></td>
@@ -116,15 +116,19 @@
                     <td  align="center" style="padding:2px;font-weight:bold"><?php echo round_two_digit($theory_internal_total+$theory_marks_40+$paper_20);?></td>
                     <td  align="center" style="padding:2px;"><?php if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) echo "PASS"; else echo "FAIL";?></td>
 					<td  align="center" style="padding:1px;text-align:center;vertical-align:middle">
-					<?php if(round_two_digit($theory_internal_total+$theory_marks_40)<30 && round_two_digit($paper_20)>=20) {?>
-					<!--<input style="width:50px;" type="text" name="thoery[<?php echo $subject_wise_val->student_id;?>]" id="thoery" value="<?php if(round_two_digit($theory_internal_total+$theory_marks_40)<30) echo round_two_digit(30-($theory_internal_total+$theory_marks_40));?>" />-->
+					<?php $diff_mark=''; if(round_two_digit($theory_internal_total+$theory_marks_40)<30 && round_two_digit($paper_20)>=20) { ?>
 					<?php if(round_two_digit($theory_internal_total+$theory_marks_40)<30) echo round_two_digit(30-($theory_internal_total+$theory_marks_40));?>
 					<?php } elseif(round_two_digit($theory_internal_total+$theory_marks_40)<30) echo round_two_digit(30-($theory_internal_total+$theory_marks_40)); else  echo '-';?>
+					<input  type="hidden" name="thoery[<?php echo $subject_wise_val->student_id;?>]" id="thoery" value="<?php if(round_two_digit($theory_internal_total+$theory_marks_40)<30 && round_two_digit($paper_20)>=20) {  if(round_two_digit($theory_internal_total+$theory_marks_40)<30) echo round_two_digit(30-($theory_internal_total+$theory_marks_40));?>
+					<?php } elseif(round_two_digit($theory_internal_total+$theory_marks_40)<30) echo round_two_digit(30-($theory_internal_total+$theory_marks_40));?>" />
 					</td>
 					<td  align="center" style="padding:1px;text-align:center;vertical-align:middle">
-					<?php if(round_two_digit($paper_20)<20) {
-						echo round_two_digit(20-$paper_20);
-					} else echo '-';?>
+					<?php if(round_two_digit($paper_20)<20) { ?>
+					<input  type="hidden" name="practical[<?php echo $subject_wise_val->student_id;?>]" id="practical" value="<?php echo round_two_digit(20-$paper_20);?>" />
+					<?php	echo round_two_digit(20-$paper_20);
+					} else { echo '-';?>
+					<input  type="hidden" name="practical[<?php echo $subject_wise_val->student_id;?>]" id="practical" value="" />
+					<?php } ?>
 					</td>
 					
 				   </tr>

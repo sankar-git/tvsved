@@ -701,7 +701,9 @@ class Generate extends CI_Controller {
 			$courseGroup=array();
 			$resultArray=array();
 		 foreach($data['aggregate_marks'] as $subject_wise_val){
-			// p($subject_wise_val);
+			 //if($subject_wise_val->student_id == 844){
+			//	p($subject_wise_val);exit;
+			 //}
 			 if($degree_id=='1'){
 				 if(!empty($subject_wise_val->course_subject_name)){
 					 if(!in_array($subject_wise_val->course_subject_name, $courseGroup, true)){
@@ -728,7 +730,9 @@ class Generate extends CI_Controller {
 							  else 
 								  $subject_wise_val->result =  "NOT SATISFACTORY";
 						  }else{
-							  if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) 
+							  if(strtoupper(trim($subject_wise_val->theory_paper1)) == 'A' || strtoupper(trim($subject_wise_val->theory_paper2)) == 'A' || strtoupper(trim($subject_wise_val->theory_paper3)) == 'A' || strtoupper(trim($subject_wise_val->theory_paper4)) == 'A' || strtoupper(trim($subject_wise_val->theory_external1)) == 'A' || strtoupper(trim($subject_wise_val->theory_external2)) == 'A' || strtoupper(trim($subject_wise_val->theory_external3)) == 'A' || strtoupper(trim($subject_wise_val->theory_external4)) == 'A'){
+								  $subject_wise_val->result = "ABSENT"; 
+							  }else if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) 
 								  $subject_wise_val->result = "PASS"; 
 							  else 
 								  $subject_wise_val->result =  "FAIL";
@@ -750,9 +754,9 @@ class Generate extends CI_Controller {
 					$total_internal_sum = $subject_wise_val->practical_internal;
 				$total_internal_sum = $total_internal_sum+$subject_wise_val->assignment_mark;
 					if($total_internal_sum>=25 && $subject_wise_val->theory_external1>=25)
-						$subject_wise_val->result = "P"; 
+						$subject_wise_val->result = "PASS"; 
 					else 
-						$subject_wise_val->result =  "F";
+						$subject_wise_val->result =  "FAIL";
 				 $resultArray[$name][$subject_wise_val->course_code][]=$subject_wise_val;
 				 //print_r($resultArray);exit;
 			 }

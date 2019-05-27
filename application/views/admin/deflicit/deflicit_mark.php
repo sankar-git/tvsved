@@ -123,7 +123,7 @@
 					</div>
 					<div class="form-group col-md-4" style="margin-top:25px">
 					  <label for="deflicit_range">Deflicit Range<span style="color:red;font-weight: bold;">*</span></label>
-					   <input type="text" name="deflicit_range" id="deflicit_range" maxlength="2" value="" />
+					   <input type="text" name="deflicit_range" id="deflicit_range"  value="" />
 					</div>
 					 <div class="col-md-2">
 					<input type="submit"  name="failed_list"  id="failed_list"  style="margin-top:25px;"  value="Show Deflicit List" class="btn btn-primary" ></div>

@@ -105,9 +105,12 @@ class Condonation extends CI_Controller {
 	   $course_input=$this->input->post('course_id');
 	   $deflicit_range=$this->input->post('deflicit_range');
 	   $thoery=$this->input->post('thoery');
-	  
+	   $practical=$this->input->post('practical');
+	  $msg=0;
 		foreach($thoery as $student_id=>$mark){
-			if($mark<=$deflicit_range){
+			$this->db->where(array('student_id'=>$student_id,'course_id'=>$course_input));
+			$this->db->delete('students_ug_deflicit_marks');
+			if(trim($mark)<=trim($deflicit_range) && $practical[$student_id] == ''){
 				$result = $this->db->select('id')->from('students_ug_deflicit_marks')->where(array('student_id'=>$student_id,'course_id'=>$course_input))->get()->result_array();
 				if(count($result) == 0){
 					$this->db->query("INSERT INTO students_ug_deflicit_marks (campus_id,program_id,degree_id,batch_id,semester_id,discipline_id,student_id,course_id,highest_marks,second_highest_marks,smallest_marks,date_of_start,theory_internal1,theory_internal2,theory_internal3,theory_internal,theory_paper1,theory_paper2,theory_paper3,theory_paper4,sum_internal_practical,practical_internal,theory_external1,theory_external2,theory_external3,theory_external4,practical_external,external_sum,marks_sum,ncc_status) SELECT campus_id,program_id,degree_id,batch_id,semester_id,discipline_id,student_id,course_id,highest_marks,second_highest_marks,smallest_marks,date_of_start,theory_internal1,theory_internal2,theory_internal3,theory_internal,theory_paper1,theory_paper2,theory_paper3,theory_paper4,sum_internal_practical,practical_internal,theory_external1,theory_external2,theory_external3,theory_external4,practical_external,external_sum,marks_sum,ncc_status FROM students_ug_marks WHERE student_id = '$student_id' AND course_id = '$course_input'");
@@ -117,9 +120,11 @@ class Condonation extends CI_Controller {
 				$data['deflicit_mark'] = $mark;
 				$data['deflicit_range'] = $deflicit_range;
 				$this->db->update('students_ug_deflicit_marks',$data);
+				$msg=1;
 			}
 			
-		}
+		} 
+		echo $msg;
 	}
 	function show_approval_deflicit(){
 		

@@ -107,14 +107,14 @@
                     <td  style="padding:2px;"><?php echo $marks->user_unique_id;?></td>
                     <td  align="left" style="padding:2px;"> <?php echo ucfirst($marks->first_name).' '.ucfirst($marks->last_name);?></td>
                     <?php $passcnt=0;$failcnt=0; foreach($courseGroup as $key=>$value){ 
-					if($result[$name][$value] == 'FAIL') 
+					if($result[$name][$value] == 'FAIL' || $result[$name][$value] == 'ABSENT') 
 						$failcnt++;
 					else
 						$passcnt++;
 					?>
 					<td  style="padding:2px;"><?php echo $result[$name][$value];?></td>
 					<?php } ?>
-                    <td  style="padding:2px;"><?php if($passcnt == count($courseGroup)) echo "PASS";elseif($failcnt<=3) echo "CAP"; else echo "FAIL";?> </td>
+                    <td  style="padding:2px;"><?php if($passcnt == count($courseGroup)) echo "PASS";elseif($failcnt<3) echo "CAP"; else echo "FAIL";?> </td>
 				</tr>			
 			<?php  } ?>
             </table>
