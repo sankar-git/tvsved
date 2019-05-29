@@ -338,7 +338,7 @@
 				{
 					alert("Saved Successfully");
 				}
-			
+				$('#failed_list').trigger('click');
 			 }
 		});
 		}else{
