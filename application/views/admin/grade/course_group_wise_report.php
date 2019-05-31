@@ -120,8 +120,8 @@
 					   <select class="form-control" name="month" id="month">
 					   
 						  <option value="">Select Month</option>
-						<?php for($i=0;$i<12;$i++){ $time = strtotime(sprintf('%d months', $i-1));?>
-						<option value="<?php echo date('F', $time);?>"><?php echo date('F', $time);?></option>
+						<?php for($i=1;$i<=12;$i++){ ?>
+						<option value="<?php echo date('F', mktime(0,0,0,$i, 1, date('Y')));?>"><?php echo date('F', mktime(0,0,0,$i, 1, date('Y')));?></option>
 						<?php }?>
 					  </select>
 					</div>
@@ -130,7 +130,7 @@
 					   <select class="form-control" name="year" id="year">
 					   
 						  <option value="">Select Year</option>
-							<?php for($i=date('Y')-5;$i<=date('Y');$i++){?>
+							<?php for($i=date('Y')-10;$i<=date('Y');$i++){?>
 							<option value="<?php echo $i;?>"><?php echo $i;?></option>
 							<?php }?>
 						

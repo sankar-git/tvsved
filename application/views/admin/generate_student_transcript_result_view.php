@@ -86,8 +86,8 @@
 					   <select class="form-control" name="month" id="month">
 					   
 						  <option value="">Select Month</option>
-						<?php for($i=0;$i<12;$i++){ $time = strtotime(sprintf('%d months', $i-1));?>
-						<option value="<?php echo date('F', $time);?>"><?php echo date('F', $time);?></option>
+						<?php for($i=1;$i<=12;$i++){ ?>
+						<option value="<?php echo date('F', mktime(0,0,0,$i, 1, date('Y')));?>"><?php echo date('F', mktime(0,0,0,$i, 1, date('Y')));?></option>
 						<?php }?>
 					  </select>
 					</div>

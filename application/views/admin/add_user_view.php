@@ -414,18 +414,9 @@ $this->load->view('admin/helper/header');?>
 					  <label for="section"><i class="fa fa-bell-o"></i> Month of Passing</label>
 					     <select name="monthpassing" id="monthpassing" class="form-control">
 						      <option value="">--Select Month--</option>
-							  <option value="January">January</option>
-							  <option value="February">February</option>
-							  <option value="March">March</option>
-							  <option value="April">April</option>
-							  <option value="May">May</option>
-							  <option value="June">June</option>
-							  <option value="July">July</option>
-							  <option value="August">August</option>
-							  <option value="September">September</option>
-							  <option value="October">October</option>
-							  <option value="November">November</option>
-							  <option value="December">December</option>
+							  <?php for($i=1;$i<=12;$i++){ ?>
+						<option value="<?php echo date('F', mktime(0,0,0,$i, 1, date('Y')));?>"><?php echo date('F', mktime(0,0,0,$i, 1, date('Y')));?></option>
+						<?php }?>
 							  
 							</select>
 					</div>
@@ -434,10 +425,9 @@ $this->load->view('admin/helper/header');?>
 					  <label for="section"><i class="fa fa-bell-o"></i> Year of Passing</label>
 					     <select name="yearpassing" id="yearpassing" class="form-control">
 						      <option value="">--Select Year--</option>
-							  <?php $year = 2019;for($i=2019;$i<=2000;$i--) { ?>
-							  <option value="<?php echo $i;?>"><?php echo $i;?></option>
-							
-							  <?php } ?>
+							  <?php for($i=date('Y')-10;$i<=date('Y');$i++){?>
+							<option value="<?php echo $i;?>"><?php echo $i;?></option>
+							<?php }?>
 							</select>
 					</div>
 						

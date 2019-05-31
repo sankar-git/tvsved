@@ -410,7 +410,8 @@ function setgroup(val)
 					  <label for="section"><i class="fa fa-bell-o"></i> Year of Passing</label>
 					     <select name="yearpassing" id="yearpassing" class="form-control">
 						      <option value="">--Select Year--</option>
-							  <?php $year = 2019;for($i=2000;$i<=2019;$i++) { ?>
+							  <?php for($i=date('Y')-10;$i<=date('Y');$i++){?>
+							
 							  <option value="<?php echo $i;?>" <?php if(@$user_row->year_passing == $i){echo "selected";}?>><?php echo $i;?></option>
 							
 							  <?php } ?>
