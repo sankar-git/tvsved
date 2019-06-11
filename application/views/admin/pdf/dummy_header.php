@@ -32,7 +32,7 @@
                 </tr>
                 <tr>
                     <td align="left" width="25px" style="vertical-align:top;font-weight:bold;">Exam<span align="right">:</span></td>
-					<td align="left" width="300px" style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;Annual Board</td>
+					<td align="left" width="300px" style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;<?php if($exam_type == 2) echo "CAP"; else echo "Annual Board";?></td>
                     <td align="right" width="200px" style="vertical-align:top;font-weight:bold;">Batch</td>
 					<td align="right"width="70px" style="vertical-align:top;font-weight:bold;">:&nbsp;&nbsp;<?php echo $dummy_number_report[0]['batch_name'];?></td>
                     

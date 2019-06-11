@@ -130,6 +130,14 @@
 						
 					  </select>
 					</div>
+					<div class="form-group col-md-4">
+					  <label for="exampleInputEmail1">Exam<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="exam_type" id="exam_type" class="form-control">
+						  <option value="">Select Type</option>
+						  <option value="1">Regular</option>						  
+						  <option value="2">Cap</option>						  
+					  </select>
+					</div>
 				  <div class="form-group col-md-4" id="itemsImport" >
 				       <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
 				       <select class="form-control" name="marks_type" id="marks_type" onchange="getStudentAssignedMarks();">
@@ -189,6 +197,7 @@
 					<input type="hidden" name="discipline_id_1" id="discipline_id_1" value ="" />
 					<input type="hidden" name="course_id_1" id="course_id_1" value ="" />
 					<input type="hidden" name="marks_type_1" id="marks_type_1" value ="" />
+					<input type="hidden" name="exam_type_1" id="exam_type_1" value ="" />
 				</div>
 					</form>
 				</div>
@@ -275,7 +284,7 @@
 		}
 	$(document).ready(function() {
 		 $('#downloadExcel').click(function(){
-			if($("#campus_id").val()>0 && $("#program_id").val()>0 &&  $("#degree_id").val()>0 &&  $("#batch_id").val()>0 &&  $("#semester_id").val()>0 &&  $("#discipline_id").val()>0 &&  $("#course_id").val()!='' &&  $("#marks_type").val()>0){
+			if($("#campus_id").val()>0 && $("#program_id").val()>0 &&  $("#degree_id").val()>0 &&  $("#batch_id").val()>0 &&  $("#semester_id").val()>0 &&  $("#discipline_id").val()>0 &&  $("#course_id").val()!='' &&  $("#marks_type").val()>0 &&  $("#exam_type").val()>0){
 				return true;
 			}else{
 				alert('Please select all fields');return false;
@@ -289,7 +298,7 @@
 				 alert('Please upload valid excel file to import');return false;
 			 }
 				 
-			if($("#campus_id").val()>0 && $("#program_id").val()>0 &&  $("#degree_id").val()>0 &&  $("#batch_id").val()>0 &&  $("#semester_id").val()>0 &&  $("#discipline_id").val()>0 &&  $("#course_id").val()!='' &&  $("#marks_type").val()>0){
+			if($("#campus_id").val()>0 && $("#program_id").val()>0 &&  $("#degree_id").val()>0 &&  $("#batch_id").val()>0 &&  $("#semester_id").val()>0 &&  $("#discipline_id").val()>0 &&  $("#course_id").val()!='' &&  $("#marks_type").val()>0 &&  $("#exam_type").val()>0){
 				$("#campus_id_1").val($("#campus_id").val());
 				$("#program_id_1").val($("#program_id").val());
 				$("#degree_id_1").val($("#degree_id").val());
@@ -298,6 +307,7 @@
 				$("#discipline_id_1").val($("#discipline_id").val());
 				$("#course_id_1").val($("#course_id").val());
 				$("#marks_type_1").val($("#marks_type").val());
+				$("#exam_type_1").val($("#exam_type").val());
 				return true;
 			}else{
 				alert('Please select all fields');return false;

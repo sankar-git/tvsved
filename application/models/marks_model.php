@@ -70,6 +70,7 @@ Class Marks_model extends CI_Model
 		 $batch_id=$data['batch_id'];
 		 $semester_id=$data['semester_id'];
 		 $discipline_id=$data['discipline_id'];
+		 $exam_type=$data['exam_type'];
 		 if(isset($data['course_id']) && $data['course_id']!='')
 			$course_id=$data['course_id'];
 		else{
@@ -86,15 +87,15 @@ Class Marks_model extends CI_Model
 			$this->db->join('courses co','co.id = c.course_id','LEFT');
 		}
 		if(isset($data['course_id']) && $data['course_id']!=''){
-			$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.course_id ='$course_id'",'LEFT');
+			$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.course_id ='$course_id' AND ug.exam_type ='$exam_type'",'LEFT');
 		}else{
 			if($data['degree_id']!=1){
-					$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id and ug.course_id=c.course_id",'LEFT');
+					$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id and ug.course_id=c.course_id  AND ug.exam_type ='$exam_type'",'LEFT');
 			}else{
-				$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id ",'LEFT');
+				$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.exam_type ='$exam_type'",'LEFT');
 			}
 		}
-		$this->db->where(array('c.campus_id'=>$campus_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,'c.batch_id'=>$batch_id,'u.role_id'=>1));
+		$this->db->where(array('c.campus_id'=>$campus_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,'c.batch_id'=>$batch_id,'c.exam_type'=>$exam_type,'u.role_id'=>1));
 		if(isset($data['course_id']) && $data['course_id']!=''){
 			$this->db->group_by('c.student_id');
 			$this->db->order_by('u.first_name');

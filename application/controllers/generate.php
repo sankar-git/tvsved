@@ -297,6 +297,7 @@ class Generate extends CI_Controller {
 		$date_of_start=$this->input->post('date_of_start');
 		//$date_of_closure=$this->input->post('date_of_closure');
 		$student_id=$this->input->post('student_id');
+		$data['exam_type']=$exam_type=$this->input->post('exam_type');
 		$data['month']=$month=$this->input->post('month');
 	       $data['year']=$year=$this->input->post('year');
 	    $send['campus_id']=$campus_id;
@@ -359,7 +360,7 @@ class Generate extends CI_Controller {
 					// p($students); exit;
 					 foreach($students as $stuData)
 					 {
-						$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id);
+						$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id,$exam_type);
 						//echo $this->db->last_query();exit;
 						// p($subjectList); 
 						     $list['first_name']  =$stuData->first_name;
@@ -437,7 +438,7 @@ class Generate extends CI_Controller {
 					foreach($students as $stuData)
 					 {
 						
-						$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id);
+						$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id,$exam_type);
 						// p($subjectList); 
 						     $list['first_name']  =$stuData->first_name;
 						     $list['last_name']  =$stuData->last_name;
@@ -520,7 +521,7 @@ class Generate extends CI_Controller {
 					 foreach($students as $stuData)
 					 {
 						
-						$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id);
+						$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id,$exam_type);
 						// p($subjectList); 
 						     
 						     $list['student_unique_id']  =$stuData->user_unique_id;
@@ -604,7 +605,7 @@ class Generate extends CI_Controller {
 					 foreach($students as $stuData)
 					 {
 						
-						$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id);
+						$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id,$exam_type);
 						// p($subjectList); 
 						     
 						     $list['student_unique_id']  =$stuData->user_unique_id;
@@ -696,7 +697,7 @@ class Generate extends CI_Controller {
 	      // $course_credit=$courseid[1]; 
 	     //  print_r($course_id); exit;
 		 
-		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'',$student_id);
+		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'',$student_id,$exam_type);
 		  //echo $this->db->last_query();exit;
 			$courseGroup=array();
 			$resultArray=array();
@@ -798,7 +799,7 @@ class Generate extends CI_Controller {
 	      // $course_credit=$courseid[1]; 
 	     //  print_r($course_id); exit;
 		 
-		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'',$student_id);
+		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'',$student_id,$exam_type);
 		  //echo $this->db->last_query();exit;
 			$courseGroup=array();
 			$resultArray=array();
@@ -931,9 +932,9 @@ class Generate extends CI_Controller {
 					 foreach($students as $stuData)
 					 {
 						if($degree_id == 1){
-							$subjectList = $this->Generate_model->get_student_assigned_subjects_bvsc($stuData->user_id,$semester_id);
+							$subjectList = $this->Generate_model->get_student_assigned_subjects_bvsc($stuData->user_id,$semester_id,$exam_type);
 						}else{
-							$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id);
+							$subjectList = $this->Generate_model->get_student_assigned_subjects($stuData->user_id,$semester_id,$exam_type);
 						}
 						// p($subjectList); 
 						     

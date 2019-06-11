@@ -233,6 +233,7 @@ class Marks extends CI_Controller {
 		$course_id=$this->input->post('course_id');
 		$marks_type=$this->input->post('marks_type');
 		$upload_type=$this->input->post('upload_type');
+		$exam_type=$this->input->post('exam_type');
 		$student_id=$this->input->post('student_id');
 		$course_idCount=1;
 		 $send['campus_id']=$campus_id;
@@ -241,6 +242,7 @@ class Marks extends CI_Controller {
 	    $send['batch_id']=$batch_id;
 	    $send['semester_id']=$semester_id;
 	    $send['discipline_id']=$discipline_id;
+	    $send['exam_type']=$exam_type;
 		if($upload_type == 'coursewise'){
 			if(strpos($course_id,"-") !== false){
 				$course_idArr = explode("-",$course_id);
@@ -254,6 +256,7 @@ class Marks extends CI_Controller {
 		}else{
 			 $send['student_id']=$student_id;
 		}
+		//print_r($_POST);
 		$studentList= $this->Marks_model->get_student_assigned_marks($send);
 		//echo $this->db->last_query();exit;
 		$trdata='';

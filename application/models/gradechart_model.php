@@ -114,13 +114,13 @@ Class Gradechart_model extends CI_Model
 		return $result;
 	}
 	
-	function get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id='',$course_id='',$student_id='')
+	function get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id='',$course_id='',$student_id='',$exam_type=1)
 	{
 		$this->db->select('r.course_id,r.theory_internal1,r.theory_internal2,r.theory_internal3,r.theory_internal,r.theory_paper1,
 		                   r.theory_paper2,r.theory_paper3,r.theory_paper4,r.sum_internal_practical,r.practical_internal,r.theory_external1,r.theory_external2,r.theory_external3,r.theory_external4,r.practical_external,
 						   r.marks_sum,r.external_sum,assignment_mark,student_id,ncc_status');
 		$this->db->from('students_ug_marks as r');
-		$this->db->where(array('r.campus_id'=>$campus_id,'r.program_id'=>$program_id,'r.degree_id'=>$degree_id,'r.batch_id'=>$batch_id,'r.semester_id'=>$semester_id));
+		$this->db->where(array('r.campus_id'=>$campus_id,'r.program_id'=>$program_id,'r.degree_id'=>$degree_id,'r.batch_id'=>$batch_id,'r.semester_id'=>$semester_id,'r.exam_type'=>$exam_type));
 		if($course_id>0)
 			$this->db->where(array('r.course_id'=>$course_id));
 		if($student_id>0)
@@ -154,7 +154,7 @@ Class Gradechart_model extends CI_Model
 			$this->db->where_in('sa.course_id',$courseid);
 			$this->db->where('sa.student_id',$result_val['student_id']);
 			//$this->db->where('sa.student_id',$courseArr[0]);
-			$this->db->where(array('sa.campus_id'=>$campus_id,'sa.program_id'=>$program_id,'sa.degree_id'=>$degree_id,'sa.batch_id'=>$batch_id,'sa.semester_id'=>$semester_id));
+			$this->db->where(array('sa.campus_id'=>$campus_id,'sa.program_id'=>$program_id,'sa.degree_id'=>$degree_id,'sa.batch_id'=>$batch_id,'sa.semester_id'=>$semester_id,'sa.exam_type'=>$exam_type));
 			if($program_id == 1 && $degree_id == 1)
 				$this->db->group_by('c.course_subject_id');
 			//	$this->db->order_by('c.id,u.first_name,u.last_name');

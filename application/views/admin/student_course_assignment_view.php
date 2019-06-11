@@ -112,7 +112,7 @@
 					</div>
 				 </div>
 				 
-				 <div class="row" id="statusDiv" >
+				 <div class="row">
 				 	<div class="form-group col-md-4">
 					  <label for="batch_id">Status<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="status_id" id="status_id" class="form-control">
@@ -124,11 +124,19 @@
 						
 					  </select>
 					</div>
-				 </div>
-				 <div class="box-footer">
+				 
+				 <div class="form-group col-md-4">
+					  <label for="examtype">Exam Type<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="examtype"  id="examtype" class="form-control" >
+						  <option value="1">Regular</option>
+						  <option value="2">CAP</option>
+						 </select>
+					</div>
+				  <div class="form-group col-md-4">
             
 				 <button type="button" name="assign" id="assign" value="Register" onclick="registerCourse();" class="btn btn-success"/>Register</button>
               </div>
+				 </div>
 				 </div>
 			 
 			 
@@ -201,7 +209,7 @@
 					</div>
 				 </div>
 				 
-				 <div class="row">
+				
 				 	<div class="form-group col-md-4">
 					  <label for="course_id">Course<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="course_id[]" multiple id="course_id" class="form-control" onchange="get_student_list_course(this.value);">
@@ -209,16 +217,14 @@
 						 
 						 </select>
 					</div>
-					<div class="form-group col-md-4" style="display:none" id="examtype_con">
-					  <label for="exam_type">Exam<span style="color:red;font-weight: bold;">*</span></label>
+					<div class="form-group col-md-4">
+					  <label for="exam_type">Exam Type<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="exam_type"  id="exam_type" class="form-control" >
-						  <option value="">Select Exam</option>
-						  <option value="Annual Board">Annual Board</option>
-						  <option value="CAP">CAP</option>
-						 
+						  <option value="1">Regular</option>
+						  <option value="2">CAP</option>
 						 </select>
 					</div>
-					</div>
+					
 					 <div class="box-footer">
             
 				 <button type="button" name="assign" id="assign" value="Register" onclick="registerCourse();" class="btn btn-success"/>Register</button>
@@ -233,7 +239,7 @@
 			 
 			 
 			 
-			 
+			 	
 			 
 			 
 			 
@@ -246,7 +252,7 @@
 							 <table id="example" class="table table-bordered table-hover">
 								<thead>
 								<tr>
-								    <th></th>
+								    <th><input type="checkbox" name="select_all" id="select_all" value="1" checked /><label for="select_all">Select All<span style="color:red;font-weight: bold;">*</span></label></th>
 								    <th>S.No</th>
 									<th>Student Id</th>
 									<th>Student Name</th>
@@ -306,8 +312,13 @@
   </div>
   <!-- /.content-wrapper -->
   <script type="text/javascript">
-	
 	$(document).ready(function() {
+		$('#select_all').click(function(){
+			if($('#select_all').prop('checked') == true)
+				$('input[name="student_id[]"').prop('checked',true);
+			else
+				$('input[name="student_id[]"').prop('checked',false);
+		});
 		$("#sales_dob").datepicker({format: 'dd-mm-yyyy',autoclose: true});
 		/*$('#student_id').multiselect({
 			        	includeSelectAllOption: true,
@@ -647,8 +658,9 @@
 		 else
 			 $('#examtype_con').hide();
 	  });
-	  $("#status_id").on("change", function() {
+	  $("#status_id,#examtype").on("change", function() {
 		$('#courseList').show(); 
+		$('#studentList').hide(); 
 		var $form = $("#course_approval_form");
 		
 		$.ajax({
@@ -657,6 +669,7 @@
 			data: $form.serialize(),
 			success: function(data){
 				//alert(data); 
+				
 				 $('#tr_list').html(data);
 		
 			 }
@@ -667,7 +680,7 @@
   function registerCourse()
   {
 	if($("#ccampus_id").val()>=1 && $("#ccampus_id").val()<=4){
-		if($('#examtype').val() == ''){
+		if($('#exam_type').val() == ''){
 		alert('Please select exam');return false;}
 	}
 		 
@@ -688,14 +701,8 @@
   
   function get_student_list_course(val)
   {
-	  	 if(val!='')
-			 
-			 {
-				$('#studentList').show(); 
-			 }
-			 else{
-				$('#studentList').hide();  
-			 }
+	  	 $('#courseList').hide(); 
+		$('#studentList').show(); 
 		var $form = $("#course_approval_form");
 		
 		$.ajax({

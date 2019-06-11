@@ -111,7 +111,7 @@
                     <td align="center"><?php echo str_replace(",","<br/>",$courseData['course_code']);?></td>
                     <td style="padding-left:20px;"><?php echo str_replace(",","<br/>",$courseData['course_title']);?></td>
                     <td style="padding-left:20px;"><?php echo $courseData['theory_credit'].'+'.$courseData['practical_credit'];?></td>
-                    <td style="padding-left:20px;">First Time</td>
+                    <td style="padding-left:20px;"><?php if($exam_type == 2) echo "CAP"; else echo "First Time";?></td>
                 </tr>
 				<?php } ?>
 				

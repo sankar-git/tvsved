@@ -98,6 +98,7 @@ class Excelupload extends CI_Controller {
 			 $discipline_id = $this->input->post('discipline_id');
 			 $mark_type = $this->input->post('marks_type');
 			 $date_of_start = $this->input->post('date_of_start');
+			 $exam_type = $this->input->post('exam_type');
 			
 			 $campuses = $this->Excel_model->get_campus_by_id($campus_id);
 			 $programs = $this->Excel_model->get_program_by_id($program_id);
@@ -117,8 +118,9 @@ class Excelupload extends CI_Controller {
 				 $courses_group = $this->Excel_model->get_course_group_by_id($course_group_id);
 				 $courses1 = $this->Excel_model->get_course_by_id($course_idArr[0]);
 				 $courses2 = $this->Excel_model->get_course_by_id($course_idArr[1]);
-				$course_title = $courses_group->course_subject_title.' ('.$courses2->course_code.','.$courses1->course_code.')';
+				$course_title = $courses_group->course_subject_title.' ('.$courses1->course_code.','.$courses2->course_code.')';
 			 }
+			 
 			 //exit;
 			 /*$dos = $this->Generate_model->get_date_by_degree($degree_id); 
 			// echo $dos[1]->id;
@@ -134,11 +136,15 @@ class Excelupload extends CI_Controller {
 				 $file_name= 'internal';
 			 else
 				 $file_name = 'external';
+			 if($exam_type == 1)
+				 $exam_type_str= 'Regular';
+			 else
+				 $exam_type_str = 'Cap';
 			 
 			// print_r($dos);exit;
 			 $credits = $this->Marks_model->get_course_credit_points($course_id);
 			// print_r($credits[0]->practicle_credit);//exit;
-			 $data['students']=$this->Marks_model->get_ug_students_by_ids($campus_id,$program_id,$degree_id,$batch_id); 
+			 $data['students']=$this->Marks_model->get_ug_students_by_ids($campus_id,$program_id,$degree_id,$batch_id,$exam_type); 
 			// p($data['students']); exit;
 			if($degree_id==1 && $program_id == 1){
             //$finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Student Name','INTERNAL FIRST(10)',' INTERNAL SECOND(10)',' INTERNAL THIRD(10)','PRACTICAL PAPER-I(60)','PRACTICAL PAPER-II(60)','EXTERNAL PAPER-I(100)','EXTERNAL PAPER-II(100)');
@@ -160,7 +166,8 @@ class Excelupload extends CI_Controller {
 					$external = array('External Paper I(100)','External Paper II(100)');
 					$finalExcelArr = array_merge($finalExcelArr,$external);
 				}
-			
+				$exam_typeArr = array('Exam Type(Regular/Cap)');
+			$finalExcelArr = array_merge($finalExcelArr,$exam_typeArr);
 			//p($finalExcelArr);exit;
            $objPHPExcel = new PHPExcel();
            $objPHPExcel->setActiveSheetIndex(0);
@@ -197,26 +204,26 @@ class Excelupload extends CI_Controller {
 
             foreach ($data['students'] as $key => $value) {
              
-            $newvar = $j+$key;
+				$newvar = $j+$key;
 
-            //Set height for all rows.
-            $objPHPExcel->getActiveSheet()->getRowDimension($newvar)->setRowHeight(20);
-            
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[0].$newvar, $campuses->campus_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[1].$newvar, $programs->program_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[2].$newvar, $degrees->degree_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[3].$newvar, $batches->batch_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[4].$newvar, $semesters->semester_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[5].$newvar, $disciplines->discipline_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[6].$newvar, $course_title);
-            //$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $dateofstart);
-			if($mark_type == 1){
-				$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->user_unique_id);
-				$objPHPExcel->getActiveSheet()->setCellValue($cols[8].$newvar, $value->first_name.' '.$value->last_name);
-			}else{
-				$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->dummy_value);
-			}
-            
+				//Set height for all rows.
+				$objPHPExcel->getActiveSheet()->getRowDimension($newvar)->setRowHeight(20);
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($cols[0].$newvar, $campuses->campus_name);
+				$objPHPExcel->getActiveSheet()->setCellValue($cols[1].$newvar, $programs->program_name);
+				$objPHPExcel->getActiveSheet()->setCellValue($cols[2].$newvar, $degrees->degree_name);
+				$objPHPExcel->getActiveSheet()->setCellValue($cols[3].$newvar, $batches->batch_name);
+				$objPHPExcel->getActiveSheet()->setCellValue($cols[4].$newvar, $semesters->semester_name);
+				$objPHPExcel->getActiveSheet()->setCellValue($cols[5].$newvar, $disciplines->discipline_name);
+				$objPHPExcel->getActiveSheet()->setCellValue($cols[6].$newvar, $course_title);
+				//$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $dateofstart);
+				if($mark_type == 1){
+					$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->user_unique_id);
+					$objPHPExcel->getActiveSheet()->setCellValue($cols[8].$newvar, $value->first_name.' '.$value->last_name);
+				}else{
+					$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->dummy_value);
+				}
+            $objPHPExcel->getActiveSheet()->setCellValue($cols[count($finalExcelArr)-1].$newvar, $exam_type_str);
 			
             }
           }
@@ -264,7 +271,8 @@ class Excelupload extends CI_Controller {
 						$finalExcelArr = array_merge($finalExcelArr,$external);
 					}
 			   }
-			
+			$exam_typeArr = array('Exam Type(Regular/Cap)');
+			$finalExcelArr = array_merge($finalExcelArr,$exam_typeArr);
 			//p($finalExcelArr);exit;
 			   $objPHPExcel = new PHPExcel();
 			   $objPHPExcel->setActiveSheetIndex(0);
@@ -321,7 +329,7 @@ class Excelupload extends CI_Controller {
 				$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->dummy_value);
 				
 			}
-            
+            $objPHPExcel->getActiveSheet()->setCellValue($cols[count($finalExcelArr)-1].$newvar, $exam_type_str);
 			
             }
           }
@@ -397,7 +405,8 @@ class Excelupload extends CI_Controller {
 			 $discipline_id = $this->input->post('discipline_id_1');
 			 $mark_type = $this->input->post('marks_type_1');
 			 $degree_id = $this->input->post('degree_id_1');
-			  $dos = $this->Generate_model->get_date_by_degree($degree_id); 
+			 $exam_type = $this->input->post('exam_type_1');
+			  //$dos = $this->Generate_model->get_date_by_degree($degree_id); 
 			  $credits = $this->Marks_model->get_course_credit_points($course_id);
 			// echo $dos[1]->id;
 			$dateofstart='';
@@ -516,7 +525,7 @@ class Excelupload extends CI_Controller {
 						redirect(base_url().'excelupload/uploadUgMarksExcel');exit;
 					}
 					//for update work
-					$check_student = $this->Excel_model->get_student_already_uploaded($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id,$student_id);
+					$check_student = $this->Excel_model->get_student_already_uploaded($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id,$student_id,$exam_type);
 					$common_array           =array(
 						'campus_id'     =>($campus_id) ? $campus_id:'',
 						'program_id'     =>($program_id) ? $program_id : '',
@@ -526,6 +535,7 @@ class Excelupload extends CI_Controller {
 						'discipline_id'     =>($discipline_id) ? $discipline_id : '',
 						'course_id'     =>($course_id) ? $course_id : '',
 						'student_id'    =>($student_id) ? $student_id : '',
+						'exam_type'    =>($exam_type) ? $exam_type : '1',
 						'created_on'    =>($register_date_time) ? $register_date_time : '');
 					$final_array = array_merge($common_array,$internal_arr ,$external_arr);
 					//p($final_array);exit;

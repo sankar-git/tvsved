@@ -39,7 +39,7 @@ $this->load->view('admin/helper/header');?>
             <!-- form start -->
            <div class="box-body"> <form role="form" name="course_view" id="course_view" method="post" action="" enctype="multipart/form-data">
 		  <div class="row">
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-3">
 					  <label for="program">Campus<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="campus_id" id="campus_id" class="form-control" onchange="getProgram();">
 						  <option value="">--Select Campus--</option>
@@ -50,7 +50,7 @@ $this->load->view('admin/helper/header');?>
 					  </select>
 			    </div>
 					
-					<div class="form-group col-md-4">
+					<div class="form-group col-md-3">
 					  <label for="program">Program<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="program_id" id="program_id" class="form-control" onchange="getDegreebyProgram();">
 						  <option value="">--Select Program--</option>
@@ -60,20 +60,17 @@ $this->load->view('admin/helper/header');?>
 						  <?php } ?>
 					  </select>
 					</div>
-					<div class="form-group col-md-4">
+					<div class="form-group col-md-3">
 					  <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
 					  <select class="form-control" name="degree_id" id="degree_id" onchange="getSemesterbyDegree(),getBatchbyDegree();" >
 						  <option value="">--Select Degree--</option>
 						 
 					  </select>
 					</div>
-				</div>
 				
-				
-			   <div class="row">
 				  
 					
-					<div class="form-group col-md-4">
+					<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="batch_id" id="batch_id" class="form-control" >
 						  <option value="">Select Batch</option>
@@ -82,13 +79,21 @@ $this->load->view('admin/helper/header');?>
 					</div>
 					
 					
-					<div class="form-group col-md-4">
+					<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Semester<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="semester_id" id="semester_id" class="form-control">
 						  <option value="">Select Semester</option>
 						  <?php foreach($semesters as $semester){ ?>
 						  <option value="<?php echo $semester->id;?>"><?php echo $semester->semester_name;?></option>
 						  <?php } ?>
+					  </select>
+					</div>
+					<div class="form-group col-md-3">
+					  <label for="exampleInputEmail1">Exam<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="exam_type" id="exam_type" class="form-control">
+						  <option value="">Select Type</option>
+						  <option value="1">Regular</option>						  
+						  <option value="2">Cap</option>						  
 					  </select>
 					</div>
 					<div class="form-group col-md-3">
@@ -118,6 +123,7 @@ $this->load->view('admin/helper/header');?>
 									<th>Batch</th>
 									<th>Student</th>
 									<th>Course Name</th>
+									<th>Type</th>
 									<th width="100px">Action</th>
 									<!--<th>Print(PDF)</th>-->
 								</tr>
@@ -134,6 +140,7 @@ $this->load->view('admin/helper/header');?>
 									<td nowrap><?php echo $course->batch_name;?></td>
 									<td><?php echo $course->first_name.' '.$course->last_name;?></td>
 									<td><?php echo $course->course_title;?></td>
+									<td><?php if($course->exam_type == 2) echo "CAP"; else echo "Regular";?></td>
 									<td width="100px"><a onclick="return confirm('Are you sure to Deregister');" href="<?php echo base_url(); ?>course/deleteStudentCourseAssignment/<?php echo $course->id; ?>">Deregister</a></td>
 									</tr>
 									

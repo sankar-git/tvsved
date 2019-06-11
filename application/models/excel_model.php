@@ -180,11 +180,11 @@ Class Excel_model extends CI_Model
 			$insert_id = $this->db->insert_id(); 
 			return $insert_id;
 	 }
-	 function get_student_already_uploaded($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id,$student_id)
+	 function get_student_already_uploaded($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id,$student_id,$exam_type=1)
 	 {
 		$this->db->select('ug.student_id');
 		$this->db->from('students_ug_marks as ug');
-        $this->db->where(array('ug.campus_id'=>$campus_id,'ug.program_id'=>$program_id,'ug.degree_id'=>$degree_id,'ug.batch_id'=>$batch_id,'ug.semester_id'=>$semester_id,'ug.course_id'=>$course_id,'ug.student_id'=>$student_id));
+        $this->db->where(array('ug.campus_id'=>$campus_id,'ug.program_id'=>$program_id,'ug.degree_id'=>$degree_id,'ug.batch_id'=>$batch_id,'ug.semester_id'=>$semester_id,'ug.course_id'=>$course_id,'ug.student_id'=>$student_id,'ug.exam_type'=>$exam_type));
 		$result	= $this->db->get()->row();
 		return $result;  
 		 

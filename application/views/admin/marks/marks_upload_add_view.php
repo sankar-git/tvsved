@@ -160,7 +160,14 @@
 				   <select class="form-control" name="date_of_start" id="date_of_start">
 				   </select>
 				</div>-->
-				
+				<div class="form-group col-md-4">
+					  <label for="exampleInputEmail1">Exam<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="exam_type" id="exam_type" class="form-control" onchange="getStudentAssignedMarks();">
+						  <option value="">Select Type</option>
+						  <option value="1">Regular</option>						  
+						  <option value="2">Cap</option>						  
+					  </select>
+					</div>
 				    <div class="ncc_show" style="display:none;">
 				     <div class="form-group col-md-4" id="show_list">
 				       <label for="course-group">Items to be Import<span style="color:red;font-weight: bold;">*</span></label>
@@ -800,6 +807,7 @@ var upload_type=$('#upload_type').val();
 						course_id: $('#course_id').val(),
 						upload_type: $('#upload_type').val(),
 						student_id: $('#student_id').val(),
+						exam_type: $('#exam_type').val(),
 						//date_of_start: $('#date_of_start').val(),
 						marks_type_ncc: $('#marks_type_ncc').val(),
 				marks_type: $('#marks_type').val() },
@@ -860,7 +868,7 @@ var upload_type=$('#upload_type').val();
 			type:'POST',
 			cache:false,
 			url:'<?php echo base_url();?>marks/getStudentAssignedPGMarkss',
-			data: {"campus_id": $('#campus_id').val(),"program_id": $('#program_id').val(),"degree_id": $('#degree_id').val(),"batch_id": $('#batch_id').val(),"semester_id": $('#semester_id').val(),"discipline_id": $('#discipline_id').val(),"course_id": $('#course_id').val(),"marks_type_ncc": $('#marks_type_ncc').val(),"marks_type": $('#marks_type').val(),"practicle_credit": $('#practicle_credit').val(),"theory_credit": $('#theory_credit').val(),"student_id": $('#student_id').val(),"upload_type": $('#upload_type').val()},
+			data: {"campus_id": $('#campus_id').val(),"program_id": $('#program_id').val(),"degree_id": $('#degree_id').val(),"batch_id": $('#batch_id').val(),"semester_id": $('#semester_id').val(),"discipline_id": $('#discipline_id').val(),"course_id": $('#course_id').val(),"marks_type_ncc": $('#marks_type_ncc').val(),"marks_type": $('#marks_type').val(),"practicle_credit": $('#practicle_credit').val(),"theory_credit": $('#theory_credit').val(),"student_id": $('#student_id').val(),"upload_type": $('#upload_type').val(),"exam_type": $('#exam_type').val()},
 			success: function(data){
 				//alert(data); return false;
 				$('.trlist').empty();	
@@ -932,7 +940,7 @@ var upload_type=$('#upload_type').val();
 			type:'POST',
 			cache:false,
 			url:'<?php echo base_url();?>marks/getStudentAssignedMarkss',
-			data: {"campus_id": $('#campus_id').val(),"program_id": $('#program_id').val(),"degree_id": $('#degree_id').val(),"batch_id": $('#batch_id').val(),"semester_id": $('#semester_id').val(),"discipline_id": $('#discipline_id').val(),"course_id": $('#course_id').val(),"marks_type_ncc": $('#marks_type_ncc').val(),"marks_type": $('#marks_type').val(),"practicle_credit": $('#practicle_credit').val(),"theory_credit": $('#theory_credit').val(),"student_id": $('#student_id').val(),"upload_type": $('#upload_type').val()},
+			data: {"campus_id": $('#campus_id').val(),"program_id": $('#program_id').val(),"degree_id": $('#degree_id').val(),"batch_id": $('#batch_id').val(),"semester_id": $('#semester_id').val(),"discipline_id": $('#discipline_id').val(),"course_id": $('#course_id').val(),"marks_type_ncc": $('#marks_type_ncc').val(),"marks_type": $('#marks_type').val(),"practicle_credit": $('#practicle_credit').val(),"theory_credit": $('#theory_credit').val(),"student_id": $('#student_id').val(),"upload_type": $('#upload_type').val(),"exam_type": $('#exam_type').val()},
 			success: function(data){
 				//alert(data); return false;
 				$('.trlist').empty();	
