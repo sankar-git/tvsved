@@ -36,7 +36,7 @@ Class Marks_model extends CI_Model
 		return $result;
 		
 	 }
-	 function get_course_group_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id)
+	 function get_course_group_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$exam_type='',$student_id='')
 	 { //echo "coming";
 		 if($program_id == 1 && $degree_id==1){
 			$this->db->select("case when `course_subject_name` IS NULL then c.id else concat(GROUP_CONCAT( distinct c.course_subject_id order by c.course_subject_id SEPARATOR '|'), '|', GROUP_CONCAT( DISTINCT c.id order by c.id SEPARATOR '-')) end as id,  case when `course_subject_name` IS NULL then course_title else course_subject_name end as course_title, `c`.`course_group_id`,c.course_subject_id,csg.course_subject_name,csg.course_subject_title,GROUP_CONCAT( DISTINCT  course_code order by course_code SEPARATOR ',') as course_code",false);
@@ -57,11 +57,96 @@ Class Marks_model extends CI_Model
 			}
 			//$this->db->group_by('c.course_subject_id');
 		 }
+		 if( !empty($exam_type) )
+				$this->db->where(array('ca.exam_type'=>$exam_type));
+		if( !empty($student_id) )
+			$this->db->where(array('ca.student_id'=>$student_id));
 		 //
 		$result	= $this->db->get()->result(); //echo $this->db->last_query();exit;
 		return $result;
 	 }
-	 
+	 function get_student_wise_assigned_marks($data)
+	 {
+		 $campus_id=$data['campus_id'];
+		 $program_id=$data['program_id'];
+		 $degree_id=$data['degree_id'];
+		 $batch_id=$data['batch_id'];
+		 $semester_id=$data['semester_id'];
+		 $discipline_id=$data['discipline_id'];
+		 $exam_type=$data['exam_type'];
+		 $student_id=$data['student_id'];
+		 if($data['degree_id']!=1){
+			$this->db->select('co.id as courseid,co.course_code,co.theory_credit,co.practicle_credit,co.course_title');
+			$this->db->select('d.dummy_value,u.user_unique_id,u.id,u.first_name,ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark');
+			$this->db->from('student_assigned_courses c');
+			$this->db->join('users  u','u.id = c.student_id','LEFT');
+			$this->db->join('tbl_dummy  d','u.id = d.student_id','LEFT');
+			$this->db->join('courses co','co.id = c.course_id','LEFT');
+			if(isset($data['course_id']) && $data['course_id']!='')
+				$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.course_id ='$course_id' AND ug.exam_type ='$exam_type'",'LEFT');
+			else
+				$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id and ug.course_id=c.course_id  AND ug.exam_type ='$exam_type'",'LEFT');
+			$this->db->where(array('c.campus_id'=>$campus_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,'c.batch_id'=>$batch_id,'c.exam_type'=>$exam_type,'u.role_id'=>1));
+			if(isset($data['course_id']) && $data['course_id']!=''){
+				$this->db->group_by('c.student_id');
+				$this->db->order_by('u.first_name');
+			}else{
+				$this->db->where_in('c.student_id',$student_id);
+				$this->db->group_by('ug.student_id,ug.course_id');
+				$this->db->order_by('ug.id');
+			}
+			$result	= $this->db->get()->result();
+		 }else{
+			 $result = $this->get_course_group_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$exam_type,$student_id);
+			
+			 foreach($result as $key=>$res){ 
+				if(isset($data['student_id']) && $data['student_id']!=''){
+					$this->db->select('d.dummy_value,u.user_unique_id,u.id,u.first_name');
+					$this->db->from('users  u');
+					$this->db->join('tbl_dummy  d','u.id = d.student_id','LEFT');
+					$this->db->where("u.id",$data['student_id']);
+					$user_result	= $this->db->get()->result();
+				}
+				$this->db->select('ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark');
+				 $this->db->from('students_ug_marks ug')->where("exam_type",$exam_type);
+				 if(isset($data['course_id']) && $data['course_id']!='')
+					 $this->db->where("course_id",$data['course_id']);
+				 else
+					 $this->db->where("course_id",$res->id);
+				 if(isset($data['student_id']) && $data['student_id']!='')
+					 $this->db->where("student_id",$data['student_id']);
+				 $mark_result	= $this->db->get()->result();
+				$result[$key]->dummy_value=$user_result[0]->dummy_value;
+				$result[$key]->user_unique_id=$user_result[0]->user_unique_id;
+				$result[$key]->first_name=$user_result[0]->first_name;
+				$result[$key]->course_id=$res->id;
+				$result[$key]->id=$user_result[0]->id;
+				if(count($mark_result)>0){
+					foreach($mark_result as $key1=>$mark_res){
+						$result[$key]->theory_internal1 = $mark_res->theory_internal1;
+						$result[$key]->theory_internal2 = $mark_res->theory_internal2;
+						$result[$key]->theory_internal3 = $mark_res->theory_internal3;
+						$result[$key]->theory_paper1 = $mark_res->theory_paper1;
+						$result[$key]->theory_paper2 = $mark_res->theory_paper2;
+						$result[$key]->theory_paper3 = $mark_res->theory_paper3;
+						$result[$key]->theory_paper4 = $mark_res->theory_paper4;
+						$result[$key]->theory_internal = $mark_res->theory_internal;
+						$result[$key]->practical_internal = $mark_res->practical_internal;
+						$result[$key]->theory_external1 = $mark_res->theory_external1;
+						$result[$key]->theory_external2 = $mark_res->theory_external2;
+						$result[$key]->theory_external3 = $mark_res->theory_external3;
+						$result[$key]->theory_external4 = $mark_res->theory_external4;
+						$result[$key]->practical_external = $mark_res->practical_external;
+						$result[$key]->course_id = $mark_res->course_id;
+						$result[$key]->ncc_status = $mark_res->ncc_status;
+						$result[$key]->assignment_mark = $mark_res->assignment_mark;
+					}
+				}
+			 }
+			 //echo "<pre>";print_r($result);exit;
+			 return $result;
+		 }
+	 }
 	 function get_student_assigned_marks($data)
 	 {
 		 $campus_id=$data['campus_id'];
@@ -172,10 +257,10 @@ Class Marks_model extends CI_Model
 	 {
 		 $this->db->select('id');
 		 $this->db->from('students_ug_marks');
-		 $this->db->where(array('student_id'=>$data['student_id'],'course_id'=>$data['course_id'],'semester_id'=>$data['semester_id']));
+		 $this->db->where(array('student_id'=>$data['student_id'],'course_id'=>$data['course_id'],'semester_id'=>$data['semester_id'],'exam_type'=>$data['exam_type']));
 		 $result = $this->db->get()->result();
 		 if(count($result)>0){
-			  $this->db->where(array('student_id'=>$data['student_id'],'course_id'=>$data['course_id'],'semester_id'=>$data['semester_id']));
+			  $this->db->where(array('student_id'=>$data['student_id'],'course_id'=>$data['course_id'],'semester_id'=>$data['semester_id'],'exam_type'=>$data['exam_type']));
 			 $this->db->update('students_ug_marks',$data);
 			 return $result[0]->id;
 		 }else{

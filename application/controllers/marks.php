@@ -254,11 +254,19 @@ class Marks extends CI_Controller {
 			}
 		    $send['course_id']=$course_id;
 		}else{
+			$course_res=$this->Marks_model->get_course_group_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$student_id,$exam_type);
+			foreach($course_res as $k=>$v){ 
+				$send['course_id'][]=$v->id;
+			}
 			 $send['student_id']=$student_id;
 		}
 		//print_r($_POST);
-		$studentList= $this->Marks_model->get_student_assigned_marks($send);
-		//echo $this->db->last_query();exit;
+		if($upload_type == 'coursewise'){
+			$studentList= $this->Marks_model->get_student_assigned_marks($send);
+		}else{
+			$studentList= $this->Marks_model->get_student_wise_assigned_marks($send);
+		}
+		
 		$trdata='';
 		$i=0;
 		if(count($studentList)>0){
@@ -335,14 +343,14 @@ class Marks extends CI_Controller {
 						</td>';
 						
 					}else{
-						$trdata.='<td><input type="text" name="theory_internal1[]" class="theory_internal"  value="'.$students->theory_internal1.'" style="width:60px;" >
-									<input type="text" name="theory_internal2[]" class="theory_internal"  value="'.$students->theory_internal2.'" style="width:60px;" >
-									<input type="text" name="theory_internal3[]" class="theory_internal"  value="'.$students->theory_internal3.'" style="width:60px;" >
+						$trdata.='<td><input type="text" name="theory_internal1[]" class="theory_internal"  value="'.@$students->theory_internal1.'" style="width:60px;" >
+									<input type="text" name="theory_internal2[]" class="theory_internal"  value="'.@$students->theory_internal2.'" style="width:60px;" >
+									<input type="text" name="theory_internal3[]" class="theory_internal"  value="'.@$students->theory_internal3.'" style="width:60px;" >
 								</td>
 								<td>';
 						for($j=1;$j<=$course_idCount;$j++){
 							$var = "theory_paper{$j}";
-							$trdata.='<input type="text" name="theory_paper'.$j.'[]"  class="practical_exam" value="'.$students->{$var}.'" style="width:60px;" >&nbsp;';
+							$trdata.='<input type="text" name="theory_paper'.$j.'[]"  class="practical_exam" value="'.@$students->{$var}.'" style="width:60px;" >&nbsp;';
 							
 						}
 						$trdata.='</td>';
@@ -362,9 +370,9 @@ class Marks extends CI_Controller {
 							<td><input type="hidden"  value="'.$students->courseid.'">'.($i) .' 
 							<input type="hidden" name="course_id[]" value="'.$students->courseid.'"></td>';
 							if(isset($students->course_subject_title)){
-								$trdata.='<td>'.$students->course_subject_title.'('.$students->course_code.') <b>'.$students->theory_credit.'+'.$students->practicle_credit.'</b></td>';
+								$trdata.='<td>'.$students->course_subject_title.'('.@$students->course_code.') <b>'.@$students->theory_credit.'+'.@$students->practicle_credit.'</b></td>';
 							}else{
-								$trdata.='<td>'.$students->course_title.'('.$students->course_code.') <b>'.$students->theory_credit.'+'.$students->practicle_credit.'</b></td>';
+								$trdata.='<td>'.$students->course_title.'('.@$students->course_code.') <b>'.@$students->theory_credit.'+'.@$students->practicle_credit.'</b></td>';
 							}
 						  
 					}
@@ -397,7 +405,7 @@ class Marks extends CI_Controller {
 						$trdata.=' <td>';
 						for($j=1;$j<=$course_idCount;$j++){
 							$var = "theory_external{$j}";
-							$trdata.='<input type="text" name="theory_external'.$j.'[]" class="theory_external" value="'.$students->{$var}.'" style="width:60px;">&nbsp;';
+							$trdata.='<input type="text" name="theory_external'.$j.'[]" class="theory_external" value="'.@$students->{$var}.'" style="width:60px;">&nbsp;';
 						}
 						$trdata.='</td>';
 					}
@@ -748,6 +756,7 @@ class Marks extends CI_Controller {
 		$discipline_id=$this->input->post('discipline_id');
 		
 		$course_id=$this->input->post('course_id');
+		$exam_type=$this->input->post('exam_type');
 		
 		//print_r($_POST); exit;
 		$course_idCount=1;
@@ -839,6 +848,7 @@ class Marks extends CI_Controller {
 				'discipline_id'=>$discipline_id,
 				'student_id'=>$student_id,
 				'course_id'=>$course_id,
+				'exam_type'=>$exam_type,
 				'created_on'=>$register_date_time);
 			if($marks_type=='1'){
 				$data1['theory_internal1']=$theory_marks1;
