@@ -1054,6 +1054,8 @@ class Admin extends CI_Controller {
 				$saved['spouse_email']=$this->input->post('spouse_email');
 				$saved['faculty']=$this->input->post('faculty');
 				$saved['city_id']=$this->input->post('city_id');
+				if(empty($saved['city_id']))
+					$saved['city_id']=0;
 				$saved['marks_obtained']=$this->input->post('marks_obtained');
 				$saved['country_id']=$country_id;
 				$saved['state_id']=$state_id;

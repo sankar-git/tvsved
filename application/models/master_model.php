@@ -717,12 +717,11 @@ Class Master_model extends CI_Model
 		$this->db->from('student_assigned_courses');
 		$this->db->where(array('student_id'=>$data['student_id'],'semester_id'=>$data['semester_id'],'campus_id'=>$data['campus_id'],'degree_id'=>$data['degree_id'],'batch_id'=>$data['batch_id'],'course_id'=>$data['course_id'],'exam_type'=>$data['exam_type']));
 		$result	= $this->db->get()->result();
-		//echo $this->db->last_query();exit;
 		if(count($result)==0){
 			 $this->db->insert('student_assigned_courses',$data);
 			 $insert_id = $this->db->insert_id();
 		}else{
-			$this->db->where('id',$id);
+			$this->db->where('id',$result[0]->id);
 			$this->db->update('student_assigned_courses',$data);
 		}
 			return true;
@@ -842,7 +841,7 @@ Class Master_model extends CI_Model
         $result	= $this->db->get()->result();
 		return $result;
 	}
-	function get_assign_course_row($student_id,$semester='',$exam_type='')
+	function get_assign_course_row($student_id,$semester='',$exam_type='',$batch='')
 	{
 		$this->db->select('c.*');
 		$this->db->from('student_assigned_courses c');
@@ -852,6 +851,9 @@ Class Master_model extends CI_Model
 		}
 		if($exam_type>0){
 			$this->db->where(array('c.exam_type'=>$exam_type));
+		}
+		if($batch>0){
+			$this->db->where(array('c.batch_id'=>$batch));
 		}
         $result	= $this->db->get()->result();
 		

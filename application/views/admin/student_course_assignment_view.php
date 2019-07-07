@@ -93,6 +93,16 @@
 					  </select>
 					</div>
 					<div class="form-group col-md-4">
+					  <label for="batch_id">Academic Year<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="academic_year" id="academic_year" class="form-control" >
+						  <option value="">--Select Academic Year--</option>
+						  <?php foreach($batches as $batch){?>
+						  <option value="<?php echo $batch->id; ?>"><?php echo $batch->batch_name; ?></option>
+						 
+						  <?php } ?>
+					  </select>
+					</div>
+					<div class="form-group col-md-4">
 					  <label for="semester_id">Semester<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="semester_id" id="semester_id" class="form-control" onchange="getStudentByDegreeCampusBatchAndSemester();">
 						  <option value="">--Select Program--</option>
@@ -110,9 +120,7 @@
 						  <?php// } ?>
 					  </select>
 					</div>
-				 </div>
-				 
-				 <div class="row">
+				
 				 	<div class="form-group col-md-4">
 					  <label for="batch_id">Status<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="status_id" id="status_id" class="form-control">
@@ -129,7 +137,6 @@
 					  <label for="examtype">Exam Type<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="examtype"  id="examtype" class="form-control" >
 						  <option value="1">Regular</option>
-						  <option value="2">CAP</option>
 						 </select>
 					</div>
 				  <div class="form-group col-md-4">
@@ -175,14 +182,24 @@
 						  <?php// } ?>
 					  </select>
 					</div>
-				 </div>
 				 
 				 
-				  <div class="row">
+				 
+				 
 					<div class="form-group col-md-4">
 					  <label for="batch_id">Batch<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="bbatch_id" id="bbatch_id" class="form-control" onchange="loadCourse();">
 						  <option value="">--Select --</option>
+						  <?php foreach($batches as $batch){?>
+						  <option value="<?php echo $batch->id; ?>"><?php echo $batch->batch_name; ?></option>
+						 
+						  <?php } ?>
+					  </select>
+					</div>
+					<div class="form-group col-md-4">
+					  <label for="batch_id">Academic Year<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="bacademic_year" id="bacademic_year" class="form-control"  onchange="loadCourse();" >
+						  <option value="">--Select Academic Year--</option>
 						  <?php foreach($batches as $batch){?>
 						  <option value="<?php echo $batch->id; ?>"><?php echo $batch->batch_name; ?></option>
 						 
@@ -207,7 +224,7 @@
 						  <?php // } ?>
 					  </select>
 					</div>
-				 </div>
+				 
 				 
 				
 				 	<div class="form-group col-md-4">
@@ -221,10 +238,9 @@
 					  <label for="exam_type">Exam Type<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="exam_type"  id="exam_type" class="form-control" >
 						  <option value="1">Regular</option>
-						  <option value="2">CAP</option>
 						 </select>
 					</div>
-					
+					</div>
 					 <div class="box-footer">
             
 				 <button type="button" name="assign" id="assign" value="Register" onclick="registerCourse();" class="btn btn-success"/>Register</button>

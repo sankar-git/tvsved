@@ -29,6 +29,7 @@ class Course extends CI_Controller {
 		 
 		 
 		 $this->load->model('Discipline_model');
+		 $this->load->model('Gradechart_model');
 		  $this->load->model('Master_model');
 		  $sessdata= $this->session->userdata('sms');
 		    if(empty($sessdata)){
@@ -548,7 +549,7 @@ class Course extends CI_Controller {
 				 $this->Master_model->save_assign_course($data);
 				}
 			} 
-		  $this->session->set_flashdata('message', 'Course assign  successfully');
+		  $this->session->set_flashdata('message', 'Course assigned  successfully');
 	      redirect('course/assignCourseList');
 	}
 	
@@ -570,6 +571,194 @@ class Course extends CI_Controller {
 		$data['disciplines'] = $this->Discipline_model->get_discipline();
 		
 	    $this->load->view('admin/student_course_assignment_view',$data);
+		
+	}
+	function getCapStudentList(){
+		$campus_id=$this->input->post('campus_id');
+		$program_id=$this->input->post('program_id');
+		$degree_id=$this->input->post('degree_id');
+		$semester_id=$this->input->post('semester_id');
+		$batch_id=$this->input->post('batch_id');
+		$student_id=$this->input->post('student_id');
+		$exam_type=1;
+		$data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'','',$exam_type);
+		$courseGroup=array();
+		$resultArray=array();
+		 foreach($data['aggregate_marks'] as $subject_wise_val){
+			// p($subject_wise_val);
+			 if($degree_id=='1'){
+				 if(!empty($subject_wise_val->course_subject_name) && $subject_wise_val->coure_group_id != 22){
+					 if(!in_array($subject_wise_val->course_subject_name, $courseGroup, true)){
+							array_push($courseGroup, $subject_wise_val->course_subject_name);
+							$courseGroupArr[$subject_wise_val->coure_group_id]=$subject_wise_val->course_subject_name;
+						}
+						$name = $subject_wise_val->first_name.' '.$subject_wise_val->last_name;
+						
+						$numbers = array( $subject_wise_val->theory_internal1,$subject_wise_val->theory_internal2,$subject_wise_val->theory_internal3); 
+						rsort($numbers);
+						//print_r($numbers);exit;
+						 $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
+						  $theory_externals=$subject_wise_val->theory_external1/5;
+						  $practical_externals=$subject_wise_val->theory_external2/5;
+						 $theory_marks_40=$theory_externals+$practical_externals;
+						  $paper1_20=$subject_wise_val->theory_paper1/3;
+						  $paper1_20s=number_format($paper1_20,2);
+						  $paper2_20=$subject_wise_val->theory_paper2/3;
+						  $paper2_20s=number_format($paper2_20,2);
+						  $paper_20=$paper1_20s+$paper2_20s;
+						  if($subject_wise_val->coure_group_id == 22){
+							  if($subject_wise_val->ncc_status == 1)
+								   $subject_wise_val->result = "SATISFACTORY"; 
+							  else 
+								  $subject_wise_val->result =  "NOT SATISFACTORY";
+						  }else{
+							  if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) {
+								  $subject_wise_val->result = "PASS"; 
+								  $subject_wise_val->theory_diff='-';
+								  $subject_wise_val->prac_diff='-';
+							  }else {
+								  $subject_wise_val->result =  "FAIL";
+								  if($theory_internal_total+$theory_marks_40<30)
+									$subject_wise_val->theory_diff = round_two_digit(30 - ($theory_internal_total+$theory_marks_40),2);
+								  else
+									$subject_wise_val->theory_diff = '-';
+								if($paper_20<20)
+								  $subject_wise_val->prac_diff = round_two_digit(20 - $paper_20,2);
+							  else
+								$subject_wise_val->prac_diff ='-';
+							  }
+						  }
+					if($subject_wise_val->result == 'FAIL')
+						$resultArray[$name][$subject_wise_val->course_subject_name][]=$subject_wise_val;
+					//print_r($resultArray);exit;
+				 }
+			 }else{
+				 $name = $subject_wise_val->first_name.' '.$subject_wise_val->last_name;
+				  if(!in_array($subject_wise_val->course_code, $courseGroup, true)){
+							array_push($courseGroup, $subject_wise_val->course_code);
+							$courseGroupArr[$subject_wise_val->course_code]=$subject_wise_val->course_code;
+						}
+				 if($subject_wise_val->theory_credit > 0 && $subject_wise_val->practicle_credit > 0) 
+					$total_internal_sum = number_format($subject_wise_val->theory_internal1 + $subject_wise_val->practical_internal,2);
+				elseif($subject_wise_val->theory_credit > 0 ) 
+					$total_internal_sum = $subject_wise_val->theory_internal1;
+				elseif($subject_wise_val->practicle_credit > 0 )
+					$total_internal_sum = $subject_wise_val->practical_internal;
+				$total_internal_sum = $total_internal_sum+$subject_wise_val->assignment_mark;
+					if($total_internal_sum>=25 && $subject_wise_val->theory_external1>=25)
+						$subject_wise_val->result = "P"; 
+					else 
+						$subject_wise_val->result =  "F";
+				 $resultArray[$name][$subject_wise_val->course_code][]=$subject_wise_val;
+				 //print_r($resultArray);exit;
+			 }
+			 
+		  }
+		  if(count(@$courseGroupArr)>0){
+		   if($degree_id=='1')
+			ksort($courseGroupArr);
+		  }
+		 $data['result_marks'] =$resultArray;
+		 $data['courseGroup'] =@$courseGroupArr;
+		 $courseCount = count(@$data['courseGroup']);
+		 $html='<thead>
+						<tr>
+							<th rowspan="2" style="text-align:center;vertical-align:middle">S.No</th>
+							<th rowspan="2" style="text-align:center;vertical-align:middle">Student Id</th>
+							<th rowspan="2" style="vertical-align:middle">Student Name</th>
+							<th colspan="'.$courseCount.'" style="text-align:center;vertical-align:middle">Courses</th>
+						</tr>
+						<tr>';
+		if(count(@$data['courseGroup'])>0){
+			foreach($data['courseGroup'] as $key=>$res){
+				$html.='<th style="text-align:center">'.$res.'</th>';
+			}
+		}
+		$html.='</tr></thead><tbody id="tr_list">'; 
+		$counter=1;
+		if(count(@$data['result_marks'])>0){
+			foreach($data['result_marks'] as $key1=>$student){
+				$course_id = array_values($student)[0][0]->course_id;
+				$user_unique_id = array_values($student)[0][0]->user_unique_id;
+				$first_name = array_values($student)[0][0]->first_name;
+				$student_id = array_values($student)[0][0]->student_id;
+				$html.='<tr>';
+				$html.='<td style="text-align:center;vertical-align:middle">'.$counter.'</td>';
+				$html.='<td style="text-align:center;vertical-align:middle">'.$user_unique_id.'</td>';
+				$html.='<td style="vertical-align:middle">'.$first_name.'</td>';
+				foreach($data['courseGroup'] as $key=>$res){
+					if(isset($student[$res])){
+						$html.= '<td style="text-align:center;vertical-align:middle"><input type="checkbox" name="course_id[]" value= "'.$student_id.','.$student[$res][0]->course_id.'" /></td>';
+					}else{
+						$html.='<td style="text-align:center;vertical-align:middle">-</td>';
+					}
+				}
+				$html.='</tr>';
+				$counter++;
+			}
+		}else{
+			$html.='<tr><td colspan="4" style="text-align:center">No records found</td></tr>';
+		}
+		 echo $html.='</tbody>';
+	}
+	function studentCourseAssignmentCap()
+	{
+		$data['page_title']="Student Course Assignment CAP";
+		$data['campuses'] = $this->Discipline_model->get_campus();
+		$data['batches'] = $this->Discipline_model->get_batch();
+		$data['disciplines'] = $this->Discipline_model->get_discipline();
+		if(isset($_POST['save'])){
+			$campus_id=$this->input->post('campus_id');
+			$program_id=$this->input->post('program_id');
+			$degree_id=$this->input->post('degree_id');
+			$batch_id=$this->input->post('batch_id');
+			$semester_id=$this->input->post('semester_id');
+			
+			$courses=$this->input->post('course_id');
+			foreach($courses as $course){
+				if($degree_id == 1){
+					$coursesArr = explode(",",$course);
+					$student_id=$coursesArr[0];
+					$coursegroupArr = explode("|",$coursesArr[1]);
+					$courseidArr = explode("-",$coursegroupArr[1]);
+					for($i=0;$i<count($courseidArr);$i++){
+						$course_id=$courseidArr[$i];
+						 $data=array(
+							'campus_id'=>$campus_id,
+							'program_id'=>$program_id,
+							'degree_id'=>$degree_id,
+							'batch_id'=>$batch_id,
+							'semester_id'=>$semester_id,
+							'student_id'=>$student_id,
+							'course_id'=>$course_id,
+							'exam_type'=>2
+							
+							);
+						$this->Master_model->save_student_course_list($data);
+					}
+				}else{
+					$coursesArr = explode(",",$course);
+					$student_id=$coursesArr[0];
+					$course_id=$coursesArr[1];
+						 $data=array(
+							'campus_id'=>$campus_id,
+							'program_id'=>$program_id,
+							'degree_id'=>$degree_id,
+							'batch_id'=>$batch_id,
+							'semester_id'=>$semester_id,
+							'student_id'=>$student_id,
+							'course_id'=>$course_id,
+							'exam_type'=>2
+							
+							);
+						$this->Master_model->save_student_course_list($data);
+				}
+				
+			}
+			$this->session->set_flashdata('message', 'Course assigned  successfully');
+		redirect('course/studentCourseAssignmentCap');			
+		}
+	    $this->load->view('admin/student_course_assignment_cap_view',$data);
 		
 	}
 	
@@ -658,6 +847,7 @@ class Course extends CI_Controller {
 		$program_id=$this->input->post('program_id');
 		$degree_id=$this->input->post('degree_id');
 		$batch_id=$this->input->post('batch_id');
+		$academic_year=$this->input->post('academic_year');
 		$semester_id=$this->input->post('semester_id');
 		$student_id=$this->input->post('student_id');
 		$status_id=$this->input->post('status_id');
@@ -669,7 +859,7 @@ class Course extends CI_Controller {
 	    $send['campus_id']=$campus_id;
 	    $send['program_id']=$program_id;
 	    $send['degree_id']=$degree_id;
-	    $send['batch_id']=$batch_id;
+	    $send['batch_id']=$academic_year;
 	    $send['semester_id']=$semester_id;
 	    $send['student_id']=$student_id;
 	    $send['status_id']=$status_id;
@@ -685,7 +875,7 @@ class Course extends CI_Controller {
 		$trdata='';
 			$i=0;
 			     //$status= array();
-				 $statusArr= $this->Master_model->get_assign_course_row($student_id,$semester_id,$exam_type);
+				 $statusArr= $this->Master_model->get_assign_course_row($student_id,$semester_id,$exam_type,$academic_year);
 			   // $array = json_decode(json_encode($statusArr), true);
 				//print_r($array); exit;
 				//$status = (array)$statusArr;
@@ -861,13 +1051,14 @@ class Course extends CI_Controller {
 		$pprogram_id=$this->input->post('pprogram_id');
 		$ddegree_id=$this->input->post('ddegree_id');
 		$bbatch_id=$this->input->post('bbatch_id');
+		$bacademic_year=$this->input->post('bacademic_year');
 		$ssemester_id=$this->input->post('ssemester_id');
 		$discipline_id=$this->input->post('discipline_id');
 		$course_id=$this->input->post('course_id');
 	    $send['campus_id']=$ccampus_id;
 	    $send['program_id']=$pprogram_id;
 	    $send['degree_id']=$ddegree_id;
-	    $send['batch_id']=$bbatch_id;
+	    $send['batch_id']=$bacademic_year;
 	    $send['semester_id']=$ssemester_id;
 	    $send['discipline_id']=$discipline_id;
 	    $send['course_id']=$course_id;

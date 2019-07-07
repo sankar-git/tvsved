@@ -1,5 +1,4 @@
 <?php
-ob_start();
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Generate extends CI_Controller {
 	

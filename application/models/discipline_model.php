@@ -377,7 +377,7 @@ Class Discipline_model extends CI_Model
 	{
 		$this->db->select('b.id,b.batch_start_year,b.batch_name,b.status,sy.syllabus_year,sy.id as syllabus_year_id');
         $this->db->from('batches as b');
-        $this->db->join('syllabus_years as sy','sy.id = b.syllabus_id','INNER');
+        $this->db->join('syllabus_years as sy','sy.id = b.syllabus_id','LEFT');
 		$result	= $this->db->get()->result();
 		return $result; 
 	}
