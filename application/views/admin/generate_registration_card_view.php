@@ -101,7 +101,7 @@ $this->load->view('admin/helper/header');?>
 					</div>
 					<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Exam<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="exam_type" id="exam_type" class="form-control">
+					  <select name="exam_type" id="exam_type" class="form-control" onchange="getStudentList();">
 						  <option value="">Select Type</option>
 						  <option value="1">Regular</option>						  
 						  <option value="2">Cap</option>						  

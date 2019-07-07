@@ -1093,6 +1093,7 @@ class Generate extends CI_Controller {
 		$program_id=$this->input->post('program_id');
 		$degree_id=$this->input->post('degree_id');
 		$semester_id=$this->input->post('semester_id');
+		$exam_type=$this->input->post('exam_type');
 		$batch_id=$this->input->post('batch_id');
 		$date_of_start=$this->input->post('date_of_start');
 		$date_of_closure=$this->input->post('date_of_closure');
@@ -1102,6 +1103,7 @@ class Generate extends CI_Controller {
 	    $send['degree_id']=$degree_id;
 	    $send['batch_id']=$batch_id;
 	    $send['semester_id']=$semester_id;
+	    $send['exam_type']=$exam_type;
 	    $studentList= $this->Generate_model->get_student_list_for_registration($send);
 		//echo $this->db->last_query();
 	  //print_r($studentList); exit;
