@@ -144,8 +144,18 @@ class Excelupload extends CI_Controller {
 			// print_r($dos);exit;
 			 $credits = $this->Marks_model->get_course_credit_points($course_id);
 			// print_r($credits[0]->practicle_credit);//exit;
-			 $data['students']=$this->Marks_model->get_ug_students_by_ids($campus_id,$program_id,$degree_id,$batch_id,$exam_type); 
-			// p($data['students']); exit;
+			 //$data['students']=$this->Marks_model->get_ug_students_by_ids($campus_id,$program_id,$degree_id,$batch_id,$exam_type); 
+			  $send['campus_id']=$campus_id;
+	    $send['program_id']=$program_id;
+	    $send['degree_id']=$degree_id;
+	    $send['batch_id']=$batch_id;
+	    $send['semester_id']=$semester_id;
+	    $send['discipline_id']=$discipline_id;
+	    $send['exam_type']=$exam_type;
+	    $send['course_id']=$course_id;
+			  $data['students']=$studentList= $this->Marks_model->get_student_assigned_marks($send);
+			// echo $this->db->last_query();exit;
+			//p($data['students']); exit;
 			if($degree_id==1 && $program_id == 1){
             //$finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Student Name','INTERNAL FIRST(10)',' INTERNAL SECOND(10)',' INTERNAL THIRD(10)','PRACTICAL PAPER-I(60)','PRACTICAL PAPER-II(60)','EXTERNAL PAPER-I(100)','EXTERNAL PAPER-II(100)');
 			 if($mark_type == 1)
