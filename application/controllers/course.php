@@ -659,7 +659,8 @@ class Course extends CI_Controller {
 			ksort($courseGroupArr);
 		  }
 		 $data['result_marks'] =$resultArray;
-		 $data['courseGroup'] =@$courseGroupArr;
+		$data['courseGroup'] =@$courseGroupArr;
+		// print_r($data['result_marks']);exit;
 		 $courseCount = count(@$data['courseGroup']);
 		 $html='<thead>
 						<tr>
@@ -674,7 +675,7 @@ class Course extends CI_Controller {
 				$html.='<th style="text-align:center">'.$res.'</th>';
 			}
 		}
-		$html.='</tr></thead><tbody id="tr_list">'; 
+		$html.='</tr></thead><tbody id="tr_list">';
 		$counter=1;
 		if(count(@$data['result_marks'])>0){
 			foreach($data['result_marks'] as $key1=>$student){

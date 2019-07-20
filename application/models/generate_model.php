@@ -127,7 +127,7 @@ Class Generate_model extends CI_Model
 	}
 	function get_student_assigned_subjects_bvsc($stuId,$semester_id,$exam_type=1)
 	{
-		$this->db->select('c.id, group_concat(distinct c.course_title order by c.course_title) as course_title,group_concat(distinct c.course_code order by c.course_code) as course_code,c.theory_credit,c.practicle_credit,csg.course_subject_name,csg.course_subject_title,c.course_subject_id',true);
+		$this->db->select('c.id, group_concat(distinct c.course_title order by c.course_title) as course_title,group_concat(distinct c.course_code order by c.course_code) as course_code,c.theory_credit,c.practicle_credit,csg.course_subject_name,csg.course_subject_title,c.course_subject_id,csg.course_subject_title',true);
 		$this->db->from('courses c');
 		$this->db->join('student_assigned_courses sac','sac.course_id = c.id','INNER');
 		$this->db->join('course_subject_groups csg','csg.id=c.course_subject_id','LEFT');
@@ -297,6 +297,17 @@ Class Generate_model extends CI_Model
         $result	= $this->db->get()->result();
 		return $result;
 	}
+	function get_coursesubj_name($course_code)
+	{
+		$this->db->select('*');
+		$this->db->from('course_subject_groups');
+		$this->db->where('course_subject_name',$course_code);
+
+		$query = $this->db->get();
+		return $query->row('course_subject_title');
+ 
+	}
+
 	
 	
 } //end class

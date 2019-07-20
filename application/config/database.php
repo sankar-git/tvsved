@@ -50,7 +50,7 @@ $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
-$db['default']['password'] = 'test@123';
+$db['default']['password'] = '';
 $db['default']['database'] = 'tanuvaslivenew';
 
 /*$db['default']['hostname'] = 'localhost';
@@ -63,7 +63,7 @@ $db['default']['username'] = 'parthrvw_santosh';
 $db['default']['password'] = 'San@1234';
 $db['default']['database'] = 'parthrvw_partha_school';*/
 
-$db['default']['dbdriver'] = 'mysql';
+$db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;

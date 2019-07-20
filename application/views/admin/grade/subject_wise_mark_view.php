@@ -92,9 +92,9 @@
 					<?php } ?>
                 </tr>
 				 <tr>
-                    <th scope="col"  style="padding:2px;">(10)</th>
-                    <th scope="col" style="padding:2px;">(10)</th>
-					<th scope="col" style="padding:2px;">(10)</th>
+                    <th scope="col"  style="padding:2px;">(40)</th>
+                    <th scope="col" style="padding:2px;">(40)</th>
+					<th scope="col" style="padding:2px;">(40)</th>
 					<?php for($i=0;$i<$course_count;$i++){?>
                     <th scope="col"  style="padding:2px;">(100)</th>
 					<?php } ?>
@@ -125,7 +125,7 @@
                     <td align="center" style="font-size:14px;"><?php echo $reg_students->dummy_value;?></td>
 					<td align="center"  style=" font-size:14px; "><?php echo $reg_students->user_unique_id;?></td>
 					<?php if(in_array($degree,array(5,6))){?>
-					 <td style ="font-size:12px;"><p align="center" style=" font-size:14px;"><?php round_two_digit($mark[0]->theory_internal1/4,2);?></p></td>
+					 <td style ="font-size:12px;"><p align="center" style=" font-size:14px;"><?php echo $mark[0]->theory_internal1;?></p></td>
                     <td style ="font-size:12px;"><p align="center" style=" font-size:14px;"></p></td>
                     <td style ="font-size:12px;"><p align="center" style=" font-size:14px;"></p></td>
 					<?php for($k=0;$k<$course_count;$k++){?>
@@ -135,9 +135,9 @@
                     <td style ="font-size:12px;"><p align="center" style=" font-size:14px;"></p></td>
 					<?php }  ?>
 					<?php }else{ ?>
-                    <td style ="font-size:12px;" align="center"><p align="center" style=" font-size:14px;"><?php  if(isset($mark[0]->theory_internal1)) echo round_two_digit($mark[0]->theory_internal1/4,2);?></p></td>
-                    <td style ="font-size:12px;" align="center"><p align="center" style=" font-size:14px;"><?php if(isset($mark[0]->theory_internal2)) echo round_two_digit($mark[0]->theory_internal2/4,2);?></p></td>
-                    <td style ="font-size:12px;" align="center"><p align="center" style=" font-size:14px;"><?php if(isset($mark[0]->theory_internal3)) echo round_two_digit($mark[0]->theory_internal3/4,2);?></p></td>
+                    <td style ="font-size:12px;" align="center"><p align="center" style=" font-size:14px;"><?php  if(!empty($mark[0]->theory_internal1)){echo $mark[0]->theory_internal1;}else{echo '0.00';} ?></p></td>
+                    <td style ="font-size:12px;" align="center"><p align="center" style=" font-size:14px;"><?php if(!empty($mark[0]->theory_internal2)) {echo $mark[0]->theory_internal2;}else{echo '0.00';}?></p></td>
+                    <td style ="font-size:12px;" align="center"><p align="center" style=" font-size:14px;"><?php if(!empty($mark[0]->theory_internal3)) {echo $mark[0]->theory_internal3;}else{echo '0.00';}?></p></td>
 					<?php for($k=0;$k<$course_count;$k++){ $var = 'theory_external'.($k+1);?>
                     <td style ="font-size:12px;" align="center"><p align="center" style=" font-size:14px;"><?php if(isset($mark[0]->{$var})) echo $mark[0]->{$var};?></p></td>
 					<?php } ?>

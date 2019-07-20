@@ -1,5 +1,5 @@
 <?php  foreach($hall_tickets as $key=>$halldata){?>
-<?php $this->load->view('admin/pdf/pdf_header',$halldata);?>         
+<?php $this->load->view('admin/pdf/pdf_header',$halldata);?>      
             <table id="table" width="100%" class="table">
 
                 <tr>
@@ -43,7 +43,7 @@
                               <?php $i=0; foreach($halldata['subjectList'] as $subjects){?>
                                							
                                     <!--<td align="center" style=" font-size:11px; font-weight:bold;">22-03-2017</td>-->
-                                    <p align="left">&nbsp;<?php echo $subjects['course_code'];?> - <?php echo $subjects['course_title'];?></p>
+                                    <p align="left">&nbsp;<?php echo $subjects['course_title'];?></p>
                                 
 								 <?php $i++;}?>
 							</td></tr>										 
@@ -55,7 +55,7 @@
             <br />     
             <table width="100%">
                 <tr>
-                    <td align="left" style="width:30%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div>Attested</div></td>
+                    <td align="left" style="width:30%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div></div></td>
                     <td align="center" style="width:35%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div>&nbsp;</div></td>
                     <td align="center" style="width:30%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div>&nbsp;</div></td>
                 </tr>

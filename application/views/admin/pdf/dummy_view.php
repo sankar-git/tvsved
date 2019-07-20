@@ -38,8 +38,8 @@
             <table id="table" width="100%">
                 <tr style="">
                     <th style="width:70px;">SL.No.</th>
-                    <th style="width:150px; font-size:14px; font-weight:bold;">STUDENT ID.</th>
-                    <th style="width:250px; font-size:14px; font-weight:bold;">NAME</th>
+                    <th style="width:150px; font-size:14px; font-weight:bold;">STUDENT ID. & DUMMY NUMBER</th>
+                    <th style="width:200px; font-size:14px; font-weight:bold;">NAME</th>
                     <th>SUBJECTS</th>
                 </tr>
 				<?php $i=$dummy_number_report[0]['index'] ; ?>
@@ -49,20 +49,18 @@
                 <tr>
                     <td align="center" style=" font-size:14px; font-weight:bold;vertical-align:top"><?php echo $i;?></td>
                     <td align="center" style=" font-size:14px; font-weight:bold;vertical-align:top"><?php echo $dummydata['student_unique_id'];?>
-					 </br><p><?php  echo $dummydata['dummy_value'];?></p>
+					 <br /><!-- <p><?php  echo "&";?></p><p> --><?php  echo $dummydata['dummy_value'];?></p>
 					</td>
-                    <td align="left" style=" padding-left:1px;font-size:14px; font-weight:bold;vertical-align:top">&nbsp;&nbsp;<?php echo $dummydata['first_name'].' '.$dummydata['last_name'];?></td>
-                    <td align="left" style =" font-size:12px; font-weight:bold;">
-						<table style="border:none;width:100%;font-weight:bold;">
+                    <td align="center" style=" padding-left:1px;font-size:14px; font-weight:bold;vertical-align:top">&nbsp;&nbsp;<?php echo $dummydata['first_name'].' '.$dummydata['last_name'];?></td>
+                    <td align="left" style =" font-size:10px;">
+						<table style="border:none; width:100%;">
                        <?php  foreach($dummydata['subjectList'] as $key=>$subjects) {
 							 //p($subjects);
 							 
-							if($key%2==0){ $first=true;  ?>
-							<tr><td style="border:none">&nbsp;&nbsp;<?php echo $subjects['course_code'];?></td>
+							// if($key%2==0){ $first=true;  ?>
+							<tr><td style="border:none"><?php echo $subjects['course_title'];?></td>
 							
-							<?php }else{ $first=false;?>
-							<td style="border:none" >&nbsp;&nbsp;<?php echo $subjects['course_code'];?></td></tr>
-					   <?php } } if($first) echo "</tr>"; ?>
+					   <?php }  ?>
 						</table>
                     </td>
                 </tr> 

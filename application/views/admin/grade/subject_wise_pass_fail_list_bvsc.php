@@ -87,38 +87,38 @@
 	<input type="hidden" name="downloadpdf" value="true" />
 	</form>
 	<?php } ?>
-	
-		<p align="center">
-	     <h4 align="center">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY <BR />
-          <?php echo $subject_wise_list[0]->degree_name;?>. - DEGREE - <?php echo strtoupper($title);?></h4>
+	   <div><span style="margin-left: 300px;" class="logo"><img height="90" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></span>
+		
+	     <h4 align="center" style="margin-top: -70px;">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY <BR />
+          <?php echo $subject_wise_list[0]->degree_code;?>.<br /><br /><?php echo strtoupper($title);?></h4>
 			<?php if(!isset($_POST['downloadpdf'])){?>
                 <h5 align="center"><a href="javascript:;" onclick="document.genpdf.submit();">Download PDF</a></h5>
 			<?php } ?>		 
-	   </p>
-	  
+	   
+	  </div><hr>
 	
     <div style="padding:0px; width:100%; font-family:Arial, Helvetica, sans-serif; ">
         <div class="pdf_container">
 			<table class="sub-detail-tbl" style="width:100%; margin:0px; border-collapse: collapse; margin:20px 0px;Line-height:1.5">
 				<tr>
                     <td align="left" width="20%" style="vertical-align:top;font-weight:bold;">College</td>
-					<td align="left" width="50%" style="vertical-align:top;font-weight:bold;;">:&nbsp;<?php echo $subject_wise_list[0]->campus_code;?></td>					
+					<td align="left" width="50%" style="vertical-align:top;">:&nbsp;<?php echo $subject_wise_list[0]->campus_name;?></td>					
 					<td align="left" width="15%" style="vertical-align:top;font-weight:bold;">Batch</td>
-					<td align="left"width="20%" style="vertical-align:top;font-weight:bold;">:&nbsp;<?php  echo $subject_wise_list[0]->batch_name; ?></td>                
+					<td align="left"width="20%" style="vertical-align:top;">:&nbsp;<?php  echo $subject_wise_list[0]->batch_name; ?></td>                
                    
                 </tr>
                 <tr>
-                    <td align="left"  width="20%" style="vertical-align:top;font-weight:bold;">Subject ID</td>
-					<td align="left"  width="50%" style="vertical-align:top;font-weight:bold;">:&nbsp;<?php if(empty($subject_wise_list[0]->course_subject_name)) echo $subject_wise_list[0]->course_code; else echo $subject_wise_list[0]->course_subject_name;?></td>
-                    <td align="left" width="15%" style="vertical-align:top;font-weight:bold;">Exam</td>
-					<td align="left"  width="20%" style="vertical-align:top;font-weight:bold;">:&nbsp;Annual Board</td>
+                    <td align="left"  width="20%" style="vertical-align:top;font-weight:bold;">Examination</td>
+					<td align="left"  width="50%" style="vertical-align:top;">:&nbsp;<?php echo $subject_wise_list[0]->semester_name.'-'."Annual"; ?></td>
+                    <td align="left" width="15%" style="vertical-align:top;font-weight:bold;">Month & Year</td>
+					<td align="left"  width="20%" style="vertical-align:top;">:&nbsp;<?php echo $month.' '.$year; ?></td>
                     
                 </tr>
 				<tr>
-                    <td align="left"  width="20%" style="vertical-align:top;font-weight:bold;">Subject Name</td>
-					<td align="left"  width="50%" style="vertical-align:top;font-weight:bold;">:&nbsp;<?php if(empty($subject_wise_list[0]->course_subject_title)) echo $subject_wise_list[0]->course_title; else echo $subject_wise_list[0]->course_subject_title;?></td>
-                    <td align="left" width="15%" style="vertical-align:top;font-weight:bold;">Annual Board</td>
-					<td align="left"  width="20%" style="vertical-align:top;font-weight:bold;">:&nbsp;First</td>
+                    <td align="left"  width="20%" style="vertical-align:top;font-weight:bold;">Subject</td>
+					<td align="left"  width="50%" style="vertical-align:top;">:&nbsp;<?php if(empty($subject_wise_list[0]->course_subject_title)) echo $subject_wise_list[0]->course_title; else echo $subject_wise_list[0]->course_subject_title;?></td>
+                    <td align="left" width="15%" style="vertical-align:top;font-weight:bold;">Credit Hours</td>
+					<td align="left"  width="20%" style="vertical-align:top;">:&nbsp;<?php echo $subject_wise_list[0]->theory_credit.'+'.$subject_wise_list[0]->practicle_credit;?></td>
                     
                 </tr>
              </table> 			 

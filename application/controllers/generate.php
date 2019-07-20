@@ -329,6 +329,84 @@ class Generate extends CI_Controller {
 		   
             exit;			
 		 }
+
+
+		 if(!empty($this->input->post('reg_card')))
+		 {  
+	           
+	           // $data['campuses'] = $this->Discipline_model->get_campus(); 
+	            $campus_id=$this->input->post('campus_id');
+				$program_id=$this->input->post('program_id');
+				$degree_id=$this->input->post('degree_id');
+				$semester_id=$this->input->post('semester_id');
+				
+				$batch_id=$this->input->post('batch_id');
+				$date_of_start=$this->input->post('date_of_start');
+				
+				//print_r($date_of_closure); exit;
+				// $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
+				// print_r($batchYear->date_of_closure); exit;
+				 //$batch_year=$batchYear->date_of_closure;
+				// print_r($batch_year); exit;
+				 //$yrdata= strtotime($batch_year);
+                 $monthYrr= $month.' '.$year;				 
+			//	print_r($monthYrr); exit;
+				 $student_id=$this->input->post('student_id'); //array input
+				 $allData = array();
+				     $semesterRow = $this->Result_model->get_semester_name($semester_id); 
+					 $students = $this->Generate_model->get_studedent_data($student_id);
+					// p($students); exit;
+					 foreach($students as $stuData)
+					 {
+						$subjectList = $this->Generate_model->get_student_assigned_subjects_bvsc($stuData->user_id,$semester_id,$exam_type);
+						//echo $this->db->last_query();exit;
+						// p($subjectList); 
+						     $list['first_name']  =$stuData->first_name;
+						     $list['last_name']  =$stuData->last_name;
+						     $list['user_unique_id']  =$stuData->user_unique_id;
+						     $list['user_image']  =$stuData->user_image;
+						     $list['batch_name']  =$stuData->batch_name;
+						     $list['campus_name']  =$stuData->campus_name;
+						     $list['campus_code']  =$stuData->campus_code;
+						     $list['degree_name']  =$stuData->degree_name;
+						     $list['degree_code']  =$stuData->degree_code;
+						     $list['month_year']  =$monthYrr;
+						     $list['semester_name']  =$semesterRow->semester_name;
+						     $list['semester_code']  =$semesterRow->semester_code;
+						     $list['created_on']  =$stuData->created_on;
+						    //p($list); exit;
+								 $dataList =array();
+								 foreach($subjectList as $subjectVal)
+								 {    
+							        $data['course_id']   = $subjectVal->id;
+									$data['course_code']   = $subjectVal->course_code;
+									$data['theory_credit']   = $subjectVal->theory_credit;
+									$data['practicle_credit']   = $subjectVal->practicle_credit;   
+									   $dataList[] = $data;
+								 }
+								// p($dataList); exit;
+						    $list['subjectList'] = $dataList;
+						    $allData[] = $list;  
+					 }  
+				     $data['reg_cards']=$allData;
+				
+			//	p( $data['hall_tickets']); exit;
+			
+			//load the view and saved it into $html variable
+			$html=$this->load->view('admin/pdf/reg_card_view', $data, true);
+			// print_r($html); exit;
+			//this the the PDF filename that user will get to download
+			$pdfFilePath = "registration_card.pdf";
+	 
+			//load mPDF library
+			$this->load->library('m_pdf');
+			$this->m_pdf->pdf->SetTitle('registrationCard');
+		   //generate the PDF from the given html
+			$this->m_pdf->pdf->WriteHTML($html);
+	        $this->m_pdf->pdf->Output($pdfFilePath, "I");
+		
+            exit;			
+		 }
 		 
 		 //*************************Generate Hall Ticket*********************************//
 		
@@ -943,6 +1021,7 @@ class Generate extends CI_Controller {
 						     $list['batch_name']  =$stuData->batch_name;
 						     $list['campus_name']  =$stuData->campus_name;
 						     $list['campus_code']  =$stuData->campus_code;
+						     $list['degree_code']  =$stuData->degree_code;
 						     $list['degree_name']  =$stuData->degree_name;
 						     $list['semester_name']  =$stuData->semester_name;
 						     $list['gender']  =$stuData->gender;
@@ -954,7 +1033,7 @@ class Generate extends CI_Controller {
 								 foreach($subjectList as $subjectVal)
 								 {    
 							           $data['course_id']   = $subjectVal->id;
-									   $data['course_code']   = $subjectVal->course_code;
+									   $data['course_subject_title']   = $subjectVal->course_subject_title;
 									   $data['course_title']   = $subjectVal->course_title;
 									   $data['theory_credit']   = $subjectVal->theory_credit;
 									   $data['practical_credit']   = $subjectVal->practicle_credit;

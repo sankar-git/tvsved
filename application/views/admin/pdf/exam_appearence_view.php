@@ -38,14 +38,15 @@
             
 			<table width="100%">
                 <tr>
-                    <td width="15%"><img height="100" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></td>
+                    <td><div><span class="logo"><img height="90" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></span></div></td>
+                    <!-- <td width="15%"><img height="100" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></td> -->
                     <td width="85%">
                         
 					<table width="100%">
 						<tr><td><p style=" font-size:16px; font-weight:bold;">TAMIL NADU  VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></td></tr>
 						<tr>
                                     <td align="center">
-									<p align="center" style=" font-size:13px; font-weight:bold;"><?php echo $appearData['degree_name'];?></p>
+									<p align="center" style=" font-size:13px; font-weight:bold;"><?php echo $appearData['degree_code'];?></p>
                                        
                                     </td>
                                 </tr>
@@ -65,8 +66,8 @@
             <hr />
 			<table width="100%" style="font-size:11px;">
 				<tr>
-					<td width="35%">1. Name : <b><?php  echo $appearData['first_name'].' '.$appearData['last_name'];?></td>
-					<td width="65%" align="left">2. Sex: <b><?php  echo ucfirst($appearData['gender']);?></td>
+					<td>1. Name : <b><?php  echo $appearData['first_name'].' '.$appearData['last_name'];?></td>
+					<td align="left">2. Sex: <b><?php  echo ucfirst($appearData['gender']);?></td>
 				</tr>
 				<tr>
 					<td>3. I.D.No.: <b><?php  echo $appearData['student_unique_id'];?></td>
@@ -74,24 +75,18 @@
 				</tr>
 				<tr>
 					<td >5. College: <b><?php echo $appearData['campus_code'];?></b></td>
-					<td align="left">6. Degree: <b><?php  echo $appearData['degree_name'];?></b></td>
+					
 				</tr>
-				<tr>
-					<td >7. Program: <b><?php echo $appearData['program_name'];?></b></td>
-					<td align="left">8. Examination: <b><?php echo $appearData['semester_name'];?></b></td>
-				</tr>
-				<tr>
-					<td width="100%" colspan="2">9. Details of Examination appearing for: <b><?php  echo $appearData['degree_name'];?></b></td>
-				</tr>
+				
 			</table>
 
             <table id="table" width="100%" style="margin-top:5px;">
                 <tr style="font-size:13px; font-weight:bold;">
                     <th style="width:70px;">S.No</th>
-                    <th style="width:150px;">Course Code</th>
-                    <th style="width:250px;">Course Title</th>
+                    <th style="width:150px;">Subject</th>
+                    <th style="width:250px;">Papers</th>
                     <th style="width:70px;">Credit Hours</th>
-                    <th>Remarks</th>
+                    <th>No of Appearances</th>
                 </tr>
                 <?php 
 				 $sum_theory=0;
@@ -108,7 +103,7 @@
 				?>
                 <tr style=" font-size:12px; font-weight:bold;">
                     <td align="center"><?php echo $i;?></td>
-                    <td align="center"><?php echo str_replace(",","<br/>",$courseData['course_code']);?></td>
+                    <td align="center"><?php echo str_replace(",","<br/>",$courseData['course_subject_title']);?></td>
                     <td style="padding-left:20px;"><?php echo str_replace(",","<br/>",$courseData['course_title']);?></td>
                     <td style="padding-left:20px;"><?php echo $courseData['theory_credit'].'+'.$courseData['practical_credit'];?></td>
                     <td style="padding-left:20px;"><?php if($exam_type == 2) echo "CAP"; else echo "First Time";?></td>

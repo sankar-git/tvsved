@@ -169,7 +169,7 @@ Class Result_model extends CI_Model
 	
 	function get_semester_name($semester_id)
 	{
-		$this->db->select('s.semester_name');
+		$this->db->select('s.semester_code,s.semester_name');
 		$this->db->from('semesters s');
 		$this->db->where('s.id',$semester_id);
 		$result = $this->db->get()->row();

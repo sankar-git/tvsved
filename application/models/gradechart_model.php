@@ -4,10 +4,10 @@ Class Gradechart_model extends CI_Model
 	function get_registered_student($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id)
 	{
 		if($degree_id=='1'){
-			$this->db->select('u.user_unique_id,u.first_name,u.last_name,u.user_unique_id,b.batch_name,csg.course_subject_title as course_title,cp.campus_name,cp.campus_code,d.degree_name,d.degree_code,s.semester_name');
+			$this->db->select('u.user_unique_id,u.first_name,u.last_name,u.user_unique_id,b.batch_name,csg.course_subject_title as course_title,cp.campus_name,cp.campus_code,d.degree_name,d.degree_code,s.semester_name,u.created_on,c.theory_credit,c.practicle_credit');
 			
 		}else
-			$this->db->select('u.user_unique_id,u.first_name,u.last_name,u.user_unique_id,b.batch_name,c.course_title,cp.campus_name,cp.campus_code,d.degree_name,d.degree_code,s.semester_name');
+			$this->db->select('u.user_unique_id,u.first_name,u.last_name,u.user_unique_id,b.batch_name,c.course_title,cp.campus_name,cp.campus_code,d.degree_name,d.degree_code,s.semester_name,u.created_on,c.theory_credit,c.practicle_credit');
 		$this->db->from('student_assigned_courses sac');
 		$this->db->join('users u','u.id = sac.student_id','INNER');
 		$this->db->join('batches b','b.id = sac.batch_id','INNER');
@@ -62,7 +62,7 @@ Class Gradechart_model extends CI_Model
 	}
 	function get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_id,$semester_id)
 	{
-	    	$this->db->select('u.id as student_id,u.first_name,u.last_name,u.user_unique_id,cp.campus_code,b.batch_name,c.course_title,c.course_code,du.dummy_value,d.degree_name,d.degree_code,sem.semester_name,csg.course_subject_name,csg.course_subject_title,c.theory_credit,c.practicle_credit');
+	    	$this->db->select('u.id as student_id,u.first_name,u.last_name,u.user_unique_id,cp.campus_code,b.batch_name,c.course_title,c.course_code,du.dummy_value,d.degree_name,d.degree_code,sem.semester_name,csg.course_subject_name,csg.course_subject_title,c.theory_credit,c.practicle_credit,cp.campus_name');
 	    	$this->db->from('users u');
 	    	//$this->db->from('courses c');
 	    	$this->db->join('user_map_student_details ud','ud.user_id = u.id','LEFT');
@@ -141,7 +141,7 @@ Class Gradechart_model extends CI_Model
 			//print_r($courseArr);exit;
 			$this->db->select('c.id as course_id,
 						 group_concat(distinct c.course_title) as course_title,group_concat(distinct c.course_code) as course_code,c.theory_credit,c.practicle_credit,cp.campus_code,cp.campus_name,
-						   b.batch_name,s.semester_name,d.degree_name,csg.course_subject_name,csg.course_subject_title,csg.id as coure_group_id,dis.discipline_name,dis.discipline_code,u.first_name,u.last_name,u.user_unique_id,student_id',true);
+						   b.batch_name,s.semester_name,d.degree_code,d.degree_name,csg.course_subject_name,csg.course_subject_title,csg.id as coure_group_id,dis.discipline_name,dis.discipline_code,u.first_name,u.last_name,u.user_unique_id,student_id',true);
 			$this->db->from('courses as c','c.id=r.course_id');
 			$this->db->join('student_assigned_courses as sa',"sa.course_id=c.id");
 			$this->db->join('disciplines as dis','dis.id=c.discipline_id');

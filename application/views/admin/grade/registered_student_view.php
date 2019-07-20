@@ -38,18 +38,17 @@
                     <td>
                         <div>
                             <table>
-                                <tr><td><div><div style="margin-left:30px; font-weight:bold; font-size:16px;"><p>TAMIL NADU  VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></div></div></td></tr>
+                                <tr><td><div><div style="margin-left:30px; font-weight:bold; font-size:16px;"><p>TAMIL NADU  VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></div></div></td></tr><br />
                                 <tr>
                                     <td align="center">
-                                            <p align="center" style=" font-size:14px;"><?php echo $registered_students[0]->degree_code;?></p>
-											
-                                            <p align="center" style=" font-size:14px; padding:10px 0px 0px 0px;">
-											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <p align="center" style=" font-size:14px;"><b><?php echo $registered_students[0]->degree_code;?></b></p><br />
+                                            <p align="center" style=" font-size:14px; padding:10px 0px 0px 0px;"><b>
+											STUDENT REGISTRATION</b>
 											</p>
                                     </td>
-									
+									<!-- <td align="center">
+                                            <p></p>                           
+                                    </td> -->
                                 </tr>
 
                             </table>
@@ -63,16 +62,23 @@
             <hr />
             <table width="100%" style="font-size:12px;">
                 <tr>
-                    <td width="10%"><b>College</b></td>
-					<td width="40%"> : <?php echo $registered_students[0]->campus_name;?></td>
-                    <td width="10%"><b>Subject</b></td>
-					<td width="40%"> : <?php echo $registered_students[0]->course_title;?></td>
+                    <td><b>College</b></td>
+					<td> : <?php echo $registered_students[0]->campus_name;?></td>
+                    <td><b>Batch</b></td>
+                    <td> : <?php echo $registered_students[0]->batch_name;?></td>
                 </tr>
                 <tr>
-                   <td><b >Batch</b></td>
-				   <td> : <?php echo $registered_students[0]->batch_name;?></td>
-                    <td><b>Semester</b></td>
-					<td> : <?php echo $registered_students[0]->semester_name;?></td>
+                    <td><b>Examination</b></td>
+                    <td > : <?php echo $registered_students[0]->semester_name.'-'."Annual";?></td>
+                    <td><b>Month & Year</b></td>
+                    <td> : <?php $doe = explode("-", $date_of_exam); $mon_nam = gregoriantojd($doe[1],$doe[0],$doe[2]);
+                    echo jdmonthname($mon_nam,0).' '.$doe[2];?></td>
+                </tr>
+                <tr>
+                   <td><b>Subject</b></td>
+				   <td> : <?php echo $registered_students[0]->course_title;?></td>
+                    <td><b>Credit Hours</b></td>
+					<td> : <?php echo $registered_students[0]->theory_credit.'+'.$registered_students[0]->practicle_credit;?></td>
                 </tr>
             </table>
 
@@ -81,23 +87,38 @@
             <table id="table" width="100%">
                 <tr style="">
                     <th style="width:70px;">S.No</th>
-                   
+                    <th style="width:150px; font-size:14px; font-weight:bold;">Student Id</th>
                     <th style="width:250px; font-size:14px; font-weight:bold;">Name</th>
-					 <th style="width:150px; font-size:14px; font-weight:bold;">Student Id</th>
-                    <th>Registered /<p>Not Registered</p></th>
+					 <th style="width:150px; font-size:14px; font-weight:bold;">Date of Registration</th>
+                    <th>Remarks</th>
                 </tr>
 				<?php $i=0; foreach($registered_students as $reg_students){
                   // print_r($dummydata); 
 				$i++;?>
                 <tr>
                     <td align="center" style=" font-size:14px;"> <p align="center" style=" font-size:14px;"><?php echo $i;?></p></td>
+                    <td align="center" style=" font-size:14px;"><p align="center" style=" font-size:14px;"><?php echo $reg_students->user_unique_id;?></p><br /></td>
 					<td style=" font-size:14px; padding-left:20px;"><p align="center" style=" font-size:14px;"><?php echo $reg_students->first_name.' '.$reg_students->last_name;?></p></td>
-                    <td align="center" style=" font-size:14px;"><p align="center" style=" font-size:14px;"><?php echo $reg_students->user_unique_id;?></p></br></td>
-                    <td style ="font-size:12px;  padding-left:20px;"><p align="center" style=" font-size:14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo "Registered";?> </p></td>
+                    <td align="center" style=" font-size:14px;"><p align="center" style=" font-size:14px;">
+                        <?php $dor = $reg_students->created_on;
+                              $dor1 = explode(" ", $dor);
+                        echo $dor1[0];?></p></td>
+                    <td style ="font-size:12px;padding-left:10px; padding-right:10px;text-align: center;"><p align="center" style=" font-size:14px;"><?php echo "Registered";?> </p></td>
                 </tr> 
 			<?php } //exit; ?>
             </table>
-</div>
+        </div><br /><br /><br /><br />
+        <div>
+            <table width="100%">
+                        <tr style="font-size:12px; font-weight:bold;">
+                            <td width="20%" align="center"><div>Signature Of<br />Course Teacher</div></td>
+                            <td width="20%" align="center"><div>Signature Of<br />H.O.D </div></td>
+                            <td width="20%" align="center"><div>Signature Of<br /> Dean </div></td>
+                            <td width="20%" align="center"><div>Signature of<br />Registar</div></td>
+                        </tr>
+                    </table>
+        </div>
+
     </div>
 </body>
 

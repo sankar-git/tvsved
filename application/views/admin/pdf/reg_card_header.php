@@ -61,12 +61,12 @@
 						<tr><td><p style=" font-size:16px; font-weight:bold;">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></td></tr>
 						<tr>
 							<td align="center">
-								
+								<p align="center" style=" font-size:13px; font-weight:bold;"><!-- <?php echo strtoupper($semester_name);?>&nbsp; --><?php echo $campus_name;?></p>
 									<p align="center" style=" font-size:13px; font-weight:bold;"><!-- <?php echo strtoupper($semester_name);?>&nbsp; --><?php echo $degree_code;?></p>
 								  
 								   <!-- <p align="center" style=" font-size:13px; font-weight:bold;">FIRST ANNUAL BOARD B.V.Sc & A.H EXAMINATION</p>-->
 									<br/>
-									  <p align="center" style=" font-size:13px; font-weight:bold;">HALL TICKET</p>
+									  <p align="center" style=" font-size:13px; font-weight:bold;">STUDENT REGISTRATION CARD</p>
 									<!-- <p style=" font-size:13px; font-weight:bold;"><?php echo $semester_name;?></p> -->
 								
 							</td>
@@ -77,18 +77,21 @@
                 </tr>
             </table><hr>
             <br />
-            <table style="font-size:13px;"  width="100%">
+            <table style="font-size:11px;"  width="100%">
                 <tr>
-                    <td width="15%" style="font-weight:bold;">College </td>
-                    <td>: <?php echo $campus_name;?></td> 
-                    
-                    <td align="right" style="font-weight:bold;">Batch </td>
-                    <td>: <?php echo $batch_name;?></td>
+                    <td width="20%" style="font-weight:bold;">Name of Student </td>
+                    <td>: <?php echo $first_name.' '.$last_name;?></td> 
+                     <td align="left" style="font-weight:bold;">I.D. No. </td>
+                    <td>: <?php echo $user_unique_id;?></td>
+                    <td align="right" style="font-weight:bold;">Date of Registration </td>
+                    <td>: <?php if(!empty($created_on)){ $dor = explode(" ", $created_on);  echo $dor[0]; }else{echo " - ";}?></td>
                 </tr>
                 <tr>
-					<td width="15%" style="font-weight:bold;">Examination </td>
-                    <td>: <?php echo $semester_name;?></td> 
-                    <td align="right" style="font-weight:bold;">Month & Year </td>
-                    <td>: <?php  echo $month_year;?></td>
+					<td width="20%" style="font-weight:bold;">Professional Year </td>
+                    <td>: <?php $sem_cod = explode("-", $semester_code); echo $sem_cod[1]; ?></td> 
+                    <td align="left" style="font-weight:bold;">Class Batch </td>
+                    <td>: <?php  echo "A/B/C/D";?></td>
+                    <td align="right" style="font-weight:bold;">Year of Admission </td>
+                    <td>: <?php  echo $batch_name;?></td>
                 </tr>
             </table>

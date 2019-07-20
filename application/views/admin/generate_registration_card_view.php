@@ -149,6 +149,7 @@ $this->load->view('admin/helper/header');?>
 				   <div class="box-body table-responsive">
 			       <div style="float:left;">
 					  <input type="submit"  name="get_print" id="get_print" value="Print" class="btn btn-primary">
+					  <input type="submit"  name="reg_card" id="reg_card" value="Registration Card" class="btn btn-primary" formtarget="_blank">
 					  <input type="submit"  name="hall_ticket" id="hall_ticket" value="Hall Ticket" class="btn btn-primary" formtarget="_blank">
 					  <input type="submit"  name="hall_ticket_with_date" id="hall_ticket_with_date" value="Hall Ticket With Dates" class="btn btn-primary" formtarget="_blank">
 					  <input type="submit"  name="rules" id="rules" value="Rules" class="btn btn-primary" formtarget="_blank">

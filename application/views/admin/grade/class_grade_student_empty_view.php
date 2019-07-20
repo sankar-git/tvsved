@@ -46,31 +46,83 @@
 
 
 <body>
-	<p align="center">
+    <table>
+                <tr>
+                    <td><div><span class="logo"><img height="90" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></span></div></td>
+                    <td>
+                        <div>
+                            <table>
+                                <tr><td><div><div style="margin-left:30px; font-weight:bold; font-size:16px;"><p>TAMIL NADU  VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></div></div></td></tr><br />
+                                <tr>
+                                    <td align="center">
+                                            <p align="center" style=" font-size:14px;"><b><?php echo $aggregate_marks[0]->discipline_code;?></b></p><br />
+                                            <p align="center" style=" font-size:14px; padding:10px 0px 0px 0px;"><b>
+                                            RESULTS</b>
+                                            </p>
+                                    </td>
+                                    <!-- <td align="center">
+                                            <p></p>                           
+                                    </td> -->
+                                </tr>
+
+                            </table>
+                        </div>
+
+
+                    </td>
+                </tr>
+            </table>
+
+            <hr />
+	<!-- <p align="center">
 	     <h5 align="center">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY </h5>
          <h6 align="center"><?php echo $aggregate_marks[0]->discipline_code.'. ('.strtoupper($aggregate_marks[0]->discipline_name).')';?></h6>
          <h6 align="center"><?php echo strtoupper($aggregate_marks[0]->semester_name);?> FINAL EXAMINATION RESULTS</h6>
 		
-	</p>
+	</p> -->
     <div style="padding:0px; width:100%; font-family:Arial, Helvetica, sans-serif; ">
         <div class="pdf_container">
-            <table class="sub-detail-tbl" style="width:100%;padding:10px 0px; margin:0px; border-collapse: collapse; margin:10px 0px;Lline-height:1.5">
+             <table class="sub-detail-tbl" width="100%" style="font-size:12px;">
+                <tr>
+                    <td><b>College</b></td>
+                    <td> : <?php echo $aggregate_marks[0]->campus_name;?></td>
+                    <td><b>Batch</b></td>
+                    <td> : <?php echo $aggregate_marks[0]->batch_name;?></td>
+                </tr>
+                <tr>
+                    <td><b>Examination</b></td>
+                    <td > : <?php echo $aggregate_marks[0]->semester_name.'-'."Annual";?></td>
+                    <td><b>Month & Year</b></td>
+                    <td> : <?php if(!empty($date_of_exam)){ $doe = explode("-", $date_of_exam); $mon_nam = gregoriantojd($doe[1],$doe[0],$doe[2]);
+                    echo jdmonthname($mon_nam,0).' '.$doe[2];}else{
+                        echo " Select Month & Year ";
+                    }?></td>
+                </tr>
+                <tr>
+                   <td><b>Subject</b></td>
+                   <td> : <?php echo $aggregate_marks[0]->course_title;?></td>
+                    <td><b>Credit Hours</b></td>
+                    <td> : <?php echo $aggregate_marks[0]->theory_credit.'+'.$aggregate_marks[0]->practicle_credit;?></td>
+                </tr>
+            </table>
+           <!--  <table class="sub-detail-tbl" style="width:100%;padding:10px 0px; margin:0px; border-collapse: collapse; margin:10px 0px;Lline-height:1.5">
 				<tr>
-                    <td align="left" width="90px" style="vertical-align:top;font-weight:bold;">College &nbsp;&nbsp;:&nbsp;&nbsp;</td>
-					<td align="left" width="200px" style="vertical-align:top;font-weight:bold;margin-left:1px;"><?php echo $aggregate_marks[0]->campus_code;?></td>					
-					<td align="right" width="250px" style="vertical-align:top;font-weight:bold;">Month & Year of Exam &nbsp;:&nbsp;</td>
-					<td align="left"width="250px" style="vertical-align:top;font-weight:bold;"><?php echo $month.' - '.$year;?></td>
+                    <td align="left" width="20%" style="vertical-align:top;font-weight:bold;">College &nbsp;:&nbsp;</td>
+					<td align="left" style="vertical-align:top;"><?php echo $aggregate_marks[0]->campus_name;?></td>			
+                    <td align="right" style="vertical-align:top;font-weight:bold;">Batch &nbsp;:&nbsp;</td>
+                    <td align="right" style="vertical-align:top;"><?php echo $aggregate_marks[0]->batch_name;?></td> 		
+					
             
                    
                 </tr>
                 <tr>
-					<td align="right" width="90px" style="vertical-align:top;font-weight:bold;"></td>
-					<td align="left"width="200px" style="vertical-align:top;font-weight:bold;">&nbsp;</td>
-                    <td align="right" width="250px" style="vertical-align:top;font-weight:bold;">Batch &nbsp;:&nbsp;</td>
-					<td align="left" width="250px" style="vertical-align:top;font-weight:bold;"><?php echo $aggregate_marks[0]->batch_name;?></td>  
+					<td align="right" width="20%" style="vertical-align:top;font-weight:bold;">Examination</td>
+					<td align="left" style="vertical-align:top;">&nbsp;</td>
+                    <td align="right" width="250px" style="vertical-align:top;font-weight:bold;">Month & Year of Exam &nbsp;:&nbsp;</td>
+                    <td align="right" style="vertical-align:top;"><?php echo $month.' - '.$year;?></td>
                     
                 </tr>
-             </table>
+             </table> -->
 
         <div class="table_holder">
            
@@ -79,8 +131,9 @@
                     <th width="10%" style="font-weight:bold;">S.No.</th>
                     <th width="10%" style="font-weight:bold;">ID No.</th>
                     <th width="30%" style="font-weight:bold;">NAME</th>
-					<?php foreach($courseGroup as $key=>$value){?>
-                    <th width="10%" style="font-weight:bold;"><?php echo $value;?></th>
+					<?php foreach($courseGroup as $key=>$value){ 
+                        $corse_name = $this->Generate_model->get_coursesubj_name($value);?>
+                    <th width="10%" style="font-weight:bold;"><?php echo $corse_name;?></th>
 					<?php } ?>
 					<th width="10%" style="font-weight:bold;">RESULT</th>
                 </tr>
