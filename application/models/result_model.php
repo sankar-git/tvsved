@@ -12,7 +12,7 @@ Class Result_model extends CI_Model
         $result	= $this->db->get()->result();
 		return $result;
 	}
-	function get_student_marks_by_id($student_id,$semester_id='')
+	function get_student_marks_by_id($student_id,$semester_id='',$exam_type='')
 	{
 		/*$this->db->select('um.assignment_mark,um.theory_internal1,um.highest_marks,um.second_highest_marks,um.smallest_marks,um.theory_internal2,um.theory_internal3,
 		                   um.theory_internal,um.theory_paper1,um.theory_paper2,um.theory_paper3,um.theory_paper4,um.sum_internal_practical,
@@ -36,6 +36,11 @@ Class Result_model extends CI_Model
 		$this->db->where('r.student_id',$student_id);
 		if(!empty($semester_id))
 			$this->db->where('r.semester_id',$semester_id);
+		if(!empty($exam_type))
+			$this->db->where('r.exam_type',$exam_type);
+		elseif(isset($_POST['exam_type']))
+			$this->db->where('r.exam_type',$_POST['exam_type']);
+		
 		$this->db->order_by('student_id,id');
 		$resultArr=$this->db->get()->result_array();
 		$final_array=array();
