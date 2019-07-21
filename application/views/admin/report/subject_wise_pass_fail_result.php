@@ -43,8 +43,8 @@
 										&nbsp; 
                                             <p align="center" style=" font-size:14px;  font-weight:bold;">
 											<?php 
-											if(!empty($pass_fail_list[0]['degree_name'])){
-											echo $pass_fail_list[0]['degree_name'];
+											if(!empty($pass_fail_list[0]['degree_code'])){
+											echo $pass_fail_list[0]['degree_code'];
 											}else{echo '';}?>
 											</p>
 											

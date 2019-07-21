@@ -71,8 +71,8 @@
                     <td><b>Examination</b></td>
                     <td > : <?php echo $registered_students[0]->semester_name.'-'."Annual";?></td>
                     <td><b>Month & Year</b></td>
-                    <td> : <?php $doe = explode("-", $date_of_exam); $mon_nam = gregoriantojd($doe[1],$doe[0],$doe[2]);
-                    echo jdmonthname($mon_nam,0).' '.$doe[2];?></td>
+                    <td> : <?php if(!empty($date_of_exam)){ $doe = explode("-", $date_of_exam); $mon_nam = gregoriantojd($doe[1],$doe[0],$doe[2]);
+                    echo jdmonthname($mon_nam,0).' '.$doe[2];}else{echo "Select Date of Exam";}?></td>
                 </tr>
                 <tr>
                    <td><b>Subject</b></td>

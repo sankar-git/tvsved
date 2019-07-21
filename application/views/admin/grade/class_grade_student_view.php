@@ -74,37 +74,51 @@
 
 
 <body>
-	<p align="center">
-	     <h5 align="center">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY </h5>
-         <h6 align="center"><?php echo $aggregate_marks[0]->degree_name;?> - DEGREE SUBJECT WISE MARK REPORT</h6>
-		
-	</p>
+    <table>
+                <tr>
+                    <td><div><span class="logo"><img height="90" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></span></div></td>
+                    <td>
+                        <div>
+                            <table>
+                                <tr><td><div><div style="margin-left:30px; font-weight:bold; font-size:16px;"><p>TAMIL NADU  VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></div></div></td></tr><br />
+                                <tr>
+                                    <td align="center">
+                                            <p align="center" style=" font-size:14px;"><b><?php echo $aggregate_marks[0]->degree_code;?></b></p><br />
+                                            <p align="center" style=" font-size:14px; padding:10px 0px 0px 0px;"><b>
+                                            SUBJECT WISE MARK REPORT</b>
+                                            </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <hr />
     <div style="padding:0px; width:100%; font-family:Arial, Helvetica, sans-serif; ">
         <div class="pdf_container">
-			<table class="sub-detail-tbl" style="width:100%;padding:20px 0px; margin:0px; border-collapse: collapse; margin:20px 0px;Lline-height:1.5">
-				<tr>
-                    <td align="left" width="25%" style="vertical-align:top;font-weight:bold;">College &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td>
-					<td align="left" width="25%" style="vertical-align:top;font-weight:bold;margin-left:1px;"><?php echo $aggregate_marks[0]->campus_code;?></td>					
-					<td align="right" width="25%" style="vertical-align:top;font-weight:bold;">Batch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;</td>
-					<td align="left"width="25%" style="vertical-align:top;font-weight:bold;"><?php echo $aggregate_marks[0]->batch_name;?></td>                
-                   
+            <table width="100%" style="font-size:12px;">
+                <tr>
+                    <td><b>College</b></td>
+                    <td> : <?php echo $aggregate_marks[0]->campus_name;?></td>
+                    <td><b>Batch</b></td>
+                    <td> : <?php echo $aggregate_marks[0]->batch_name;?></td>
                 </tr>
                 <tr>
-                    <td align="left"  style="vertical-align:top;font-weight:bold;">Subject ID &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td>
-					<td align="left"  style="vertical-align:top;font-weight:bold;"><?php if(empty($aggregate_marks[0]->course_subject_name)) echo $aggregate_marks[0]->course_code; else echo $aggregate_marks[0]->course_subject_name;?></td>
-                    <td align="right"  style="vertical-align:top;font-weight:bold;"></td>
-					<td align="left" style="vertical-align:top;font-weight:bold;">&nbsp;</td>
-                    
+                    <td><b>Examination</b></td>
+                    <td > : <?php echo $aggregate_marks[0]->semester_name.'-'."Annual";?></td>
+                    <td><b>Month & Year</b></td>
+                    <td> : <?php if(!empty($month) && !empty($year)){echo $month.' '.$year;}else{echo "Select Month & Year";}?></td>
                 </tr>
-				<tr>
-                    <td align="left"  style="vertical-align:top;font-weight:bold;">Subject Name &nbsp;:</td>
-					<td align="left"  style="vertical-align:top;font-weight:bold;"><?php if(empty($aggregate_marks[0]->course_subject_title)) echo $aggregate_marks[0]->course_title.'('.$aggregate_marks[0]->theory_credit.' + '.$aggregate_marks[0]->practicle_credit.')'; else echo $aggregate_marks[0]->course_subject_title;?></td>
-                    <td align="right" style="vertical-align:top;font-weight:bold;"><?php if($degree_id == 1){?>Annual Board<?php }else{?>Semester<?php }?>&nbsp;&nbsp;:&nbsp;&nbsp;</td>
-					<td align="left" style="vertical-align:top;font-weight:bold;"><?php echo $aggregate_marks[0]->semester_name;?></td>
-                    
+                <tr>
+                   <td><b>Subject</b></td>
+                   <td> : <?php $sub = explode(" ", $aggregate_marks[0]->course_title);
+                            $sub_nam = $sub[0].' '.$sub[1];
+                            echo $sub_nam;?></td>
+                    <td><b>Credit Hours</b></td>
+                    <td> : <?php echo $aggregate_marks[0]->theory_credit.'+'.$aggregate_marks[0]->practicle_credit;?></td>
                 </tr>
-             </table> 
-
+            </table>
         <div class="table_holder">
 		<?php if($degree_id == 1){?>
             <table id="table" width="100%;" class="student_table">
@@ -112,52 +126,66 @@
 					<th rowspan="3">S.No.</th>
                     <th rowspan="3">ID No.</th>
                     <th rowspan="3">NAME</th>
-                    <th rowspan="2">INTERNAL</th>
-                    <th colspan="<?php echo $course_count;?>">THEORY</th>
-                    <th rowspan="2">TOTAL</th>
-                    <th rowspan="2">PRACTICAL</th>
+                    <th colspan="4">MARKS OBTAINED</th>
+                    
+                    
+                    <th rowspan="3" align="center">TOTAL<br />(100)</th>
                     <th rowspan="3">RESULT</th>
                 </tr>
                 <tr>
-				<?php for($j=0;$j<$course_count;$j++){?>
-                    <th>PAPER-<?php echo $numeralCodes[$j];?></th>
-				<?php } ?>
+                    <th colspan="2">INTERNAL ASSESSMENT</th>
+                    <th colspan="2">ANNUAL EXAM</th>
+				
                 </tr>
-				 <tr>
-				 <?php for($j=0;$j<$course_count;$j++){?>
-                    <th>(20)</th>
-                   <?php } ?>
-                    <th>(20)</th>
-                    <th>(60)</th>
-                    <th>(40)</th>
+                <tr>
+                    <th rowspan="1" align="center">First<br />(10)</th>
+                    <th rowspan="1" align="center">Second<br />(10)</th>
+                    <th rowspan="1" align="center">Theory<br />(40)</th>
+                    <th rowspan="1" align="center">Practical<br />(40)</th>
                 </tr>
                 <?php $i=0;foreach($aggregate_marks as $subject_wise_val){ $i++;
+                    // $inter1 = $subject_wise_val->theory_internal1/4;
+                    // $inter2 = $subject_wise_val->theory_internal2/4;
+                    // $inter3 = $subject_wise_val->theory_internal3/4;
+
 				
 				 $numbers = array( $subject_wise_val->theory_internal1,$subject_wise_val->theory_internal2,$subject_wise_val->theory_internal3); 
 				  rsort($numbers);
-					  $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
-					  $theory_externals=$subject_wise_val->theory_external/5;
-					  $practical_externals=$subject_wise_val->practical_external/5;
-					  $theory_marks_40=$theory_externals+$practical_externals;
-					  $paper1_20=$subject_wise_val->theory_paper1/3;
-					  $paper1_20s=number_format($paper1_20,2);
-					  $paper2_20=$subject_wise_val->theory_paper2/3;
-					  $paper2_20s=number_format($paper2_20,2);
-					  $paper_20=$paper1_20s+$paper2_20s;
+                  // $array = array(50,250,30,250,40,70,10,50); // 250  2-times
+$max=$max2=0;
+for ($k = 0; $k < count($numbers); $k++) {
+if ($numbers[$k] > $max) {
+    $max2 = $max;
+    $max = $numbers[$k];
+} else if (($numbers[$k] > $max2) && ($numbers[$k] != $max)) {
+    $max2 = $numbers[$k];
+}
+}
+echo "Highest Value is : " . $max . "<br/>"; //output : 250
+echo "Second highest value is : " . $max2 . "<br/>";//output : 70
+					  // $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
+					//   $theory_externals=$subject_wise_val->theory_external/5;
+					//   $practical_externals=$subject_wise_val->practical_external/5;
+					//   $theory_marks_40=$theory_externals+$practical_externals;
+					//   $paper1_20=$subject_wise_val->theory_paper1/3;
+					//   $paper1_20s=number_format($paper1_20,2);
+					//   $paper2_20=$subject_wise_val->theory_paper2/3;
+					//   $paper2_20s=number_format($paper2_20,2);
+					//   $paper_20=$paper1_20s+$paper2_20s;
 				?> 
                 <tr>
 					<td align="center"><?php echo $i;?></td>
                     <td><?php echo $subject_wise_val->user_unique_id;?></td>
                     <td align="left"> <?php echo ucfirst($subject_wise_val->first_name).' '.ucfirst($subject_wise_val->last_name);?></td>
-                    <td  align="center" style="border-right:1px solid black; padding:5px;"><?php  echo round_two_digit($theory_internal_total);?></td>
-                    <?php $theory_marks_40=0; for($j=1;$j<=$course_count;$j++){ $var = "theory_external".$j; $theory_marks_40+=$subject_wise_val->{$var}/5;?>
+                    <td  align="center" style="border-right:1px solid black; padding:5px;"><?php echo $max/2;?></td><td  align="center" style="border-right:1px solid black; padding:5px;"><?php echo $max2/2;?></td>
+                    <!-- <?php $theory_marks_40=0; for($j=1;$j<=$course_count;$j++){ $var = "theory_external".$j; $theory_marks_40+=$subject_wise_val->{$var}/5;?>
                     
                     <td  align="center" style="padding:2px;"><?php echo round_two_digit($subject_wise_val->{$var}/5);?></td>
-					<?php }?>
-                    <td  align="center"  style="padding:5px; margin:0px;font-weight:bold"><?php if($course_count == 1) $theory_marks_40=$theory_marks_40*2;  elseif($course_count > 2) $theory_marks_40=$theory_marks_40*2/$course_count;  echo round_two_digit($theory_internal_total+$theory_marks_40);?></td>
+					<?php }?> -->
+                    <!-- <td  align="center"  style="padding:5px; margin:0px;font-weight:bold"><?php if($course_count == 1) $theory_marks_40=$theory_marks_40*2;  elseif($course_count > 2) $theory_marks_40=$theory_marks_40*2/$course_count;  echo round_two_digit($theory_internal_total+$theory_marks_40);?></td>
 					<?php $paper_20=0; for($j=1;$j<=$course_count;$j++){ $var = "theory_paper".$j; $paper_20+=$subject_wise_val->{$var}/3; }?>
 					
-                    <td  align="center"  style="padding:5px; margin:0px;font-weight:bold"><?php $paper_20=($paper_20*2)/$course_count; echo round_two_digit($paper_20);?></td>
+                    <td  align="center"  style="padding:5px; margin:0px;font-weight:bold"><?php $paper_20=($paper_20*2)/$course_count; echo round_two_digit($paper_20);?></td> -->
                     <td  align="center"  style="padding:5px; margin:0px;font-weight:bold"><?php if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) echo "PASS"; else echo "FAIL";?></td>
                                
 

@@ -98,12 +98,6 @@
                         echo " Select Month & Year ";
                     }?></td>
                 </tr>
-                <tr>
-                   <td><b>Subject</b></td>
-                   <td> : <?php echo $aggregate_marks[0]->course_title;?></td>
-                    <td><b>Credit Hours</b></td>
-                    <td> : <?php echo $aggregate_marks[0]->theory_credit.'+'.$aggregate_marks[0]->practicle_credit;?></td>
-                </tr>
             </table>
            <!--  <table class="sub-detail-tbl" style="width:100%;padding:10px 0px; margin:0px; border-collapse: collapse; margin:10px 0px;Lline-height:1.5">
 				<tr>
@@ -122,18 +116,18 @@
                     <td align="right" style="vertical-align:top;"><?php echo $month.' - '.$year;?></td>
                     
                 </tr>
-             </table> -->
+             </table> --><br />
 
         <div class="table_holder">
            
 		<table class="table" width="100%" style="border:solid 1px black; ">
                 <tr>
-                    <th width="10%" style="font-weight:bold;">S.No.</th>
-                    <th width="10%" style="font-weight:bold;">ID No.</th>
+                    <th width="8%" style="font-weight:bold;">S.No.</th>
+                    <th width="15%" style="font-weight:bold;">ID No.</th>
                     <th width="30%" style="font-weight:bold;">NAME</th>
 					<?php foreach($courseGroup as $key=>$value){ 
                         $corse_name = $this->Generate_model->get_coursesubj_name($value);?>
-                    <th width="10%" style="font-weight:bold;"><?php echo $corse_name;?></th>
+                    <th width="20%" style="font-weight:bold;"><?php echo $corse_name;?></th>
 					<?php } ?>
 					<th width="10%" style="font-weight:bold;">RESULT</th>
                 </tr>
@@ -151,49 +145,46 @@
 					$result[$name][$groupname] = $result[$name][$groupname][0];
 				
 			}
-			//print_r($result[$name]);exit;
+			// print_r($result[$name]);exit;
 			$counter++;
 			?>
 				<tr>	
 					
-					<td  style="padding:2px;"><?php echo $counter;?></td>
-                    <td  style="padding:2px;"><?php echo $marks->user_unique_id;?></td>
-                    <td  align="left" style="padding:2px;"> <?php echo ucfirst($marks->first_name).' '.ucfirst($marks->last_name);?></td>
+					<td  style="padding:2px;font-size: 14px;"><?php echo $counter;?></td>
+                    <td  style="padding:2px;font-size: 14px;"><?php echo $marks->user_unique_id;?></td>
+                    <td  align="left" style="padding:2px;font-size: 14px;"> <?php echo ucfirst($marks->first_name).' '.ucfirst($marks->last_name);?></td>
                     <?php $passcnt=0;$failcnt=0; foreach($courseGroup as $key=>$value){ 
 					if($result[$name][$value] == 'FAIL' || $result[$name][$value] == 'ABSENT') 
 						$failcnt++;
 					else
 						$passcnt++;
 					?>
-					<td  style="padding:2px;"><?php echo $result[$name][$value];?></td>
+					<td  style="padding:2px;font-size: 14px;"><?php echo $result[$name][$value];?></td>
 					<?php } ?>
-                    <td  style="padding:2px;"><?php if($passcnt == count($courseGroup)) echo "PASS";elseif($failcnt<3) echo "CAP"; else echo "FAIL";?> </td>
+                    <td  style="padding:2px;font-size: 14px;"><?php if($passcnt == count($courseGroup)) echo "PASS";elseif($failcnt<3) echo "CAP"; else echo "FAIL";?> </td>
 				</tr>			
 			<?php  } ?>
-            </table>
-
-
-            
-             
+            </table>  
+        </div><br />
+        <div class="col-md-12">
+            <label class="col-md-9">No. of Passed Candidates:</label>
+            <label class="col-md-3"></label>
+        </div>
+        <div class="col-md-12">
+            <label class="col-md-9">No. of Candidates Eligible for CAP:</label>
+            <label class="col-md-3"></label>
+        </div>
+        <div class="col-md-12">
+            <label class="col-md-9">No. of Failed Candidates:</label>
+            <label class="col-md-3"></label>
+        </div>
+        <div class="col-md-12">
+            <label class="col-md-9">Total No. of Candidates:</label>
+            <label class="col-md-3"></label>
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
         </div>
-
-
-
-
-    
+ 
 </body>
 
 

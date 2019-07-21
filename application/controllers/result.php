@@ -820,6 +820,7 @@ class Result extends CI_Controller {
 						 $list['campus_code']  =$stuData->campus_code;
 						 $list['degree_code']  =$stuData->degree_code;
 						 $list['degree_name']  =$stuData->degree_name;
+						 $list['semester_code'] =$semesterRow->semester_code;
 						  $list['semester_name'] =$semesterRow->semester_name;
 						 $list['month_year']  =$monthYrr;
 							$allData[] = $list;  
