@@ -1068,7 +1068,8 @@ class Result extends CI_Controller {
 						 //print_r($semesterRow);
 						//$subjectList = $this->Result_model->get_student_marks_by_id($stuData->user_id,$semester_id);
 						//echo $this->db->last_query();exit;
-						
+						$list['month']=$month=$this->input->post('month');
+	       				$list['year']=$year=$this->input->post('year');
 						     
 						    $list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id);
 							$list['first_name']  =$stuData->first_name;
@@ -1097,7 +1098,7 @@ class Result extends CI_Controller {
 	 
 			//load mPDF library
 			$this->load->library('m_pdf');
-			$this->m_pdf->pdf->setTitle('AGGREGATE RESULT MARK REPORT');
+			$this->m_pdf->pdf->setTitle('AGGREGATE MARK REPORT');
 		   //generate the PDF from the given html
 			$this->m_pdf->pdf->WriteHTML($html);
 	 

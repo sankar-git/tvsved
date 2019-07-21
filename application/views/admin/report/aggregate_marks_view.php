@@ -47,11 +47,31 @@
 
 <body>
     <div style="padding:10px 10px 10px 10px; width:852px; font-family:Arial, Helvetica, sans-serif;">
-		<div align="center">
+        <table>
+                <tr>
+                    <td><div><span class="logo"><img height="90" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></span></div></td>
+                    <td>
+                        <div>
+                            <table>
+                                <tr><td><div><div style="margin-left:30px; font-weight:bold; font-size:16px;"><p>TAMIL NADU  VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></div></div></td></tr><br />
+                                <tr>
+                                    <td align="center">
+                                            <p align="center" style=" font-size:14px;"><b><?php echo $aggregate_marks[0]['degree_code'];?></b></p><br />
+                                            <p align="center" style=" font-size:14px; padding:10px 0px 0px 0px;"><b>
+                                            AGGREGATE MARK REPORT</b>
+                                            </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+		<!-- <div align="center">
 			   <p align="center" style="font-weight:bold; font-size:16px;">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY<br />
 			   <span align="center" style=" font-size:14px; padding-top:0px;">AGGREGATE RESULT MARK REPORT</span><br />
 			   <span align="center" style=" font-size:14px; padding-top:0px;"><?php echo $aggregate_marks[0]['semester_name']; ?> (<?php echo $aggregate_marks[0]['degree_code']; ?>)</span><br /><br />			  
-		</div>
+		</div> -->
         <div class="pdf_container">
 		<?php $i=0;foreach($aggregate_marks as $key=>$student_marks){ ?>
 		<div align="center" style="border:1px solid;margin-bottom:75px;">

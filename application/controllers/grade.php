@@ -477,7 +477,7 @@ class Grade extends CI_Controller {
 		   $courseArr = explode("|",$courseArr[0]);
 		  $data['course_count'] =  count($courseArr);
 		   $data['numeralCodes'] =  array("I","II","III","IV","V","VI","VII","VIII","IX");
-		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);;
+		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
 		// p($data['aggregate_marks']); exit;
 		  //getting batch and year
 	      

@@ -161,9 +161,25 @@ if ($numbers[$k] > $max) {
     $max2 = $numbers[$k];
 }
 }
-echo "Highest Value is : " . $max . "<br/>"; //output : 250
-echo "Second highest value is : " . $max2 . "<br/>";//output : 70
+// echo "Highest Value is : " . $max . "<br/>"; //output : 250
+// echo "Second highest value is : " . $max2 . "<br/>";//output : 70
+                if($subject_wise_val->theory_credit > 0 && $subject_wise_val->practicle_credit > 0) {
+                    $internal_sum = number_format($subject_wise_val->theory_internal1 + $subject_wise_val->practical_internal,2);
+                }
+                elseif($subject_wise_val->theory_credit > 0 ) {
+                    $internal_sum = $subject_wise_val->theory_internal1;
+                }
+                elseif($subject_wise_val->practicle_credit > 0 ){
+                    $internal_sum = $subject_wise_val->practical_internal;
+                    $internal_sum = $internal_sum+$subject_wise_val->assignment_mark;
+                }
+                $data['theory_external']    = $subject_wise_val->theory_external1;
+                $external_marks   =   $data['theory_external'];
+                $total_subject_marks=$internal_sum + $external_marks;
+                $data['total_subject_marks']       =$total_subject_marks;
 					  // $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
+
+
 					//   $theory_externals=$subject_wise_val->theory_external/5;
 					//   $practical_externals=$subject_wise_val->practical_external/5;
 					//   $theory_marks_40=$theory_externals+$practical_externals;
@@ -177,7 +193,13 @@ echo "Second highest value is : " . $max2 . "<br/>";//output : 70
 					<td align="center"><?php echo $i;?></td>
                     <td><?php echo $subject_wise_val->user_unique_id;?></td>
                     <td align="left"> <?php echo ucfirst($subject_wise_val->first_name).' '.ucfirst($subject_wise_val->last_name);?></td>
-                    <td  align="center" style="border-right:1px solid black; padding:5px;"><?php echo $max/2;?></td><td  align="center" style="border-right:1px solid black; padding:5px;"><?php echo $max2/2;?></td>
+
+            <td style="text-align:center"><?php if($internal_sum==''){echo 'N/A';}else{echo $internal_sum/4;}?></td>
+            <td style="text-align:center"><?php if($external_marks==''){echo 'N/A';}else{echo '-';}?></td>
+            <td style="text-align:center"><?php if($external_marks==''){echo 'N/A';}else{echo $external_marks;}?></td>
+            <td style="text-align:center"><?php if($subject_wise_val->total_subject_marks==''){echo 'N/A';}else{echo $subject_wise_val->total_subject_marks;}?></td>
+            
+                    <!-- <td  align="center" style="border-right:1px solid black; padding:5px;"><?php echo $max/2;?></td><td  align="center" style="border-right:1px solid black; padding:5px;"><?php echo $max2/2;?></td> -->
                     <!-- <?php $theory_marks_40=0; for($j=1;$j<=$course_count;$j++){ $var = "theory_external".$j; $theory_marks_40+=$subject_wise_val->{$var}/5;?>
                     
                     <td  align="center" style="padding:2px;"><?php echo round_two_digit($subject_wise_val->{$var}/5);?></td>
