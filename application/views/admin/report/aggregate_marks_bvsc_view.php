@@ -111,17 +111,19 @@
 					<th  style="font-weight:bold;padding:2px;">G.P.</th>
                     <th  style="font-weight:bold;padding:2px;">C.P.</th>
                     <th  style="font-weight:bold;padding:2px;">Result</th>
-					<!--<th  style="font-weight:bold;padding:2px;">Cradit Points</th>-->
+					<th  style="font-weight:bold;padding:2px;">G.P.A</th>
                 </tr>
 				<?php 
+			$total_ch='';
 			$total_cp='';
 			$total_gp='';
 			
 			foreach($student_marks['subjectList'] as $subject_data){
 				//p($subject_data); exit;
+					 $total_ch = $total_ch+$subject_data['theory_credit']+$subject_data['practicle_credit'];
 				     $total_cp = $total_cp+$subject_data['creditval'];
 					 $total_gp = $total_gp+$subject_data['gradeval'];
-					// p($total_cp); 
+					  
 				?>
 				<tr>	
 					
@@ -134,10 +136,12 @@
 			<!--<td><?php if($subject_data['percentval']==''){echo '';}else{echo $subject_data['percentval'];}?></td>-->
 			<td><?php if($subject_data['gradeval']==''){echo '';}else{echo $subject_data['gradeval'];}?></td>
 			<td><?php if($subject_data['creditval']==''){echo '';}else{echo $subject_data['creditval'];}?></td>
-			<td><?php if($subject_data['passfail_status']==''){echo '';}else{echo $subject_data['passfail_status'];}?></td>			
+			<td><?php if($subject_data['passfail_status']==''){echo '';}else{echo $subject_data['passfail_status'];}?></td>	
+					
 				</tr>				
 <?php } 	?>
-			
+			<td align="center"><b><?php $tot_ch=$total_ch-1;$gpa = $total_cp/$tot_ch;
+				echo number_format($gpa , 3);?></b></td>
             </table>
 			</div>
 <?php   if((($key+1)%3)==0) echo "<pagebreak>";  }  ?>

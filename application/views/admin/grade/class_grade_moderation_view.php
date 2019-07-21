@@ -46,31 +46,52 @@
 
 
 <body>
-	<p align="center">
+    <table>
+                <tr>
+                    <td><div><span class="logo"><img height="90" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></span></div></td><br />
+                    <td>
+                        <div>
+                            <table>
+                                <tr><td><div><div style="margin-left:30px; font-weight:bold; font-size:16px;"><p>TAMIL NADU  VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></div></div></td></tr>
+                                <tr>
+                                    <td align="center">
+                                            <p align="center" style=" font-size:14px;"><b><?php echo $aggregate_marks[0]->discipline_code;?></b></p><br />
+                                            <p align="center" style=" font-size:14px; padding:10px 0px 0px 0px;"><b>
+                                            DEFICIT MARK REPORT</b>
+                                            </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <hr />
+	<!-- <p align="center">
 	     <h5 align="center">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY </h5>
          <h6 align="center"><?php echo $aggregate_marks[0]->discipline_code.'. ('.strtoupper($aggregate_marks[0]->discipline_name).')';?></h6>
          <h6 align="center"><?php echo strtoupper($aggregate_marks[0]->semester_name);?> Moderation Marks</h6>
 		
-	</p>
+	</p> -->
     <div style="padding:0px; width:100%; font-family:Arial, Helvetica, sans-serif; ">
         <div class="pdf_container">
-            <table class="sub-detail-tbl" style="width:100%;padding:10px 0px; margin:0px; border-collapse: collapse; margin:10px 0px;Lline-height:1.5">
-				<tr>
-                    <td align="left" width="90px" style="vertical-align:top;font-weight:bold;">College &nbsp;&nbsp;:&nbsp;&nbsp;</td>
-					<td align="left" width="200px" style="vertical-align:top;font-weight:bold;margin-left:1px;"><?php echo $aggregate_marks[0]->campus_code;?></td>					
-					<td align="right" width="250px" style="vertical-align:top;font-weight:bold;">Month & Year of Exam &nbsp;:&nbsp;</td>
-					<td align="left"width="250px" style="vertical-align:top;font-weight:bold;"><?php echo $month.' - '.$year;?></td>
-            
-                   
+            <table width="100%" class="sub-detail-tbl" style="font-size:12px;">
+                <tr>
+                    <td><b>College</b></td>
+                    <td> : <?php echo $aggregate_marks[0]->campus_name;?></td>
+                    <td><b>Batch</b></td>
+                    <td> : <?php echo $aggregate_marks[0]->batch_name;?></td>
                 </tr>
                 <tr>
-					<td align="right" width="90px" style="vertical-align:top;font-weight:bold;"></td>
-					<td align="left"width="200px" style="vertical-align:top;font-weight:bold;">&nbsp;</td>
-                    <td align="right" width="250px" style="vertical-align:top;font-weight:bold;">Batch &nbsp;:&nbsp;</td>
-					<td align="left" width="250px" style="vertical-align:top;font-weight:bold;"><?php echo $aggregate_marks[0]->batch_name;?></td>  
-                    
+                    <td><b>Examination</b></td>
+                    <td > : <?php echo $aggregate_marks[0]->semester_name.'-'."Annual";?></td>
+                    <td><b>Month & Year</b></td>
+                    <td> : <?php if(!empty($month) && !empty($year)){ 
+                    echo $month.' '.$year;}else{echo "Select Month&Year of Exam";}?></td>
                 </tr>
-             </table>
+            </table>
+            
 
         <div class="table_holder">
            
@@ -80,7 +101,8 @@
                     <th rowspan="2" width="15%" style="font-weight:bold;">ID No.</th>
                     <th rowspan="2" width="30%" style="font-weight:bold;">NAME</th>
 					<?php foreach($courseGroup as $key=>$value){?>
-                    <th colspan="2" width="10%" style="font-weight:bold;"><?php echo $value;?></th>
+                    <th colspan="2" width="20%" style="font-weight:bold;"><?php 
+                    $title = $this->Gradechart_model->get_title_bycode($value); echo $title;?></th>
 					<?php } ?>
 					<th rowspan="2" width="20%" style="font-weight:bold;">Remarks</th>
                 </tr>
@@ -119,22 +141,15 @@
 				</tr>			
 			<?php  } ?>
             </table>
-
-
-            
-             
         </div>
-
-
-
-
-
-
-
-
-
-
-
+        <div>
+            <h5 align="left">Suggest Moderation Mark :</h5>
+            <?php foreach($courseGroup as $key=>$value){?>
+                <label width="50%"><?php $title = $this->Gradechart_model->get_title_bycode($value); 
+                echo $title;?></label> :____________________<br />
+            <?php } ?>
+            
+        </div>
 
         </div>
 

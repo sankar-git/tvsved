@@ -192,6 +192,17 @@ Class Gradechart_model extends CI_Model
 		$result=$this->db->get()->result();
 		return $result;
 	}
+	function get_title_bycode($course_code)
+	{
+		$this->db->select('*');
+		$this->db->from('course_subject_groups')
+				 ->where('course_subject_name',$course_code);
+
+		$query = $this->db->get();
+		return $query->row('course_subject_title');
+ 
+	}
+	
 	
 	
 } //end class
