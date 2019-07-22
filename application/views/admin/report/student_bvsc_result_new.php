@@ -49,21 +49,19 @@
                                 <tr>
                                     <td align="center">
                                         <div>
-                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;" >REPORT CARD</h5>
+                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;" ><?php echo $student_marks['degree_code'];?></h5>
                                         </div>
                                     </td>
                                 </tr>
-								<tr>
+                                <tr>
                                     <td align="center">
                                         <div>
-                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;" ><?php echo strtoupper($student_marks['semester_name']);?> <?php echo $student_marks['degree_code'];?> DEGREE COURSE</h5>
+                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;">DETAILED MARK CERTIFICATE</h5>
                                         </div>
                                     </td>
                                 </tr>
                             </table>
                         </div>
-
-
                     </td>
                 </tr>
             </table>
@@ -85,8 +83,8 @@
 				<tr>
                     <td align="left" width="7%" style="vertical-align:top;font-weight:bold;">Batch</td>
 					<td align="left" width="25%" style="vertical-align:top;font-weight:bold;">&nbsp;:&nbsp;<?php echo $student_marks['batch_name'];?></td>
-                    <td align="left" width="18%" style="vertical-align:top;font-weight:bold;">Month & Year</td>
-					<td align="left" width="25%" style="vertical-align:top;font-weight:bold;">&nbsp;:&nbsp;<?php echo $month. ' '.$year;?></td>
+                    <td align="left" width="18%" style="vertical-align:top;font-weight:bold;"><!-- Month & Year --></td>
+					<td align="left" width="25%" style="vertical-align:top;font-weight:bold;"><!-- &nbsp;:&nbsp;<?php echo $month. ' '.$year;?> --></td>
                     
                 </tr>
 				<tr>
@@ -101,8 +99,7 @@
 			<div style="height:350px;margin:0px;padding:0px;width:100%">
             <table class="table" width="100%;" style="height:100%;border:solid 1px black;padding-top:5px;">
                 <tr>
-                    <th rowspan="3">Course Code</th>
-                    <th rowspan="3">Course Name</th>
+                    <th rowspan="3">subject</th>
                     <th rowspan="3">Credit Hours</th>
                     <th colspan="4" scope="colgroup">Marks Obtained</th>
                    <!-- <th colspan="2" scope="colgroup">PRACTICAl</th>-->
@@ -143,8 +140,7 @@
 					  
 						?>
 				
-                <tr height="10px" style="border:bottom:none;">			    
-						<td><?php if($subject_data['course_code']==''){ echo '';} else{ echo $subject_data['course_code'];}?></td>
+                <tr height="10px" style="border:bottom:none;">		
 						<td><?php if($subject_data['course_title']==''){ echo '';} else{ echo $subject_data['course_title'];}?></td>
 			<td style="text-align:center"><?php echo $subject_data['theory_credit'].'+'.$subject_data['practicle_credit'];?></td>
 			<td style="text-align:center"><?php if($subject_data['first_internal']==''){echo '';}else{echo $subject_data['first_internal'];}?></td>

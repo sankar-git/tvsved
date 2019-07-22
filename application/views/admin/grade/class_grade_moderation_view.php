@@ -147,8 +147,15 @@
             <?php foreach($courseGroup as $key=>$value){?>
                 <label width="50%"><?php $title = $this->Gradechart_model->get_title_bycode($value); 
                 echo $title;?></label> :____________________<br />
-            <?php } ?>
-            
+            <?php } ?><br /><br /><br /><br /><br /><br />
+            <table width="100%">
+                <tr style="font-size:12px; font-weight:bold;">
+                    <td width="20%" align="center"><div>Signature Of<br />C.E.O</div></td>
+                    <td width="20%" align="center"><div>Signature Of<br />Registar </div></td>
+                    <td width="20%" align="center"><div>Signature Of<br /> V.C </div></td>
+                    
+                </tr>
+            </table>
         </div>
 
         </div>

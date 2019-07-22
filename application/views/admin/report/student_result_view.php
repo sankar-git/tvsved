@@ -49,17 +49,18 @@
                                 <tr>
                                     <td align="center">
                                         <div>
-                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;" >REPORT CARD</h5>
+                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;" ><?php echo $student_marks['degree_code'];?></h5>
                                         </div>
                                     </td>
                                 </tr>
-								<tr>
+                                <tr>
                                     <td align="center">
                                         <div>
-                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;" ><?php echo strtoupper($student_marks['semester_name']);?> <?php echo $student_marks['degree_code'];?> DEGREE COURSE</h5>
+                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;">DETAILED MARK CERTIFICATE</h5>
                                         </div>
                                     </td>
                                 </tr>
+								
                             </table>
                         </div>
 
