@@ -106,6 +106,7 @@ class Condonation extends CI_Controller {
 	   $deflicit_range=$this->input->post('deflicit_range');
 	   $thoery=$this->input->post('thoery');
 	   $practical=$this->input->post('practical');
+	   
 	  $msg=0;
 		foreach($thoery as $student_id=>$mark){
 			//$this->db->where(array('student_id'=>$student_id,'course_id'=>$course_input));
@@ -121,7 +122,7 @@ class Condonation extends CI_Controller {
 				$this->db->where(array('student_id'=>$student_id,'course_id'=>$course_input));
 				$data1['deflicit_mark'] = $mark;
 				$data1['deflicit_range'] = $deflicit_range;
-				$deflicit_mark = $deflicit_range*5;
+				$deflicit_mark = $mark*5;
 				$this->db->update('students_ug_deflicit_marks',$data1);
 				if($result[0]['theory_external1'] < $result[0]['theory_external2']){
 					$data['theory_external1'] = $result[0]['theory_external1']+$deflicit_mark;
