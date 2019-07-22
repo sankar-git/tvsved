@@ -630,7 +630,6 @@ class Course extends CI_Controller {
 						  }
 					if($subject_wise_val->result == 'FAIL')
 						$resultArray[$name][$subject_wise_val->course_subject_name][]=$subject_wise_val;
-					//print_r($resultArray);exit;
 				 }
 			 }else{
 				 $name = $subject_wise_val->first_name.' '.$subject_wise_val->last_name;
@@ -650,7 +649,6 @@ class Course extends CI_Controller {
 					else 
 						$subject_wise_val->result =  "F";
 				 $resultArray[$name][$subject_wise_val->course_code][]=$subject_wise_val;
-				 //print_r($resultArray);exit;
 			 }
 			 
 		  }
@@ -679,6 +677,8 @@ class Course extends CI_Controller {
 		$counter=1;
 		if(count(@$data['result_marks'])>0){
 			foreach($data['result_marks'] as $key1=>$student){
+				if(count($student)>2)
+					continue;
 				$course_id = array_values($student)[0][0]->course_id;
 				$user_unique_id = array_values($student)[0][0]->user_unique_id;
 				$first_name = array_values($student)[0][0]->first_name;
