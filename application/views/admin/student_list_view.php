@@ -34,8 +34,13 @@
 					  <label for="program">Campus<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="campus_id" id="campus_id" class="form-control" onchange="getProgram();">
 						  <option value="">--Select Campus--</option>
-						  <?php foreach($campuses as $campus){?>
-						  <option value="<?php echo $campus->id; ?>"><?php echo $campus->campus_name; ?></option>
+						  <?php foreach($campuses as $campus){
+							  if($campus_id == $campus->id)
+								  $selected="selected";
+							  else
+								  $selected="";
+							  ?>
+						  <option value="<?php echo $campus->id; ?>" <?php echo $selected;?>><?php echo $campus->campus_name; ?></option>
 						 
 						  <?php } ?>
 					  </select>
@@ -54,16 +59,17 @@
 						 
 					  </select>
 					</div>
-				
-				
-				
-			  
 				    <div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="batch_id" id="batch_id" class="form-control">
 						  <option value="">Select Batch</option>
-						  <?php foreach($batches as $batch){ ?>
-						  <option value="<?php echo $batch->id;?>"><?php echo $batch->batch_name;?></option>
+						  <?php foreach($batches as $batch){ 
+						  if($batch_id == $batch->id)
+								  $selected="selected";
+							  else
+								  $selected="";
+						  ?>
+						  <option value="<?php echo $batch->id;?>" <?php echo $selected;?>><?php echo $batch->batch_name;?></option>
 						  <?php } ?>
 					  </select>
 					</div>
@@ -108,7 +114,7 @@
 									<th>Name</th>
 									<th>Image</th>
 									<th>Email</th>
-									<th>User Type</th>
+									<th>Student ID</th>
 									<th>Contact Number</th>
 									<th width="260px">Action</th>
 									
@@ -131,7 +137,7 @@
 									<?php }?>
 									</td>
 									<td><?php echo $users->email;?></td>
-									<td>Student</td>
+									<td><?php echo $users->user_unique_id;?></td>
 									<td><?php echo $users->contact_number;?></td>
 									
 								
@@ -214,6 +220,10 @@
 			var  option_brand = '<option value="">--Select Program--</option>';
 			$('#program_id').empty();
 			$("#program_id").append(option_brand+data);
+			<?php if($program_id>0){?>
+				$("#program_id").val(<?php echo $program_id;?>);
+				getDegreebyProgram();
+			<?php } ?>
 			 }
 		});
 	}
@@ -232,6 +242,10 @@
 			var  option_brand = '<option value="">--Select Degree--</option>';
 			$('#degree_id').empty();
 			$("#degree_id").append(option_brand+data);
+			<?php if($degree_id>0){?>
+				$("#degree_id").val(<?php echo $degree_id;?>);
+				getSemesterbyDegree();
+			<?php } ?>
 			 }
 		});
 	}
@@ -288,6 +302,11 @@
 			 }
 		});
 	}
+	$(document).ready(function () {
+		<?php if($campus_id>0){?>
+			getProgram();
+		<?php } ?>
+	});
 	</script>	
   
   

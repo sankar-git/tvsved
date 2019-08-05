@@ -568,7 +568,7 @@ class Grade extends CI_Controller {
 							  else 
 								  $subject_wise_val->result =  "NOT SATISFACTORY";
 						  }else{
-							  if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) 
+							  if(trim($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && trim($theory_internal_total+$theory_marks_40+$paper_20)>=50) 
 								  $subject_wise_val->result = "PASS"; 
 							  else 
 								  $subject_wise_val->result =  "FAIL";

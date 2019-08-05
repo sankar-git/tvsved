@@ -85,7 +85,9 @@
 					   rsort($numbers);
 					  $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
 					  if($display == 'fail_list'){
-						if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50)
+						  if($subject_wise_val->coure_group_id == 22 && $subject_wise_val->ncc_status==1){
+							  continue;
+						  }elseif(trim($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && trim($theory_internal_total+$theory_marks_40+$paper_20)>=50)
 						  continue;
 					  }
 					  $i++;
@@ -114,7 +116,7 @@
                   
                     <td  align="center" style="padding:2px;font-weight:bold" ><?php $paper_20=($paper_20*2)/$course_count;  echo round_two_digit($paper_20);?></td>
                     <td  align="center" style="padding:2px;font-weight:bold"><?php echo round_two_digit($theory_internal_total+$theory_marks_40+$paper_20);?></td>
-                    <td  align="center" style="padding:2px;"><?php if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) echo "PASS"; else echo "FAIL";?></td>
+                    <td  align="center" style="padding:2px;"><?php if(trim($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && trim($theory_internal_total+$theory_marks_40+$paper_20)>=50) echo "PASS"; else echo "FAIL";?></td>
 					<td  align="center" style="padding:1px;text-align:center;vertical-align:middle">
 					<?php 
 						$diff_mark=''; 

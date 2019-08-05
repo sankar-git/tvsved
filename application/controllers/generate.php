@@ -810,7 +810,7 @@ class Generate extends CI_Controller {
 						  }else{
 							  if(strtoupper(trim($subject_wise_val->theory_paper1)) == 'A' || strtoupper(trim($subject_wise_val->theory_paper2)) == 'A' || strtoupper(trim($subject_wise_val->theory_paper3)) == 'A' || strtoupper(trim($subject_wise_val->theory_paper4)) == 'A' || strtoupper(trim($subject_wise_val->theory_external1)) == 'A' || strtoupper(trim($subject_wise_val->theory_external2)) == 'A' || strtoupper(trim($subject_wise_val->theory_external3)) == 'A' || strtoupper(trim($subject_wise_val->theory_external4)) == 'A'){
 								  $subject_wise_val->result = "ABSENT"; 
-							  }else if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) 
+							  }else if(trim($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && trim($theory_internal_total+$theory_marks_40+$paper_20)>=50) 
 								  $subject_wise_val->result = "PASS"; 
 							  else 
 								  $subject_wise_val->result =  "FAIL";
@@ -908,14 +908,14 @@ class Generate extends CI_Controller {
 							  else 
 								  $subject_wise_val->result =  "NOT SATISFACTORY";
 						  }else{
-							  if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) {
+							  if(trim($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && trim($theory_internal_total+$theory_marks_40+$paper_20)>=50) {
 								  $subject_wise_val->result = "PASS"; 
 								  $subject_wise_val->theory_diff='-';
 								  $subject_wise_val->prac_diff='-';
 							  }else {
 								  $subject_wise_val->result =  "FAIL";
-								  if($theory_internal_total+$theory_marks_40<30)
-									$subject_wise_val->theory_diff = round_two_digit(30 - ($theory_internal_total+$theory_marks_40),2);
+								  if(trim($theory_internal_total+$theory_marks_40)<30)
+									$subject_wise_val->theory_diff = round_two_digit(30 - trim($theory_internal_total+$theory_marks_40),2);
 								  else
 									$subject_wise_val->theory_diff = '-';
 								if($paper_20<20)

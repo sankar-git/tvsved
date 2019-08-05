@@ -177,6 +177,10 @@ class Admin extends CI_Controller {
 		$data['roles']=$this->type_model->get_role();
 		$data['campuses'] = $this->Discipline_model->get_campus(); 
 		
+		$data['campus_id'] = isset($_POST['campus_id'])?$_POST['campus_id']:'';
+		$data['degree_id'] = isset($_POST['degree_id'])?$_POST['degree_id']:'';
+		$data['batch_id'] = isset($_POST['batch_id'])?$_POST['batch_id']:'';
+		$data['program_id'] = isset($_POST['program_id'])?$_POST['program_id']:'';
 		$data['batches'] = $this->Discipline_model->get_batches();
 		//print_r($data['user_list']); exit;
 		//echo $this->db->last_query();exit;
@@ -1806,36 +1810,42 @@ class Admin extends CI_Controller {
 	{
 	  $data['page_title']='Add User Bulk Images';
 	  if($this->input->post('submit')){
+		 // p($_FILES);exit;
       $event_file =$_FILES['userfile']['name']; 
+	  $error = array();
       foreach ( $event_file as $key =>  $value) {
          $tmp_name = $_FILES["userfile"]["tmp_name"][$key];
         // $time=time();
          $name = basename($event_file[$key]);
 		 $image = explode('.',$name);
-		// echo "<pre>";
-		// print_r($image);
+		 
 		 $isimage = $this->type_model->isuser($image[0]);
 		 $userid = $isimage->id;
-		 if(!$isimage)
+		 if(!$userid)
 		 {
-			 $isapplication = $this->type_model->isapplicationid($image[0]);
+			 $isapplication = $this->type_model->isuser('',$image[0]);
 			  $userid = $isapplication->id;
 		 }
 		 
-		 if($isimage || $isapplication)
-		 {
+		 if($userid>0)
+		 { 
 			 if(move_uploaded_file( $tmp_name ,"uploads/user_images/student/".$name))
 			 {
 				 $this->type_model->addimagepath($userid,$name);
 			 }
 			 
-		 }
+		 }else
+			 $error[]=$image[0].' not exists in list';
             //move_uploaded_file( $tmp_name ,"uploads/user_images/".$name);
     }
-	
-   $this->session->set_flashdata('message', 'Your data sucessfully saved.');
+	if(count($error)==0)
+		$this->session->set_flashdata('message', 'Your data sucessfully saved.');
+	else
+		$this->session->set_flashdata('error_msg',$error);
    redirect(base_url().'admin/addImages');
   }
+  $data['error_msg'] = $this->session->flashdata('error_msg');
+ // p($data['error_msg']);
   $this->load->view('admin/add_bulk_user_images_view',$data);
 	}
 	//==============----upload User Images End-------------=======================================================//

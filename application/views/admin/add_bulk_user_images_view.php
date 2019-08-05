@@ -27,6 +27,13 @@
 	   
             <div class="box-header with-border">
               <h3 class="box-title" style="color:green"><?php echo $this->session->flashdata('message'); ?></h3>   
+			  <?php if(count($error_msg)>0 ){ ?>
+			  <h3 class="box-title" style="color:red">
+				 <?php  foreach($error_msg as $key=>$res){ 
+				 echo ($key+1).'. '.$res."<br/>"; 
+			   } ?>
+			  </h3>  
+			  <?php } ?>
             </div>
               <!-- /.box-header -->
             <!-- form start -->

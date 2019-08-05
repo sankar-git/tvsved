@@ -326,7 +326,7 @@ class Course extends CI_Controller {
 		 $str = '';
          foreach($data['students'] as $k=>$v){ 
            
-          $str .= "<option value=".$v->id.">".$v->first_name.' '.$v->last_name.'('.$sid.''.$v->id.')'."</option>";
+          $str .= "<option value=".$v->id.">".$v->first_name.' '.$v->last_name.'('.$v->user_unique_id.')'."</option>";
            }
 		   
            echo $str;
@@ -612,14 +612,14 @@ class Course extends CI_Controller {
 							  else 
 								  $subject_wise_val->result =  "NOT SATISFACTORY";
 						  }else{
-							  if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50) {
+							  if(trim($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && trim($theory_internal_total+$theory_marks_40+$paper_20)>=50) {
 								  $subject_wise_val->result = "PASS"; 
 								  $subject_wise_val->theory_diff='-';
 								  $subject_wise_val->prac_diff='-';
 							  }else {
 								  $subject_wise_val->result =  "FAIL";
-								  if($theory_internal_total+$theory_marks_40<30)
-									$subject_wise_val->theory_diff = round_two_digit(30 - ($theory_internal_total+$theory_marks_40),2);
+								  if(trim($theory_internal_total+$theory_marks_40)<30)
+									$subject_wise_val->theory_diff = round_two_digit(30 - trim($theory_internal_total+$theory_marks_40),2);
 								  else
 									$subject_wise_val->theory_diff = '-';
 								if($paper_20<20)

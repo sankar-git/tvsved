@@ -193,7 +193,7 @@ class Transcript extends CI_Controller {
 									   $data['theory_external']    				= $subjectVal->theory_external1;
 									   $data['practical_external'] 				= $subjectVal->practical_external;
 									   $data['marks_sum']          				= $subjectVal->marks_sum;
-									   $data['external_sum']          			= round_two_digit($theory_internal_total+$theory_marks_40+$paper_20);
+									   $data['external_sum']          			= round_two_digit(trim($theory_internal_total+$theory_marks_40+$paper_20));
 									    $data['ncc_status']          			= $subjectVal->ncc_status;
 									   $data['course_group_id']          			= $subjectVal->course_group_id;
 									  // $sum_internal                            = $data['theory_internal1'] + $data['sum_internal_practical'];//100
@@ -210,7 +210,7 @@ class Transcript extends CI_Controller {
 										$ncc_status=$data['ncc_status'];
 										$course_group_id=$data['course_group_id'];
 										
-									  if(($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && ($theory_internal_total+$theory_marks_40+$paper_20)>=50){
+									  if(trim($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && trim($theory_internal_total+$theory_marks_40+$paper_20)>=50){
 										   $passfail_status='P';
 										}
 										 elseif($ncc_status==1 and $course_group_id==2)
