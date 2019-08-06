@@ -157,6 +157,7 @@ Class Marks_model extends CI_Model
 		 $semester_id=$data['semester_id'];
 		 $discipline_id=$data['discipline_id'];
 		 $exam_type=$data['exam_type'];
+		 $marks_type=$data['marks_type'];
 		 if(isset($data['course_id']) && $data['course_id']!='')
 			$course_id=$data['course_id'];
 		else{
@@ -168,7 +169,7 @@ Class Marks_model extends CI_Model
 		$this->db->select('d.dummy_value,u.user_unique_id,u.id,u.first_name,ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark');
 		$this->db->from('student_assigned_courses c');
         $this->db->join('users  u','u.id = c.student_id','LEFT');
-        $this->db->join('tbl_dummy  d','u.id = d.student_id','LEFT');
+        $this->db->join('tbl_dummy  d','u.id = d.student_id and c.exam_type=d.exam_type','LEFT');
 		if($data['degree_id']!=1){
 			$this->db->join('courses co','co.id = c.course_id','LEFT');
 		}
@@ -200,7 +201,10 @@ Class Marks_model extends CI_Model
 			$this->db->group_by('ug.student_id,ug.course_id');
 			//
 		}
-		$this->db->order_by('u.user_unique_id');
+		if($marks_type == 2)
+			$this->db->order_by('d.dummy_value');
+		else
+			$this->db->order_by('u.user_unique_id,dummy_value');
 		
 		$result	= $this->db->get()->result();
 		if($result)

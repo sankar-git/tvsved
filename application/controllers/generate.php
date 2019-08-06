@@ -592,7 +592,7 @@ class Generate extends CI_Controller {
 				
 				$student_id=$this->input->post('student_id'); //array input
 				 $allData = array();
-					 $students = $this->Generate_model->get_student_dummy_number($student_id,$semester_id);
+					 $students = $this->Generate_model->get_student_dummy_number($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$student_id);
 					 
 					//p($students); exit;
 					 foreach($students as $stuData)
@@ -677,7 +677,7 @@ class Generate extends CI_Controller {
 				
 				$student_id=$this->input->post('student_id'); //array input
 				 $allData = array();
-					 $students = $this->Generate_model->get_student_dummy_number($student_id,$semester_id);
+					 $students = $this->Generate_model->get_student_dummy_number($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$student_id);
 					//p($students); exit;
 					 foreach($students as $stuData)
 					 {
@@ -1004,7 +1004,7 @@ class Generate extends CI_Controller {
 				$program_name=$programData->program_name;
 				$student_id=$this->input->post('student_id'); //array input
 				 $allData = array();
-					 $students = $this->Generate_model->get_student_dummy_number($student_id,$semester_id);
+					 $students = $this->Generate_model->get_student_dummy_number($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$student_id);
 					//p($students); exit;
 					 foreach($students as $stuData)
 					 {

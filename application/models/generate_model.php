@@ -107,22 +107,27 @@ Class Generate_model extends CI_Model
 		return $result;
 	}
 	
-	function get_student_dummy_number($student_id,$semester_id)
+	function get_student_dummy_number($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$student_id)
 	{
-		$this->db->select('u.*,s.semester_name,umap.user_id,b.batch_name,c.campus_name,c.campus_code,d.degree_name,d.degree_code,dd.dummy_value,dd.exam_month');
+		$this->db->select('u.*,s.semester_name,u.id as user_id,b.batch_name,c.campus_name,c.campus_code,d.degree_name,d.degree_code,dd.dummy_value,dd.exam_month');
 		$this->db->from('users u');
-		$this->db->from('semesters s');
-		$this->db->join('user_map_student_details umap','umap.user_id = u.id','INNER');
-		$this->db->join('batches b','b.id = umap.batch_id','INNER');
-		$this->db->join('campuses c','c.id = umap.campus_id','left');
-		$this->db->join('degrees d','d.id = umap.degree_id','left');
-		$this->db->join('tbl_dummy dd','dd.student_id = u.id','inner');
+		$this->db->join('tbl_dummy dd','dd.student_id = u.id','LEFT');
+		$this->db->join('semesters s','s.id = dd.semester_id','LEFT');
+		$this->db->join('batches b','b.id = dd.batch_id','LEFT');
+		$this->db->join('campuses c','c.id = dd.college_id','left');
+		$this->db->join('degrees d','d.id = dd.degree_id','left');
+		
 		
 	    $this->db->where_in('u.id',$student_id);
-	    $this->db->where('s.id',$semester_id);
+	    $this->db->where('dd.college_id',$campus_id);
+	    $this->db->where('dd.program_id',$program_id);
+	    $this->db->where('dd.degree_id',$degree_id);
+	    $this->db->where('dd.batch_id',$batch_id);
+	    $this->db->where('dd.exam_type',$exam_type);
+	    $this->db->where('dd.semester_id',$semester_id);
 	    $this->db->group_by('u.id',$student_id);
-		//echo $this->db->last_query(); die;
-        $result	= $this->db->get()->result();
+		
+        $result	= $this->db->get()->result();//echo $this->db->last_query(); die;
 		return $result;
 	}
 	function get_student_assigned_subjects_bvsc($stuId,$semester_id,$exam_type=1)
@@ -164,12 +169,13 @@ Class Generate_model extends CI_Model
         $result	= $this->db->get()->row();
 		return $result;
 	}
-	function get_students_for_dummy($campus_id,$batch_id,$degree_id)
+	function get_students_for_dummy($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type)
 	{
 		$this->db->select('u.*');
 		$this->db->from('users u');
-		$this->db->join('user_map_student_details ums','ums.user_id=u.id','INNER');
-	    $this->db->where(array('ums.campus_id'=>$campus_id,'ums.batch_id'=>$batch_id,'ums.degree_id'=>$degree_id));
+		$this->db->join('student_assigned_courses ca','ca.student_id=u.id','LEFT');
+	    $this->db->where(array('ca.campus_id'=>$campus_id,'ca.program_id'=>$program_id,'ca.semester_id'=>$semester_id,'ca.batch_id'=>$batch_id,'ca.degree_id'=>$degree_id,'ca.exam_type'=>$exam_type));
+		$this->db->group_by("u.id");
         $result	= $this->db->get()->result();
 		return $result;
 	}
@@ -193,11 +199,11 @@ Class Generate_model extends CI_Model
         $result	= $this->db->get()->result();
 		return $result;
 	}
-	function check_already_inserted_dummy_row($campus_id,$batch_id,$degree_id,$student_id,$month_name)
+	function check_already_inserted_dummy_row($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$student_id)
 	{
 		$this->db->select('d.*');
 		$this->db->from('tbl_dummy d');
-		$this->db->where(array('d.college_id'=>$campus_id,'d.batch_id'=>$batch_id,'d.degree_id'=>$degree_id,'d.student_id'=>$student_id,'d.exam_month'=>$month_name));
+		$this->db->where(array('d.college_id'=>$campus_id,'d.program_id'=>$program_id,'d.semester_id'=>$semester_id,'d.batch_id'=>$batch_id,'d.degree_id'=>$degree_id,'d.student_id'=>$student_id,'d.exam_type'=>$exam_type));
         $result	= count($this->db->get()->row());
 		return $result;
 	}

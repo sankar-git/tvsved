@@ -80,17 +80,20 @@ class Dummy extends CI_Controller {
 		 {
 			$register_date_time=date('Y-m-d H:i:s');
 			$campus_id=$this->input->post('campus_id'); 
+			$program_id=$this->input->post('program_id'); 
+			$semester_id=$this->input->post('semester_id'); 
 			$batch_id=$this->input->post('batch_id'); 
 			$degree_id=$this->input->post('degree_id'); 
 			$range_from=$this->input->post('range_from'); 
 			$range_to=$this->input->post('range_to'); 
 			$month_name=$this->input->post('month_name'); 
+			$exam_type=$this->input->post('exam_type'); 
 			//get student list by college,batch and degree
-			$data['students'] =  $this->Generate_model->get_students_for_dummy($campus_id,$batch_id,$degree_id);
+			$data['students'] =  $this->Generate_model->get_students_for_dummy($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type);
 			//p($data['students']); exit;
 			$alreadyList=array();
 			foreach($data['students'] as $students){
-				    $checkdata=$this->checking_dummy_number($campus_id,$batch_id,$degree_id,$students->id,$month_name);
+				    $checkdata=$this->checking_dummy_number($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$students->id);
 					//print_r($checkdata); exit;
 					if($checkdata==1)
 					{
@@ -104,6 +107,9 @@ class Dummy extends CI_Controller {
 				    $save['exam_month'] =  $month_name;   
 				    $save['college_id'] =  $campus_id;   
 				    $save['batch_id'] =    $batch_id;   
+				    $save['program_id'] =    $program_id;   
+				    $save['semester_id'] =    $semester_id;
+				    $save['exam_type'] =    $exam_type;   
 				    $save['degree_id'] =   $degree_id;   
 				    $save['dummy_value'] = $gen_rand;
 				    $save['created_on'] =  $register_date_time;
@@ -117,9 +123,9 @@ class Dummy extends CI_Controller {
 		 }
          $this->load->view('admin/dummy_number_view',$data);
 	}
-	function checking_dummy_number($campus_id,$batch_id,$degree_id,$student_id,$month_name)
+	function checking_dummy_number($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$student_id)
 	{
-		$RowVal=$this->Generate_model->check_already_inserted_dummy_row($campus_id,$batch_id,$degree_id,$student_id,$month_name);
+		$RowVal=$this->Generate_model->check_already_inserted_dummy_row($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$student_id);
 		return $RowVal;
 	}
 	function addExamDate()

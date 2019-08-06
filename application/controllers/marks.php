@@ -243,6 +243,7 @@ class Marks extends CI_Controller {
 	    $send['semester_id']=$semester_id;
 	    $send['discipline_id']=$discipline_id;
 	    $send['exam_type']=$exam_type;
+	    $send['marks_type']=$marks_type;
 		if($upload_type == 'coursewise'){
 			if(strpos($course_id,"-") !== false){
 				$course_idArr = explode("-",$course_id);

@@ -152,6 +152,7 @@ class Excelupload extends CI_Controller {
 	    $send['semester_id']=$semester_id;
 	    $send['discipline_id']=$discipline_id;
 	    $send['exam_type']=$exam_type;
+	    $send['marks_type']=$mark_type;
 	    $send['course_id']=$course_id;
 			  $data['students']=$studentList= $this->Marks_model->get_student_assigned_marks($send);
 			if($mark_type == 1 && $exam_type == 2){
