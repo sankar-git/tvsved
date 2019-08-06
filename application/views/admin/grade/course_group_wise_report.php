@@ -34,7 +34,7 @@
             <form role="form" name="generate_class_grade_view" id="generate_class_grade_view" method="post" action="" enctype="multipart/form-data">
               <div class="box-body">
 			    <div class="row">
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-3">
 					  <label for="program">Campus<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="campus_id" id="campus_id" class="form-control" onchange="getProgram();">
 						  <option value="">--Select Campus--</option>
@@ -45,7 +45,7 @@
 					  </select>
 			    </div>
 					
-					<div class="form-group col-md-4">
+					<div class="form-group col-md-3">
 					  <label for="program">Program<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="program_id" id="program_id" class="form-control" onchange="getDegreebyProgram();">
 						  <option value="">--Select Program--</option>
@@ -55,18 +55,15 @@
 						  <?php } ?>
 					  </select>
 					</div>
-					<div class="form-group col-md-4">
+					<div class="form-group col-md-3">
 					  <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
 					  <select class="form-control" name="degree_id" id="degree_id" onchange="getSemesterbyDegree();" >
 						  <option value="">--Select Degree--</option>
 						 
 					  </select>
 					</div>
-				</div>
 				
-				
-			   <div class="row">
-				    <div class="form-group col-md-4">
+				    <div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="batch_id" id="batch_id" class="form-control">
 						  <option value="">Select Batch</option>
@@ -77,7 +74,7 @@
 					</div>
 					
 					
-					<div class="form-group col-md-4">
+					<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Semester<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="semester_id" id="semester_id" class="form-control">
 						  <option value="">Select Semester</option>
@@ -88,7 +85,7 @@
 					</div>
 					
 					
-					<div class="form-group col-md-4">
+					<div class="form-group col-md-3">
 					  <label for="course-group">Discipline<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="discipline_id" id="discipline_id" onchange="getCourseByIds();">
 					   
@@ -103,10 +100,8 @@
 					
 				
 					
-               </div>
-			   
-               <div class="row">
-			     <div class="form-group col-md-4">
+              
+			     <div class="form-group col-md-3">
 					  <label for="course-group">Course<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="course_id" id="course_id">
 					   
@@ -115,7 +110,15 @@
 						
 					  </select>
 					</div>
-					 <div class="form-group col-md-4">
+					<div class="form-group col-md-3">
+					  <label for="exampleInputEmail1">Exam<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="exam_type" id="exam_type" class="form-control">
+						  <option value="">Select Type</option>
+						  <option value="1">Regular</option>						  
+						  <option value="2">Cap</option>						  
+					  </select>
+					</div>
+					 <div class="form-group col-md-3">
 					  <label for="month">Month<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="month" id="month">
 					   
@@ -125,7 +128,7 @@
 						<?php }?>
 					  </select>
 					</div>
-					 <div class="form-group col-md-4">
+					 <div class="form-group col-md-3">
 					  <label for="year">Year<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="year" id="year">
 					   
@@ -136,7 +139,7 @@
 						
 					  </select>
 					</div>
-			    </div>
+			    
 			   
 			   
 			  </div>

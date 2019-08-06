@@ -107,6 +107,7 @@ Class Marks_model extends CI_Model
 					$this->db->where("u.id",$data['student_id']);
 					$user_result	= $this->db->get()->result();
 				}
+				
 				$this->db->select('ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark');
 				 $this->db->from('students_ug_marks ug')->where("exam_type",$exam_type);
 				 if(isset($data['course_id']) && $data['course_id']!='')
@@ -193,16 +194,13 @@ Class Marks_model extends CI_Model
 		}
 		if(isset($data['course_id']) && $data['course_id']!=''){
 			$this->db->group_by('c.student_id');
-			$this->db->order_by('u.first_name');
 		}else{
-			
 			$this->db->where_in('c.student_id',$student_id);
 			//group by ug.student_id,ug.course_id order by ug.id
 			$this->db->group_by('ug.student_id,ug.course_id');
-			$this->db->order_by('ug.id');
 			//
 		}
-		
+		$this->db->order_by('u.user_unique_id');
 		
 		$result	= $this->db->get()->result();
 		if($result)

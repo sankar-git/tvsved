@@ -263,10 +263,18 @@ class Marks extends CI_Controller {
 		//print_r($_POST);
 		if($upload_type == 'coursewise'){
 			$studentList= $this->Marks_model->get_student_assigned_marks($send);
+			if($marks_type == 1 && $exam_type == 2){
+				$send['exam_type']=1;
+				$data['regstudentsmarks']=$this->Marks_model->get_student_assigned_marks($send);
+			}
 		}else{
 			$studentList= $this->Marks_model->get_student_wise_assigned_marks($send);
+			if($marks_type == 1 && $exam_type == 2){
+				$send['exam_type']=1;
+				$data['regstudentsmarks']=$this->Marks_model->get_student_wise_assigned_marks($send);
+				
+			}
 		}
-		
 		$trdata='';
 		$i=0;
 		if(count($studentList)>0){
@@ -318,7 +326,7 @@ class Marks extends CI_Controller {
 							}
 					}
 					if(@$courseList[0]->course_subject_id == 22){
-						if($students->ncc_status=='1')
+						if(@$students->ncc_status=='1')
 						{
 							 $passstatus='selected';
 						}
@@ -326,7 +334,7 @@ class Marks extends CI_Controller {
 						{
 							 $passstatus='';
 						}
-						if($students->ncc_status=='0')
+						if(@$students->ncc_status=='0')
 						{
 							 $failstatus='selected';
 						}
@@ -343,6 +351,15 @@ class Marks extends CI_Controller {
 						</td>';
 						
 					}else{
+						if($exam_type == 2){
+							foreach($data['regstudentsmarks'] as $key1=>$res){
+								if($students->id == $res->id && $students->course_id == $res->course_id){
+									$students->theory_internal1=$res->theory_internal1;
+									$students->theory_internal2=$res->theory_internal2;
+									$students->theory_internal3=$res->theory_internal3;
+								}
+							}
+						}
 						$trdata.='<td><input type="text" name="theory_internal1[]" class="theory_internal"  value="'.@$students->theory_internal1.'" style="width:60px;" >
 									<input type="text" name="theory_internal2[]" class="theory_internal"  value="'.@$students->theory_internal2.'" style="width:60px;" >
 									<input type="text" name="theory_internal3[]" class="theory_internal"  value="'.@$students->theory_internal3.'" style="width:60px;" >

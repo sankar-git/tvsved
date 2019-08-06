@@ -76,6 +76,7 @@ class Grade extends CI_Controller {
 	       $discipline_id=$this->input->post('discipline_id');
 	       $course_input=$this->input->post('course_id');
 	       $data['date_of_exam']=$this->input->post('date_of_exam');
+	       $exam_type=$this->input->post('exam_type');
 		  // p($course_id); exit;
 		  //===========================Subject Wise Mark====================================// 
 		  if(!empty($this->input->post('subject_wise_mark')))
@@ -87,7 +88,7 @@ class Grade extends CI_Controller {
 	      // $course_credit=$courseid[1]; 
 	     //print_r($course_id); exit;
 		 
-		   $data['students_attendance'] = $this->Gradechart_model->get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_input,$semester_id);
+		   $data['students_attendance'] = $this->Gradechart_model->get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_input,$semester_id,$exam_type);
 		   $data['campus_id'] = $campus_id=$this->input->post('campus_id');
 		  // echo $this->db->last_query();exit;
 		   $data['campus_id'] = $campus_id;
@@ -132,7 +133,7 @@ class Grade extends CI_Controller {
 	       //$course_credit=$courseid[1]; 
 	     //  print_r($course_id); exit;
 		  $data['date_of_exam']=$this->input->post('date_of_exam');
-		  $data['registered_students'] = $this->Gradechart_model->get_registered_student($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id);
+		  $data['registered_students'] = $this->Gradechart_model->get_registered_student($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id,$exam_type);
 		 // p($data['registered_students']); exit;
 		  //getting batch and year
 	      
@@ -261,7 +262,7 @@ class Grade extends CI_Controller {
 	     //  print_r($course_id); exit;
 		 
 		 // $data['students_attendance'] = $this->Gradechart_model->get_aggregate_marks($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id);
-		  $data['students_attendance'] = $this->Gradechart_model->get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_id,$semester_id);
+		  $data['students_attendance'] = $this->Gradechart_model->get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_id,$semester_id,$exam_type);
 		  //echo $this->db->last_query();exit;
 		//p($data['students_attendance']); exit;
 		  //getting batch and year
@@ -405,6 +406,7 @@ class Grade extends CI_Controller {
 	       $discipline_id=$this->input->post('discipline_id');
 	       $data['month']=$month=$this->input->post('month');
 	       $data['year']=$year=$this->input->post('year');
+	       $data['exam_type']=$exam_type=$this->input->post('exam_type');
 	      $data['course_id']= $course_input=$this->input->post('course_id');
 		  // p($course_id); exit;
 		  //===========================Subject Wise Mark====================================// 
@@ -426,7 +428,7 @@ class Grade extends CI_Controller {
 		  $data['course_count'] =  count($courseArr);
 		 }
 		   $data['numeralCodes'] =  array("I","II","III","IV","V","VI","VII","VIII","IX");
-		   $data['students_attendance'] = $this->Gradechart_model->get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_input,$semester_id);
+		   $data['students_attendance'] = $this->Gradechart_model->get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_input,$semester_id,$exam_type);
 		   //echo $this->db->last_query();exit;
 		   $data['campus_id'] = $campus_id=$this->input->post('campus_id');
 		  // echo $this->db->last_query();exit;
@@ -477,7 +479,7 @@ class Grade extends CI_Controller {
 		   $courseArr = explode("|",$courseArr[0]);
 		  $data['course_count'] =  count($courseArr);
 		   $data['numeralCodes'] =  array("I","II","III","IV","V","VI","VII","VIII","IX");
-		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id,'',$exam_type);
 		// p($data['aggregate_marks']); exit;
 		  //getting batch and year
 	      
@@ -656,7 +658,7 @@ class Grade extends CI_Controller {
 		   $courseArr = explode("|",$courseArr[0]);
 		  $data['course_count'] =  count($courseArr);
 		   $data['numeralCodes'] =  array("I","II","III","IV","V","VI","VII","VIII","IX");
-		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id,'',$exam_type);
 			//echo $this->db->last_query();exit;
 		    $subject_name=$data['subject_wise_list'][0]->course_title;
 			$data['display'] = 'pass_fail_list';
@@ -678,7 +680,7 @@ class Grade extends CI_Controller {
 		   }
 		  }	
           if($degree_id!='1' && $program_id == 1){
-		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id,'',$exam_type);
 		    $subject_name=$data['subject_wise_list'][0]->course_title;
 			$data['display'] = 'pass_fail_list';
 			$data['title'] = 'Subject Wise Mark Report';
@@ -701,7 +703,7 @@ class Grade extends CI_Controller {
 		   }
 		  }
 		if($program_id > 1){
-		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id,'',$exam_type);
 		    $subject_name=$data['subject_wise_list'][0]->course_title;
 			$data['display'] = 'pass_fail_list';
 			$data['title'] = 'Subject Wise Mark Report';
@@ -740,7 +742,7 @@ class Grade extends CI_Controller {
 	      if($degree_id=='1'){
 			  
 		   $data['numeralCodes'] =  array("I","II","III","IV","V","VI","VII","VIII","IX");
-		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id,'',$exam_type);
 		//	p($data['subject_wise_list']);exit;
 		    $subject_name=@$data['subject_wise_list'][0]->course_title;
 			$data['display'] = 'fail_list';
@@ -762,7 +764,7 @@ class Grade extends CI_Controller {
 		   }
 		  }	
           if($degree_id!='1' && $program_id == 1){
-		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id,'',$exam_type);
 			$data['display'] = 'fail_list';
 			$data['title'] = "Failed Student's Report";
 			//p($data['subject_wise_list']); exit;
@@ -784,7 +786,7 @@ class Grade extends CI_Controller {
 			}
 		  }
 		if($program_id > 1){
-		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id,'',$exam_type);
 		    $subject_name=$data['subject_wise_list'][0]->course_title;
 			$data['display'] = 'pass_fail_list';
 			$data['title'] = 'Subject Wise Mark Report';
