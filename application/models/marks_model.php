@@ -181,6 +181,16 @@ Class Marks_model extends CI_Model
 			}
 		}
 		$this->db->where(array('c.campus_id'=>$campus_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,'c.batch_id'=>$batch_id,'c.exam_type'=>$exam_type,'u.role_id'=>1));
+		if($degree_id==1){
+			$mystring = $course_id;
+			$findme   = '|';
+			$pos = strpos($mystring, $findme);
+			if($pos !== false) {
+				$courseArr = explode("|",$course_id);
+				$courseIdArr = explode("-",$courseArr[1]);
+				$this->db->where_in('c.course_id',$courseIdArr);
+			}
+		}
 		if(isset($data['course_id']) && $data['course_id']!=''){
 			$this->db->group_by('c.student_id');
 			$this->db->order_by('u.first_name');
@@ -194,7 +204,7 @@ Class Marks_model extends CI_Model
 		}
 		
 		
-		$result	= $this->db->get()->result();//echo $this->db->last_query();
+		$result	= $this->db->get()->result();
 		if($result)
 		{
 			return $result; 

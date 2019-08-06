@@ -154,7 +154,10 @@ class Excelupload extends CI_Controller {
 	    $send['exam_type']=$exam_type;
 	    $send['course_id']=$course_id;
 			  $data['students']=$studentList= $this->Marks_model->get_student_assigned_marks($send);
-			// echo $this->db->last_query();exit;
+			if($mark_type == 1 && $exam_type == 2){
+				$send['exam_type']=1;
+				$data['regstudentsmarks']=$this->Marks_model->get_student_assigned_marks($send);
+			}
 			//p($data['students']); exit;
 			if($degree_id==1 && $program_id == 1){
             //$finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Student Name','INTERNAL FIRST(10)',' INTERNAL SECOND(10)',' INTERNAL THIRD(10)','PRACTICAL PAPER-I(60)','PRACTICAL PAPER-II(60)','EXTERNAL PAPER-I(100)','EXTERNAL PAPER-II(100)');
@@ -230,10 +233,19 @@ class Excelupload extends CI_Controller {
 				if($mark_type == 1){
 					$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->user_unique_id);
 					$objPHPExcel->getActiveSheet()->setCellValue($cols[8].$newvar, $value->first_name.' '.$value->last_name);
+					if($exam_type == 2){
+						foreach($data['regstudentsmarks'] as $key1=>$res){
+							if($value->id == $res->id){
+								$objPHPExcel->getActiveSheet()->setCellValue($cols[9].$newvar, $res->theory_internal1);
+								$objPHPExcel->getActiveSheet()->setCellValue($cols[10].$newvar, $res->theory_internal2);
+								$objPHPExcel->getActiveSheet()->setCellValue($cols[11].$newvar, $res->theory_internal3);
+							}
+						}
+					}
 				}else{
 					$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->dummy_value);
 				}
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[count($finalExcelArr)-1].$newvar, $exam_type_str);
+				$objPHPExcel->getActiveSheet()->setCellValue($cols[count($finalExcelArr)-1].$newvar, $exam_type_str);
 			
             }
           }
