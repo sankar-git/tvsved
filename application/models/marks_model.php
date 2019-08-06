@@ -202,9 +202,9 @@ Class Marks_model extends CI_Model
 			//
 		}
 		if($marks_type == 2)
-			$this->db->order_by('d.dummy_value');
+			$this->db->order_by('u.user_unique_id');
 		else
-			$this->db->order_by('u.user_unique_id,dummy_value');
+			$this->db->order_by('u.user_unique_id');
 		
 		$result	= $this->db->get()->result();
 		if($result)
