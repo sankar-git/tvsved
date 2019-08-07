@@ -9,9 +9,10 @@ Class Type_model extends CI_Model
 	function isuser($user_unique_id,$application_no='')
 	{
 		$this->db->select('id')->from("users");
-		$this->db->where(['user_unique_id'=>$user_unique_id]);
-		if(!empty($application_no))
-			$this->db->or_where(['application_no'=>$application_no]);
+		if(!empty($user_unique_id))
+			$this->db->where(['user_unique_id'=>$user_unique_id]);
+		else if(!empty($application_no))
+			$this->db->where(['application_no'=>$application_no]);
 		$result = $this->db->get()->row();
 		return $result;
 	}
