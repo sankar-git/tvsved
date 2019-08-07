@@ -929,6 +929,7 @@ class Marks extends CI_Controller {
 		$discipline_id=$this->input->post('discipline_id');
 		$course_id=$this->input->post('course_id');
 		$marks_type=$this->input->post('marks_type');
+		$exam_type=$this->input->post('exam_type');
 		$student_ids=$this->input->post('student_id');
 		$theory_internal=$this->input->post('theory_internal');
 		$assignment_markArr=$this->input->post('assignment_mark');
@@ -970,6 +971,7 @@ class Marks extends CI_Controller {
 						'assignment_mark'=>$assignment_mark,
 						'practical_internal'=>$practical_marks,
 						'marks_sum'=>$marks_sum,
+						'exam_type'=>$exam_type,
 						'created_on'=>$register_date_time
 					
 					);
@@ -1017,7 +1019,7 @@ class Marks extends CI_Controller {
 						'discipline_id'=>$discipline_id,
 						'student_id'=>$student_id,
 						'course_id'=>$course_id,
-						
+						'exam_type'=>$exam_type,
 						'theory_external1'=>$theory_external_marks,
 						
 						'created_on'=>$register_date_time

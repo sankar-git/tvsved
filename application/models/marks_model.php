@@ -285,10 +285,10 @@ Class Marks_model extends CI_Model
 	 {
 		 $this->db->select('id');
 		 $this->db->from('students_ug_marks');
-		 $this->db->where(array('student_id'=>$data['student_id'],'course_id'=>$data['course_id']));
+		 $this->db->where(array('exam_type'=>$data['exam_type'],'student_id'=>$data['student_id'],'semester_id'=>$data['semester_id'],'course_id'=>$data['course_id']));
 		 $result = $this->db->get()->result();
 		 if(count($result)>0){
-			 $this->db->where(array('student_id'=>$data['student_id'],'course_id'=>$data['course_id']));
+			 $this->db->where(array('exam_type'=>$data['exam_type'],'student_id'=>$data['student_id'],'semester_id'=>$data['semester_id'],'course_id'=>$data['course_id']));
 			 $this->db->update('students_ug_marks',$data);
 			 return $result[0]->id;
 		 }else{

@@ -201,7 +201,7 @@ Class Excel_model extends CI_Model
 		 $course_id=$data['course_id'];
 		 $student_id=$data['student_id'];
 		 
-		$this->db->where(array('campus_id'=>$campus_id,'program_id'=>$program_id,'degree_id'=>$degree_id,'batch_id'=>$batch_id,'semester_id'=>$semester_id,'course_id'=>$course_id,'student_id'=>$student_id));
+		$this->db->where(array('campus_id'=>$campus_id,'program_id'=>$program_id,'degree_id'=>$degree_id,'batch_id'=>$batch_id,'semester_id'=>$semester_id,'course_id'=>$course_id,'student_id'=>$student_id,'exam_type'=>$data['exam_type']));
 		$this->db->update('students_ug_marks',$data);
 	 }
 	 
