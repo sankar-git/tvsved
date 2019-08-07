@@ -106,7 +106,7 @@
                 </tr>
                 <tr>
                     <td><b>Examination</b></td>
-                    <td > : <?php echo $aggregate_marks[0]->semester_name.'-'."Annual";?></td>
+                    <td > : <?php echo $aggregate_marks[0]->semester_name.'-'; if($exam_type == 2) echo "Cap";else echo "Annual";?></td>
                     <td><b>Month & Year</b></td>
                     <td> : <?php if(!empty($month) && !empty($year)){echo $month.' '.$year;}else{echo "Select Month & Year";}?></td>
                 </tr>
