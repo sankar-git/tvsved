@@ -1215,14 +1215,14 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 		  //check already exist
 		   $isuser= $this->type_model->isuser($firstrow[7],$firstrow[6]);
 		   //$isuser1= $this->type_model->isuser($firstrow[8]);
-		   //echo $this->db->last_query();
+		  // echo $this->db->last_query();exit;
 		 // print_r($isuser->id);
 		 //print_r($isuser);
 		   if($isuser)
 			   $updateuser = 1;
 		    else
 			   $updateuser = 0;
-		 //  echo $updateuser;
+		  //echo $updateuser;exit;
 		  // exit;
 		    if(!empty($firstrow[55]))
 			{
@@ -1300,6 +1300,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 							'permission_status'=>'1'
 			);
 			//p($dataArr1); exit;
+			//echo $updateuser;exit;
 			if($updateuser == '0')
 			{
 				$insertid=$this->type_model->get_studentexcel_data1($dataArr1);

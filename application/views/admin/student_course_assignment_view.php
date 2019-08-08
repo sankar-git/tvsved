@@ -92,7 +92,7 @@
 						  <?php } ?>
 					  </select>
 					</div>
-					<div class="form-group col-md-4">
+					<!--<div class="form-group col-md-4">
 					  <label for="batch_id">Academic Year<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="academic_year" id="academic_year" class="form-control" >
 						  <option value="">--Select Academic Year--</option>
@@ -101,7 +101,7 @@
 						 
 						  <?php } ?>
 					  </select>
-					</div>
+					</div>-->
 					<div class="form-group col-md-4">
 					  <label for="semester_id">Semester<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="semester_id" id="semester_id" class="form-control" onchange="getStudentByDegreeCampusBatchAndSemester();">
@@ -135,15 +135,20 @@
 				 
 				 <div class="form-group col-md-4">
 					  <label for="examtype">Exam Type<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="examtype"  id="examtype" class="form-control" >
+					  <select name="examtype"  id="examtype" class="form-control" onchange="getStudentByDegreeCampusBatchAndSemester();" >
 						  <option value="1">Regular</option>
 						 </select>
 					</div>
-				  <div class="form-group col-md-4">
+					<div class="form-group col-md-4" style="margin-top:25px;">
+					  
+						<input type="checkbox" name="include_academic_student" id="include_academic_student" onclick="getStudentByDegreeCampusBatchAndSemester();"  value="1"  / >&nbsp; <label for="examtype">Include Academic Students</label>
+					</div>
+					 </div>
+				   <div class="box-footer">
             
 				 <button type="button" name="assign" id="assign" value="Register" onclick="registerCourse();" class="btn btn-success"/>Register</button>
               </div>
-				 </div>
+				
 				 </div>
 			 
 			 
@@ -196,7 +201,7 @@
 						  <?php } ?>
 					  </select>
 					</div>
-					<div class="form-group col-md-4">
+					<!--<div class="form-group col-md-4">
 					  <label for="batch_id">Academic Year<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="bacademic_year" id="bacademic_year" class="form-control"  onchange="loadCourse();" >
 						  <option value="">--Select Academic Year--</option>
@@ -205,7 +210,7 @@
 						 
 						  <?php } ?>
 					  </select>
-					</div>
+					</div>-->
 					<div class="form-group col-md-4">
 					  <label for="semester_id">Semester<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="ssemester_id" id="ssemester_id" class="form-control" onchange="loadCourse();">
@@ -240,6 +245,10 @@
 						  <option value="1">Regular</option>
 						 </select>
 					</div>
+					<div class="form-group col-md-4" style="margin-top:25px;">
+					 
+						<input type="checkbox" name="include_academic_course" id="include_academic_course"   onchange="get_student_list_course(this.value);" value="1"  / >&nbsp; <label for="examtype">Include Academic Students</label>
+					</div>
 					</div>
 					 <div class="box-footer">
             
@@ -247,20 +256,7 @@
               </div>
 				 </div>
 				 <!---------------------Course Wise -------------------------->
-			 
-			 
-			 
-			 
-			 
-			 
-			 
-			 
-			 	
-			 
-			 
-			 
-			 
-				 
+			  
 			 </div>
 			  <div id="studentList" style="display:none">
 				   <div class="box-body table-responsive">

@@ -682,11 +682,11 @@ Class Master_model extends CI_Model
 		$semester_id = $data['semester_id'];
 		$this->db->select('u.*');
 		$this->db->from('users u ');
-        //$this->db->join('user_map_student_details ums','u.id = ums.user_id','INNER');
-		$this->db->join('student_assigned_courses ca','u.id = ca.student_id','INNER');
-		$this->db->where(array('ca.campus_id'=>$campus_id,'ca.batch_id'=>$batch_id,'ca.degree_id'=>$degree_id,'ca.semester_id'=>$semester_id));
+        $this->db->join('user_map_student_details ums','u.id = ums.user_id','INNER');
+		//$this->db->join('student_assigned_courses ca','u.id = ca.student_id','LEFT');
+		$this->db->where(array('ums.campus_id'=>$campus_id,'ums.batch_id'=>$batch_id,'ums.degree_id'=>$degree_id));
 		$this->db->group_by('u.id');
-		$this->db->order_by('u.first_name,u.last_name');
+		$this->db->order_by('u.user_unique_id');
         $result	= $this->db->get()->result();
 		return $result;
 	}
@@ -785,8 +785,8 @@ Class Master_model extends CI_Model
 			
 			if( !empty($degree_id) )
 				$this->db->where(array('c.degree_id'=>$degree_id));
-			//if( !empty($semester_id) )
-				//$this->db->where(array('c.semester_id'=>$semester_id));
+			if( !empty($semester_id) )
+				$this->db->where(array('c.semester_id'=>$semester_id));
 			if( !empty($program_id) )
 				$this->db->where(array('c.program_id'=>$program_id));
 			$this->db->_protect_identifiers = FALSE;
@@ -829,7 +829,7 @@ Class Master_model extends CI_Model
 		$this->db->join('user_map_student_details umap','umap.user_id = u.id','INNER');
 		
         $this->db->where(array('umap.campus_id'=>$cid,'umap.degree_id'=>$did,'umap.batch_id'=>$bid));
-        $result	= $this->db->get()->result();
+        $result	= $this->db->order_by('u.user_unique_id')->get()->result();
 		return $result;
 	}
 	function get_save_course_by_student($stu_id)
