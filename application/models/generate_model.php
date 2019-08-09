@@ -103,6 +103,7 @@ Class Generate_model extends CI_Model
 		$this->db->join('degrees d','d.id = umap.degree_id','left');
 	    $this->db->where_in('u.id',$student_id);
 		//echo $this->db->last_query(); die;
+		$this->db->order_by("u.user_unique_id", "asc");
         $result	= $this->db->get()->result();
 		return $result;
 	}
@@ -126,7 +127,7 @@ Class Generate_model extends CI_Model
 	    $this->db->where('dd.exam_type',$exam_type);
 	    $this->db->where('dd.semester_id',$semester_id);
 	    $this->db->group_by('u.id',$student_id);
-		
+		$this->db->order_by("u.user_unique_id", "asc");
         $result	= $this->db->get()->result();//echo $this->db->last_query(); die;
 		return $result;
 	}

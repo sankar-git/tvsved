@@ -311,6 +311,7 @@ class Course extends CI_Controller {
 		//echo $this->db->last_query();exit;
 		  //echo $this->db->last_query();exit;
 			$courseGroup=array();
+			$courseGroupArr=array();
 			$resultArray=array();
 		 foreach($subject_wise_pass_fail_list as $subject_wise_val){
 			 //if($subject_wise_val->student_id == 844){
@@ -376,8 +377,10 @@ class Course extends CI_Controller {
 			 }
 			 
 		  }//exit;
-		   if($degree_id=='1')
-			ksort($courseGroupArr);
+		   if($degree_id=='1'){
+			   if(count($courseGroupArr)>0)
+					ksort($courseGroupArr);
+		   }
 		 $data['result_marks'] =$resultArray;
 		 $data['courseGroup'] =$courseGroupArr;
 		return $data;
@@ -1223,7 +1226,6 @@ class Course extends CI_Controller {
 							}
 								//$result[$name][$groupname] = $marksArr;
 						}
-						
 					}
 					$result_marks = $this->get_academic_students($ccampus_id,$pprogram_id,$ddegree_id,$acdemic_batch_id,$ssemester_id,'','',2);
 					foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
@@ -1238,10 +1240,9 @@ class Course extends CI_Controller {
 							}
 								//$result[$name][$groupname] = $marksArr;
 						}
-						
 					}
 					//print_r($academic_student);exit;
-					if(count($academic_student)>0){
+					if(count(@$academic_student)>0){
 					   foreach($academic_student as $user_id=>$arr){ 
 					   //print_r($user_id);
 					   //print_r($arr);
