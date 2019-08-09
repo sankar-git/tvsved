@@ -406,9 +406,12 @@ class Course extends CI_Controller {
 							$result[$name][$groupname][] = @$marks->result;
 						}
 						$result[$name][$groupname] = array_unique($result[$name][$groupname]);
-						if(count($result[$name])>=3)
-							$academic_student[$marksArr[0]->student_id]=$name.'('.$marksArr[0]->user_unique_id.')';
+						if(count($result[$name])>=3){
+							//$academic_student[$marksArr[0]->student_id]=$name.'('.$marksArr[0]->user_unique_id.')';
+							$academic_student[$marksArr[0]->user_unique_id]['name']=$name;
+							$academic_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
 							//$result[$name][$groupname] = $marksArr;
+						}
 					}
 					
 				}
@@ -419,9 +422,12 @@ class Course extends CI_Controller {
 							$result[$name][$groupname][] = @$marks->result;
 						}
 						$result[$name][$groupname] = array_unique($result[$name][$groupname]);
-						if(count($result[$name])>=1)
-							$academic_student[$marksArr[0]->student_id]=$name.'('.$marksArr[0]->user_unique_id.')';
+						if(count($result[$name])>=1){
+							//$academic_student[$marksArr[0]->student_id]=$name.'('.$marksArr[0]->user_unique_id.')';
+							$academic_student[$marksArr[0]->user_unique_id]['name']=$name;
+							$academic_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
 							//$result[$name][$groupname] = $marksArr;
+						}
 					}
 					
 				}
@@ -437,13 +443,15 @@ class Course extends CI_Controller {
 		//print_r($data['students']); exit;
 		 $sid='00';
 		 $str = '';
+		
          foreach($data['students'] as $k=>$v){ 
            
           $str .= "<option value=".$v->id.">".$v->first_name.' '.$v->last_name.'('.$v->user_unique_id.')'."</option>";
            }
-		   if(count($academic_student)>0){
-			   foreach($academic_student as $k=>$v){ 
-					$str .= "<option value=".$k.">".$v."</option>";
+		   if(count(@$academic_student)>0){
+			   ksort($academic_student);
+			   foreach($academic_student as $unique_id=>$val){ 
+					$str .= "<option value=".$val['student_id'].">".$val['name'].'('.$unique_id.')'."</option>";
 			   }
 		   }
 		   
@@ -1221,10 +1229,9 @@ class Course extends CI_Controller {
 							}
 							$result[$name][$groupname] = array_unique($result[$name][$groupname]);
 							if(count($result[$name])>=3){
-								$academic_student[$marksArr[0]->student_id]['name']=$name;
-								$academic_student[$marksArr[0]->student_id]['user_unique_id']=$marksArr[0]->user_unique_id;
+								$academic_student[$marksArr[0]->user_unique_id]['name']=$name;
+								$academic_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
 							}
-								//$result[$name][$groupname] = $marksArr;
 						}
 					}
 					$result_marks = $this->get_academic_students($ccampus_id,$pprogram_id,$ddegree_id,$acdemic_batch_id,$ssemester_id,'','',2);
@@ -1235,23 +1242,20 @@ class Course extends CI_Controller {
 							}
 							$result[$name][$groupname] = array_unique($result[$name][$groupname]);
 							if(count($result[$name])>=1){
-								$academic_student[$marksArr[0]->student_id]['name']=$name;
-								$academic_student[$marksArr[0]->student_id]['user_unique_id']=$marksArr[0]->user_unique_id;
+								$academic_student[$marksArr[0]->user_unique_id]['name']=$name;
+								$academic_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
 							}
-								//$result[$name][$groupname] = $marksArr;
 						}
 					}
-					//print_r($academic_student);exit;
 					if(count(@$academic_student)>0){
-					   foreach($academic_student as $user_id=>$arr){ 
-					   //print_r($user_id);
-					   //print_r($arr);
+						ksort($academic_student);
+					   foreach($academic_student as $user_unique_id=>$arr){ 
 							$i++;
 							$checked = 'checked';
 							$trdata.='<tr>
-								  <td><input type="checkbox" name="student_id[]" value="'.$user_id.'" '.$checked.'></td>
+								  <td><input type="checkbox" name="student_id[]" value="'.$arr['student_id'].'" '.$checked.'></td>
 									<td>'.$i.'</td>
-									<td>'.$arr['user_unique_id'].'</td>
+									<td>'.$user_unique_id.'</td>
 									<td>'.$arr['name'].'</td>
 								  </tr>';
 					   }
