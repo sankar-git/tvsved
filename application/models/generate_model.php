@@ -89,6 +89,8 @@ Class Generate_model extends CI_Model
 		$this->db->join('batches b','b.id = sac.batch_id','INNER');
 	    $this->db->where(array('sac.campus_id'=>$cid,'sac.degree_id'=>$did,'sac.batch_id'=>$bid,'sac.semester_id'=>$semester_id,'sac.exam_type'=>$exam_type,'u.role_id'=>1));
 	    $this->db->group_by('sac.student_id');
+		$this->db->order_by('umap.batch_id','desc');
+	    $this->db->order_by('u.user_unique_id','asc');
         $result	= $this->db->get()->result();
 		return $result;
 	}
@@ -131,25 +133,25 @@ Class Generate_model extends CI_Model
         $result	= $this->db->get()->result();//echo $this->db->last_query(); die;
 		return $result;
 	}
-	function get_student_assigned_subjects_bvsc($stuId,$semester_id,$exam_type=1)
+	function get_student_assigned_subjects_bvsc($stuId,$semester_id,$exam_type=1,$batch_id,$degree_id)
 	{
 		$this->db->select('c.id, group_concat(distinct c.course_title order by c.course_title) as course_title,group_concat(distinct c.course_code order by c.course_code) as course_code,c.theory_credit,c.practicle_credit,csg.course_subject_name,csg.course_subject_title,c.course_subject_id,csg.course_subject_title',true);
 		$this->db->from('courses c');
 		$this->db->join('student_assigned_courses sac','sac.course_id = c.id','INNER');
 		$this->db->join('course_subject_groups csg','csg.id=c.course_subject_id','LEFT');
-		$this->db->where(array('sac.student_id'=>$stuId,'sac.semester_id'=>$semester_id,'sac.exam_type'=>$exam_type));
+		$this->db->where(array('sac.student_id'=>$stuId,'sac.semester_id'=>$semester_id,'sac.batch_id'=>$batch_id,'sac.degree_id'=>$degree_id,'sac.exam_type'=>$exam_type));
 		$this->db->group_by("c.course_subject_id");
 		$this->db->order_by("sac.course_id", "asc");
         $result	= $this->db->get()->result();
 		return $result;
 	}
-	function get_student_assigned_subjects($stuId,$semester_id,$exam_type=1)
+	function get_student_assigned_subjects($stuId,$semester_id,$exam_type=1,$batch_id,$degree_id)
 	{
 		$this->db->select('c.*');
 		$this->db->from('courses c');
 		$this->db->join('student_assigned_courses sac','sac.course_id = c.id','INNER');
 		//$this->db->where('sac.student_id',$stuId);
-		$this->db->where(array('sac.student_id'=>$stuId,'sac.semester_id'=>$semester_id,'sac.exam_type'=>$exam_type));
+		$this->db->where(array('sac.student_id'=>$stuId,'sac.semester_id'=>$semester_id,'sac.batch_id'=>$batch_id,'sac.degree_id'=>$degree_id,'sac.exam_type'=>$exam_type));
 		$this->db->order_by("sac.course_id", "asc");
         $result	= $this->db->get()->result();
 		return $result;
