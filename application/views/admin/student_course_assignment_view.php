@@ -141,7 +141,7 @@
 					</div>
 					<div class="form-group col-md-4" style="margin-top:25px;">
 					  
-						<input type="checkbox" name="include_academic_student" id="include_academic_student" onclick="getStudentByDegreeCampusBatchAndSemester();"  value="1"  / >&nbsp; <label for="examtype">Include Academic Students</label>
+						<input type="checkbox" name="include_academic_student" checked="checked" id="include_academic_student" onclick="getStudentByDegreeCampusBatchAndSemester();"  value="1"  / >&nbsp; <label for="examtype">Include Academic Students</label>
 					</div>
 					 </div>
 				   <div class="box-footer">
@@ -247,7 +247,7 @@
 					</div>
 					<div class="form-group col-md-4" style="margin-top:25px;">
 					 
-						<input type="checkbox" name="include_academic_course" id="include_academic_course"   onchange="get_student_list_course(this.value);" value="1"  / >&nbsp; <label for="examtype">Include Academic Students</label>
+						<input type="checkbox" name="include_academic_course"  checked="checked" id="include_academic_course"   onchange="get_student_list_course(this.value);" value="1"  / >&nbsp; <label for="examtype">Include Academic Students</label>
 					</div>
 					</div>
 					 <div class="box-footer">
