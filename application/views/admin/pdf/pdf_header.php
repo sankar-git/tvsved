@@ -67,7 +67,7 @@
 								   <!-- <p align="center" style=" font-size:13px; font-weight:bold;">FIRST ANNUAL BOARD B.V.Sc & A.H EXAMINATION</p>-->
 									<br/>
 									  <p align="center" style=" font-size:13px; font-weight:bold;">HALL TICKET</p>
-									<!-- <p style=" font-size:13px; font-weight:bold;"><?php echo $semester_name;?></p> -->
+									<!-- <p style=" font-size:13px; font-weight:bold;"><?php echo $semester_name;  ?></p> -->
 								
 							</td>
 						</tr>
@@ -87,7 +87,7 @@
                 </tr>
                 <tr>
 					<td width="15%" style="font-weight:bold;">Examination </td>
-                    <td>: <?php echo $semester_name;?></td> 
+                    <td>: <?php echo $semester_name; if($exam_type == 1) echo "-Annual";  if($exam_type == 2) echo "-Cap";?></td> 
                     <td align="right" style="font-weight:bold;">Month & Year </td>
                     <td>: <?php  echo $month_year;?></td>
                 </tr>
