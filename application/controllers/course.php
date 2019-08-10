@@ -1106,48 +1106,52 @@ class Course extends CI_Controller {
 		$courses=$this->input->post('course_id');
 		//$courseArr = $this->Master_model->get_student_assigned_course_ids($student_id);
 		//echo is_array($student_idArr);
-		//p($student_idArr); exit;
+		//p($_POST); exit;
 		if(is_array($student_idArr)){
 		foreach($student_idArr as $key=>$studentid){
 			//echo $studentid;exit;
 			$this->Master_model->delete_student_course_list($student_id,$semester_id,$exam_type);
-			for($i=0;$i<count($courses);$i++){
-				$course_id=$courses[$i];
-				 $data=array(
-					'campus_id'=>$campus_id,
-					'program_id'=>$program_id,
-					'degree_id'=>$degree_id,
-					'batch_id'=>$batch_id,
-					'semester_id'=>$semester_id,
-					'student_id'=>$studentid,
-					'course_id'=>$course_id,
-					'exam_type'=>$exam_type
-					
-					);
-				//print_r($data);exit;
-				//
-				$this->Master_model->save_student_course_list($data);
-			} //exit;
+			if(is_array($courses) && count($courses)>0){
+				for($i=0;$i<count($courses);$i++){
+					$course_id=$courses[$i];
+					 $data=array(
+						'campus_id'=>$campus_id,
+						'program_id'=>$program_id,
+						'degree_id'=>$degree_id,
+						'batch_id'=>$batch_id,
+						'semester_id'=>$semester_id,
+						'student_id'=>$studentid,
+						'course_id'=>$course_id,
+						'exam_type'=>$exam_type
+						
+						);
+					//print_r($data);exit;
+					//
+					$this->Master_model->save_student_course_list($data);
+				} //exit;
+			}
 		}
 		}else{
 			$this->Master_model->delete_student_course_list($student_idArr,$semester_id,$exam_type);//echo $this->db->last_query();
-			for($i=0;$i<count($courses);$i++){
-				$course_id=$courses[$i];
-				 $data=array(
-					'campus_id'=>$campus_id,
-					'program_id'=>$program_id,
-					'degree_id'=>$degree_id,
-					'batch_id'=>$batch_id,
-					'semester_id'=>$semester_id,
-					'student_id'=>$student_idArr,
-					'course_id'=>$course_id,
-					'exam_type'=>$exam_type
-					
-					);
-				//print_r($data);exit;
-				//
-				$this->Master_model->save_student_course_list($data);//echo $this->db->last_query();
-			} //exit;
+			if(is_array($courses) && count($courses)>0){
+				for($i=0;$i<count($courses);$i++){
+					$course_id=$courses[$i];
+					 $data=array(
+						'campus_id'=>$campus_id,
+						'program_id'=>$program_id,
+						'degree_id'=>$degree_id,
+						'batch_id'=>$batch_id,
+						'semester_id'=>$semester_id,
+						'student_id'=>$student_idArr,
+						'course_id'=>$course_id,
+						'exam_type'=>$exam_type
+						
+						);
+					//print_r($data);exit;
+					//
+					$this->Master_model->save_student_course_list($data);//echo $this->db->last_query();
+				} //exit;
+			}
 		}
 		
 	}
