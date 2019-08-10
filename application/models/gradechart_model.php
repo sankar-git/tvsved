@@ -10,6 +10,7 @@ Class Gradechart_model extends CI_Model
 			$this->db->select('u.user_unique_id,u.first_name,u.last_name,u.user_unique_id,b.batch_name,c.course_title,cp.campus_name,cp.campus_code,d.degree_name,d.degree_code,s.semester_name,u.created_on,c.theory_credit,c.practicle_credit');
 		$this->db->from('student_assigned_courses sac');
 		$this->db->join('users u','u.id = sac.student_id','INNER');
+		$this->db->join('user_map_student_details umap','u.id = umap.user_id','INNER');
 		$this->db->join('batches b','b.id = sac.batch_id','INNER');
 		$this->db->join('courses c','c.id = sac.course_id','INNER');
 		$this->db->join('campuses cp','cp.id = sac.campus_id','INNER');
@@ -29,7 +30,8 @@ Class Gradechart_model extends CI_Model
 	//	}
 		
 	    $this->db->group_by('sac.student_id');
-	    $this->db->order_by('u.first_name,u.last_name');
+	    $this->db->order_by('umap.batch_id','desc');
+	    $this->db->order_by('u.user_unique_id','asc');
 		
         $result	= $this->db->get()->result();//echo $this->db->last_query(); die;
 		return $result;
@@ -78,7 +80,8 @@ Class Gradechart_model extends CI_Model
 		    
 		    $this->db->where(array('sa.campus_id'=>$campus_id,'sa.degree_id'=>$degree_id,'sa.batch_id'=>$batch_id,'c.id'=>$course_id,'sa.semester_id'=>$semester_id,'sa.exam_type'=>$exam_type));$this->db->group_by('u.id');
 			
-			$this->db->order_by('u.first_name,u.last_name');
+			$this->db->order_by('ud.batch_id','desc');
+	    $this->db->order_by('u.user_unique_id','asc');
 		    $result	= $this->db->get()->result();
 			//echo $this->db->last_query();exit;
 			

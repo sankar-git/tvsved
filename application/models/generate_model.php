@@ -133,6 +133,29 @@ Class Generate_model extends CI_Model
         $result	= $this->db->get()->result();//echo $this->db->last_query(); die;
 		return $result;
 	}
+	function get_student_gally_number($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$student_id)
+	{
+		$this->db->select('u.*,s.semester_name,u.id as user_id,b.batch_name,c.campus_name,c.campus_code,d.degree_name,d.degree_code');
+		$this->db->from('users u');
+		$this->db->join('student_assigned_courses dd','dd.student_id = u.id','LEFT');
+		$this->db->join('semesters s','s.id = dd.semester_id','LEFT');
+		$this->db->join('batches b','b.id = dd.batch_id','LEFT');
+		$this->db->join('campuses c','c.id = dd.campus_id','left');
+		$this->db->join('degrees d','d.id = dd.degree_id','left');
+		
+		
+	    $this->db->where_in('u.id',$student_id);
+	    $this->db->where('dd.campus_id',$campus_id);
+	    $this->db->where('dd.program_id',$program_id);
+	    $this->db->where('dd.degree_id',$degree_id);
+	    $this->db->where('dd.batch_id',$batch_id);
+	    $this->db->where('dd.exam_type',$exam_type);
+	    $this->db->where('dd.semester_id',$semester_id);
+	    $this->db->group_by('u.id',$student_id);
+		$this->db->order_by("u.user_unique_id", "asc");
+        $result	= $this->db->get()->result();//echo $this->db->last_query(); die;
+		return $result;
+	}
 	function get_student_assigned_subjects_bvsc($stuId,$semester_id,$exam_type=1,$batch_id,$degree_id)
 	{
 		$this->db->select('c.id, group_concat(distinct c.course_title order by c.course_title) as course_title,group_concat(distinct c.course_code order by c.course_code) as course_code,c.theory_credit,c.practicle_credit,csg.course_subject_name,csg.course_subject_title,c.course_subject_id,csg.course_subject_title',true);

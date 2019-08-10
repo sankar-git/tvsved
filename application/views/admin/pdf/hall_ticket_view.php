@@ -1,4 +1,5 @@
-<?php  foreach($hall_tickets as $key=>$halldata){?>
+<?php  foreach($hall_tickets as $key=>$halldata){ 
+?>
 <?php $this->load->view('admin/pdf/pdf_header',$halldata);?>      
             <table id="table" width="100%" class="table">
 

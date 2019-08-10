@@ -69,7 +69,7 @@
                 </tr>
                 <tr>
                     <td><b>Examination</b></td>
-                    <td > : <?php echo $registered_students[0]->semester_name.'-'."Annual";?></td>
+                    <td > : <?php echo $registered_students[0]->semester_name; if($exam_type == 1) echo "-Annual"; if($exam_type == 2) echo "-Cap";?></td>
                     <td><b>Month & Year</b></td>
                     <td> : <?php if(!empty($date_of_exam)){ $doe = explode("-", $date_of_exam); $mon_nam = gregoriantojd($doe[1],$doe[0],$doe[2]);
                     echo jdmonthname($mon_nam,0).' '.$doe[2];}else{echo "Select Date of Exam";}?></td>

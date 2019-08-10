@@ -76,7 +76,7 @@ class Grade extends CI_Controller {
 	       $discipline_id=$this->input->post('discipline_id');
 	       $course_input=$this->input->post('course_id');
 	       $data['date_of_exam']=$this->input->post('date_of_exam');
-	       $exam_type=$this->input->post('exam_type');
+	       $data['exam_type']=$exam_type=$this->input->post('exam_type');
 		  // p($course_id); exit;
 		  //===========================Subject Wise Mark====================================// 
 		  if(!empty($this->input->post('subject_wise_mark')))
