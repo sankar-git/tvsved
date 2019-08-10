@@ -995,7 +995,8 @@ class Course extends CI_Controller {
 	    $send['exam_type']=$exam_type;
 		if($status_id=='2')
 		{
-			$send['semester_id']='';
+			if($program_id != 1)
+				$send['semester_id']='';
 	    //$studentCourse= $this->Master_model->get_assigned_course_id_by_student($student_id);
 		//dd($studentCourse); 
 		$courselist= $this->Master_model->get_student_course_list($send);
