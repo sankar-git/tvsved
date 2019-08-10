@@ -51,16 +51,16 @@
             </table> -->
 			<table width="100%" style="font-size:13px;padding:0px;" >
                 <tr>
-                    <td align="left" width="25px" style="vertical-align:top;font-weight:bold;">College</td>
-					<td align="left" width="250px" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $dummy_number_report[0]['campus_name'];?></td>	
-                    <td align="right" width="300px" style="vertical-align:top;font-weight:bold;">Batch</td>
-                    <td align="right"width="70px" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $dummy_number_report[0]['batch_name'];?></td>
+                    <td align="left" width="15%" style="vertical-align:top;font-weight:bold;">College</td>
+					<td align="left" width="52%" style="vertical-align:top;">:&nbsp;<?php echo $dummy_number_report[0]['campus_name'];?></td>	
+                    <td align="left" width="15%" style="vertical-align:top;font-weight:bold;">Batch</td>
+                    <td align="left"width="18%" style="vertical-align:top;">:&nbsp;<?php echo $dummy_number_report[0]['batch_name'];?></td>
                 </tr>
                 <tr>
-                    <td align="left" width="25px" style="vertical-align:top;font-weight:bold;">Examination </td>
-					<td align="left" width="200px" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $dummy_number_report[0]['semester_name'].'-'.'Annual';?></td>
-                    <td align="right" width="300px" style="vertical-align:top;font-weight:bold;">Month & Year<!--  of Exam --></td>
-                    <td align="right"width="70px" style="vertical-align:top;">:&nbsp;&nbsp;<?php  echo $month.' '.$year;?></td> 
+                    <td align="left" width="15%" style="vertical-align:top;font-weight:bold;">Examination </td>
+					<td align="left" width="52%" style="vertical-align:top;">:&nbsp;<?php echo $dummy_number_report[0]['semester_name'].'-'.'Annual';?></td>
+                    <td align="left" width="15%" style="vertical-align:top;font-weight:bold;">Month & Year<!--  of Exam --></td>
+                    <td align="left"width="18%" style="vertical-align:top;">:&nbsp;<?php  echo $month.' '.$year;?></td> 
                     
                 </tr>
             </table>

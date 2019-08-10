@@ -114,6 +114,7 @@ Class Generate_model extends CI_Model
 	{
 		$this->db->select('u.*,s.semester_name,u.id as user_id,b.batch_name,c.campus_name,c.campus_code,d.degree_name,d.degree_code,dd.dummy_value,dd.exam_month');
 		$this->db->from('users u');
+		$this->db->join('user_map_student_details umap','u.id = umap.user_id','INNER');
 		$this->db->join('tbl_dummy dd','dd.student_id = u.id','LEFT');
 		$this->db->join('semesters s','s.id = dd.semester_id','LEFT');
 		$this->db->join('batches b','b.id = dd.batch_id','LEFT');
@@ -129,7 +130,8 @@ Class Generate_model extends CI_Model
 	    $this->db->where('dd.exam_type',$exam_type);
 	    $this->db->where('dd.semester_id',$semester_id);
 	    $this->db->group_by('u.id',$student_id);
-		$this->db->order_by("u.user_unique_id", "asc");
+		$this->db->order_by('umap.batch_id','desc');
+	    $this->db->order_by('u.user_unique_id','asc');
         $result	= $this->db->get()->result();//echo $this->db->last_query(); die;
 		return $result;
 	}
@@ -137,6 +139,7 @@ Class Generate_model extends CI_Model
 	{
 		$this->db->select('u.*,s.semester_name,u.id as user_id,b.batch_name,c.campus_name,c.campus_code,d.degree_name,d.degree_code');
 		$this->db->from('users u');
+		$this->db->join('user_map_student_details umap','u.id = umap.user_id','INNER');
 		$this->db->join('student_assigned_courses dd','dd.student_id = u.id','LEFT');
 		$this->db->join('semesters s','s.id = dd.semester_id','LEFT');
 		$this->db->join('batches b','b.id = dd.batch_id','LEFT');
@@ -152,7 +155,8 @@ Class Generate_model extends CI_Model
 	    $this->db->where('dd.exam_type',$exam_type);
 	    $this->db->where('dd.semester_id',$semester_id);
 	    $this->db->group_by('u.id',$student_id);
-		$this->db->order_by("u.user_unique_id", "asc");
+		$this->db->order_by('umap.batch_id','desc');
+	    $this->db->order_by('u.user_unique_id','asc');
         $result	= $this->db->get()->result();//echo $this->db->last_query(); die;
 		return $result;
 	}
