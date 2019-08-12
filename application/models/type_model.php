@@ -835,7 +835,7 @@ Class Type_model extends CI_Model
 	{
 		if($imagepath != '')
 		{
-			$query = $this->db->query("update users set users.`user_image`= '".$imagepath."' where users.id=$id;");
+			$query = $this->db->query("update users set user_image= '".$imagepath."' where id=$id;");
 		}
 	}
 	
