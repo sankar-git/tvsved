@@ -75,7 +75,7 @@
                         
                     </td>
                 </tr>
-            </table><hr>
+            </table>
             <br />
             <table style="font-size:11px;"  width="100%">
                 <tr>

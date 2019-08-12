@@ -40,7 +40,7 @@
 
                     </td>
                 </tr> -->
-            </table><hr>
+            </table>
      
            <table width="100%" style="font-size:13px;padding:0px;" >
 

@@ -23,7 +23,7 @@
 
                     </td>
                 </tr>
-            </table><hr>
+            </table>
             <!-- <table  width="100%">
                 <tr>
                   

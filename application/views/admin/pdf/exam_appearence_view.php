@@ -63,7 +63,7 @@
                     </td>
                 </tr>
             </table>
-            <hr />
+            
 			<table width="100%" style="font-size:11px;">
 				<tr>
 					<td>1. Name : <b><?php  echo $appearData['first_name'].' '.$appearData['last_name'];?></td>

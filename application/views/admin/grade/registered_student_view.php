@@ -99,10 +99,7 @@
                     <td align="center" style=" font-size:14px;"> <p align="center" style=" font-size:14px;"><?php echo $i;?></p></td>
                     <td align="center" style=" font-size:14px;"><p align="center" style=" font-size:14px;"><?php echo $reg_students->user_unique_id;?></p><br /></td>
 					<td style=" font-size:14px; padding-left:20px;"><p align="center" style=" font-size:14px;"><?php echo $reg_students->first_name.' '.$reg_students->last_name;?></p></td>
-                    <td align="center" style=" font-size:14px;"><p align="center" style=" font-size:14px;">
-                        <?php $dor = $reg_students->created_on;
-                              $dor1 = explode(" ", $dor);
-                        echo $dor1[0];?></p></td>
+                    <td align="center" style=" font-size:14px;"><p align="center" style=" font-size:14px;"><?php echo $date_of_exam;?></p></td>
                     <td style ="font-size:12px;padding-left:10px; padding-right:10px;text-align: center;"><p align="center" style=" font-size:14px;"><?php echo "Registered";?> </p></td>
                 </tr> 
 			<?php } //exit; ?>

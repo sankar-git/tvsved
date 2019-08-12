@@ -73,7 +73,7 @@
                 </tr>
             </table>
 
-            <hr />
+            
 	<!-- <p align="center">
 	     <h5 align="center">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY </h5>
          <h6 align="center"><?php echo $aggregate_marks[0]->discipline_code.'. ('.strtoupper($aggregate_marks[0]->discipline_name).')';?></h6>
