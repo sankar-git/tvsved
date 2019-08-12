@@ -86,7 +86,7 @@
             </table>
         </div>
     </div>	
-	<?php if($key+1 < count($hall_tickets)){?>
+	<?php if($key+1 < count($hall_tickets) && (($key+1)%2)==1){?>
 	<!--<tocpagebreak>-->
 	<br/>
 	<div style="border:1px dotted #000;"></div>

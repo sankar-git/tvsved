@@ -105,6 +105,7 @@ Class Generate_model extends CI_Model
 		$this->db->join('degrees d','d.id = umap.degree_id','left');
 	    $this->db->where_in('u.id',$student_id);
 		//echo $this->db->last_query(); die;
+		$this->db->order_by('umap.batch_id','desc');
 		$this->db->order_by("u.user_unique_id", "asc");
         $result	= $this->db->get()->result();
 		return $result;
