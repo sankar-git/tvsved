@@ -354,7 +354,7 @@ class Marks extends CI_Controller {
 					}else{
 						if($exam_type == 2){
 							foreach($data['regstudentsmarks'] as $key1=>$res){
-								if($students->id == $res->id && $students->course_id == $res->course_id){
+								if($students->id == $res->id){
 									$students->theory_internal1=$res->theory_internal1;
 									$students->theory_internal2=$res->theory_internal2;
 									$students->theory_internal3=$res->theory_internal3;
