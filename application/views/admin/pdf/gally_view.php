@@ -76,7 +76,7 @@
 
 
 <body>
-<?php $this->load->view('admin/pdf/gally_header');?><br /><br />
+<?php $this->load->view('admin/pdf/gally_header');?><br />
     <div style=" font-family:sans-serif;" width="100%">
         <div id="dummy" width="100%">
             
@@ -95,7 +95,7 @@
                 <tr>
                     <td align="center" style=" font-size:14px; font-weight:bold;vertical-align:top"><?php echo $i;?></td>
                     <td align="center" style=" font-size:14px; font-weight:bold;vertical-align:top"><?php echo $dummydata['student_unique_id'];?></td>
-                    <td align="left" style=" padding-left:1px;font-size:14px; font-weight:bold;vertical-align:top">&nbsp;&nbsp;<?php echo $dummydata['first_name'].' '.$dummydata['last_name'];?></td>
+                    <td align="left" style="font-size:14px; font-weight:bold;vertical-align:top"><?php echo $dummydata['first_name'].' '.$dummydata['last_name'];?></td>
                     <td style =" font-size:8px; vertical-align:top">	
 					<table style="border:none;">
                        <?php  foreach($dummydata['subjectList'] as $key=>$subjects) {

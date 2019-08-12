@@ -1,5 +1,4 @@
 <?php //p($dummy_number_report); exit;?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +29,7 @@
 
 
 <body>
-<?php  $this->load->view('admin/pdf/dummy_header');?>
+<?php  $this->load->view('admin/pdf/dummy_header');?><br />
     <div style=" font-family:sans-serif;" width="100%">
         <div id="dummy" width="100%">
             
@@ -51,7 +50,7 @@
                     <td align="center" style=" font-size:14px; font-weight:bold;vertical-align:top"><?php echo $dummydata['student_unique_id'];?>
 					 <br /><!-- <p><?php  echo "&";?></p><p> --><?php  echo $dummydata['dummy_value'];?></p>
 					</td>
-                    <td align="center" style=" padding-left:1px;font-size:14px; font-weight:bold;vertical-align:top">&nbsp;&nbsp;<?php echo $dummydata['first_name'].' '.$dummydata['last_name'];?></td>
+                    <td align="left" style="font-size:14px; font-weight:bold;vertical-align:top"><?php echo $dummydata['first_name'].' '.$dummydata['last_name'];?></td>
                     <td align="left" style =" font-size:10px;">
 						<table style="border:none; width:100%;">
                        <?php  foreach($dummydata['subjectList'] as $key=>$subjects) {
