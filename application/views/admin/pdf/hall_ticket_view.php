@@ -24,7 +24,7 @@
 								<hr />
                                 <tr style="vertical-align:center">
                                     <td style="text-align:center;border:none;vertical-align:center">									
-                                        <div style="padding-left:20px;font-weight:bold;"><?php echo $halldata['first_name'].' '.$halldata['last_name']?> &nbsp;&nbsp;<?php echo $halldata['user_unique_id'];?></div>
+                                        <div style="padding-left:20px;font-weight:bold;"><?php echo $halldata['first_name'].' '.$halldata['last_name']?><br/><?php echo $halldata['user_unique_id'];?></div>
                                     </td>
 									<br />
                                 </tr>
