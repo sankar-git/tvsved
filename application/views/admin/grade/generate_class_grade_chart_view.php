@@ -268,7 +268,7 @@
 		var $form =$("#generate_class_grade_view");
 		$.ajax({
 			type:'POST',
-			url:'<?php echo base_url();?>marks/getCourseByIds',
+			url:'<?php echo base_url();?>marks/getCourseSeparateByIds',
 			data: $form.serialize(),
 			success: function(data){
 				//alert(data); 

@@ -4,7 +4,7 @@ Class Gradechart_model extends CI_Model
 	function get_registered_student($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id,$exam_type=1)
 	{
 		if($degree_id=='1'){
-			$this->db->select('u.user_unique_id,u.first_name,u.last_name,u.user_unique_id,b.batch_name,csg.course_subject_title as course_title,cp.campus_name,cp.campus_code,d.degree_name,d.degree_code,s.semester_name,u.created_on,c.theory_credit,c.practicle_credit');
+			$this->db->select('u.user_unique_id,u.first_name,u.last_name,u.user_unique_id,b.batch_name,c.course_title,csg.course_subject_title,cp.campus_name,cp.campus_code,d.degree_name,d.degree_code,s.semester_name,u.created_on,c.theory_credit,c.practicle_credit');
 			
 		}else
 			$this->db->select('u.user_unique_id,u.first_name,u.last_name,u.user_unique_id,b.batch_name,c.course_title,cp.campus_name,cp.campus_code,d.degree_name,d.degree_code,s.semester_name,u.created_on,c.theory_credit,c.practicle_credit');

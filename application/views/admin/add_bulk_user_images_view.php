@@ -44,7 +44,7 @@
                         </div>
             </div>
 			    <div class="row">
-				<form  id="userImages" name="userImages" method="post" enctype="multipart/form-data" >
+				<form  id="userImages" action="<?php echo base_url();?>admin/addImages/<?php echo rand(0,100);?>" name="userImages" method="post" enctype="multipart/form-data" >
 					<!--<div class="form-group col-md-4" style="text-align:left; padding-left:40px; padding-top:25px;">
 					    <label for="campus">Upload User Images<span style="color:red;font-weight: bold;">*</span></label>
 						  <input type="file"  name="userfile[]" id="userfile" multiple class="btn btn-primary">

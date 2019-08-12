@@ -1806,11 +1806,13 @@ class Admin extends CI_Controller {
 	
 	//==========++++++++++++++++++++++Upload Student Excel End+++++++++++++++++++++++=========================//
 	//==============----upload User Images-------------=======================================================//
-	function addImages()
+	function addImages($rnd='')
 	{
+		
 	  $data['page_title']='Add User Bulk Images';
+	    
 	  if($this->input->post('submit')){
-		 // p($_FILES);exit;
+		  
       $event_file =$_FILES['userfile']['name']; 
 	  $error = array();
       foreach ( $event_file as $key =>  $value) {

@@ -122,11 +122,11 @@ class Grade extends CI_Controller {
 		  //===========================Registered Students====================================// 
 		  if(!empty($this->input->post('reg_students')))
 		  {  
-			  if($degree_id=='1'){
+			 /* if($degree_id=='1'){
 				  $courseArr = explode("|",$course_input);
 				$courseArr = explode("-",$courseArr[1]);
-			  }
-		   $course_id=$courseArr;
+			  }*/
+		   $course_id=$course_input;
 		   
 		   //p($courseid); exit;
 	       //$course_id=$courseid[0]; 
@@ -421,12 +421,12 @@ class Grade extends CI_Controller {
 		  	$data['month']=$month=$this->input->post('month');
 	       $data['year']=$year=$this->input->post('year');
 		  $data['course_count'] =  1;
-		 if($degree_id == 1){
+		 /*if($degree_id == 1){
 		   $courseArr = explode("|",$course_input);
 		   $courseArr = explode("-",$courseArr[1]);
 		   $course_input=$courseArr[0];
 		  $data['course_count'] =  count($courseArr);
-		 }
+		 }*/
 		   $data['numeralCodes'] =  array("I","II","III","IV","V","VI","VII","VIII","IX");
 		   $data['students_attendance'] = $this->Gradechart_model->get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_input,$semester_id,$exam_type);
 		   //echo $this->db->last_query();exit;

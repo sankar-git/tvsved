@@ -32,27 +32,27 @@
 
             <table width="100%"; style="font-size:13px;">
 				<tr>
-                    <td align="left" width="10%" style="vertical-align:top;font-weight:bold;">College</td>
-					<td align="left" width="25%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->campus_name;?></td>					
-					<td align="left" width="10%" style="vertical-align:top;font-weight:bold;">Batch</td>
-					<td align="left" width="20%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->batch_name;?></td>                
+                    <td align="left" width="22%" style="vertical-align:top;font-weight:bold;">College</td>
+					<td align="left" width="35%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->campus_name;?></td>					
+					<td align="left" width="8%" style="vertical-align:top;font-weight:bold;">Batch</td>
+					<td align="left" width="35%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->batch_name;?></td>                
                    
                 </tr>
                 <tr>
-                	<td align="left" width="10%" style="vertical-align:top;font-weight:bold;">Examination</td>
-					<td align="left" width="20%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->semester_name;  if($exam_type == 1) echo "-Annual"; if($exam_type == 2) echo "-Cap";?></td>
-					 <td align="left" width="10%" style="vertical-align:top;font-weight:bold;">Subject</td>
-					<td align="left" width="20%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->course_title;?></td>
+                	<td align="left" width="22%" style="vertical-align:top;font-weight:bold;">Examination</td>
+					<td align="left" width="35%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->semester_name;  if($exam_type == 1) echo "-Annual"; if($exam_type == 2) echo "-Cap";?></td>
+					 <td align="left" width="8%" style="vertical-align:top;font-weight:bold;">Subject</td>
+					<td align="left" width="35%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->course_title;?></td>
                     
                     <!-- <td align="left" width="20%" style="vertical-align:top;font-weight:bold;">Session</td>
 					<td align="left" width="20%" style="vertical-align:top;">:&nbsp;&nbsp;F.N / A.N</td> -->
                     
                 </tr>
 				<tr>
-                    <td align="left" width="10%" style="vertical-align:top;font-weight:bold;">Date of Examination</td>
-					<td align="left" width="20%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $date_of_exam;?></td>
-					<td align="left" width="10%" style="vertical-align:top;font-weight:bold;">Session</td>
-					<td align="left" width="20%" style="vertical-align:top;">:&nbsp;&nbsp;F.N / A.N</td>
+                    <td align="left" width="22%" style="vertical-align:top;font-weight:bold;">Date of Examination</td>
+					<td align="left" width="35%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $date_of_exam;?></td>
+					<td align="left" width="8%" style="vertical-align:top;font-weight:bold;">Session</td>
+					<td align="left" width="35%" style="vertical-align:top;">:&nbsp;&nbsp;F.N / A.N</td>
                     <!-- <td align="left" width="10%" style="vertical-align:top;font-weight:bold;">Degree</td>
 					<td align="left" width="20%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->degree_code;?></td> -->
                     
