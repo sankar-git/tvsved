@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>REG Students</title>
     <style>
         #table {
             border: 1px solid;
@@ -24,13 +23,14 @@
                     border: 1px solid;
                     border-collapse: collapse;
                     font-size:12px;
+					height: 31px;
                 }
     </style>
 </head>
 
 
 <body>
-    <div style="padding:10px 10px 10px 10px; width:852px; font-family:Arial, Helvetica, sans-serif;">
+    <div style="padding:10px 10px 10px 10px; width:100%; font-family:Arial, Helvetica, sans-serif;">
         <div id="dummy">
             <table>
                 <tr>
@@ -59,7 +59,7 @@
                 </tr>
             </table>
 
-            <hr />
+            
             <table width="100%" style="font-size:12px;">
                 <tr>
                     <td><b>College</b></td>
@@ -96,11 +96,11 @@
                   // print_r($dummydata); 
 				$i++;?>
                 <tr>
-                    <td align="center" style=" font-size:14px;"> <p align="center" style=" font-size:14px;"><?php echo $i;?></p></td>
-                    <td align="center" style=" font-size:14px;"><p align="center" style=" font-size:14px;"><?php echo $reg_students->user_unique_id;?></p><br /></td>
-					<td style=" font-size:14px; padding-left:20px;"><p align="center" style=" font-size:14px;"><?php echo $reg_students->first_name.' '.$reg_students->last_name;?></p></td>
-                    <td align="center" style=" font-size:14px;"><p align="center" style=" font-size:14px;"><?php echo $date_of_exam;?></p></td>
-                    <td style ="font-size:12px;padding-left:10px; padding-right:10px;text-align: center;"><p align="center" style=" font-size:14px;"><?php echo "Registered";?> </p></td>
+                    <td align="center" style=" font-size:12px;"> <p align="center" style=" font-size:12px;"><?php echo $i;?></p></td>
+                    <td align="center" style=" font-size:12px;"><p align="center" style=" font-size:12px;"><?php echo $reg_students->user_unique_id;?></p><br /></td>
+					<td style=" font-size:12px; padding-left:20px;"><p align="center" style=" font-size:12px;"><?php echo $reg_students->first_name.' '.$reg_students->last_name;?></p></td>
+                    <td align="center" style=" font-size:12px;"><p align="center" style=" font-size:12px;"><?php echo $date_of_exam;?></p></td>
+                    <td style ="font-size:12px;padding-left:10px; padding-right:10px;text-align: center;"><p align="center" style=" font-size:12px;"><?php echo "Registered";?> </p></td>
                 </tr> 
 			<?php } //exit; ?>
             </table>

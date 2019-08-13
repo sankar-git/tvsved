@@ -169,17 +169,18 @@ Class Marks_model extends CI_Model
 		$this->db->select('d.dummy_value,u.user_unique_id,u.id,u.first_name,ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark');
 		$this->db->from('student_assigned_courses c');
         $this->db->join('users  u','u.id = c.student_id','LEFT');
+        $this->db->join('user_map_student_details  umap','u.id = umap.user_id','LEFT');
         $this->db->join('tbl_dummy  d','u.id = d.student_id and c.exam_type=d.exam_type','LEFT');
 		if($data['degree_id']!=1){
 			$this->db->join('courses co','co.id = c.course_id','LEFT');
 		}
 		if(isset($data['course_id']) && $data['course_id']!=''){
-			$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.course_id ='$course_id' AND ug.exam_type ='$exam_type'",'LEFT');
+			$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.course_id ='$course_id' AND ug.exam_type ='$exam_type'  and c.batch_id=ug.batch_id",'LEFT');
 		}else{
 			if($data['degree_id']!=1){
-					$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id and ug.course_id=c.course_id  AND ug.exam_type ='$exam_type'",'LEFT');
+					$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id and ug.course_id=c.course_id  AND ug.exam_type ='$exam_type' and c.batch_id=ug.batch_id",'LEFT');
 			}else{
-				$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.exam_type ='$exam_type'",'LEFT');
+				$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.exam_type ='$exam_type'  and c.batch_id=ug.batch_id",'LEFT');
 			}
 		}
 		$this->db->where(array('c.campus_id'=>$campus_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,'c.batch_id'=>$batch_id,'c.exam_type'=>$exam_type,'u.role_id'=>1));
@@ -201,10 +202,8 @@ Class Marks_model extends CI_Model
 			$this->db->group_by('ug.student_id,ug.course_id');
 			//
 		}
-		if($marks_type == 2)
-			$this->db->order_by('u.user_unique_id');
-		else
-			$this->db->order_by('u.user_unique_id');
+		$this->db->order_by('umap.batch_id','desc');
+		$this->db->order_by('u.user_unique_id','asc');
 		
 		$result	= $this->db->get()->result();
 		if($result)

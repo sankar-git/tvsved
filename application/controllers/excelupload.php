@@ -114,13 +114,16 @@ class Excelupload extends CI_Controller {
 				 $course_Arr = explode("|",$course_id);
 				 $course_group_id = $course_Arr[0];
 				 $course_idArr = explode("-",$course_Arr[1]);
-				//print_r( $course_Arr);
 				 $courses_group = $this->Excel_model->get_course_group_by_id($course_group_id);
 				 $courses1 = $this->Excel_model->get_course_by_id($course_idArr[0]);
 				 $courses2 = $this->Excel_model->get_course_by_id($course_idArr[1]);
-				$course_title = $courses_group->course_subject_title.' ('.$courses1->course_code.','.$courses2->course_code.')';
+				 if(isset($course_idArr[2])){
+					 $courses3 = $this->Excel_model->get_course_by_id($course_idArr[2]);
+					 $course_title = $courses_group->course_subject_title.' ('.$courses1->course_code.','.$courses2->course_code.','.$courses3->course_code.')';
+				 }else
+				 	$course_title = $courses_group->course_subject_title.' ('.$courses1->course_code.','.$courses2->course_code.')';
 			 }
-			 
+			 //p($courses_group);
 			 //exit;
 			 /*$dos = $this->Generate_model->get_date_by_degree($degree_id); 
 			// echo $dos[1]->id;
@@ -142,7 +145,11 @@ class Excelupload extends CI_Controller {
 				 $exam_type_str = 'Cap';
 			 
 			// print_r($dos);exit;
-			 $credits = $this->Marks_model->get_course_credit_points($course_id);
+			$pos = strpos($course_id, '|');
+			 if ($pos !== false) {
+				 $credits = $this->Marks_model->get_course_credit_points($course_idArr[0]);
+			 }else
+				$credits = $this->Marks_model->get_course_credit_points($course_id);
 			// print_r($credits[0]->practicle_credit);//exit;
 			 //$data['students']=$this->Marks_model->get_ug_students_by_ids($campus_id,$program_id,$degree_id,$batch_id,$exam_type); 
 			  $send['campus_id']=$campus_id;
@@ -155,6 +162,7 @@ class Excelupload extends CI_Controller {
 	    $send['marks_type']=$mark_type;
 	    $send['course_id']=$course_id;
 			  $data['students']=$studentList= $this->Marks_model->get_student_assigned_marks($send);
+			  //echo $this->db->last_query();exit;
 			if($mark_type == 1 && $exam_type == 2){
 				$send['exam_type']=1;
 				$data['regstudentsmarks']=$this->Marks_model->get_student_assigned_marks($send);

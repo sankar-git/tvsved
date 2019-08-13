@@ -21,7 +21,7 @@
 
                     </td>
                 </tr>
-            </table><hr>
+            </table>
 <!-- <div align="center">
 			   <p align="center" style="font-weight:bold; font-size:16px;">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY<br />
 			   <span align="center" style=" font-size:14px; padding-top:0px;"><?php echo $students_attendance[0]->semester_name;?>&nbsp;<?php echo $students_attendance[0]->degree_code;?>&nbsp;Degree Course</span><br />
@@ -30,7 +30,7 @@
 			</div> -->
 			
 
-            <table width="100%"; style="font-size:13px;">
+            <table width="100%"; style="font-size:12px;">
 				<tr>
                     <td align="left" width="22%" style="vertical-align:top;font-weight:bold;">College</td>
 					<td align="left" width="35%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->campus_name;?></td>					
