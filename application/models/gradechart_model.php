@@ -205,6 +205,27 @@ Class Gradechart_model extends CI_Model
 		return $query->row('course_subject_title');
  
 	}
+	function get_discontinue_students($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$exam_type,$course_id=''){
+		$this->db->select('a.id,a.user_unique_id,a.first_name');
+		$this->db->from('users as a');
+		$this->db->join('user_map_student_details as b','a.id=b.user_id');
+		$this->db->where(array('b.campus_id'=>$campus_id,'b.degree_id'=>$degree_id,'b.batch_id'=>$batch_id));
+		$query = "a.id not in (select student_id from student_assigned_courses  
+				where campus_id =  '$campus_id'
+				AND program_id =  '$program_id'
+				AND degree_id =  '$degree_id'
+				AND batch_id =  '$batch_id'
+				AND semester_id =  '$semester_id'
+				AND exam_type =  '$exam_type'";
+		if(!empty($course_id))
+			$query.= " AND course_id='$course_id' ";
+		$query.= ")";
+		$this->db->where($query, NULL, FALSE);
+		$this->db->order_by('a.user_unique_id');
+		$result=$this->db->get()->result();//echo $this->db->last_query();
+		
+		return $result;
+	}
 	
 	
 	

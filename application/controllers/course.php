@@ -1189,6 +1189,7 @@ class Course extends CI_Controller {
 		$ssemester_id=$this->input->post('ssemester_id');
 		$discipline_id=$this->input->post('discipline_id');
 		$course_id=$this->input->post('course_id');
+		$exam_type=$this->input->post('exam_type');
 	    $send['campus_id']=$ccampus_id;
 	    $send['program_id']=$pprogram_id;
 	    $send['degree_id']=$ddegree_id;
@@ -1252,6 +1253,7 @@ class Course extends CI_Controller {
 							}
 						}
 					}
+					$student_res = $this->Gradechart_model->get_discontinue_students($ccampus_id,$pprogram_id,$ddegree_id,$acdemic_batch_id,$ssemester_id,$exam_type,'');
 					if(count(@$academic_student)>0){
 						ksort($academic_student);
 					   foreach($academic_student as $user_unique_id=>$arr){ 
@@ -1264,6 +1266,19 @@ class Course extends CI_Controller {
 									<td>'.$arr['name'].'</td>
 								  </tr>';
 					   }
+				   }
+				   if(count(@$student_res)>0){
+					   foreach($student_res as $key=>$arrobj){ 
+							$i++;
+							$checked = 'checked';
+							$trdata.='<tr>
+								  <td><input type="checkbox" name="student_id[]" value="'.$arrobj->id.'" '.$checked.'></td>
+									<td>'.$i.'</td>
+									<td>'.$arrobj->user_unique_id.'</td>
+									<td>'.$arrobj->first_name.'</td>
+								  </tr>';
+					   }
+					   
 				   }
 				}
 			}

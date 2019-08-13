@@ -1061,7 +1061,11 @@ class Admin extends CI_Controller {
 				if(empty($saved['city_id']))
 					$saved['city_id']=0;
 				$saved['marks_obtained']=$this->input->post('marks_obtained');
+				if(empty($country_id))
+					$country_id=0;
 				$saved['country_id']=$country_id;
+				if(empty($state_id))
+					$state_id=0;
 				$saved['state_id']=$state_id;
 				if($user_type>0)
 					$save['role_id']=$user_type;
@@ -1086,6 +1090,8 @@ class Admin extends CI_Controller {
 				$saved['quota']=$quota;
 				
 				$saved['month_passing']=$monthpassing;
+				if(empty($yearpassing))
+					$yearpassing=0;
 				$saved['year_passing']=$yearpassing;
 				$saved['medium_instr']=$medium_instr;
 				$saved['mode_of_admission']=$modeofadmission;
