@@ -212,9 +212,24 @@ Class Generate_model extends CI_Model
 	}
 	function save_dummy_number_for_students($data)
 	{
+		$this->db->select('d.id');
+		  $this->db->from('tbl_dummy d');
+		  $this->db->where(array('d.college_id'=>$data['college_id'],'d.program_id'=>$data['program_id'],'d.semester_id'=>$data['semester_id'],'d.batch_id'=>$data['batch_id'],'d.degree_id'=>$data['degree_id'],'d.student_id'=>$data['student_id']));
+		  $result=$this->db->get()->result();
+			if( count($result)>0 )
+			{
+				/*$id = $result[0]->id;
+				$this->db->where('id',$id);
+				$this->db->update('tbl_dummy',$data);
+				return $id;*/	
+				return $result[0]->id;
+			}else{
+				$this->db->insert('tbl_dummy',$data);
+				$insert_id = $this->db->insert_id();
+			}
+		return $insert_id;
 		    //print_r($data); exit;
-			$this->db->insert('tbl_dummy',$data);
-			$insert_id = $this->db->insert_id();
+			
 	}
 	function checking_dummy_number_already_exists($data)
 	{
@@ -235,6 +250,14 @@ Class Generate_model extends CI_Model
 		$this->db->select('d.*');
 		$this->db->from('tbl_dummy d');
 		$this->db->where(array('d.college_id'=>$campus_id,'d.program_id'=>$program_id,'d.semester_id'=>$semester_id,'d.batch_id'=>$batch_id,'d.degree_id'=>$degree_id,'d.student_id'=>$student_id,'d.exam_type'=>$exam_type));
+        $result	= count($this->db->get()->row());
+		return $result;
+	}
+	function check_already_inserted_dummy($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$dummy_value)
+	{
+		$this->db->select('d.*');
+		$this->db->from('tbl_dummy d');
+		$this->db->where(array('d.college_id'=>$campus_id,'d.program_id'=>$program_id,'d.semester_id'=>$semester_id,'d.batch_id'=>$batch_id,'d.degree_id'=>$degree_id,'d.exam_type'=>$exam_type,'d.dummy_value'=>$dummy_value));
         $result	= count($this->db->get()->row());
 		return $result;
 	}

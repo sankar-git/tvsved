@@ -90,19 +90,11 @@ class Dummy extends CI_Controller {
 			$exam_type=$this->input->post('exam_type'); 
 			//get student list by college,batch and degree
 			$data['students'] =  $this->Generate_model->get_students_for_dummy($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type);
+			//echo $this->db->last_query();
 			//p($data['students']); exit;
 			$alreadyList=array();
 			foreach($data['students'] as $students){
-				    $checkdata=$this->checking_dummy_number($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$students->id);
-					//print_r($checkdata); exit;
-					if($checkdata==1)
-					{
-						//echo "hello"; exit;
-					}
-					else
-					{
-					  //echo "hell000o"; exit;
-					$gen_rand=rand($range_from,$range_to);
+					$gen_rand=$this->checking_dummy_number($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$range_from,$range_to);
 				    $save['student_id'] =  $students->id;   
 				    $save['exam_month'] =  $month_name;   
 				    $save['college_id'] =  $campus_id;   
@@ -113,20 +105,24 @@ class Dummy extends CI_Controller {
 				    $save['degree_id'] =   $degree_id;   
 				    $save['dummy_value'] = $gen_rand;
 				    $save['created_on'] =  $register_date_time;
-					//print_r($save); 
-					
 					$this->Generate_model->save_dummy_number_for_students($save);
-					}
+					
 			} //exit;
 			$this->session->set_flashdata('message', 'Dummy number generated successfully.');
 			redirect('dummy/generateDummy');	
 		 }
          $this->load->view('admin/dummy_number_view',$data);
 	}
-	function checking_dummy_number($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$student_id)
+	function checking_dummy_number($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$range_from,$range_to)
 	{
-		$RowVal=$this->Generate_model->check_already_inserted_dummy_row($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$student_id);
-		return $RowVal;
+		$gen_rand=rand($range_from,$range_to);
+		//$gen_rand=34567;
+		$retval=$this->Generate_model->check_already_inserted_dummy($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$gen_rand);
+		if($retval>0){
+			$this->checking_dummy_number($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type,$range_from,$range_to);
+		}else{
+			return $gen_rand;
+		}
 	}
 	function addExamDate()
 	{    
