@@ -166,8 +166,8 @@ Class Gradechart_model extends CI_Model
 				//echo $this->db->last_query();echo "<br>";
 		//}
 			//print_r($courseresult[$key]);
-			//print_r($courseresult);exit;
-			$final_array[] = (object) array_merge($courseresult[0], $result_val);
+			//print_r($result_val);
+			$final_array[] = (object) array_merge(@$courseresult[0], @$result_val);
 			//print_r($final_array);exit;
 			
 		}

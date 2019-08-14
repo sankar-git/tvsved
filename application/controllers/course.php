@@ -394,6 +394,7 @@ class Course extends CI_Controller {
 		$degree_id=$this->input->post('degree_id');
 		$batch_id=$this->input->post('batch_id');
 		$semester_id=$this->input->post('semester_id');
+		$exam_type=$this->input->post('exam_type');
 		$include_academic_student=$this->input->post('include_academic_student');
 		$academic_student=array();
 		if($include_academic_student == 1){
@@ -440,10 +441,16 @@ class Course extends CI_Controller {
 		$send['semester_id']=$semester_id;
 		$data['students']=$this->Master_model->get_student_by_degree_campus_batch_semester($send); //get student dropdown
 		
-		//print_r($data['students']); exit;
+		
+		
 		 $sid='00';
 		 $str = '';
-		
+		$student_res = $this->Gradechart_model->get_discontinue_students($campus_id,$program_id,$degree_id,$acdemic_batch_id,$semester_id,$exam_type,'');
+		foreach($student_res as $key=>$arrobj){
+			$academic_student[$arrobj->user_unique_id]['name']=$arrobj->first_name;
+			$academic_student[$arrobj->user_unique_id]['student_id']=$arrobj->id;
+		}
+		//p($academic_student);exit;
          foreach($data['students'] as $k=>$v){ 
            
           $str .= "<option value=".$v->id.">".$v->first_name.' '.$v->last_name.'('.$v->user_unique_id.')'."</option>";
