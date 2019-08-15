@@ -776,12 +776,18 @@ class Generate extends CI_Controller {
 	     //  print_r($course_id); exit;
 		 
 		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'',$student_id,$exam_type);
+		  if($exam_type == 2){
+			 //$data['regularResult']=$this->get_regular_marks($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$student_id);
+			    //p($regularResultArray['result_marks']);
+		// p($regularResultArray['courseGroup']);
+		  }
 		  //echo $this->db->last_query();exit;
+		 
 			$courseGroup=array();
 			$resultArray=array();
 		 foreach($data['aggregate_marks'] as $subject_wise_val){
 			 //if($subject_wise_val->student_id == 844){
-			//	p($subject_wise_val);exit;
+				//p($subject_wise_val);exit;
 			 //}
 			 if($degree_id=='1'){
 				 if(!empty($subject_wise_val->course_subject_name)){
@@ -790,7 +796,7 @@ class Generate extends CI_Controller {
 							$courseGroupArr[$subject_wise_val->coure_group_id]=$subject_wise_val->course_subject_name;
 						}
 						$name = $subject_wise_val->first_name.' '.$subject_wise_val->last_name;
-						
+						//p($courseGroupArr);exit;
 						$numbers = array( $subject_wise_val->theory_internal1,$subject_wise_val->theory_internal2,$subject_wise_val->theory_internal3); 
 						rsort($numbers);
 						//print_r($numbers);exit;
@@ -840,12 +846,13 @@ class Generate extends CI_Controller {
 				 //print_r($resultArray);exit;
 			 }
 			 
-		  }//exit;
+		  }
 		   if($degree_id=='1')
 			ksort($courseGroupArr);
 		 $data['result_marks'] =$resultArray;
 		 $data['courseGroup'] =$courseGroupArr;
-		 
+		 //p($data['result_marks']);
+		// p($data['courseGroup']);exit;
 		  //echo $this->db->last_query();exit;
 		 //p( $resultArray); 
 		// p( $courseGroupArr); exit;
@@ -1081,7 +1088,78 @@ class Generate extends CI_Controller {
 		
 		
 	}
-	
+	function get_regular_marks($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$student_id){
+		$data['regular_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'',$student_id,1);
+		$courseGroup=array();
+			$resultArray=array();
+		 foreach($data['regular_marks'] as $subject_wise_val){
+			 //if($subject_wise_val->student_id == 844){
+				//p($subject_wise_val);exit;
+			 //}
+			 if($degree_id=='1'){
+				 if(!empty($subject_wise_val->course_subject_name)){
+					 if(!in_array($subject_wise_val->course_subject_name, $courseGroup, true)){
+							array_push($courseGroup, $subject_wise_val->course_subject_name);
+							$courseGroupArr[$subject_wise_val->coure_group_id]=$subject_wise_val->course_subject_name;
+						}
+						$name = $subject_wise_val->first_name.' '.$subject_wise_val->last_name;
+						//p($courseGroupArr);exit;
+						$numbers = array( $subject_wise_val->theory_internal1,$subject_wise_val->theory_internal2,$subject_wise_val->theory_internal3); 
+						rsort($numbers);
+						//print_r($numbers);exit;
+						 $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
+						  $theory_externals=$subject_wise_val->theory_external1/5;
+						  $practical_externals=$subject_wise_val->theory_external2/5;
+						 $theory_marks_40=$theory_externals+$practical_externals;
+						  $paper1_20=$subject_wise_val->theory_paper1/3;
+						  $paper1_20s=number_format($paper1_20,2);
+						  $paper2_20=$subject_wise_val->theory_paper2/3;
+						  $paper2_20s=number_format($paper2_20,2);
+						  $paper_20=$paper1_20s+$paper2_20s;
+						  if($subject_wise_val->coure_group_id == 22){
+							  if($subject_wise_val->ncc_status == 1)
+								   $subject_wise_val->result = "SATISFACTORY"; 
+							  else 
+								  $subject_wise_val->result =  "NOT SATISFACTORY";
+						  }else{
+							  if(strtoupper(trim($subject_wise_val->theory_paper1)) == 'A' || strtoupper(trim($subject_wise_val->theory_paper2)) == 'A' || strtoupper(trim($subject_wise_val->theory_paper3)) == 'A' || strtoupper(trim($subject_wise_val->theory_paper4)) == 'A' || strtoupper(trim($subject_wise_val->theory_external1)) == 'A' || strtoupper(trim($subject_wise_val->theory_external2)) == 'A' || strtoupper(trim($subject_wise_val->theory_external3)) == 'A' || strtoupper(trim($subject_wise_val->theory_external4)) == 'A'){
+								  $subject_wise_val->result = "ABSENT"; 
+							  }else if(trim($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && trim($theory_internal_total+$theory_marks_40+$paper_20)>=50) 
+								  $subject_wise_val->result = "PP"; 
+							  else 
+								  $subject_wise_val->result =  "FAIL";
+						  }
+					$resultArray[$name][$subject_wise_val->course_subject_name][]=$subject_wise_val;
+					//print_r($resultArray);exit;
+				 }
+			 }else{
+				 $name = $subject_wise_val->first_name.' '.$subject_wise_val->last_name;
+				  if(!in_array($subject_wise_val->course_code, $courseGroup, true)){
+							array_push($courseGroup, $subject_wise_val->course_code);
+							$courseGroupArr[$subject_wise_val->course_code]=$subject_wise_val->course_code;
+						}
+				 if($subject_wise_val->theory_credit > 0 && $subject_wise_val->practicle_credit > 0) 
+					$total_internal_sum = number_format($subject_wise_val->theory_internal1 + $subject_wise_val->practical_internal,2);
+				elseif($subject_wise_val->theory_credit > 0 ) 
+					$total_internal_sum = $subject_wise_val->theory_internal1;
+				elseif($subject_wise_val->practicle_credit > 0 )
+					$total_internal_sum = $subject_wise_val->practical_internal;
+				$total_internal_sum = $total_internal_sum+$subject_wise_val->assignment_mark;
+					if($total_internal_sum>=25 && $subject_wise_val->theory_external1>=25)
+						$subject_wise_val->result = "PASS"; 
+					else 
+						$subject_wise_val->result =  "FAIL";
+				 $resultArray[$name][$subject_wise_val->course_code][]=$subject_wise_val;
+				 //print_r($resultArray);exit;
+			 }
+			 
+		  }
+		   if($degree_id=='1')
+			ksort($courseGroupArr);
+		 $data['result_marks'] =$resultArray;
+		 $data['courseGroup'] =$courseGroupArr;
+		 return $data;
+	}
 	//ajax function for generate registration card
 	
 	function getProgramByCampus()

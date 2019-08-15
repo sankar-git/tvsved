@@ -91,12 +91,9 @@
                 </tr>
                 <tr>
                     <td><b>Examination</b></td>
-                    <td > : <?php echo $aggregate_marks[0]->semester_name.'-'."Annual";?></td>
+                    <td > : <?php echo $aggregate_marks[0]->semester_name; if($exam_type == 1) echo '-'."Annual"; if($exam_type == 2) echo '-'."Cap";?></td>
                     <td><b>Month & Year</b></td>
-                    <td> : <?php if(!empty($date_of_exam)){ $doe = explode("-", $date_of_exam); $mon_nam = gregoriantojd($doe[1],$doe[0],$doe[2]);
-                    echo jdmonthname($mon_nam,0).' '.$doe[2];}else{
-                        echo " Select Month & Year ";
-                    }?></td>
+                    <td> : <?php echo $month.' '.$year;?></td>
                 </tr>
             </table>
            <!--  <table class="sub-detail-tbl" style="width:100%;padding:10px 0px; margin:0px; border-collapse: collapse; margin:10px 0px;Lline-height:1.5">
@@ -131,7 +128,13 @@
 					<?php } ?>
 					<th width="10%" style="font-weight:bold;">RESULT</th>
                 </tr>
-<?php $counter=0; foreach($result_marks as $name=>$courseGroupArr){ 
+<?php $counter=0; 
+	$allResult=array();
+	$allResult['pass']=0;
+	$allResult['cap']=0;
+	$allResult['fail']=0;
+	$allResult['total']=0;
+foreach($result_marks as $name=>$courseGroupArr){ 
 			$result_str ='';
 			foreach($courseGroupArr as $groupname=>$marksArr){
 				//print_r($marks);exit;
@@ -159,30 +162,39 @@
 					else
 						$passcnt++;
 					?>
-					<td  style="padding:2px;font-size: 14px;"><?php echo $result[$name][$value];?></td>
+					<td  style="padding:2px;font-size: 14px;"><?php if(isset($result[$name][$value])) echo $result[$name][$value];else{ if($exam_type == 2) echo 'PP';}?></td>
 					<?php } ?>
-                    <td  style="padding:2px;font-size: 14px;"><?php if($passcnt == count($courseGroup)) echo "PASS";elseif($failcnt<3) echo "CAP"; else echo "FAIL";?> </td>
+                    <td  style="padding:2px;font-size: 14px;"><?php 
+					if($passcnt == count($courseGroup)){ 
+						$allResult['pass']+=1; echo "PASS";
+					}elseif($failcnt<3){ 
+						$allResult['cap']+=1; echo "CAP";
+					}else{ 
+						$allResult['fail']+=1; echo "FAIL";
+					};?> </td>
 				</tr>			
 			<?php  } ?>
             </table>  
-        </div><br />
+        </div>
+		<?php if($exam_type == 1) {?>
+		<br />
         <div class="col-md-12">
             <label class="col-md-9">No. of Passed Candidates:</label>
-            <label class="col-md-3"></label>
+            <label class="col-md-3"><?php echo $allResult['pass'];?></label>
         </div>
         <div class="col-md-12">
             <label class="col-md-9">No. of Candidates Eligible for CAP:</label>
-            <label class="col-md-3"></label>
+            <label class="col-md-3"><?php echo $allResult['cap'];?></label>
         </div>
         <div class="col-md-12">
             <label class="col-md-9">No. of Failed Candidates:</label>
-            <label class="col-md-3"></label>
+            <label class="col-md-3"><?php echo $allResult['fail'];?></label>
         </div>
         <div class="col-md-12">
             <label class="col-md-9">Total No. of Candidates:</label>
-            <label class="col-md-3"></label>
+            <label class="col-md-3"><?php echo $counter;?></label>
         </div>
-
+		<?php } ?>
         </div>
  
 </body>

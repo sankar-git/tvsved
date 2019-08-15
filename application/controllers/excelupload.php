@@ -107,6 +107,7 @@ class Excelupload extends CI_Controller {
 			 $semesters = $this->Excel_model->get_semester_by_id($semester_id);
 			 $disciplines = $this->Excel_model->get_discipline_by_id($discipline_id);
 			$pos = strpos($course_id, '|');
+			$non_credit=false;
 			 if ($pos === false) {
 				$courses = $this->Excel_model->get_course_by_id($course_id);
 				$course_title = $courses->course_title;
@@ -122,8 +123,11 @@ class Excelupload extends CI_Controller {
 					 $course_title = $courses_group->course_subject_title.' ('.$courses1->course_code.','.$courses2->course_code.','.$courses3->course_code.')';
 				 }else
 				 	$course_title = $courses_group->course_subject_title.' ('.$courses1->course_code.','.$courses2->course_code.')';
+				if(trim($courses_group->course_subject_title) == 'NON CREDIT'){
+					$non_credit=true;
+				}
 			 }
-			 //p($courses_group);
+			// p($courses_group);
 			 //exit;
 			 /*$dos = $this->Generate_model->get_date_by_degree($degree_id); 
 			// echo $dos[1]->id;
@@ -170,21 +174,23 @@ class Excelupload extends CI_Controller {
 			//p($data['students']); exit;
 			if($degree_id==1 && $program_id == 1){
             //$finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Student Name','INTERNAL FIRST(10)',' INTERNAL SECOND(10)',' INTERNAL THIRD(10)','PRACTICAL PAPER-I(60)','PRACTICAL PAPER-II(60)','EXTERNAL PAPER-I(100)','EXTERNAL PAPER-II(100)');
-			 if($mark_type == 1)
+			if($non_credit == true){
+				$finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Student ID','Student Name');
+			}elseif($mark_type == 1)
 				$finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Student ID','Student Name');
 			else
 				$finalExcelArr = array('College','Program','Degree','Batch','Semester',' Discipline','Course','Student Dummy No');
 			//if($credits[0]->theory_credit != '0' && ($mark_type == '1'|| $mark_type == '3'))
 				
 			//if($credits[0]->practicle_credit != '0' && $mark_type == '1' || $mark_type == '3')
-				if($mark_type == 1){
+				if($non_credit == true){
+					$non_credit = array('Satisfactory/Not Satisifactory');
+					$finalExcelArr = array_merge($finalExcelArr,$non_credit);
+				}elseif($mark_type == 1){
 					$theoryarr = array('Internal theory first(40)','Internal theory second(40)','Internal theory third(40)');
 					$practicalarr = array('Practical Paper I(60)','Practical Paper II(60)');
 					$finalExcelArr = array_merge($finalExcelArr,$theoryarr,$practicalarr);
-				}
-				
-			//if($mark_type == '2' || $mark_type == '3')
-				if($mark_type == 2){
+				}elseif($mark_type == 2){
 					$external = array('External Paper I(100)','External Paper II(100)');
 					$finalExcelArr = array_merge($finalExcelArr,$external);
 				}
@@ -239,7 +245,10 @@ class Excelupload extends CI_Controller {
 				$objPHPExcel->getActiveSheet()->setCellValue($cols[5].$newvar, $disciplines->discipline_name);
 				$objPHPExcel->getActiveSheet()->setCellValue($cols[6].$newvar, $course_title);
 				//$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $dateofstart);
-				if($mark_type == 1){
+				if($non_credit == true){
+					$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->user_unique_id);
+					$objPHPExcel->getActiveSheet()->setCellValue($cols[8].$newvar, $value->first_name.' '.$value->last_name);
+				}elseif($mark_type == 1){
 					$objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->user_unique_id);
 					$objPHPExcel->getActiveSheet()->setCellValue($cols[8].$newvar, $value->first_name.' '.$value->last_name);
 					if($exam_type == 2){
@@ -439,6 +448,21 @@ class Excelupload extends CI_Controller {
 			 $exam_type = $this->input->post('exam_type_1');
 			  //$dos = $this->Generate_model->get_date_by_degree($degree_id); 
 			  $credits = $this->Marks_model->get_course_credit_points($course_id);
+			  
+			  $pos = strpos($course_id, '|');
+			$non_credit=false;
+			 if ($pos === false) {
+				//$courses = $this->Excel_model->get_course_by_id($course_id);
+				//$course_title = $courses->course_title;
+			 }else{
+				 $course_Arr = explode("|",$course_id);
+				 $course_group_id = $course_Arr[0];
+				 $course_idArr = explode("-",$course_Arr[1]);
+				 $courses_group = $this->Excel_model->get_course_group_by_id($course_group_id);
+				 if(trim($courses_group->course_subject_title) == 'NON CREDIT'){
+					$non_credit=true;
+				}
+			 }
 			// echo $dos[1]->id;
 			$dateofstart='';
 			/* for($j=0;$j<count($dos);$j++)
@@ -462,12 +486,20 @@ class Excelupload extends CI_Controller {
 			 $external_arr=array();
 			for($i=1;$i<=count($rowsold);$i++)
 			{				
-				$firstrow = $rowsold[$i];
+				$firstrow = @$rowsold[$i];
+				//print_r($firstrow);exit;
 				$assignment_mark='';
-				if(($mark_type == 1 && $firstrow[9] != '') || ($mark_type == 2 && $firstrow[8] != ''))
+				if(($mark_type == 1 && $firstrow[9] != '') ||($non_credit == true && $firstrow[9] != '') || ($mark_type == 2 && $firstrow[8] != ''))
 				{
 					if($degree_id == 1 && $program_id==1){
-						if($mark_type == 1){
+						if($non_credit == true){
+							if(strtolower(trim($firstrow[9])) == 'satisfactory' || strtolower(trim($firstrow[9])) == '1'){
+								$ncc_status = 1;
+							}else{
+								$ncc_status = 0;
+							}
+							$internal_arr = array('ncc_status'=>$ncc_status);
+						}else if($mark_type == 1){
 							$internal_marks1=$firstrow[9];
 							$internal_marks2=$firstrow[10];
 							$internal_marks3=$firstrow[11];	 
@@ -478,8 +510,7 @@ class Excelupload extends CI_Controller {
 											'theory_internal3'    =>($internal_marks3) ? $internal_marks3 : '',
 											'theory_paper1'    =>($internal_practical1) ? $internal_practical1 : '',
 											'theory_paper2'    =>($internal_practical2) ? $internal_practical2 : '');
-						}
-						if($mark_type == 2){
+						}else if($mark_type == 2){
 							$theory_external1=$firstrow[8];
 							$theory_external2=$firstrow[9];
 							$external_arr = array('theory_external1'    =>($theory_external1) ? $theory_external1 : '',
@@ -537,7 +568,14 @@ class Excelupload extends CI_Controller {
 							$external_arr = array('theory_external1'    =>($theory_external1) ? $theory_external1 : '');
 						}
 					}
-					if($mark_type == 1){
+					if($non_credit == true){
+					 $stud_id = $firstrow[7];
+					 $stud = explode(' ',$firstrow[8]);
+					 
+					// print_r($stud);
+					 $students = $this->Excel_model->get_student_by_id($stud_id);
+					 $student_id = $students->id;
+					}elseif($mark_type == 1){
 					 $stud_id = $firstrow[7];
 					 $stud = explode(' ',$firstrow[8]);
 					 
@@ -578,6 +616,7 @@ class Excelupload extends CI_Controller {
 					{
 						$savedata = $this->Excel_model->save_ug_marks_excel($final_array);
 					}
+					//echo $this->db->last_query();echo "<br/>";
 					$m++;
 				}else{
 					//$this->session->set_flashdata('errormessage', 'Excel data not uploaded.');
@@ -585,6 +624,7 @@ class Excelupload extends CI_Controller {
 				}
 			}
         }
+		//exit;
 	    $this->session->set_flashdata('message', 'Excel uploaded successfully.');
         redirect(base_url().'excelupload/uploadUgMarksExcel');
     }
