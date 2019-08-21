@@ -1341,6 +1341,12 @@ class Course extends CI_Controller {
 			$i=0;
 			$prev_sem_student=array();
 			if(in_array($ssemester_id,array(4,5,6))){
+				$discontinue_res = $this->Gradechart_model->get_discontinue_students($ccampus_id,$pprogram_id,$ddegree_id,$bbatch_id,1,1,'');
+				foreach($discontinue_res as $key=>$stu_res){
+					$prev_sem_student[$stu_res->user_unique_id]['name']=$stu_res->first_name;
+					$prev_sem_student[$stu_res->user_unique_id]['student_id']=$stu_res->id;
+				}
+				//print_r($prev_sem_student);exit;
 					if($ssemester_id == 4){
 						$semester_id = 1;
 					}elseif($ssemester_id == 5){
@@ -1510,6 +1516,7 @@ class Course extends CI_Controller {
 						}
 					}
 					$student_res = $this->Gradechart_model->get_discontinue_students($ccampus_id,$pprogram_id,$ddegree_id,$acdemic_batch_id,$ssemester_id,$exam_type,'');
+					//p($student_res);exit;
 					if(count(@$academic_student)>0){
 						ksort($academic_student);
 					   foreach($academic_student as $user_unique_id=>$arr){ 
