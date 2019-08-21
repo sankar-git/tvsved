@@ -377,6 +377,7 @@ class Course extends CI_Controller {
 			 }
 			 
 		  }//exit;
+		 // p($resultArray);
 		   if($degree_id=='1'){
 			   if(count($courseGroupArr)>0)
 					ksort($courseGroupArr);
@@ -1243,7 +1244,7 @@ class Course extends CI_Controller {
 		if(is_array($student_idArr)){
 		foreach($student_idArr as $key=>$studentid){
 			//echo $studentid;exit;
-			$this->Master_model->delete_student_course_list($student_id,$semester_id,$exam_type);
+			$this->Master_model->delete_student_course_list($student_id,$semester_id,$exam_type,$batch_id);
 			if(is_array($courses) && count($courses)>0){
 				for($i=0;$i<count($courses);$i++){
 					$course_id=$courses[$i];
@@ -1265,7 +1266,7 @@ class Course extends CI_Controller {
 			}
 		}
 		}else{
-			$this->Master_model->delete_student_course_list($student_idArr,$semester_id,$exam_type);//echo $this->db->last_query();
+			$this->Master_model->delete_student_course_list($student_idArr,$semester_id,$exam_type,$batch_id);//echo $this->db->last_query();
 			if(is_array($courses) && count($courses)>0){
 				for($i=0;$i<count($courses);$i++){
 					$course_id=$courses[$i];
@@ -1442,6 +1443,7 @@ class Course extends CI_Controller {
 							}
 						}
 					}
+					//p($prev_sem_student);exit;
 					$result_marks = $this->get_academic_students($ccampus_id,$pprogram_id,$ddegree_id,$bbatch_id,$semester_id,'','',2);
 					foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
 						foreach($courseGroupArr as $groupname=>$marksArr){
@@ -1457,7 +1459,7 @@ class Course extends CI_Controller {
 					}
 					//p($result_marks);exit;
 				}
-				//p($prev_sem_student);exit;
+				
 			foreach($studentList as $students)
 			{
 				$failed_flag = true;
