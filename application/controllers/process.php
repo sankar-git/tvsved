@@ -390,7 +390,7 @@ class Process extends CI_Controller {
 		$data['courses']=$this->Process_model->get_student_assign_course($campus_id,$program_id,$degree_id,$semester_id,$batch_id);
 		//p($data['courses']); exit;
 		 $str = '';
-         foreach($data['courses'] as $k=>$v){   
+         foreach($data['courses'] as $k=>$v){
           $str .= "<option value=".$v->id.">".$v->course_title."</option>";
          }
 		echo $str;

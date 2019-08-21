@@ -90,7 +90,7 @@ class Dummy extends CI_Controller {
 			$exam_type=$this->input->post('exam_type'); 
 			//get student list by college,batch and degree
 			$data['students'] =  $this->Generate_model->get_students_for_dummy($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$exam_type);
-			//echo $this->db->last_query();
+			//echo $this->db->last_query();exit;
 			//p($data['students']); exit;
 			$alreadyList=array();
 			foreach($data['students'] as $students){
@@ -102,9 +102,14 @@ class Dummy extends CI_Controller {
 				    $save['program_id'] =    $program_id;   
 				    $save['semester_id'] =    $semester_id;
 				    $save['exam_type'] =    $exam_type;   
-				    $save['degree_id'] =   $degree_id;   
-				    $save['dummy_value'] = $gen_rand;
+				    $save['degree_id'] =   $degree_id;
+					if(!empty($gen_rand)){
+						$save['dummy_value'] = $gen_rand;
+					}else{
+						echo "Dummy Value Empty for $students->id";exit;
+					}
 				    $save['created_on'] =  $register_date_time;
+					//p($save);exit;
 					$this->Generate_model->save_dummy_number_for_students($save);
 					
 			} //exit;

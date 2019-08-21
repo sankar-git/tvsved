@@ -441,20 +441,146 @@ class Course extends CI_Controller {
 		$send['semester_id']=$semester_id;
 		$data['students']=$this->Master_model->get_student_by_degree_campus_batch_semester($send); //get student dropdown
 		
-		
+		$ssemester_id=$semester_id;
 		
 		 $sid='00';
 		 $str = '';
-		$student_res = $this->Gradechart_model->get_discontinue_students($campus_id,$program_id,$degree_id,$acdemic_batch_id,$semester_id,$exam_type,'');
+		$prev_sem_student=array();
+		if(in_array($ssemester_id,array(4,5,6))){
+			if($ssemester_id == 4){
+				$semester_id = 1;
+			}elseif($ssemester_id == 5){
+				$semester_id = 1;
+				$result_marks = $this->get_academic_students($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'','',1);
+				foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+					foreach($courseGroupArr as $groupname=>$marksArr){
+						foreach($marksArr as $key=>$marks){
+							$result[$name][$groupname][] = @$marks->result;
+						}
+						$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+						if(count($result[$name])>=3){
+							$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+							$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+						}
+					}
+				}
+				$result_marks = $this->get_academic_students($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'','',2);
+				foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+					foreach($courseGroupArr as $groupname=>$marksArr){
+						foreach($marksArr as $key=>$marks){
+							$result[$name][$groupname][] = @$marks->result;
+						}
+						$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+						if(count($result[$name])>=1){
+							$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+							$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+						}
+					}
+				}
+				$semester_id = $ssemester_id-1;
+			}else if($ssemester_id == 6){
+				$semester_id = 1;
+				$result_marks = $this->get_academic_students($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'','',1);
+				foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+					foreach($courseGroupArr as $groupname=>$marksArr){
+						foreach($marksArr as $key=>$marks){
+							$result[$name][$groupname][] = @$marks->result;
+						}
+						$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+						if(count($result[$name])>=3){
+							$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+							$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+						}
+					}
+				}
+				$result_marks = $this->get_academic_students($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'','',2);
+				foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+					foreach($courseGroupArr as $groupname=>$marksArr){
+						foreach($marksArr as $key=>$marks){
+							$result[$name][$groupname][] = @$marks->result;
+						}
+						$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+						if(count($result[$name])>=1){
+							$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+							$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+						}
+					}
+				}
+				$semester_id = 4;
+				$result_marks = $this->get_academic_students($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'','',1);
+				foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+					foreach($courseGroupArr as $groupname=>$marksArr){
+						foreach($marksArr as $key=>$marks){
+							$result[$name][$groupname][] = @$marks->result;
+						}
+						$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+						if(count($result[$name])>=3){
+							$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+							$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+						}
+					}
+				}
+				$result_marks = $this->get_academic_students($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'','',2);
+				foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+					foreach($courseGroupArr as $groupname=>$marksArr){
+						foreach($marksArr as $key=>$marks){
+							$result[$name][$groupname][] = @$marks->result;
+						}
+						$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+						if(count($result[$name])>=1){
+							$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+							$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+						}
+					}
+				}
+				$semester_id = $ssemester_id-1;
+			}
+			
+			$result_marks = $this->get_academic_students($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'','',1);
+			foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+				foreach($courseGroupArr as $groupname=>$marksArr){
+					foreach($marksArr as $key=>$marks){
+						$result[$name][$groupname][] = @$marks->result;
+					}
+					$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+					if(count($result[$name])>=3){
+						$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+						$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+					}
+				}
+			}
+			$result_marks = $this->get_academic_students($campus_id,$program_id,$degree_id,$batch_id,$semester_id,'','',2);
+			foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+				foreach($courseGroupArr as $groupname=>$marksArr){
+					foreach($marksArr as $key=>$marks){
+						$result[$name][$groupname][] = @$marks->result;
+					}
+					$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+					if(count($result[$name])>=1){
+						$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+						$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+					}
+				}
+			}
+			//p($result_marks);exit;
+		}
+		//p($academic_student);exit;
+		foreach($data['students'] as $k=>$v){ 
+			$failed_flag = true;
+			if(count($prev_sem_student)>0){
+				if(isset($prev_sem_student[$v->user_unique_id]))
+					$failed_flag = false;
+			}
+			if($failed_flag){
+				$str .= "<option value=".$v->id.">".$v->first_name.' '.$v->last_name.'('.$v->user_unique_id.')'."</option>";
+			}
+		}
+		   
+		   $student_res = $this->Gradechart_model->get_discontinue_students($campus_id,$program_id,$degree_id,$acdemic_batch_id,$semester_id,$exam_type,'');
 		foreach($student_res as $key=>$arrobj){
 			$academic_student[$arrobj->user_unique_id]['name']=$arrobj->first_name;
 			$academic_student[$arrobj->user_unique_id]['student_id']=$arrobj->id;
 		}
-		//p($academic_student);exit;
-         foreach($data['students'] as $k=>$v){ 
-           
-          $str .= "<option value=".$v->id.">".$v->first_name.' '.$v->last_name.'('.$v->user_unique_id.')'."</option>";
-           }
 		   if(count(@$academic_student)>0){
 			   ksort($academic_student);
 			   foreach($academic_student as $unique_id=>$val){ 
@@ -1185,6 +1311,7 @@ class Course extends CI_Controller {
            echo $str;
 		
 	}
+	
 	function getStudentListByCourse()
 	{
 		//print_r($_POST); exit;
@@ -1211,23 +1338,143 @@ class Course extends CI_Controller {
 	
 		$trdata='';
 			$i=0;
+			$prev_sem_student=array();
+			if(in_array($ssemester_id,array(4,5,6))){
+					if($ssemester_id == 4){
+						$semester_id = 1;
+					}elseif($ssemester_id == 5){
+						$semester_id = 1;
+						$result_marks = $this->get_academic_students($ccampus_id,$pprogram_id,$ddegree_id,$bbatch_id,$semester_id,'','',1);
+						foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+							foreach($courseGroupArr as $groupname=>$marksArr){
+								foreach($marksArr as $key=>$marks){
+									$result[$name][$groupname][] = @$marks->result;
+								}
+								$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+								if(count($result[$name])>=3){
+									$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+									$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+								}
+							}
+						}
+						$result_marks = $this->get_academic_students($ccampus_id,$pprogram_id,$ddegree_id,$bbatch_id,$semester_id,'','',2);
+						foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+							foreach($courseGroupArr as $groupname=>$marksArr){
+								foreach($marksArr as $key=>$marks){
+									$result[$name][$groupname][] = @$marks->result;
+								}
+								$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+								if(count($result[$name])>=1){
+									$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+									$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+								}
+							}
+						}
+						$semester_id = $ssemester_id-1;
+					}else if($ssemester_id == 6){
+						$semester_id = 1;
+						$result_marks = $this->get_academic_students($ccampus_id,$pprogram_id,$ddegree_id,$bbatch_id,$semester_id,'','',1);
+						foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+							foreach($courseGroupArr as $groupname=>$marksArr){
+								foreach($marksArr as $key=>$marks){
+									$result[$name][$groupname][] = @$marks->result;
+								}
+								$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+								if(count($result[$name])>=3){
+									$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+									$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+								}
+							}
+						}
+						$result_marks = $this->get_academic_students($ccampus_id,$pprogram_id,$ddegree_id,$bbatch_id,$semester_id,'','',2);
+						foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+							foreach($courseGroupArr as $groupname=>$marksArr){
+								foreach($marksArr as $key=>$marks){
+									$result[$name][$groupname][] = @$marks->result;
+								}
+								$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+								if(count($result[$name])>=1){
+									$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+									$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+								}
+							}
+						}
+						$semester_id = 4;
+						$result_marks = $this->get_academic_students($ccampus_id,$pprogram_id,$ddegree_id,$bbatch_id,$semester_id,'','',1);
+						foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+							foreach($courseGroupArr as $groupname=>$marksArr){
+								foreach($marksArr as $key=>$marks){
+									$result[$name][$groupname][] = @$marks->result;
+								}
+								$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+								if(count($result[$name])>=3){
+									$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+									$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+								}
+							}
+						}
+						$result_marks = $this->get_academic_students($ccampus_id,$pprogram_id,$ddegree_id,$bbatch_id,$semester_id,'','',2);
+						foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+							foreach($courseGroupArr as $groupname=>$marksArr){
+								foreach($marksArr as $key=>$marks){
+									$result[$name][$groupname][] = @$marks->result;
+								}
+								$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+								if(count($result[$name])>=1){
+									$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+									$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+								}
+							}
+						}
+						$semester_id = $ssemester_id-1;
+					}
+					
+					$result_marks = $this->get_academic_students($ccampus_id,$pprogram_id,$ddegree_id,$bbatch_id,$semester_id,'','',1);
+					foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+						foreach($courseGroupArr as $groupname=>$marksArr){
+							foreach($marksArr as $key=>$marks){
+								$result[$name][$groupname][] = @$marks->result;
+							}
+							$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+							if(count($result[$name])>=3){
+								$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+								$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+							}
+						}
+					}
+					$result_marks = $this->get_academic_students($ccampus_id,$pprogram_id,$ddegree_id,$bbatch_id,$semester_id,'','',2);
+					foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
+						foreach($courseGroupArr as $groupname=>$marksArr){
+							foreach($marksArr as $key=>$marks){
+								$result[$name][$groupname][] = @$marks->result;
+							}
+							$result[$name][$groupname] = array_unique($result[$name][$groupname]);
+							if(count($result[$name])>=1){
+								$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
+								$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
+							}
+						}
+					}
+					//p($result_marks);exit;
+				}
+				//p($prev_sem_student);exit;
 			foreach($studentList as $students)
 			{
-				if($students->course_type=='1')
-				{
-					$course_type='FT';
+				$failed_flag = true;
+				if(count($prev_sem_student)>0){
+					if(isset($prev_sem_student[$students->user_unique_id]))
+						$failed_flag = false;
 				}
-				else{
-					$course_type='PT';
+				if($failed_flag){
+					$i++;
+					$checked = 'checked';
+					$trdata.='<tr>
+						  <td><input type="checkbox" name="student_id[]" value="'.$students->user_id.'" '.$checked.'></td>
+							<td>'.$i.'</td>
+							<td>'.$students->user_unique_id.'</td>
+							<td>'.$students->first_name.' '.$students->last_name.'</td>
+						  </tr>';
 				}
-				$i++;
-				$checked = 'checked';
-				$trdata.='<tr>
-				      <td><input type="checkbox" name="student_id[]" value="'.$students->user_id.'" '.$checked.'></td>
-						<td>'.$i.'</td>
-						<td>'.$students->user_unique_id.'</td>
-						<td>'.$students->first_name.' '.$students->last_name.'</td>
-					  </tr>';
 			}
 			$include_academic_course=$this->input->post('include_academic_course');
 			//$academic_student=array();

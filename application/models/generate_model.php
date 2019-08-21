@@ -212,16 +212,15 @@ Class Generate_model extends CI_Model
 	}
 	function save_dummy_number_for_students($data)
 	{
-		$this->db->select('d.id');
+		$this->db->select('d.id,d.dummy_value');
 		  $this->db->from('tbl_dummy d');
 		  $this->db->where(array('d.college_id'=>$data['college_id'],'d.program_id'=>$data['program_id'],'d.semester_id'=>$data['semester_id'],'d.batch_id'=>$data['batch_id'],'d.degree_id'=>$data['degree_id'],'d.student_id'=>$data['student_id']));
 		  $result=$this->db->get()->result();
-			if( count($result)>0 )
+			if( count($result)>0 &&  empty($result[0]->dummy_value))
 			{
-				/*$id = $result[0]->id;
+				$id = $result[0]->id;
 				$this->db->where('id',$id);
 				$this->db->update('tbl_dummy',$data);
-				return $id;*/	
 				return $result[0]->id;
 			}else{
 				$this->db->insert('tbl_dummy',$data);

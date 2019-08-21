@@ -363,6 +363,8 @@
 	function currentAssignDiv()
 	{
 		var assign_type =$('#assign_type').val();
+		$('#tr_list_student').html('');
+		$('#tr_list').html('');
 		
 		if(assign_type=='student')
 		{   
@@ -387,6 +389,8 @@
 	function getProgramByCampusId()
 	{
 		var campus_id =$('#campus_id').val();
+		$('#tr_list_student').html('');
+		$('#tr_list').html('');
 		$.ajax({
 			type:'POST',
 			url:'<?php echo base_url();?>course/getProgramByCampusId',
@@ -401,6 +405,8 @@
 	}
 	function ggetProgramByCampusId()
 	{
+		$('#tr_list_student').html('');
+		$('#tr_list').html('');
 		var campus_id =$('#ccampus_id').val();
 		$.ajax({
 			type:'POST',
@@ -416,6 +422,8 @@
 	}
 	function getSemesterByDegree()
 	{
+		$('#tr_list_student').html('');
+		$('#tr_list').html('');
 		var degree_id =$('#degree_id').val();
 		$.ajax({
 			type:'POST',
@@ -432,6 +440,8 @@
 	
 	function ggetSemesterByDegree()
 	{
+		$('#tr_list_student').html('');
+		$('#tr_list').html('');
 		var degree_id =$('#ddegree_id').val();
 		$.ajax({
 			type:'POST',
@@ -448,7 +458,8 @@
 	
 	function ggetDisciplineByDegreeId()
 	{
-		
+		$('#tr_list_student').html('');
+		$('#tr_list').html('');
 		var degree_id =$('#ddegree_id').val();
 		$.ajax({
 			type:'POST',
@@ -464,7 +475,8 @@
 	}
 	function getBatchByDegreeId()
 	{
-		
+		$('#tr_list_student').html('');
+		$('#tr_list').html('');
 		var degree_id =$('#degree_id').val();
 		$.ajax({
 			type:'POST',
@@ -481,7 +493,8 @@
 	
 	function ggetBatchByDegreeId()
 	{
-		
+		$('#tr_list_student').html('');
+		$('#tr_list').html('');
 		var degree_id =$('#ddegree_id').val();
 		$.ajax({
 			type:'POST',
@@ -497,6 +510,8 @@
 	}
 	function getDegreebyProgram()
 	{
+		$('#tr_list_student').html('');
+		$('#tr_list').html('');
 		var program_id =$('#program_id').val();
 		var campus_id =$('#campus_id').val();
 		$.ajax({
@@ -514,6 +529,8 @@
 	
 	function ggetDegreebyProgram()
 	{
+		$('#tr_list_student').html('');
+		$('#tr_list').html('');
 		var program_id =$('#pprogram_id').val();
 		var campus_id =$('#ccampus_id').val();
 		$.ajax({
@@ -530,6 +547,8 @@
 	}
 	function getStudentByDegreeCampusBatchAndSemester()
 	{
+		$('#tr_list_student').html('');
+		$('#tr_list').html('');
 		var $form =$("#course_approval_form");
 		$.ajax({
 			type:'POST',
