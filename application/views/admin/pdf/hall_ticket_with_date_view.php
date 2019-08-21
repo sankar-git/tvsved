@@ -56,28 +56,39 @@
                     </td>
                 </tr>
             </table>
-            <br />
-            <br />
+            <br />     
             <table width="100%">
                 <tr>
-                    <td align="left" style=" font-size:12px; font-weight:bold;text-transform: uppercase;"><div>Attested</div></td>
-                    <td align="right" style=" font-size:12px; font-weight:bold;text-transform: uppercase;"><div>Signature of the Dean</div></td>
-                    <td align="right" style=" font-size:12px; font-weight:bold;text-transform: uppercase;"><div>Signature of the Candidate</div></td>
+                    <td align="left" style="width:30%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div></div></td>
+                    <td align="center" style="width:35%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div>&nbsp;</div></td>
+                    <td align="center" style="width:30%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div>&nbsp;</div></td>
                 </tr>
 
             </table>
-            <br />
-            <br />
             <table width="100%">
                 <tr>
-                    <td align="left" style=" font-size:12px; font-weight:bold;text-transform: uppercase;"><div>University Seal</div></td>
-                    <td align="left" style=" font-size:12px; font-weight:bold; padding-left:0px;text-transform: uppercase;"><div>Controller of Examinations</div></td>
-                    <td align="right" style=" font-size:12px; font-weight:bold; padding-right:30px;text-transform: uppercase;"><div>Registrar</div></td>
+                    <td align="left" style="width:30%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div>&nbsp;</div></td>
+                    <td align="center" style="width:35%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div>Signature of the Dean</div></td>
+                    <td align="center" style="width:30%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div>Signature of the Candidate</div></td>
+                </tr>
+
+            </table>
+			<table width="100%">
+                <tr>
+                    <td align="left" style="width:30%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div>University Seal</div></td>
+                    <td align="center" style="width:35%; font-size:12px; font-weight:bold; text-transform: uppercase;"><div>&nbsp;</div></td>
+                    <td align="center" style="width:30%; font-size:12px; font-weight:bold; text-transform: uppercase;"><div>&nbsp;</div></td>
+                </tr>
+            </table>
+            <table width="100%">
+                <tr>
+                    <td align="left" style="width:30%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div>&nbsp;</div></td>
+                    <td align="center" style="width:35%; font-size:12px; font-weight:bold; text-transform: uppercase;"><div>Controller of Examinations</div></td>
+                    <td align="center" style="width:30%; font-size:12px; font-weight:bold; text-transform: uppercase;"><div>Registrar</div></td>
                 </tr>
             </table>
         </div>
     </div>
-	<?php if($key+1 < count($hall_tickets)){?>
-	<!--<tocpagebreak>-->
-	<br/><br/>
+	<?php if($key+1 < count($hall_tickets) && (($key+1)%2)==1){?>
+	<div style="border:1px dotted #000;"></div>
 	<?php } }?>

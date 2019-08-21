@@ -1809,6 +1809,45 @@ class Admin extends CI_Controller {
           $objWriter->save('php://output');
         }	
 	}
+	function read_crop(){
+		$this->load->library('image_lib');
+		$dir = "uploads/user_images/student/";
+		if (is_dir($dir)) {
+			if ($dh = opendir($dir)) {
+				while (($file = readdir($dh)) !== false) {
+					$pos = strpos($file, '_thumb');
+					if ($file == '.' || $file == '..' || $pos !== false) {
+						continue;
+					}
+					$image = explode('.',$file);
+					$isimage = $this->type_model->isuser($image[0]);
+					
+					if(isset($isimage->id))
+					{ 
+						$userid = $isimage->id;
+						$name = $file ;
+						@unlink("uploads/user_images/student/".str_replace(".","_thumb.",$name));
+						$config['image_library'] = 'gd2';
+						$config['source_image'] = "uploads/user_images/student/".$name;
+						$config['create_thumb'] = TRUE;
+						$config['maintain_ratio'] = TRUE;
+						$config['overwrite'] = TRUE;
+						$config['width']     = 200;
+						$config['height']   = 200;
+						$this->image_lib->clear();
+						$this->image_lib->initialize($config);
+						$this->image_lib->resize();
+						$name = str_replace(".","_thumb.",$name);
+						$this->type_model->addimagepath($userid,$name);
+						echo $this->db->last_query();echo "<br/>";
+					}else{
+						echo "User not exists - ".$image[0];echo "<br/>";
+					}
+				}
+				closedir($dh);
+			}
+		}
+	}
 	
 	//==========++++++++++++++++++++++Upload Student Excel End+++++++++++++++++++++++=========================//
 	//==============----upload User Images-------------=======================================================//
@@ -1821,6 +1860,7 @@ class Admin extends CI_Controller {
 		  
       $event_file =$_FILES['userfile']['name']; 
 	  $error = array();
+	  $this->load->library('image_lib');
       foreach ( $event_file as $key =>  $value) {
          $tmp_name = $_FILES["userfile"]["tmp_name"][$key];
         // $time=time();
@@ -1839,7 +1879,19 @@ class Admin extends CI_Controller {
 		 { 
 			 if(move_uploaded_file( $tmp_name ,"uploads/user_images/student/".$name))
 			 {
-				 $this->type_model->addimagepath($userid,$name);
+				 @unlink("uploads/user_images/student/".str_replace(".","_thumb.",$name));
+				$config['image_library'] = 'gd2';
+				$config['source_image'] = "uploads/user_images/student/".$name;
+				$config['create_thumb'] = TRUE;
+				$config['maintain_ratio'] = TRUE;
+				$config['overwrite'] = TRUE;
+				$config['width']     = 200;
+				$config['height']   = 200;
+				$this->image_lib->clear();
+				$this->image_lib->initialize($config);
+				$this->image_lib->resize();
+				$name = str_replace(".","_thumb.",$name);
+				$this->type_model->addimagepath($userid,$name);
 			 }
 			 
 		 }else
@@ -1850,7 +1902,7 @@ class Admin extends CI_Controller {
 		$this->session->set_flashdata('message', 'Your data sucessfully saved.');
 	else
 		$this->session->set_flashdata('error_msg',$error);
-   redirect(base_url().'admin/addImages');
+   redirect(base_url().'admin/addImages?rnd='.rand(0,100));
   }
   $data['error_msg'] = $this->session->flashdata('error_msg');
  // p($data['error_msg']);

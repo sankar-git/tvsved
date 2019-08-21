@@ -83,10 +83,10 @@
 			
             <table id="table" width="100%">
                 <tr>
-                    <th style="width:70px;">SL.No.</th>
-                    <th style="width:150px; font-size:14px; font-weight:bold;">STUDENT ID.</th>
-                    <th style="width:200px; font-size:14px; font-weight:bold;">NAME</th>
-                    <th>SUBJECTS</th>
+                    <th style="width:10%">SL.No.</th>
+                    <th style="width:20%; font-size:14px; font-weight:bold;">STUDENT ID.</th>
+                    <th style="width:30%; font-size:14px; font-weight:bold;">NAME</th>
+                    <th style="width:40%;">SUBJECTS</th>
                 </tr>
 				<?php $i=$dummy_number_report[0]['index'] ; ?>
 				<?php foreach($dummy_number_report as $dummydata){

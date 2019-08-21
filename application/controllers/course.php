@@ -448,6 +448,11 @@ class Course extends CI_Controller {
 		 $str = '';
 		$prev_sem_student=array();
 		if(in_array($ssemester_id,array(4,5,6))){
+			$discontinue_res = $this->Gradechart_model->get_discontinue_students($campus_id,$program_id,$degree_id,$batch_id,1,1,'');
+			foreach($discontinue_res as $key=>$stu_res){
+				$prev_sem_student[$stu_res->user_unique_id]['name']=$stu_res->first_name;
+				$prev_sem_student[$stu_res->user_unique_id]['student_id']=$stu_res->id;
+			}
 			if($ssemester_id == 4){
 				$semester_id = 1;
 			}elseif($ssemester_id == 5){

@@ -76,7 +76,7 @@
                     <td align="center" style="width:35%; font-size:12px; font-weight:bold; text-transform: uppercase;"><div>&nbsp;</div></td>
                     <td align="center" style="width:30%; font-size:12px; font-weight:bold; text-transform: uppercase;"><div>&nbsp;</div></td>
                 </tr>
-            </table><br/>
+            </table>
             <table width="100%">
                 <tr>
                     <td align="left" style="width:30%; font-size:12px; font-weight:bold;text-transform: uppercase;"><div>&nbsp;</div></td>
@@ -88,9 +88,7 @@
     </div>	
 	<?php if($key+1 < count($hall_tickets) && (($key+1)%2)==1){?>
 	<!--<tocpagebreak>-->
-	<br/>
 	<div style="border:1px dotted #000;"></div>
-	<br/>
 	<?php } }?>
 </body>
 </html>
