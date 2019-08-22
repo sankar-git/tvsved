@@ -751,15 +751,15 @@ Class Master_model extends CI_Model
 		$sid = $data['semester_id'];
 		$stuid = $data['student_id'];
 		$exam_type = $data['exam_type'];
+		if(empty($exam_type))
+			$exam_type =1;
 		
 		$this->db->select('courses.id,courses.course_title,courses.course_code,courses.theory_credit,courses.practicle_credit,disciplines.discipline_name,	disciplines.discipline_code,courses.status');
 		$this->db->from('courses');
         $this->db->join('disciplines','disciplines.id = courses.discipline_id','INNER');
         $this->db->join('student_assigned_courses sac','sac.course_id = courses.id','INNER');
 		$this->db->where(array('sac.program_id'=>$pid,'sac.degree_id'=>$did,'sac.semester_id'=>$sid,'sac.batch_id'=>$bid));
-		if($exam_type == 2){
-			$this->db->where('sac.exam_type',$exam_type);
-		}
+		$this->db->where('sac.exam_type',$exam_type);
 		$this->db->where_in('sac.student_id',$stuid);
         $result	= $this->db->get()->result();//echo $this->db->last_query();
 		return $result;
