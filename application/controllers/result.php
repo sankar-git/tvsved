@@ -394,7 +394,7 @@ class Result extends CI_Controller {
 		 $this->load->view('admin/generate_consolidated_view',$data);
 	}
 	function generateResult()
-	{    
+	{
 	
 	     	//print_r($_POST); exit;
 	   
@@ -407,7 +407,8 @@ class Result extends CI_Controller {
 		$month=$data['month'] =$this->input->post('month');
 		$year=$data['year'] =$this->input->post('year');
 		$student_id=$this->input->post('student_id');
-		
+        $certificate_type=$this->input->post('certificate_type');
+
 	    $send['campus_id']=$campus_id;
 	    $send['program_id']=$program_id;
 	    $send['degree_id']=$degree_id;
@@ -674,6 +675,7 @@ class Result extends CI_Controller {
 			
 			
 			//load the view and saved it into $html variable
+
 			$html=$this->load->view('admin/report/student_result_view', $data, true);
 			//$html=$this->load->view('admin/report/student_result_view_new', $data, true);
 			// print_r($html); exit;
@@ -700,6 +702,7 @@ class Result extends CI_Controller {
 					 {
 							$list['overall']=array();
 							$list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id);
+							//p($list);exit;
 							$list['first_name']  =$stuData->first_name;
 						     $list['father_name']  =$stuData->parent_name;
 						     $list['mother_name']  =$stuData->mother_name;
@@ -726,7 +729,7 @@ class Result extends CI_Controller {
 							}else{
 								if($semester_id == 4){
 									$prevlist1=$this->get_bvsc_semester_marks($stuData->user_id,1);
-									$list['previous']=$prevlist;
+									$list['previous']=$prevlist1;
 									$list['overall']['sum_subjects_credit_point'] = $prevlist1['overallReport']['sum_subjects_credit_point']+$list['overallReport']['sum_subjects_credit_point'];
 									$list['overall']['credithours'] = $prevlist1['overallReport']['credithours']+$list['overallReport']['credithours'];
 									$list['overall']['gradeval_avergage'] = $prevlist1['overallReport']['gradeval_avergage']+$list['overallReport']['gradeval_avergage'];
@@ -734,7 +737,7 @@ class Result extends CI_Controller {
 								}elseif($semester_id == 5){
 									$prevlist1=$this->get_bvsc_semester_marks($stuData->user_id,1);
 									$prevlist2=$this->get_bvsc_semester_marks($stuData->user_id,4);
-									$list['previous'] = $prevlist1;
+									$list['previous'] = $prevlist2;
 									$list['overall']['sum_subjects_credit_point'] = $prevlist1['overallReport']['sum_subjects_credit_point']+$prevlist2['overallReport']['sum_subjects_credit_point']+$list['overallReport']['sum_subjects_credit_point'];
 									$list['overall']['credithours'] = $prevlist1['overallReport']['credithours']+$prevlist2['overallReport']['credithours']+$list['overallReport']['credithours'];
 									$list['overall']['gradeval_avergage'] = $prevlist1['overallReport']['gradeval_avergage']+$prevlist2['overallReport']['gradeval_avergage']+$list['overallReport']['gradeval_avergage'];
@@ -743,7 +746,7 @@ class Result extends CI_Controller {
 									$prevlist1=$this->get_bvsc_semester_marks($stuData->user_id,1);
 									$prevlist2=$this->get_bvsc_semester_marks($stuData->user_id,4);
 									$prevlist3=$this->get_bvsc_semester_marks($stuData->user_id,5);
-									$list['previous'] = $prevlist1;
+									$list['previous'] = $prevlist3;
 									$list['overall']['sum_subjects_credit_point'] = $prevlist1['overallReport']['sum_subjects_credit_point']+$prevlist2['overallReport']['sum_subjects_credit_point']+$prevlist3['overallReport']['sum_subjects_credit_point']+$list['overallReport']['sum_subjects_credit_point'];
 									$list['overall']['credithours'] = $prevlist1['overallReport']['credithours']+$prevlist2['overallReport']['credithours']+$prevlist3['overallReport']['credithours']+$list['overallReport']['credithours'];
 									$list['overall']['gradeval_avergage'] = $prevlist1['overallReport']['gradeval_avergage']+$prevlist2['overallReport']['gradeval_avergage']+$prevlist3['overallReport']['gradeval_avergage']+$list['overallReport']['gradeval_avergage'];
@@ -757,10 +760,14 @@ class Result extends CI_Controller {
 					// p($data['aggregate_marks']); exit;
 				//p($data['result_data']); 
 				//exit;
-			
+                         //p($data);exit;
 			
 			//load the view and saved it into $html variable
-			$html=$this->load->view('admin/report/student_bvsc_result_new', $data, true);
+                if($certificate_type == 2){
+                    $html = $this->load->view('admin/report/student_bvsc_student_view', $data, true);
+                }else {
+                    $html = $this->load->view('admin/report/student_bvsc_result_new', $data, true);
+                }
 			//$html=$this->load->view('admin/report/student_result_view_new', $data, true);
 			// print_r($html); exit;
 			//this the the PDF filename that user will get to download
@@ -1893,6 +1900,7 @@ class Result extends CI_Controller {
 		foreach($subjectList as $subjectVal)
 		{
 			$data['course_id']               		= $subjectVal->id;
+			$data['courseid']               		= $subjectVal->course_id;
 			if(empty($subjectVal->course_subject_name))
 			   $course_code = $subjectVal->course_code;
 			else
@@ -1956,7 +1964,7 @@ class Result extends CI_Controller {
 				$overallReport['gradeval_avergage']=$gradeval+=$data['gradeval'];
 				$overallReport['count_subject']=$count_subject;
 			}
-			$dataList[] = $data;
+			$dataList[$data['courseid']] = $data;
 			//echo $count_subject;
 		}
 			//p($subjectVal);exit;
@@ -2053,30 +2061,33 @@ class Result extends CI_Controller {
 	    $send['degree_id']=$degree_id;
 	    $send['batch_id']=$batch_id;
 	    $send['semester_id']=$semester_id;
-	    $send['exam_type']=$exam_type;
+	    //$send['exam_type']=$exam_type;
 	    $studentList= $this->Generate_model->get_student_list_for_registration($send);
 		//echo $this->db->last_query();exit;
 	  //print_r($studentList); exit;
 	
-		$trdata='';
-			$i=0;
-			foreach($studentList as $students)
-			{
-				
-				$i++;
-				$checked = 'checked';
-				$trdata.='<tr>
-				      <td ><input type="checkbox" class="checkbox"  id="select_all" name="student_id[]" value="'.$students->user_id.'"></td>
-						<td>'.$i.'</td>
-						<td>'.$students->user_unique_id.'</td>
-						<td>'.$students->batch_name.'</td>
-						<td>'.$students->first_name.' '.$students->last_name.'</td>
+		    $trdata='';
+		    if(count($studentList)>0) {
+                $i = 0;
+                foreach ($studentList as $students) {
+
+                    $i++;
+                    $checked = 'checked';
+                    $trdata .= '<tr>
+				      <td ><input type="checkbox" class="checkbox"  id="select_all" name="student_id[]" value="' . $students->user_id . '"></td>
+						<td>' . $i . '</td>
+						<td>' . $students->user_unique_id . '</td>
+						<td>' . $students->batch_name . '</td>
+						<td>' . $students->first_name . ' ' . $students->last_name . '</td>
 						
 						
 						
 						
 					</tr>';
-			}
+                }
+            }else{
+                $trdata .= '<tr><td colspan="5" style="text-align:center;">No Records found</td></tr>';
+            }
 			echo $trdata; 
 	}
 	function getPrint()

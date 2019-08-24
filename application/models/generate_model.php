@@ -87,7 +87,14 @@ Class Generate_model extends CI_Model
 		$this->db->join('user_map_student_details umap','umap.user_id = u.id','INNER');
 		$this->db->join('student_assigned_courses sac','sac.student_id = u.id','INNER');
 		$this->db->join('batches b','b.id = sac.batch_id','INNER');
-	    $this->db->where(array('sac.campus_id'=>$cid,'sac.degree_id'=>$did,'sac.batch_id'=>$bid,'sac.semester_id'=>$semester_id,'sac.exam_type'=>$exam_type,'u.role_id'=>1));
+
+	    $this->db->where(array('sac.campus_id'=>$cid,'sac.degree_id'=>$did,'u.role_id'=>1));
+        if(!empty($bid))
+            $this->db->where(array('sac.batch_id'=>$bid));
+        if(!empty($exam_type))
+            $this->db->where(array('sac.exam_type'=>$exam_type));
+        if(!empty($semester_id))
+            $this->db->where(array('sac.semester_id'=>$semester_id));
 	    $this->db->group_by('sac.student_id');
 		$this->db->order_by('umap.batch_id','desc');
 	    $this->db->order_by('u.user_unique_id','asc');

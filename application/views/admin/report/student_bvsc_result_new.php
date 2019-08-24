@@ -56,7 +56,8 @@
                                 <tr>
                                     <td align="center">
                                         <div>
-                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;">DETAILED MARK CERTIFICATE</h5>
+                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;">DETAILED MARK CERTIFICATE<br/>
+                                             <?php echo strtoupper($student_marks['semester_name']);?></h5>
                                         </div>
                                     </td>
                                 </tr>
@@ -99,15 +100,14 @@
 			<div style="height:350px;margin:0px;padding:0px;width:100%">
             <table class="table" width="100%;" style="height:100%;border:solid 1px black;padding-top:5px;">
                 <tr>
-                    <th rowspan="3">subject</th>
+                    <th rowspan="3">Subject</th>
                     <th rowspan="3">Credit Hours</th>
                     <th colspan="4" scope="colgroup">Marks Obtained</th>
-                   <!-- <th colspan="2" scope="colgroup">PRACTICAl</th>-->
                     <th rowspan="3">Total<br/>(100)</th>
                     <th rowspan="3">Grade Point<br/>(10)</th>
                     <th rowspan="3">Credit Points</th>
 					<th rowspan="3">Result</th>
-					</tr>
+                </tr>
                 <tr>
                     <th colspan="2" scope="colgroup">Internal Assessment</th>
                     <th colspan="2" scope="colgroup">Annual Examination</th>
@@ -147,7 +147,6 @@
 			<td style="text-align:center"><?php if($subject_data['second_internal']==''){echo '';}else{echo $subject_data['second_internal'];}?></td>
 			<td style="text-align:center"><?php if($subject_data['sum_theory']==''){echo '';}else{echo $subject_data['sum_theory'];}?></td>
 			<td style="text-align:center"><?php if($subject_data['sum_practical']==''){echo '';}else{echo $subject_data['sum_practical'];}?></td>
-			
 			<?php if($subject_data['course_group_id'] == 22){ ?>
 				<td colspan="4" style="text-align:center"><?php echo $subject_data['passfail_status'];?></td>
 			<?php }else{ ?>
@@ -156,12 +155,9 @@
 			<td style="text-align:center"><?php if($subject_data['creditval']==''){echo '';}else{echo $subject_data['creditval'];}?></td>
 			<td style="text-align:center"><?php echo $subject_data['passfail_status'];?></td>
 			<?php } ?>
-
                 </tr>
-
 				<?php $i++;} for($j=$i;$j<10;$j++){    //exit; ?>
                 <tr style="border:bottom:none;" height="10px">	
-					<td>&nbsp;</td>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>

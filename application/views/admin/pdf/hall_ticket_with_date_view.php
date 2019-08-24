@@ -91,4 +91,6 @@
     </div>
 	<?php if($key+1 < count($hall_tickets) && (($key+1)%2)==1){?>
 	<div style="border:1px dotted #000;"></div>
-	<?php } }?>
+	<?php } if((($key+1)%2)==0){  ?>
+<pagebreak>
+    <?php }  } ?>

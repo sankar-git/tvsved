@@ -31,18 +31,18 @@ Class Result_model extends CI_Model
 		return $result;*/
 		$this->db->select('discipline_id,program_id,degree_id,campus_id,batch_id,semester_id,r.course_id,r.theory_internal1,r.theory_internal2,r.theory_internal3,r.theory_internal,r.theory_paper1,
 		                   r.theory_paper2,r.theory_paper3,r.theory_paper4,r.sum_internal_practical,r.practical_internal,r.theory_external1,r.theory_external2,r.theory_external3,r.theory_external4,r.practical_external,
-						   r.marks_sum,r.external_sum,assignment_mark,student_id,ncc_status');
+						   r.marks_sum,r.external_sum,assignment_mark,student_id,ncc_status,r.exam_type');
 		$this->db->from('students_ug_marks as r');
 		$this->db->where('r.student_id',$student_id);
 		if(!empty($semester_id))
 			$this->db->where('r.semester_id',$semester_id);
 		if(!empty($exam_type))
 			$this->db->where('r.exam_type',$exam_type);
-		elseif(isset($_POST['exam_type']))
-			$this->db->where('r.exam_type',$_POST['exam_type']);
+		//elseif(isset($_POST['exam_type']))
+			//$this->db->where('r.exam_type',$_POST['exam_type']);
 		
-		$this->db->order_by('student_id,id');
-		$resultArr=$this->db->get()->result_array();
+		$this->db->order_by('student_id,exam_type');
+		$resultArr=$this->db->get()->result_array();//echo $this->db->last_query();echo "<br/>";
 		$final_array=array();
 		foreach($resultArr as $key=>$result_val){
 			if($result_val['program_id'] == 1 && $result_val['degree_id'] == 1){

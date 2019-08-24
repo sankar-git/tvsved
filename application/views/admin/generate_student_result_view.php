@@ -79,7 +79,7 @@
 					</div>
 					<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Semester<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="semester_id" id="semester_id" class="form-control" >
+					  <select name="semester_id" id="semester_id" class="form-control" onchange="getStudentList();" >
 						  <option value="">Select Semester</option>
 						
 					  </select>
@@ -96,28 +96,36 @@
 						
 					  </select>
 					</div>
-					<div class="form-group col-md-3">
-					  <label for="exampleInputEmail1">Exam<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="exam_type" id="exam_type" class="form-control" onchange="getStudentList();">
-						  <option value="">Select Type</option>
-						  <option value="1">Regular</option>						  
-						  <option value="2">Cap</option>						  
-					  </select>
-					</div>
-					<!--<div class="form-group col-md-3">
-					  <label for="course-group">Date Of Start<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="date_of_start" id="date_of_start" class="form-control" >
-						  <option value="">Select Start Date</option>
-						
-					  </select>
-					</div>
-					<div class="form-group col-md-3">
-					  <label for="exampleInputEmail1">Date Of Closure<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="date_of_closure" id="date_of_closure" class="form-control" >
-						  <option value="">Select Date Of Closure</option>
-						
-					  </select>
-					</div>-->
+                    <div class="form-group col-md-3">
+                        <label for="exampleInputEmail1">Certificate Copy<span style="color:red;font-weight: bold;">*</span></label>
+                        <select name="certificate_type" id="certificate_type" class="form-control" >
+                            <option value="">Select Certificate Copy</option>
+                            <option value="1">Admin</option>
+                            <option value="2">Student</option>
+                        </select>
+                    </div>
+                    <!--<div class="form-group col-md-3">
+                      <label for="exampleInputEmail1">Exam<span style="color:red;font-weight: bold;">*</span></label>
+                      <select name="exam_type" id="exam_type" class="form-control" onchange="getStudentList();">
+                          <option value="">Select Type</option>
+                          <option value="1">Regular</option>
+                          <option value="2">Cap</option>
+                      </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="course-group">Date Of Start<span style="color:red;font-weight: bold;">*</span></label>
+                      <select name="date_of_start" id="date_of_start" class="form-control" >
+                          <option value="">Select Start Date</option>
+
+                      </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="exampleInputEmail1">Date Of Closure<span style="color:red;font-weight: bold;">*</span></label>
+                      <select name="date_of_closure" id="date_of_closure" class="form-control" >
+                          <option value="">Select Date Of Closure</option>
+
+                      </select>
+                    </div>-->
 					<div class="form-group col-md-3">
 					  <label for="month">Month<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="month" id="month">
