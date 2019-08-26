@@ -307,7 +307,6 @@ Class Result_model extends CI_Model
 		$result=$this->db->get()->result();
 		return $result;
 	}
-	
 	function get_deflicit_fail_list_btech($student_id,$semester_id)
 	{
 		//p($semester_id); exit;
@@ -320,7 +319,176 @@ Class Result_model extends CI_Model
 		$result=$this->db->get()->result();
 		return $result;
 	}
-	
-	
+    function get_student_data($student_id)
+    {
+        $this->db->select('u.*,umap.user_id,b.batch_name,b.batch_start_year,c.campus_name,c.campus_code,d.degree_name,d.degree_code,umap.parent_name,umap.mother_name');
+        $this->db->from('users u');
+        $this->db->join('user_map_student_details umap','umap.user_id = u.id','INNER');
+        $this->db->join('batches b','b.id = umap.batch_id','INNER');
+        $this->db->join('campuses c','c.id = umap.campus_id','left');
+        $this->db->join('degrees d','d.id = umap.degree_id','left');
+        $this->db->where_in('u.id',$student_id);
+        //echo $this->db->last_query(); die;
+        $this->db->order_by('umap.batch_id','desc');
+        $this->db->order_by("u.user_unique_id", "asc");
+        $result	= $this->db->get()->result();
+        return $result;
+    }
+    function get_bvsc_semester_marks($student_id,$semester_id){
+        $subjectList = $this->get_student_marks_by_id($student_id,$semester_id);
+        $dataList =array();
+        $overallReport =array();
+        $sum_subjects_credit_point=0;
+        $credithours=0;
+        $gradeval=0;
+        $count_subject=0;
+        $list['subjectList'] = array();
+        $list['overallReport'] = array();
+        if(count($subjectList)>0) {
+            foreach ($subjectList as $subjectVal) {
+               // p( $subjectVal);
+                $data['course_id'] = $subjectVal->courseid;
+                $data['courseid'] = $subjectVal->course_id;
+                if (empty($subjectVal->course_subject_name))
+                    $course_code = $subjectVal->course_code;
+                else
+                    $course_code = $subjectVal->course_subject_name;
+
+                if (empty($subjectVal->course_subject_title))
+                    $course_title = $subjectVal->course_title;
+                else
+                    $course_title = $subjectVal->course_subject_title;
+                $course_group_id = $subjectVal->coure_group_id;
+                $data['course_group_id'] = $course_group_id;
+                $data['course_code'] = $course_code;
+                $data['course_title'] = $course_title;
+                $data['theory_credit'] = $subjectVal->theory_credit;
+                $data['practicle_credit'] = $subjectVal->practicle_credit;
+                $data['theory_practical_credit'] = $data['theory_credit'] + $data['practicle_credit'];
+                if ($course_group_id == 22) {
+
+                    $data['course_code'] = $subjectVal->course_code;
+                    $data['course_title'] = $subjectVal->course_title;
+                    $data['first_internal'] = '';
+                    $data['second_internal'] = '';
+                    $data['sum_theory'] = '';
+                    $data['sum_practical'] = '';
+                    $data['gradeval'] = '';
+                    $data['creditval'] = '';
+                    $data['sum_total'] = '';
+                    $data['theory_internal'] = '';
+                } else {
+                    $numbers = array($subjectVal->theory_internal1, $subjectVal->theory_internal2, $subjectVal->theory_internal3);
+                    rsort($numbers);
+                    $data['first_internal'] = round_two_digit($numbers[0] / 4);
+                    $data['second_internal'] = round_two_digit($numbers[1] / 4);
+                    $data['theory_internal'] = round_two_digit($data['first_internal'] + $data['second_internal']);
+                    $theory_marks_40 = 0;
+                    $course_id = $subjectVal->course_id;
+                    $courseArr = explode("-", $course_id);
+                    $courseArr = explode("|", $courseArr[0]);
+                    $course_count = count($courseArr);
+                    $data['sum_theory'] = round_two_digit(($subjectVal->theory_external1 / 5) + ($subjectVal->theory_external2 / 5));
+                    $data['sum_practical'] = round_two_digit(($subjectVal->theory_paper1 / 3) + ($subjectVal->theory_paper2 / 3));
+                    $data['sum_total'] = round_two_digit($data['first_internal'] + $data['second_internal'] + $data['sum_theory'] + $data['sum_practical']);
+                    $data['gradeval'] = number_format(($data['first_internal'] + $data['second_internal'] + $data['sum_theory'] + $data['sum_practical']) / 10, 3);
+                    $data['creditval'] = number_format($data['gradeval'] * $data['theory_practical_credit'], 3);
+                }
+                $passfail_status = 'Fail';
+                if ($data['first_internal'] + $data['second_internal'] + $data['sum_theory'] >= 30 && $data['sum_practical'] >= 20) {
+                    $passfail_status = 'Pass';
+                } elseif ($subjectVal->ncc_status == 1 and $course_group_id == 22) {
+                    $passfail_status = 'Satisfactory';
+                } elseif ($course_group_id == 22) {
+                    $passfail_status = 'Not Satisfactory';
+                }
+                $data['passfail_status'] = $passfail_status;
+                if ($course_group_id != 22) {
+                    $count_subject++;
+                    $overallReport['sum_subjects_credit_point'] = $sum_subjects_credit_point += $data['creditval'];
+                    $overallReport['credithours'] = $credithours += $subjectVal->theory_credit + $subjectVal->practicle_credit;
+                    $overallReport['gradeval_avergage'] = $gradeval += $data['gradeval'];
+                    $overallReport['count_subject'] = $count_subject;
+                }
+                $dataList[$data['courseid']] = $data;
+                //echo $count_subject;
+            }
+            //p($subjectVal);exit;
+            $list['subjectList'] = $dataList;
+            $list['overallReport'] = $overallReport;
+            //p($list);exit;
+        }
+        return 	$list;
+    }
+	function get_student_results($campus_id,$program_id,$batch_id,$degree_id,$semester_id,$student_id,$month,$year){
+        $semesterRow = $this->get_semester_name($semester_id);
+        $students = $this->get_student_data($student_id);
+        foreach($students as $stuData)
+        {
+            $list['overall']=array();
+            $list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id);
+            //p($list);exit;
+            $list['first_name']  =$stuData->first_name;
+            $list['father_name']  =$stuData->parent_name;
+            $list['mother_name']  =$stuData->mother_name;
+            $list['last_name']  =$stuData->last_name;
+            $list['user_unique_id']  =$stuData->user_unique_id;
+            $list['user_image']  =$stuData->user_image;
+            $list['batch_name']  =$stuData->batch_name;
+            $list['batch_start_year']  =$stuData->batch_start_year;
+            $list['campus_name']  =$stuData->campus_name;
+            $list['campus_code']  =$stuData->campus_code;
+            $list['degree_code']  =$stuData->degree_code;
+            $list['degree_name']  =$stuData->degree_name;
+            $list['semester_name'] =$semesterRow->semester_name;
+            $list['month_year']  =$month.' '.$year;
+
+
+            if($semester_id == 1){
+                $list['previous']=array();
+                $list['overall']['sum_subjects_credit_point'] = $list['overallReport']['sum_subjects_credit_point'];
+                $list['overall']['credithours'] = $list['overallReport']['credithours'];
+                $list['overall']['gradeval_avergage'] = $list['overallReport']['gradeval_avergage'];
+                $list['overall']['count_subject'] = $list['overallReport']['count_subject'];
+
+            }else{
+                if($semester_id == 4){
+                    $prevlist1=$this->get_bvsc_semester_marks($stuData->user_id,1);
+                    $list['previous']=$prevlist1;
+                   // p($prevlist1);
+                    //p($list);
+                    if(count($prevlist1)>0){
+                        $list['overall']['sum_subjects_credit_point'] = $prevlist1['overallReport']['sum_subjects_credit_point']+@$list['overallReport']['sum_subjects_credit_point'];
+                        $list['overall']['credithours'] = $prevlist1['overallReport']['credithours']+@$list['overallReport']['credithours'];
+                        $list['overall']['gradeval_avergage'] = $prevlist1['overallReport']['gradeval_avergage']+@$list['overallReport']['gradeval_avergage'];
+                        $list['overall']['count_subject'] = $prevlist1['overallReport']['count_subject']+@$list['overallReport']['count_subject'];
+                    }
+                }elseif($semester_id == 5){
+                    $prevlist1=$this->get_bvsc_semester_marks($stuData->user_id,1);
+                    $prevlist2=$this->get_bvsc_semester_marks($stuData->user_id,4);
+                    $list['previous'] = $prevlist2;
+                    $list['overall']['sum_subjects_credit_point'] = $prevlist1['overallReport']['sum_subjects_credit_point']+@$prevlist2['overallReport']['sum_subjects_credit_point']+@$list['overallReport']['sum_subjects_credit_point'];
+                    $list['overall']['credithours'] = $prevlist1['overallReport']['credithours']+@$prevlist2['overallReport']['credithours']+@$list['overallReport']['credithours'];
+                    $list['overall']['gradeval_avergage'] = $prevlist1['overallReport']['gradeval_avergage']+@$prevlist2['overallReport']['gradeval_avergage']+@$list['overallReport']['gradeval_avergage'];
+                    $list['overall']['count_subject'] = $prevlist1['overallReport']['count_subject']+@$prevlist2['overallReport']['count_subject']+@$list['overallReport']['count_subject'];
+                }elseif($semester_id == 6){
+                    $prevlist1=$this->get_bvsc_semester_marks($stuData->user_id,1);
+                    $prevlist2=$this->get_bvsc_semester_marks($stuData->user_id,4);
+                    $prevlist3=$this->get_bvsc_semester_marks($stuData->user_id,5);
+                    $list['previous'] = $prevlist3;
+                    $list['overall']['sum_subjects_credit_point'] = $prevlist1['overallReport']['sum_subjects_credit_point']+@$prevlist2['overallReport']['sum_subjects_credit_point']+@$prevlist3['overallReport']['sum_subjects_credit_point']+@$list['overallReport']['sum_subjects_credit_point'];
+                    $list['overall']['credithours'] = $prevlist1['overallReport']['credithours']+@$prevlist2['overallReport']['credithours']+@$prevlist3['overallReport']['credithours']+@$list['overallReport']['credithours'];
+                    $list['overall']['gradeval_avergage'] = $prevlist1['overallReport']['gradeval_avergage']+@$prevlist2['overallReport']['gradeval_avergage']+@$prevlist3['overallReport']['gradeval_avergage']+@$list['overallReport']['gradeval_avergage'];
+                    $list['overall']['count_subject'] = $prevlist1['overallReport']['count_subject']+@$prevlist2['overallReport']['count_subject']+@$prevlist3['overallReport']['count_subject']+@$list['overallReport']['count_subject'];
+                }
+            }
+            $allData[$stuData->user_id] = $list;
+            //p($allData);exit;
+        } //exit;
+        return $allData;
+        $data['aggregate_marks']=$allData;
+        return $data;
+    }
+
 	
 } //end class

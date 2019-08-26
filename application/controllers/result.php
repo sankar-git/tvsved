@@ -415,373 +415,298 @@ class Result extends CI_Controller {
 	    $send['batch_id']=$batch_id;
 	  
 	    if(!empty($this->input->post('report_card')))
-		 {  
-	          
-	           
-	            $campus_id=$this->input->post('campus_id');
-				$program_id=$this->input->post('program_id');
-				$degree_id=$this->input->post('degree_id');
-				$semester_id=$this->input->post('semester_id');
-				//p($semester_id); exit;
-				$batch_id=$this->input->post('batch_id');
-				$date_of_start=$this->input->post('date_of_start');
-				$date_of_closure=$this->input->post('date_of_closure');
-				//$batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
-				$semesterRow = $this->Result_model->get_semester_name($semester_id); //getting semester name 
-				//p($semesterRow); exit;
-				//$batch_year=$batchYear->date_of_closure;
-				//$yrdata= strtotime($batch_year);
-                $monthYrr= $month.' '.$year;
-			    $student_id=$this->input->post('student_id'); //array input
-				$allData = array();
-				$students = $this->Generate_model->get_studedent_data($student_id);
-					//p($students); exit;
-					 if($degree_id!=1 || $program_id>1)
-					 {
-					 foreach($students as $stuData)
-					 {
-						$subjectList = $this->Result_model->get_student_marks_by_id($stuData->user_id,$semester_id);
-						
-						     $list['first_name']  =$stuData->first_name;
-						     $list['last_name']  =$stuData->last_name;
-						     $list['user_unique_id']  =$stuData->user_unique_id;
-						     $list['user_image']  =$stuData->user_image;
-						     $list['batch_name']  =$stuData->batch_name;
-						     $list['campus_name']  =$stuData->campus_name;
-						     $list['campus_code']  =$stuData->campus_code;
-						     $list['degree_code']  =$stuData->degree_code;
-						     $list['degree_name']  =$stuData->degree_name;
-							  $list['semester_name'] =$semesterRow->semester_name;
-							 
-						     $list['month_year']  =$monthYrr;
-						         $dataList =array();
-								 $prevSemsList=array();
-								 $total_marks='';
-								 $total_credits='';
-								 $percentval='';
-								 $gradeval='';
-								 $gradepercent='';
-								 $roundpercent='';
-								 $creditpoint='';
-								 $creditval='';
-								 $total_all_subject_sum='';
-								 $allpercent ='';
-								 $total_theory_credit='';
-								 $total_practical_credit='';
-								 $total_credit_sum='';
-								 $roundoverallpercent='';
-								 $sum_subject_credit_val='';
-								 $sum_total_credits ='';
-								 $grade_point_average ='';
-								 $internal_sum='';
-								 $external_marks='';
-								 $total_subject_marks='';
-								 foreach($subjectList as $subjectVal)
-								 {  
-                                       $data['course_id']          = $subjectVal->id;
-									   if(empty($subjectVal->course_subject_name))
-										   $course_code = $subjectVal->course_code;
-									   else
-										   $course_code = $subjectVal->course_subject_name;
-									   
-									   if(empty($subjectVal->course_subject_title))
-										   $course_title = $subjectVal->course_title;
-									   else
-										   $course_title = $subjectVal->course_subject_title;
-									   $data['course_code']        = $course_code;
-									   $data['course_title']       = $course_title;
-									   $data['theory_credit']      = $subjectVal->theory_credit;
-									   $data['practicle_credit']   = $subjectVal->practicle_credit;
-									   $data['theory_internal']    = $subjectVal->theory_internal1;
-									   $data['practical_internal'] = $subjectVal->practical_internal;
-									   $data['assignment_mark'] = $subjectVal->assignment_mark;
-									   $data['theory_external']    = $subjectVal->theory_external1;
-									   $data['practical_external'] = $subjectVal->practical_external;
-									   $data['marks_sum']          = $subjectVal->marks_sum;
-									  
-									  if($subjectVal->theory_credit > 0 && $subjectVal->practicle_credit > 0) 
-										$internal_sum = number_format($subjectVal->theory_internal1 + $subjectVal->practical_internal,2);
-									elseif($subjectVal->theory_credit > 0 ) 
-										$internal_sum = $subjectVal->theory_internal1;
-									elseif($subjectVal->practicle_credit > 0 )
-										$internal_sum = $subjectVal->practical_internal;
-										$internal_sum = $internal_sum+$subjectVal->assignment_mark;
-									   $data['internal_sum']       = $internal_sum;    
-									   //p($subjectVal);exit;
-									    //subjectwise status of pass or fail of btech result
-									    //$internal_sum     =   $data['theory_internal']+$data['practical_internal']+$data['assignment_mark'];
-									    $external_marks   =   $data['theory_external'];
-										$total_subject_marks=$internal_sum + $external_marks;
-										$data['total_subject_marks']       =$total_subject_marks;
-										if($internal_sum>=25 && $external_marks>=25){ 
-											if($program_id == 1)
-												$passfail_status='PASS';
-											else
-												$passfail_status='P';
-										}
-										else{
-											if($program_id == 1)
-												$passfail_status='FAIL';
-											else
-												$passfail_status='F';
-										}
-										if($internal_sum <25 && $external_marks>=25)
-										{
-											$deflicit='1';
-										}
-										else{
-											$deflicit='0';
-										}
-									   //calculating percent,grade and credit points
-									   $total_credits = $data['theory_credit'] + $data['practicle_credit'];
-									   
-									   $percentval=($total_subject_marks/100)*100;
-									 // p($percentval); 
-									 // $roundpercent=round($percentval,2);
-									  $roundpercent = number_format($percentval, 3);
-									 // p($roundpercent); exit;
-									 
-									  $gradeval = $roundpercent/10;
-									  $gradepercent = number_format($gradeval, 3);
-									  $creditpoint = $gradepercent*$total_credits;
-									  $creditval = number_format($creditpoint,3);
-									 // p($roundpercent);
-									 // p($gradeval); 
-									  // $data['sum_total'] = $internal_sum;
-									   $data['percentval'] = $roundpercent;
-									   $data['gradeval']   = $gradepercent;
-									   $data['creditval']  = $creditval;
-									   $data['credithour'] = $total_credits;
-									   //$data['result_status'] = $result_status;
-									   $data['passfail_status'] = $passfail_status;
-									   //p($data); exit;
-									   $total_all_subject_sum  = $total_all_subject_sum + $total_subject_marks;
-									   $sum_subject_credit_val = $sum_subject_credit_val + $data['creditval'];
-									   $sum_total_credits      = $sum_total_credits + $total_credits;
-									   $grade_point_average    = $sum_subject_credit_val/$sum_total_credits;
-									   $gpa                    = number_format($grade_point_average,3);
-									   if(!empty($gpa))
-									   {
-										   $savegpa=$gpa;
-									   }
-									   else{
-										  $savegpa=''; 
-									   }
-									   $dataList[] = $data;
-									   
-									   /*******save all result btech*************************************/
-									   $result['student_id']=$stuData->user_id;
-									   $result['campus_id']=$campus_id;
-									   $result['program_id']=$program_id;
-									   $result['degree_id']=$degree_id;
-									   $result['semester_id']=$semester_id;
-									   $result['batch_id']=$batch_id;
-									   $result['course_id']=$subjectVal->id;
-									   $result['theory_credit']=$subjectVal->theory_credit;
-									   $result['practicle_credit']=$subjectVal->practicle_credit;
-									   $result['theory_internal1']=$subjectVal->theory_internal1;
-									   $result['assignment_mark']=$subjectVal->assignment_mark;
-									   $result['theory_internal2']=$subjectVal->theory_internal2;
-									   $result['theory_internal3']=$subjectVal->theory_internal3;
-									   $result['theory_internal']=$subjectVal->theory_internal1;
-									   $result['theory_paper1']=$subjectVal->theory_paper1;
-									   $result['theory_paper2']=$subjectVal->theory_paper2;
-									   $result['sum_internal_practical']=$internal_sum;
-									   $result['practical_internal']=$subjectVal->practical_internal;
-									   $result['theory_external1']=$subjectVal->theory_external1;
-									   $result['practical_external']=$subjectVal->practical_external;
-									   $result['marks_sum']=$subjectVal->marks_sum;
-									   $result['external_sum']=$subjectVal->external_sum;
-									   $result['pass_condition1']=$internal_sum;
-									   $result['pass_condition2']=$external_marks;
-									   $result['sum_internal']=$sum_internal;
-									   $result['ncc_status']=$subjectVal->ncc_status;
-									   $result['course_group_id']=$subjectVal->course_group_id;
-									   $result['passfail_status']=$passfail_status;
-									   $result['percentval']=$roundpercent;
-									   $result['gradeval']= $gradepercent;
-									   $result['creditval']=$creditval;
-									   $result['credithour']=$total_credits;
-									   $result['dstatus']=$deflicit;
-									   //p($result); exit;
-									    $resultData = $this->Result_model->get_previous_results_subjects_marks($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$stuData->user_id,$subjectVal->id);
-									  
-									   if(!empty($resultData))
-									   {
-										   //$this->Result_model->update_student_previous_result_marks($result); 
-									   }
-									   else
-									   {
-										  // $this->Result_model->save_student_previous_result_marks($result); 
-									   }
-									   //$prevSemesterMarks = $this->Result_model->get_previous_semester_data($stuData->user_id,$semester_id);
-									   /*******save all result end*************************************/ 
-									   
-									   
-									   
-								 }  //exit; loop
-								 
-								       $insert['total_marks'] =$total_all_subject_sum;
-								       $insert['total_credit_points'] =$sum_subject_credit_val;
-									   $insert['total_credits'] =$sum_total_credits;
-									   $insert['total_grade_point_average'] =$savegpa;
-									   $insert['campus_id'] = $campus_id;
-									   $insert['program_id'] = $program_id;
-									   $insert['degree_id'] = $degree_id;
-									   $insert['semester_id'] = $semester_id;
-									   $insert['batch_id'] =  $batch_id;
-									   $insert['student_id'] = $stuData->user_id;
-									   //p($insert); exit;
-									   $getData = $this->Result_model->get_previous_save_semster_marks($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$stuData->user_id);
-									  
-									   if(!empty($getData))
-									   {
-										   //$this->Result_model->update_student_previous_semsester_marks($insert); 
-									   }
-									   else
-									   {
-										 //  $this->Result_model->save_student_previous_semsester_marks($insert); 
-									   }
-									   $prevSemesterMarks = $this->Result_model->get_previous_semester_data($stuData->user_id,$semester_id);
-									   //p($prevSemesterMarks); 
-									   //p(count($prevSemesterMarks));
-									   //$prev=array();
-									   $tempArr=array();
-									   foreach($prevSemesterMarks as $stmarks)
-									   {
-										  
-										  // p($stmarks->total_credits); 
-										  $prev['total_marks'] = $stmarks->total_marks;
-										  $prev['total_credit_points']=$stmarks->total_credit_points;
-										  $prev['total_credits']=$stmarks->total_credits;
-										  $prev['total_grade_point_average']= $stmarks->total_grade_point_average;
-										  $tempArr[]=$prev;
-									      //p($prev) ; 
-									   }  //exit;
-									   //$prevSemsList[]=$tempArr;
-									   $prevSemsList[] = $prevSemesterMarks;
-						            // p($prevSemsList); 
-									  
-								// p($dataList); exit;
-						    $list['prevSemesterList']   = $prevSemsList;
-						 //p($list['prevSemesterList']);
-						    $list['subjectList'] = $dataList;
-						    $allData[] = $list;  
-							
-					 } //exit;
-				     $data['aggregate_marks']=$allData;
-				
-				//p($data['result_data']);  exit; // btech result;
-			
-			
-			//load the view and saved it into $html variable
+		 {
+            $campus_id=$this->input->post('campus_id');
+            $program_id=$this->input->post('program_id');
+            $degree_id=$this->input->post('degree_id');
+            $semester_id=$this->input->post('semester_id');
+            //p($semester_id); exit;
+            $batch_id=$this->input->post('batch_id');
+            $date_of_start=$this->input->post('date_of_start');
+            $date_of_closure=$this->input->post('date_of_closure');
+            //$batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
 
-			$html=$this->load->view('admin/report/student_result_view', $data, true);
-			//$html=$this->load->view('admin/report/student_result_view_new', $data, true);
-			// print_r($html); exit;
-			//this the the PDF filename that user will get to download
-			$pdfFilePath = "student_result_view.pdf";
-	 
-			//load mPDF library
-			$this->load->library('m_pdf');
-			$this->m_pdf->pdf->mPDF('utf-8','A4','','','10','10','10','10');
-			$this->m_pdf->pdf->setTitle('Report Card');
-		   //generate the PDF from the given html
-			$this->m_pdf->pdf->WriteHTML($html);
-	        $this->m_pdf->pdf->Output($pdfFilePath, "I");
-		
-            exit;
-			 }	// end b_tech condition	
+            //p($semesterRow); exit;
+            //$batch_year=$batchYear->date_of_closure;
+            //$yrdata= strtotime($batch_year);
+            $monthYrr= $month.' '.$year;
+            $student_id=$this->input->post('student_id'); //array input
+            $allData = array();
+
+            //p($students); exit;
+             if($degree_id!=1 || $program_id>1)
+             {
+                 $semesterRow = $this->Result_model->get_semester_name($semester_id); //getting semester name
+                 $students = $this->Generate_model->get_studedent_data($student_id);
+                foreach($students as $stuData)
+                {
+                    $subjectList = $this->Result_model->get_student_marks_by_id($stuData->user_id,$semester_id);
+                    $list['first_name']  =$stuData->first_name;
+                    $list['last_name']  =$stuData->last_name;
+                    $list['user_unique_id']  =$stuData->user_unique_id;
+                    $list['user_image']  =$stuData->user_image;
+                    $list['batch_name']  =$stuData->batch_name;
+                    $list['campus_name']  =$stuData->campus_name;
+                    $list['campus_code']  =$stuData->campus_code;
+                    $list['degree_code']  =$stuData->degree_code;
+                    $list['degree_name']  =$stuData->degree_name;
+                    $list['semester_name'] =$semesterRow->semester_name;
+
+                    $list['month_year']  =$monthYrr;
+                    $dataList =array();
+                    $prevSemsList=array();
+                    $total_marks='';
+                    $total_credits='';
+                    $percentval='';
+                    $gradeval='';
+                    $gradepercent='';
+                    $roundpercent='';
+                    $creditpoint='';
+                    $creditval='';
+                    $total_all_subject_sum='';
+                    $allpercent ='';
+                    $total_theory_credit='';
+                    $total_practical_credit='';
+                    $total_credit_sum='';
+                    $roundoverallpercent='';
+                    $sum_subject_credit_val='';
+                    $sum_total_credits ='';
+                    $grade_point_average ='';
+                    $internal_sum='';
+                    $external_marks='';
+                    $total_subject_marks='';
+                    foreach($subjectList as $subjectVal)
+                    {
+                        $data['course_id']          = $subjectVal->id;
+                        if(empty($subjectVal->course_subject_name))
+                            $course_code = $subjectVal->course_code;
+                        else
+                            $course_code = $subjectVal->course_subject_name;
+
+                        if(empty($subjectVal->course_subject_title))
+                            $course_title = $subjectVal->course_title;
+                        else
+                            $course_title = $subjectVal->course_subject_title;
+                        $data['course_code']        = $course_code;
+                        $data['course_title']       = $course_title;
+                        $data['theory_credit']      = $subjectVal->theory_credit;
+                        $data['practicle_credit']   = $subjectVal->practicle_credit;
+                        $data['theory_internal']    = $subjectVal->theory_internal1;
+                        $data['practical_internal'] = $subjectVal->practical_internal;
+                        $data['assignment_mark'] = $subjectVal->assignment_mark;
+                        $data['theory_external']    = $subjectVal->theory_external1;
+                        $data['practical_external'] = $subjectVal->practical_external;
+                        $data['marks_sum']          = $subjectVal->marks_sum;
+
+                        if($subjectVal->theory_credit > 0 && $subjectVal->practicle_credit > 0)
+                            $internal_sum = number_format($subjectVal->theory_internal1 + $subjectVal->practical_internal,2);
+                        elseif($subjectVal->theory_credit > 0 )
+                            $internal_sum = $subjectVal->theory_internal1;
+                        elseif($subjectVal->practicle_credit > 0 )
+                            $internal_sum = $subjectVal->practical_internal;
+                        $internal_sum = $internal_sum+$subjectVal->assignment_mark;
+                        $data['internal_sum']       = $internal_sum;
+                        //p($subjectVal);exit;
+                        //subjectwise status of pass or fail of btech result
+                        //$internal_sum     =   $data['theory_internal']+$data['practical_internal']+$data['assignment_mark'];
+                        $external_marks   =   $data['theory_external'];
+                        $total_subject_marks=$internal_sum + $external_marks;
+                        $data['total_subject_marks']       =$total_subject_marks;
+                        if($internal_sum>=25 && $external_marks>=25){
+                            if($program_id == 1)
+                                $passfail_status='PASS';
+                            else
+                                $passfail_status='P';
+                        }
+                        else{
+                            if($program_id == 1)
+                                $passfail_status='FAIL';
+                            else
+                                $passfail_status='F';
+                        }
+                        if($internal_sum <25 && $external_marks>=25)
+                        {
+                            $deflicit='1';
+                        }
+                        else{
+                            $deflicit='0';
+                        }
+                        //calculating percent,grade and credit points
+                        $total_credits = $data['theory_credit'] + $data['practicle_credit'];
+
+                        $percentval=($total_subject_marks/100)*100;
+                        // p($percentval);
+                        // $roundpercent=round($percentval,2);
+                        $roundpercent = number_format($percentval, 3);
+                        // p($roundpercent); exit;
+
+                        $gradeval = $roundpercent/10;
+                        $gradepercent = number_format($gradeval, 3);
+                        $creditpoint = $gradepercent*$total_credits;
+                        $creditval = number_format($creditpoint,3);
+                        // p($roundpercent);
+                        // p($gradeval);
+                        // $data['sum_total'] = $internal_sum;
+                        $data['percentval'] = $roundpercent;
+                        $data['gradeval']   = $gradepercent;
+                        $data['creditval']  = $creditval;
+                        $data['credithour'] = $total_credits;
+                        //$data['result_status'] = $result_status;
+                        $data['passfail_status'] = $passfail_status;
+                        //p($data); exit;
+                        $total_all_subject_sum  = $total_all_subject_sum + $total_subject_marks;
+                        $sum_subject_credit_val = $sum_subject_credit_val + $data['creditval'];
+                        $sum_total_credits      = $sum_total_credits + $total_credits;
+                        $grade_point_average    = $sum_subject_credit_val/$sum_total_credits;
+                        $gpa                    = number_format($grade_point_average,3);
+                        if(!empty($gpa))
+                        {
+                            $savegpa=$gpa;
+                        }
+                        else{
+                            $savegpa='';
+                        }
+                        $dataList[] = $data;
+                        /*******save all result btech*************************************/
+                        $result['student_id']=$stuData->user_id;
+                        $result['campus_id']=$campus_id;
+                        $result['program_id']=$program_id;
+                        $result['degree_id']=$degree_id;
+                        $result['semester_id']=$semester_id;
+                        $result['batch_id']=$batch_id;
+                        $result['course_id']=$subjectVal->id;
+                        $result['theory_credit']=$subjectVal->theory_credit;
+                        $result['practicle_credit']=$subjectVal->practicle_credit;
+                        $result['theory_internal1']=$subjectVal->theory_internal1;
+                        $result['assignment_mark']=$subjectVal->assignment_mark;
+                        $result['theory_internal2']=$subjectVal->theory_internal2;
+                        $result['theory_internal3']=$subjectVal->theory_internal3;
+                        $result['theory_internal']=$subjectVal->theory_internal1;
+                        $result['theory_paper1']=$subjectVal->theory_paper1;
+                        $result['theory_paper2']=$subjectVal->theory_paper2;
+                        $result['sum_internal_practical']=$internal_sum;
+                        $result['practical_internal']=$subjectVal->practical_internal;
+                        $result['theory_external1']=$subjectVal->theory_external1;
+                        $result['practical_external']=$subjectVal->practical_external;
+                        $result['marks_sum']=$subjectVal->marks_sum;
+                        $result['external_sum']=$subjectVal->external_sum;
+                        $result['pass_condition1']=$internal_sum;
+                        $result['pass_condition2']=$external_marks;
+                        $result['sum_internal']=$sum_internal;
+                        $result['ncc_status']=$subjectVal->ncc_status;
+                        $result['course_group_id']=$subjectVal->course_group_id;
+                        $result['passfail_status']=$passfail_status;
+                        $result['percentval']=$roundpercent;
+                        $result['gradeval']= $gradepercent;
+                        $result['creditval']=$creditval;
+                        $result['credithour']=$total_credits;
+                        $result['dstatus']=$deflicit;
+                        //p($result); exit;
+                        $resultData = $this->Result_model->get_previous_results_subjects_marks($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$stuData->user_id,$subjectVal->id);
+
+                    }  //exit; loop
+
+                    $insert['total_marks'] =$total_all_subject_sum;
+                    $insert['total_credit_points'] =$sum_subject_credit_val;
+                    $insert['total_credits'] =$sum_total_credits;
+                    $insert['total_grade_point_average'] =$savegpa;
+                    $insert['campus_id'] = $campus_id;
+                    $insert['program_id'] = $program_id;
+                    $insert['degree_id'] = $degree_id;
+                    $insert['semester_id'] = $semester_id;
+                    $insert['batch_id'] =  $batch_id;
+                    $insert['student_id'] = $stuData->user_id;
+                    //p($insert); exit;
+                    $getData = $this->Result_model->get_previous_save_semster_marks($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$stuData->user_id);
+
+                    if(!empty($getData))
+                    {
+                        //$this->Result_model->update_student_previous_semsester_marks($insert);
+                    }
+                    else
+                    {
+                    //  $this->Result_model->save_student_previous_semsester_marks($insert);
+                    }
+                    $prevSemesterMarks = $this->Result_model->get_previous_semester_data($stuData->user_id,$semester_id);
+                    //p($prevSemesterMarks);
+                    //p(count($prevSemesterMarks));
+                    //$prev=array();
+                    $tempArr=array();
+                    foreach($prevSemesterMarks as $stmarks)
+                    {
+
+                    // p($stmarks->total_credits);
+                    $prev['total_marks'] = $stmarks->total_marks;
+                    $prev['total_credit_points']=$stmarks->total_credit_points;
+                    $prev['total_credits']=$stmarks->total_credits;
+                    $prev['total_grade_point_average']= $stmarks->total_grade_point_average;
+                    $tempArr[]=$prev;
+                    //p($prev) ;
+                    }  //exit;
+                    //$prevSemsList[]=$tempArr;
+                    $prevSemsList[] = $prevSemesterMarks;
+                    // p($prevSemsList);
+
+                    // p($dataList); exit;
+                    $list['prevSemesterList']   = $prevSemsList;
+                    //p($list['prevSemesterList']);
+                    $list['subjectList'] = $dataList;
+                    $allData[] = $list;
+                } //exit;
+                $data['aggregate_marks']=$allData;
+
+                //p($data['result_data']);  exit; // btech result;
+
+
+                //load the view and saved it into $html variable
+
+                $html=$this->load->view('admin/report/student_result_view', $data, true);
+                //$html=$this->load->view('admin/report/student_result_view_new', $data, true);
+                // print_r($html); exit;
+                //this the the PDF filename that user will get to download
+                $pdfFilePath = "student_result_view.pdf";
+
+                //load mPDF library
+                $this->load->library('m_pdf');
+                $this->m_pdf->pdf->mPDF('utf-8','A4','','','10','10','10','10');
+                $this->m_pdf->pdf->setTitle('Report Card');
+                //generate the PDF from the given html
+                $this->m_pdf->pdf->WriteHTML($html);
+                $this->m_pdf->pdf->Output($pdfFilePath, "I");
+
+                exit;
+             }	// end b_tech condition
 			 
 			 
-			  if($degree_id=1  && $program_id==1) //bvsc
-					 {
-				
-					//echo "hello"; exit;
-					foreach($students as $stuData)
-					 {
-							$list['overall']=array();
-							$list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id);
-							//p($list);exit;
-							$list['first_name']  =$stuData->first_name;
-						     $list['father_name']  =$stuData->parent_name;
-						     $list['mother_name']  =$stuData->mother_name;
-						     $list['last_name']  =$stuData->last_name;
-						     $list['user_unique_id']  =$stuData->user_unique_id;
-						     $list['user_image']  =$stuData->user_image;
-						     $list['batch_name']  =$stuData->batch_name;
-						     $list['batch_start_year']  =$stuData->batch_start_year;
-						     $list['campus_name']  =$stuData->campus_name;
-						     $list['campus_code']  =$stuData->campus_code;
-						     $list['degree_code']  =$stuData->degree_code;
-						     $list['degree_name']  =$stuData->degree_name;
-							  $list['semester_name'] =$semesterRow->semester_name;
-						     $list['month_year']  =$monthYrr;
-							
-							
-							if($semester_id == 1){
-								$list['previous']=array();
-								$list['overall']['sum_subjects_credit_point'] = $list['overallReport']['sum_subjects_credit_point'];
-								$list['overall']['credithours'] = $list['overallReport']['credithours'];
-								$list['overall']['gradeval_avergage'] = $list['overallReport']['gradeval_avergage'];
-								$list['overall']['count_subject'] = $list['overallReport']['count_subject'];
-								
-							}else{
-								if($semester_id == 4){
-									$prevlist1=$this->get_bvsc_semester_marks($stuData->user_id,1);
-									$list['previous']=$prevlist1;
-									$list['overall']['sum_subjects_credit_point'] = $prevlist1['overallReport']['sum_subjects_credit_point']+$list['overallReport']['sum_subjects_credit_point'];
-									$list['overall']['credithours'] = $prevlist1['overallReport']['credithours']+$list['overallReport']['credithours'];
-									$list['overall']['gradeval_avergage'] = $prevlist1['overallReport']['gradeval_avergage']+$list['overallReport']['gradeval_avergage'];
-									$list['overall']['count_subject'] = $prevlist1['overallReport']['count_subject']+$list['overallReport']['count_subject'];
-								}elseif($semester_id == 5){
-									$prevlist1=$this->get_bvsc_semester_marks($stuData->user_id,1);
-									$prevlist2=$this->get_bvsc_semester_marks($stuData->user_id,4);
-									$list['previous'] = $prevlist2;
-									$list['overall']['sum_subjects_credit_point'] = $prevlist1['overallReport']['sum_subjects_credit_point']+$prevlist2['overallReport']['sum_subjects_credit_point']+$list['overallReport']['sum_subjects_credit_point'];
-									$list['overall']['credithours'] = $prevlist1['overallReport']['credithours']+$prevlist2['overallReport']['credithours']+$list['overallReport']['credithours'];
-									$list['overall']['gradeval_avergage'] = $prevlist1['overallReport']['gradeval_avergage']+$prevlist2['overallReport']['gradeval_avergage']+$list['overallReport']['gradeval_avergage'];
-									$list['overall']['count_subject'] = $prevlist1['overallReport']['count_subject']+$prevlist2['overallReport']['count_subject']+$list['overallReport']['count_subject'];
-								}elseif($semester_id == 6){
-									$prevlist1=$this->get_bvsc_semester_marks($stuData->user_id,1);
-									$prevlist2=$this->get_bvsc_semester_marks($stuData->user_id,4);
-									$prevlist3=$this->get_bvsc_semester_marks($stuData->user_id,5);
-									$list['previous'] = $prevlist3;
-									$list['overall']['sum_subjects_credit_point'] = $prevlist1['overallReport']['sum_subjects_credit_point']+$prevlist2['overallReport']['sum_subjects_credit_point']+$prevlist3['overallReport']['sum_subjects_credit_point']+$list['overallReport']['sum_subjects_credit_point'];
-									$list['overall']['credithours'] = $prevlist1['overallReport']['credithours']+$prevlist2['overallReport']['credithours']+$prevlist3['overallReport']['credithours']+$list['overallReport']['credithours'];
-									$list['overall']['gradeval_avergage'] = $prevlist1['overallReport']['gradeval_avergage']+$prevlist2['overallReport']['gradeval_avergage']+$prevlist3['overallReport']['gradeval_avergage']+$list['overallReport']['gradeval_avergage'];
-									$list['overall']['count_subject'] = $prevlist1['overallReport']['count_subject']+$prevlist2['overallReport']['count_subject']+$prevlist3['overallReport']['count_subject']+$list['overallReport']['count_subject'];
-								}
-							}
-							$allData[] = $list;  
-							//p($allData);exit;
-					 } //exit;
-				     $data['aggregate_marks']=$allData;
-					// p($data['aggregate_marks']); exit;
-				//p($data['result_data']); 
-				//exit;
-                         //p($data);exit;
-			
-			//load the view and saved it into $html variable
+            if($degree_id=1  && $program_id==1) //bvsc
+            {
+
+                $data['aggregate_marks']=$this->Result_model->get_student_results($campus_id,$program_id,$batch_id,$degree_id,$semester_id,$student_id,$month,$year);
+                // p($data['aggregate_marks']); exit;
+                //p($data['result_data']);
+                //exit;
+                //p($data);exit;
+
+                //load the view and saved it into $html variable
                 if($certificate_type == 2){
                     $html = $this->load->view('admin/report/student_bvsc_student_view', $data, true);
                 }else {
                     $html = $this->load->view('admin/report/student_bvsc_result_new', $data, true);
                 }
-			//$html=$this->load->view('admin/report/student_result_view_new', $data, true);
-			// print_r($html); exit;
-			//this the the PDF filename that user will get to download
-			$pdfFilePath = "student_result_view.pdf";
-	 
-			//load mPDF library
-			$this->load->library('m_pdf');
-	 
-		   //generate the PDF from the given html
-			$this->m_pdf->pdf->WriteHTML($html);
-	        $this->m_pdf->pdf->Output($pdfFilePath, "I");
-		
-            exit;
-			 }
+                //$html=$this->load->view('admin/report/student_result_view_new', $data, true);
+                // print_r($html); exit;
+                //this the the PDF filename that user will get to download
+                $pdfFilePath = "student_result_view.pdf";
+
+                //load mPDF library
+                $this->load->library('m_pdf');
+
+                //generate the PDF from the given html
+                $this->m_pdf->pdf->WriteHTML($html);
+                $this->m_pdf->pdf->Output($pdfFilePath, "I");
+
+                exit;
+            }
 		}
 		 //*************************Generate Result End*********************************//
 		 

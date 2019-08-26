@@ -34,7 +34,7 @@
 
 
 <body>
-<?php  foreach($aggregate_marks as $key=>$student_marks){
+<?php $count=0; foreach($aggregate_marks as $key=>$student_marks){
 // p($student_val);
 ?>
 <div style="width:100%; font-family:Arial, Helvetica, sans-serif;">
@@ -277,9 +277,9 @@
         </table>-->
     </div>
 </div>
-<?php if($key+1<count($aggregate_marks)){?>
+<?php if($count+1<count($aggregate_marks)){?>
 <pagebreak>
-    <?php } } ?>
+    <?php } $count++;} ?>
 </body>
 
 

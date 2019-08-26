@@ -70,17 +70,10 @@
 						
 					  </select>
 					</div>
-				
-               </div>
+
+                </div>
 			   
 			    <div class="row">
-				<div class="form-group col-md-3">
-					  <label for="exampleInputEmail1">Student<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="student_id" id="student_id" class="form-control">
-						  <option value="">Select Student</option>
-						
-					  </select>
-				</div>
 				<div class="form-group col-md-3">
 					  <label for="month">Month<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="month" id="month">
@@ -103,13 +96,35 @@
 					  </select>
 					</div>
 			 </div>
+                  <div id="studentList" >
+                      <div class="box-body table-responsive">
+
+                          <div style="float:middle;" align="left">
+                              <input type="submit"  name="transcript_result" id="transcript_result" value="Generate" class="btn btn-primary" formtarget="_blank">
+
+                          </div>
+                          <table id="example" class="table table-bordered table-hover">
+                              <thead>
+                              <tr>
+                                  <th><input type="checkbox"  id="select_all">Select All</th>
+                                  <th>S.No</th>
+                                  <th>Student Id</th>
+                                  <th>Batch</th>
+                                  <th>Student Name</th>
+                                  <!--<th>Print(PDF)</th>-->
+
+                              </tr>
+                              </thead>
+                              <tbody id="tr_list">
+
+                              </tbody>
+                          </table>
+
+
+                      </div>
+                  </div>
 			 <div class="row">
-			 <div class="form-group col-md-3">
-					 
-					  
-					  <input type="submit"  name="transcript_result" id="transcript_result" value="Generate" class="btn btn-primary" formtarget="_blank">
-						
-			   </div>
+
 			   </div>
 			
 			 
@@ -232,24 +247,22 @@
 			 }
 		});
 	}
-	function getStudentList()
-	{
-		var $form = $("#registration_form");
-		
-		$.ajax({
-			type:'POST',
-			url:'<?php echo base_url();?>transcript/getStudentList',
-			data: $form.serialize(),
-			success: function(data){
-				//alert(data); 
-			var  option_brand = '<option value="">--Select Student--</option>';
-			$('#student_id').empty();
-			$("#student_id").append(option_brand+data);
-		
-			 }
-		});
-	}
-	
+      function getStudentList()
+      {
+          var $form = $("#registration_form");
+
+          $.ajax({
+              type:'POST',
+              url:'<?php echo base_url();?>result/getStudentList',
+              data: $form.serialize(),
+              success: function(data){
+                  //alert(data);
+                  $('#tr_list').html(data);
+
+              }
+          });
+      }
+
 
 	function getPrint()
 	{

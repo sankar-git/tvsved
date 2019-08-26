@@ -1,4 +1,4 @@
-<?php //p($result_data[0]); exit;?>
+<?php //p($dummy_number_report[0]['degree_name']); exit;?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,257 +10,207 @@
         }
 
         .table th {
-                border: 1px solid black;
-                border-collapse: collapse;
-                height: 35px;
-            }
+            border: 1px solid black;
+            border-collapse: collapse;
+            height: 35px;
+        }
 
         .table th td {
-                    border: 1px solid black;
-                    border-collapse: collapse;
-                }
-		.font tr td {
-				font-size:12px;
-			}
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        .font tr td {
+            font-size:12px;
+        }
 
         .table tr td {
-                border: 1px solid black;
-                border-collapse: collapse;
-                font-size: 12px;
-            }
+            border: 1px solid black;
+            border-collapse: collapse;
+            font-size: 12px;
+            height: 35px;
+        }
     </style>
 </head>
 
 
 <body>
- 
-    <div style="padding:0px; width:100% font-family:Arial, Helvetica, sans-serif;">
-        <div id="dummy">
-            <table>
+<?php $count=0; $tot_non_credit_hrs=0; foreach($aggregate_marks['semester_1'] as $student_id=>$student_marks){
+?>
+<div style="width:100%; font-family:Arial, Helvetica, sans-serif;">
+    <div id="dummy">
+        <table style="padding-top:0px;">
+            <tr>
+                <td width="11%" style="text-align:left;vertical-align: top;"><img height="90" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></td>
+                <td width="76%" style="">
+                        <table>
+                            <tr><td align="center"><div><div style=" font-weight:bold; font-size:18px;"><p>TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></div></div></td></tr>
+
+                            <tr>
+                                <td align="center">
+                                    <div>
+                                        <h5 align="center" style=" font-size:18px; margin-top:10px;">TRANSCRIPT</h5>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <div>
+                                        <h5 align="center" style=" font-size:18px; margin-top:10px;"><?php echo strtoupper($student_marks['degree_name']);?><br/>(<?php echo $student_marks['degree_code'];?>) DEGREE COURSE</h5>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <div>&nbsp;</div>
+                                </td>
+                            </tr>
+                        </table>
+                </td>
+                <td width="13%"  style="border:1px solid #000;text-align:left;vertical-align: top;"><?php if(!empty($student_marks['user_image']) && file_exists('uploads/user_images/student/'.$student_marks['user_image']) ){?><img height="125"  border="0" src="uploads/user_images/student/<?php echo $student_marks['user_image'];?>" /><?php } ?></td>
+            </tr>
+        </table>
+        <table class="sub-detail-tbl" style="width:100%;padding:2px 0px; margin:0px; border-collapse: collapse; Lline-height:1.5">
+            <tr>
+                <td align="left"  colspan="6" style="vertical-align:top;">Name of the College:&nbsp;<?php echo $student_marks['campus_name']; ?></td>
+            </tr>
+            <tr>
+                <td align="left" width="7%" style="vertical-align:top;">Name</td>
+                <td align="left" colspan="2" width="35%" style="vertical-align:top;margin-left:1px;">&nbsp;:&nbsp;<?php echo $student_marks['first_name'].' '.$student_marks['last_name'];?></td>
+                <td align="left" width="18%" style="vertical-align:top;">Father's Name</td>
+                <td align="left" colspan="2" width="25%" style="vertical-align:top;">&nbsp;:&nbsp;<?php echo $student_marks['father_name'];?></td>
+
+            </tr>
+            <tr>
+                <td align="left" width="7%" style="vertical-align:top;">ID No.</td>
+                <td align="left" colspan="2" width="25%" style="vertical-align:top;">&nbsp;:&nbsp;<?php echo $student_marks['user_unique_id'];?></td>
+                <td align="left" width="18%" style="vertical-align:top;">Mother's Name</td>
+                <td align="left" colspan="2" width="25%" style="vertical-align:top;">&nbsp;:&nbsp;<?php echo $student_marks['mother_name'];?></td>
+
+            </tr>
+            <tr>
+                <td align="left" width="25%" style="vertical-align:top;">Admitted In:</td>
+                <td align="left" width="7%%" style="vertical-align:top;">&nbsp;</td>
+                <td align="left" width="25%" style="vertical-align:top;">Completed In:</td>
+                <td align="left" width="7%" style="vertical-align:top;">&nbsp;</td>
+                <td align="left" width="30%"  style="vertical-align:top;">Last Institution Attended:</td>
+                <td align="left" width="7%" style="vertical-align:top;">&nbsp;</td>
+
+            </tr>
+
+        </table>
+
+        <div style="margin-top:20px;padding:0px;width:100%">
+            <table class="table" width="100%;" style="height:100%;border:solid 1px black;padding-top:5px;">
+                <thead>
                 <tr>
-                    <td><div><span class="logo"><img height="110" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></span></div></td>
-                    <td>
-                        <div>
-                            <table>
-                                <tr><td><div><div style="margin-left:30px; font-weight:bold; font-size:18px;"><p>TAMIL NADU  VETERINARY AND ANIMAL SCIENCES UNIVERSITY, CHENNAI-600051</p></div></div></td></tr>
-                                <tr>
-                                    <td>
-                                        <div>
-                                           
-                                            <h5 align="center" style=" font-size:14px; margin-top:-10px;" >TRANSCRIPT OF ACADEMIC RECORD FOR <?php echo strtoupper($result_data[0]['program_name']);?> PROGRAMME</h5>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                            </table>
-                        </div>
-
-
-                    </td>
+                    <th rowspan="3">SI.No</th>
+                    <th rowspan="3">Subject</th>
+                    <th rowspan="3" >Credit Hours</th>
+                    <th colspan="4"  scope="colgroup">Marks Obtained</th>
+                    <th rowspan="3" >Total<br/>(100)</th>
+                    <th rowspan="3" >Grade Point<br/>(10)</th>
+                    <th rowspan="3" >Credit Points</th>
+                    <!-- <th rowspan="3">Result</th>-->
                 </tr>
+                <tr>
+                    <th colspan="2" scope="colgroup">Internal Assessment</th>
+                    <th colspan="2" scope="colgroup">Annual Examination</th>
+                </tr>
+                <tr>
+                    <th scope="col" >First <br />(10)</th>
+                    <th scope="col">Second <br />(10)</th>
+                    <th scope="col">Theory <br />(40)</th>
+                    <th scope="col" >Practical<br />(40)</th>
+                </tr>
+                </thead><tbody>
+                <?php foreach($aggregate_marks as $semester=>$student_res){  $student_marks=$aggregate_marks[$semester][$student_id]; ?>
+                <tr>
+                    <td colspan="10" style="text-align:center"><?php echo $student_marks['semester_name']; ?></td>
+                </tr>
+                <?php
+                $sumcreditpoint='';
+                $credithours='';
+                $averagegradepoint='';
+                $sumtotal='';
+                $total_theory_credit='';
+                $total_practical_credit='';
+                $subject_credit_points='';
+                $sum_subjects_credit_point='';
+                $resultStatus='PASS';
+                $external_sum='';
+                $count_subject=0;
+                $i=0;  foreach($student_marks['subjectList'] as $subject_data){ $i++;
+                    if($subject_data['passfail_status'] == 'FAIL' || $subject_data['passfail_status'] =='Not Satisfactory')
+                        $resultStatus='FAIL';
+                    $sum_subjects_credit_point+=$subject_data['creditval'];$count_subject++;
+                    $external_sum+=$subject_data['external_sum'];
+                    $credithours+=$subject_data['theory_credit']+$subject_data['practicle_credit'];
+
+                    ?>
+
+                    <tr>
+                        <td><?php echo $i;?></td>
+                        <td ><?php if($subject_data['course_title']==''){ echo '';} else{ echo $subject_data['course_title'];}?></td>
+                        <td style="text-align:center"><?php echo $subject_data['theory_credit'].'+'.$subject_data['practicle_credit']; if($subject_data['course_group_id'] == 22){ $tot_non_credit_hrs+=$subject_data['theory_credit']+$subject_data['practicle_credit']; echo "(Non-<br/>Credit)";} ?></td>
+                        <?php if($subject_data['course_group_id'] == 22){ ?>
+                            <td colspan="7" style="text-align:center"><?php echo $subject_data['passfail_status'];?></td>
+                        <?php }else{ ?>
+                            <td style="text-align:center"><?php if($subject_data['first_internal']==''){echo '';}else{echo $subject_data['first_internal'];}?></td>
+                            <td style="text-align:center"><?php if($subject_data['second_internal']==''){echo '';}else{echo $subject_data['second_internal'];}?></td>
+                            <td style="text-align:center"><?php if($subject_data['sum_theory']==''){echo '';}else{echo $subject_data['sum_theory'];}?></td>
+                            <td style="text-align:center"><?php if($subject_data['sum_practical']==''){echo '';}else{echo $subject_data['sum_practical'];}?></td>
+                            <td style="text-align:center"><?php if($subject_data['sum_total']==''){echo '';}else{echo $subject_data['sum_total'];}?></td>
+                            <td style="text-align:center"><?php if($subject_data['gradeval']==''){echo '';}else{echo $subject_data['gradeval'];}?></td>
+                            <td style="text-align:center"><?php if($subject_data['creditval']==''){echo '';}else{echo $subject_data['creditval'];}?></td>
+                            <!--<td style="text-align:center"><?php echo $subject_data['passfail_status'];?></td>-->
+                        <?php } ?>
+                    </tr>
+
+                <?php } } ?>
+                </tbody>
             </table>
-
-            <hr />
-			<table class="table" width="100%" style="border:solid 1px black;">
-				<tr>
-					<td width="10%">Name</td><td colspan="3"><?php echo $result_data[0]['first_name'].' '.$result_data[0]['last_name'];?></td>
-					<td  width="15%">Degree awarded</td><td colspan="2"><?php echo $result_data[0]['degree_name'];?></td>
-				</tr>
-				<tr>
-					<td>ID Number</td><td width="15%"><?php echo $result_data[0]['user_unique_id'];?></td>
-					<td width="8%">Sex</td><td width="10%"><?php echo ucfirst($result_data[0]['gender']);?></td>
-					<td>Date of admisssion</td><td>&nbsp;</td><td rowspan="7">&nbsp;</td>
-				</tr>
-				<tr>
-					<td>Date of Birth</td><td><?php echo $result_data[0]['dob'];?></td>
-					<td>Place of birth</td><td>&nbsp;</td>
-					<td>Date of completion</td><td width="20%">&nbsp;</td>
-				</tr>
-				<tr>
-					<td>Name of the Parent/Guardian</td><td  colspan="2"><?php echo $result_data[0]['parent_name'];?></td><td>&nbsp;</td>
-					
-					<td>OGPA</td><td><?php  echo number_format($total_gradeval/$total_count,2);?></td>
-				</tr>
-				<tr>
-					<td>College</td><td  colspan="2"><?php echo $result_data[0]['campus_code'];?></td><td>&nbsp;</td>
-					
-					<td>Details of previous examination passed</td><td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td>Faculty</td><td  colspan="2">&nbsp;</td><td>&nbsp;</td>
-					
-					<td>Univerity/College</td><td><?php echo $result_data[0]['campus_name'];?></td>
-				</tr>
-				<tr>
-					<td>Discipline</td><td  colspan="2"><?php echo $result_data[0]['discipline_name'];?></td><td>&nbsp;</td>
-					
-					<td>Degree Earned</td><td><?php echo $result_data[0]['degree_name'];?></td>
-				</tr>
-				<tr>
-					<td>Medium of Instruction</td><td  colspan="2">English</td><td>&nbsp;</td>
-					
-					<td>Month and year of passing</td><td><?php $month = isset($month)?$month:date('F');$year = isset($year)?$year:date('Y'); echo $month.' '.$year;?></td>
-				</tr>
-				
-			</table>
-            <!--<table style="font-size:14px;">
-				<tr>
-					<td style="font-weight:bold;width:15%;">Name</td>
-					<td style="width:44%;">: <?php echo $result_data[0]['first_name'];?></td>
-					<td style="font-weight:bold;">Month & Year of Exam</td>
-					<td >: <?php $month = isset($month)?$month:date('F');$year = isset($year)?$year:date('Y'); echo $month.' '.$year;?></td>
-				</tr>
-				<tr>
-					<td style="font-weight:bold">ID No.</td>
-					<td>: <?php echo $result_data[0]['user_unique_id'];?></td>
-					<td style="font-weight:bold">Batch</td>
-					<td>: <?php echo $result_data[0]['batch_name'];?></td>
-				</tr>
-				<tr>
-					<td style="font-weight:bold">College</td>
-					<td>: <?php echo $result_data[0]['campus_name'];?></td>
-					<td></td>
-					<td></td>
-				</tr>
-				
-               
-            </table><br /><br />-->
-
-
-            
-			<div style="float:left;width:50%">
-			 <table class="table" width="99%" style="border:solid 1px black;">
-			  <tr>
-                    <th rowspan="1" width="11%">Course No</th>
-                    <th rowspan="1">Course Title</th>
-                    <th rowspan="1" width="10%">Credit Hours</th>
-                  
-                    <th rowspan="1" width="10%">Grade Points</th>
-                    <th rowspan="1" width="10%">Credit Points</th>
-                    <!--<th rowspan="1">Result</th>-->
-                </tr>
-				
-			
-			  <?php $count=0; $flag=false; foreach($result_data as $student_val){ $count++;?>
-                <?php	if($count >=19 && $flag == false){ $flag=true;
-	              ?>
-				  </table></div><div style="float:left;width:50%"><table class="table" width="100%" style="border:solid 1px black;">
-			  <tr>
-                    <th width="11%">Course No</th>
-                    <th>Course Title</th>
-                    <th width="10%">Credit Hours</th>
-                  
-                    <th width="10%">Grade Points</th>
-                    <th width="10%">Credit Points</th>
-                    <!--<th>Result</th>-->
-                </tr>
-					<?php } ?>
-				
-                <tr>
-                    <td colspan="5"><b><?php echo $student_val['semester_name'];?></b></td>
-                   
-                </tr>
-                <!--<tr>
-                    <th scope="col">INT.(Max. 20)</th>
-                    <th scope="col">EXT.(Max. 20)</th>
-                    <th scope="col">INT.(Max. 20)</th>
-                    <th scope="col">EXT.(Max. 20)</th>
-                </tr>-->
-				<?php 
-					$sumcreditpoint='';
-					$sumgradepoint='';
-					$credithours='';
-					$averagegradepoint='';
-					$sumtotal='';
-					$total_theory_credit='';
-					$total_practical_credit='';
-					$subject_credit_points='';
-					$sum_subjects_credit_point='';
-					$resultStatus=array();
-					$i=0; foreach($student_val['subjectList'] as $student_course){ $count++;
-						//p($student_course); exit;
-						array_push($resultStatus,$student_course['passfail_status']);
-						$total_theory_credit= $total_theory_credit+$student_course['theory_credit'];
-						$total_practical_credit= $total_practical_credit+$student_course['practicle_credit'];
-						$sum_subjects_credit_point=$total_theory_credit+$total_practical_credit;
-						$sumgradepoint = $sumgradepoint+$student_course['gradeval'];
-						$sumcreditpoint = $sumcreditpoint+$student_course['creditval'];
-						$subject_credit_points = $student_course['theory_credit'].'+'.$student_course['practicle_credit'];
-						?>
-						<?php	if($count >=19 && $flag == false){ $flag=true;
-	              ?>
-				  </table></div><div style="float:left;width:50%"><table class="table" width="100%" style="border:solid 1px black;">
-			  <tr>
-                    <th width="11%">Course No</th>
-                    <th>Course Title</th>
-                    <th width="10%">Credit Hours</th>
-                  
-                    <th width="10%">Grade Points</th>
-                    <th width="10%">Credit Points</th>
-                    <!--<th>Result</th>-->
-                </tr>
-					<?php } ?>
-            
-                <tr>
-                    <td align="center" ><?php  echo $student_course['course_code'];?></td>
-                    <td><?php  echo $student_course['course_title'];?></td>
-                    <td align="center" ><?php  echo $subject_credit_points;?></td>
-                    <td align="center" ><?php  echo $student_course['gradeval'];?></td>
-                    <td align="center" ><?php  echo $student_course['creditval'];?></td>
-                    <!--<td align="center" style="border-bottom:solid 1px #fff !important;"><?php echo $student_course['passfail_status'];?></td>-->
-
-                </tr>
-				<?php $i++;}
-
-				
-				//exit; ?>
-				
-               
-              <!--  <tr>
-
-                    <td colspan="2"><div style="border-top:solid 1px black !important;">* Non-Credit Courses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total</div></td>
-                    <td align="center"><div style="border-top:solid 1px black !important;"><?php echo $sum_subjects_credit_point;?></div></td>
-                    <td align="center"><div style="border-top:solid 1px black !important;"><?php echo $sumgradepoint;?></div></td>
-                    <td align="center"><div style="border-top:solid 1px black !important;"><?php echo $sumcreditpoint;?></div></td>
-                    <td>&nbsp;</td>
-                </tr>-->
-          
-			  <?php } ?>
-				<?php
-				if(count($result_data) == 0)
-					$row_count = 38;
-				elseif($counter >=19)
-					$row_count = 38;
-				elseif($counter <19)
-					$row_count = 38;
-				for($j=1;$j<$row_count-$count;$j++){ $counter = $j+$count;
-				if($counter >=19 && $flag == false){ $flag=true;
-	              ?>
-				  </table></div><div style="float:left;width:50%"><table class="table" width="100%" style="border:solid 1px black;">
-			  <tr>
-                    <th width="11%">Course No</th>
-                    <th>Course Title</th>
-                    <th width="10%">Credit Hours</th>
-                  
-                    <th width="10%">Grade Points</th>
-                    <th width="10%">Credit Points</th>
-                    <!--<th>Result</th>-->
-                </tr>
-				<?php }else{ ?>
-					<tr>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-					</tr>
-				<?php } } ?>
-			  
-          	  </table>
         </div>
-        </div>
+        <table width="100%" style="padding:0px;margin-left:0px;margin-top:5px;margin-bottom:5px;font-size:12px;text-align:left;" >
+            <tr>
+                <td style="height:30px;">Grand Total of Credit Hours: <?php if(!empty($student_marks['overall']['credithours'])){echo $student_marks['overall']['credithours'];}else{echo 'N/A';}?></td><td>&nbsp;</td>
+                <td>Grand Total of Credit Points: <?php if(!empty($student_marks['overall']['sum_subjects_credit_point'])) {echo $student_marks['overall']['sum_subjects_credit_point'];} else {echo 'N/A';	}?></td><td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="height:30px;">Non-Credit Hours: <?php echo $tot_non_credit_hrs;?></td><td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="height:30px;">Overall Grade Point Average(OGPA): <?php if(!empty($student_marks['overall']['sum_subjects_credit_point'])){ echo round($student_marks['overall']['sum_subjects_credit_point']/$student_marks['overall']['credithours'],3);}else{echo 'N/A';} ?></td><td>&nbsp;</td>
+                <td>Percentage of Marks:</td><td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="height:30px;"><strong>RESULT:&nbsp;<?php if($resultStatus == 'FAIL') {echo 'FAIL';} else{ echo 'PASS';}?></strong></td><td>&nbsp;</td>
+                <td><strong>CONDUCT</strong></td><td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="height:30px;">
+                    <p>*&nbsp;&nbsp;&nbsp;&nbsp;Cleared with compartment</p>
+                    <p>**&nbsp;&nbsp;&nbsp;Unsuccessful in the Professional Year</p>
+                    <p>***&nbsp;&nbsp;Internship extended or repeated</p>
+                </td>
+            </tr>
+        </table>
+        <table width="100%">
+            <tr>
+                <td  style="height:30px;" width="33%" >DATE:</td>
+                <td >&nbsp;</td>
+                <td >&nbsp;</td>
+            </tr>
+            <tr>
+                <td  style="height:30px;" width="33%" >&nbsp;</td>
+                <td>CONTROLLER OF EXAMINATIONS</td>
+                <td>REGISTRAR</td>
+            </tr>
+        </table>
     </div>
- 
+</div>
+<?php if($count+1<count($aggregate_marks['semester_1'])){?>
+<pagebreak>
+    <?php } $count++;}  ?>
 </body>
 
 
