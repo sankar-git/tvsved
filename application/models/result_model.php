@@ -334,8 +334,8 @@ Class Result_model extends CI_Model
         $result	= $this->db->get()->result();
         return $result;
     }
-    function get_bvsc_semester_marks($student_id,$semester_id){
-        $subjectList = $this->get_student_marks_by_id($student_id,$semester_id);
+    function get_bvsc_semester_marks($student_id,$semester_id,$exam_type=''){
+        $subjectList = $this->get_student_marks_by_id($student_id,$semester_id,$exam_type);
         $dataList =array();
         $overallReport =array();
         $sum_subjects_credit_point=0;
@@ -420,13 +420,13 @@ Class Result_model extends CI_Model
         }
         return 	$list;
     }
-	function get_student_results($campus_id,$program_id,$batch_id,$degree_id,$semester_id,$student_id,$month,$year){
+	function get_student_results($campus_id,$program_id,$batch_id,$degree_id,$semester_id,$student_id,$month,$year,$exam_type='',$section=''){
         $semesterRow = $this->get_semester_name($semester_id);
         $students = $this->get_student_data($student_id);
         foreach($students as $stuData)
         {
             $list['overall']=array();
-            $list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id);
+            $list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id,$exam_type);
             //p($list);exit;
             $list['first_name']  =$stuData->first_name;
             $list['father_name']  =$stuData->parent_name;
@@ -445,12 +445,19 @@ Class Result_model extends CI_Model
 
 
             if($semester_id == 1){
-                $list['previous']=array();
-                $list['overall']['sum_subjects_credit_point'] = $list['overallReport']['sum_subjects_credit_point'];
-                $list['overall']['credithours'] = $list['overallReport']['credithours'];
-                $list['overall']['gradeval_avergage'] = $list['overallReport']['gradeval_avergage'];
-                $list['overall']['count_subject'] = $list['overallReport']['count_subject'];
-
+                $list['previous'] = array();
+                if($section == 'reportcard'){
+                    $overallData=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id);
+                    $list['overall']['sum_subjects_credit_point'] = $overallData['overallReport']['sum_subjects_credit_point'];
+                    $list['overall']['credithours'] = $overallData['overallReport']['credithours'];
+                    $list['overall']['gradeval_avergage'] = $overallData['overallReport']['gradeval_avergage'];
+                    $list['overall']['count_subject'] = $overallData['overallReport']['count_subject'];
+                }else {
+                    $list['overall']['sum_subjects_credit_point'] = $list['overallReport']['sum_subjects_credit_point'];
+                    $list['overall']['credithours'] = $list['overallReport']['credithours'];
+                    $list['overall']['gradeval_avergage'] = $list['overallReport']['gradeval_avergage'];
+                    $list['overall']['count_subject'] = $list['overallReport']['count_subject'];
+                }
             }else{
                 if($semester_id == 4){
                     $prevlist1=$this->get_bvsc_semester_marks($stuData->user_id,1);

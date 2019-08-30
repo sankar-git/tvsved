@@ -72,7 +72,7 @@
 					</div>
 					<div class="form-group col-md-3">
 					  <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
-					  <select class="form-control" name="degree_id" id="degree_id" onchange="getSemesterbyDegree(),getBatchbyDegree(),getBatchbyDOS(),getBatchbyDOC();">
+					  <select class="form-control" name="degree_id" id="degree_id" onchange="getSemesterbyDegree(),getBatchbyDegree(),getDisciplineByDegreeId();">
 						  <option value="">--Select Degree--</option>
 						   
 					  </select>
@@ -89,14 +89,29 @@
                </div>
 			   
 			    <div class="row">
-				<div class="form-group col-md-3">
+				<div class="form-group col-md-2">
 					  <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="batch_id" id="batch_id" class="form-control" onchange="getStudentList();" >
 						  <option value="">Select Batch</option>
 						
 					  </select>
 					</div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
+                        <label for="discipline">Discipline<span style="color:red;font-weight: bold;">*</span></label>
+                        <select class="form-control" name="discipline_id" id="discipline_id" onchange="getStudentList();">
+                            <option value="">--Select Discipline--</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                    <label for="exampleInputEmail1">Exam<span style="color:red;font-weight: bold;">*</span></label>
+                    <select name="exam_type" id="exam_type" class="form-control" onchange="getStudentList();">
+                        <option value="">Select Type</option>
+                        <option value="1">Regular</option>
+                        <option value="2">Cap</option>
+                    </select>
+                </div>
+                    <div class="form-group col-md-2">
                         <label for="exampleInputEmail1">Certificate Copy<span style="color:red;font-weight: bold;">*</span></label>
                         <select name="certificate_type" id="certificate_type" class="form-control" >
                             <option value="">Select Certificate Copy</option>
@@ -126,7 +141,7 @@
 
                       </select>
                     </div>-->
-					<div class="form-group col-md-3">
+					<div class="form-group col-md-2">
 					  <label for="month">Month<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="month" id="month">
 					   
@@ -136,7 +151,7 @@
 						<?php }?>
 					  </select>
 					</div>
-					 <div class="form-group col-md-3">
+					 <div class="form-group col-md-2">
 					  <label for="year">Year<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="year" id="year">
 					   
@@ -327,6 +342,21 @@
 			 }
 		});
 	}
+      function getDisciplineByDegreeId()
+      {
+          var degree_id =$('#degree_id').val();
+          $.ajax({
+              type:'POST',
+              url:'<?php echo base_url();?>course/getDisciplineByDegreeId',
+              data: {'degree_id':degree_id},
+              success: function(data){
+                  //alert(data);
+                  var  option_brand = '<option value="">--Select Discipline--</option>';
+                  $('#discipline_id').empty();
+                  $("#discipline_id").append(option_brand+data);
+              }
+          });
+      }
 	function getStudentList()
 	{
 		

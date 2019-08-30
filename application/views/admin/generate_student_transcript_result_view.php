@@ -57,7 +57,7 @@
 					</div>
 					<div class="form-group col-md-3">
 					  <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
-					  <select class="form-control" name="degree_id" id="degree_id" onchange="getBatchbyDegree(),getBatchbyDOS();">
+					  <select class="form-control" name="degree_id" id="degree_id" onchange="getBatchbyDegree(),getDisciplineByDegreeId();">
 						  <option value="">--Select Degree--</option>
 						   
 					  </select>
@@ -74,6 +74,13 @@
                 </div>
 			   
 			    <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="discipline">Discipline<span style="color:red;font-weight: bold;">*</span></label>
+                        <select class="form-control" name="discipline_id" id="discipline_id" onchange="getStudentList();">
+                            <option value="">--Select Discipline--</option>
+
+                        </select>
+                    </div>
 				<div class="form-group col-md-3">
 					  <label for="month">Month<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="month" id="month">
@@ -247,6 +254,22 @@
 			 }
 		});
 	}
+      function getDisciplineByDegreeId()
+      {
+
+          var degree_id =$('#degree_id').val();
+          $.ajax({
+              type:'POST',
+              url:'<?php echo base_url();?>course/getDisciplineByDegreeId',
+              data: {'degree_id':degree_id},
+              success: function(data){
+                  //alert(data);
+                  var  option_brand = '<option value="">--Select Discipline--</option>';
+                  $('#discipline_id').empty();
+                  $("#discipline_id").append(option_brand+data);
+              }
+          });
+      }
       function getStudentList()
       {
           var $form = $("#registration_form");
