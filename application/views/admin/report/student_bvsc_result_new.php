@@ -56,7 +56,7 @@
                                 <tr>
                                     <td align="center">
                                         <div>
-                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;">DETAILED MARK CERTIFICATE<br/>
+                                             <h5 align="center" style=" font-size:15px; margin-top:-10px;"><?php if($exam_type == 1) echo "DETAILED ";else echo "COMPARTMENTAL ";?>MARK CERTIFICATE<br/>
                                              <?php echo strtoupper($student_marks['semester_name']);?></h5>
                                         </div>
                                     </td>

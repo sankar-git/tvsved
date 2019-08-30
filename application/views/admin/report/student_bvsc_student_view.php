@@ -50,7 +50,7 @@
                             <tr>
                                 <td align="center">
                                     <div>
-                                        <h5 align="center" style=" font-size:15px; margin-top:-10px;">DETAILED MARK CERTIFICATE</h5>
+                                        <h5 align="center" style=" font-size:15px; margin-top:-10px;"><?php if($exam_type == 1) echo "DETAILED ";else echo "COMPARTMENTAL ";?>MARK CERTIFICATE</h5>
                                     </div>
                                 </td>
                             </tr>

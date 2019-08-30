@@ -48,7 +48,7 @@ function admin_mainmenu()
 			
 				
 				$msg .=' <li class="treeview" >
-				          <a href="#">
+				          <a href="javascript:;">
 							<i class="fa fa-user"></i> <span>'.$values->menuname.'</span>
 							<span class="pull-right-container">
 							  <i class="fa fa-angle-left pull-right"></i>
@@ -95,7 +95,7 @@ function admin_mainmenu()
 			if(@in_array(@$values->id,$uMainMenu)){
 				
 				$msg .=' <li class="treeview ">
-				          <a href="#">
+				          <a href="javascript:;">
 							<i class="fa fa-user"></i> <span>'.$values->menuname.'</span>
 							<span class="pull-right-container">
 							  <i class="fa fa-angle-left pull-right"></i>
