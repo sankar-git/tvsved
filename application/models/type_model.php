@@ -126,10 +126,46 @@ Class Type_model extends CI_Model
 		return true;			
 		}
 	}
-	function list_user()
+	function list_user($role_type='')
 	{
-		$ignore = array(1, 2);
-		return $this->db->select('users.*,role.role_name')->from('users')->join('role','users.role_id=role.id','left')->order_by('first_name', 'ASC')->where_not_in('role_id', $ignore)->get()->result();//method chaining
+	    if($role_type == 'admin') {
+            $ignore = array(1, 2,5,6);
+            $this->db->select('users.*,role.role_name')->from('users')->join('role', 'users.role_id=role.id', 'left')->order_by('first_name', 'ASC')->where_not_in('role_id', $ignore);
+        }else if($role_type == 'student') {
+            $this->db->select('u.*,role.role_name')->from('users u')->join('user_map_student_details as s','s.user_id = u.id','LEFT')->join('role', 'u.role_id=role.id', 'left')->where('u.role_id', 1);
+            if(isset($_POST['campus_id']) && $_POST['campus_id'] != '' && $_POST['campus_id'] != '0')
+                $this->db->where('s.campus_id', $_POST['campus_id']);
+           // if(isset($_POST['program_id']) && $_POST['program_id'] != '' && $_POST['program_id'] != '0')
+               // $this->db->where('s.program_id', $_POST['program_id']);
+            if(isset($_POST['degree_id']) && $_POST['degree_id'] != '' && $_POST['degree_id'] != '0')
+                $this->db->where('s.degree_id', $_POST['degree_id']);
+            if(isset($_POST['batch_id']) && $_POST['batch_id'] != '' && $_POST['batch_id'] != '0')
+                $this->db->where('s.batch_id', $_POST['batch_id']);
+        }else if($role_type == 'alumini') {
+            $this->db->select('u.*,role.role_name')->from('users u')->join('user_map_student_details as s','s.user_id = u.id','LEFT')->join('role', 'u.role_id=role.id', 'left')->where('u.role_id', 6);
+            if(isset($_POST['campus_id']) && $_POST['campus_id'] != '' && $_POST['campus_id'] != '0')
+                $this->db->where('s.campus_id', $_POST['campus_id']);
+           // if(isset($_POST['program_id']) && $_POST['program_id'] != '' && $_POST['program_id'] != '0')
+               // $this->db->where('s.program_id', $_POST['program_id']);
+            if(isset($_POST['degree_id']) && $_POST['degree_id'] != '' && $_POST['degree_id'] != '0')
+                $this->db->where('s.degree_id', $_POST['degree_id']);
+            if(isset($_POST['batch_id']) && $_POST['batch_id'] != '' && $_POST['batch_id'] != '0')
+                $this->db->where('s.batch_id', $_POST['batch_id']);
+        }else if($role_type == 'teacher') {
+            $this->db->select('u.*,role.role_name')->from('users u')->join('user_map_teacher_details as s','s.user_id = u.id','LEFT')->join('role', 'u.role_id=role.id', 'left')->where('u.role_id', 2);
+            if(isset($_POST['campus_id']) && $_POST['campus_id'] != '' && $_POST['campus_id'] != '0')
+                $this->db->where('s.campus', $_POST['campus_id']);
+        }else if($role_type == 'parent') {
+            $this->db->select("u.*,role.role_name")->from('users u')->join('user_map_student_details as s','s.user_id = u.id','LEFT')->join('role', 'u.role_id=role.id', 'left')->where('u.role_id', 5);
+            if(isset($_POST['campus_id']) && $_POST['campus_id'] != '' && $_POST['campus_id'] != '0')
+                $this->db->where('s.campus_id', $_POST['campus_id']);
+
+        }else{
+	        return false;
+        }
+
+        return $this->db->get()->result();//method chaining
+
 	}
 	function registerStudent()
 	{
@@ -435,9 +471,9 @@ Class Type_model extends CI_Model
 		//print_r($id);
 		//print_r($data); exit;
 		$this->db->select('id');
-		  $this->db->from('user_map_student_details');
+		  $this->db->from('user_map_teacher_details');
 		  $this->db->where(array('user_id'=>$id));
-		  $result=$this->db->get()->result();
+		  $result=$this->db->get()->result();//echo $this->db->last_query();
 		if( count($result)>0 )
 		{
 			$this->db->where('user_id',$id);

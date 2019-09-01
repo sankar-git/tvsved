@@ -273,7 +273,7 @@ class Authenticate extends CI_Controller {
  function forgotPasswordByEmail($flag='2')
  {
 	 $data['err_flag'] = $flag;
-	 $data['page_title'] = 'Forgot Password';
+	 $data['page_title'] = 'Reset Password';
 	$this->load->view('admin/forgot_password_email_view',$data); 
  }
  

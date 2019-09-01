@@ -295,6 +295,12 @@ Class Discipline_model extends CI_Model
 		$this->db->from('users as u');
         $this->db->join('user_map_student_details as umap','umap.user_id = u.id','left');
 		$this->db->where(array('u.role_id' => $type));
+        if(isset($_POST['campus']) && $_POST['campus'] != '' && $_POST['campus'] != '0')
+            $this->db->where('umap.campus_id', $_POST['campus']);
+        if(isset($_POST['degree']) && $_POST['degree'] != '' && $_POST['degree'] != '0')
+            $this->db->where('umap.degree_id', $_POST['degree']);
+        if(isset($_POST['batch']) && $_POST['batch'] != '' && $_POST['batch'] != '0')
+            $this->db->where('umap.batch_id', $_POST['batch']);
         $result	= $this->db->get()->result();
 		return $result;
 	}
@@ -304,6 +310,8 @@ Class Discipline_model extends CI_Model
 		$this->db->from('users as u');
         $this->db->join('user_map_teacher_details as umap','umap.user_id = u.id','left');
 		$this->db->where(array('u.role_id' => $type));
+        if(isset($_POST['campus']) && $_POST['campus'] != '' && $_POST['campus'] != '0')
+            $this->db->where('umap.campus_id', $_POST['campus']);
         $result	= $this->db->get()->result();
 		//echo $this->db->last_query(); die;
 		return $result;
@@ -313,7 +321,10 @@ Class Discipline_model extends CI_Model
 		$this->db->select('*');
 		$this->db->from('users as u');
         $this->db->join('user_map_userdetail_details as umap','umap.user_id = u.id','left');
-		$this->db->where(array('u.role_id' => $type));
+        $this->db->where_not_in('role_id', $type);
+
+        if(isset($_POST['campus']) && $_POST['campus'] != '' && $_POST['campus'] != '0')
+            $this->db->where('umap.campus_id', $_POST['campus']);
         $result	= $this->db->get()->result();
 		//echo $this->db->last_query(); die;
 		return $result;

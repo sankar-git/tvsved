@@ -200,11 +200,15 @@ Class Attendance_model extends CI_Model
 		$data['name'] = $result['name'];
 		$data['color'] = isset($result['color'])?$result['color']:'';
 		$data['degree_id'] = $degree_id;
+		$data['campus_id'] = $result['campus_id'];
+		$data['program_id'] = $result['program_id'];
 		$this->db->select('id');
 		$this->db->from('holiday_list');
 		$this->db->where('startDate',$data['startDate']);
 		$this->db->where('endDate',$data['endDate']);
 		$this->db->where('degree_id',$data['degree_id']);
+		$this->db->where('campus_id',$data['campus_id']);
+		$this->db->where('program_id',$data['program_id']);
 		$result =$this->db->get()->result();
 		if(isset($result[0]->id) && $result[0]->id>0){
 			$this->db->where('id',$result[0]->id);

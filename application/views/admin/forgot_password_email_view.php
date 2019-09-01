@@ -43,7 +43,7 @@
 				 <div class="thumb">
                   <a href="<?php echo base_url();?>"><img class="media-object img-circle" height="100" width="100" src="<?php echo base_url();?>assets/admin/dist/img/logo.jpg" alt=""></a>
 				  </div>
-                  <h2 class="text-center">Forgot Password?</h2>
+                  <h2 class="text-center">Reset Password?</h2>
                   <p><span><a href="<?php echo base_url();?>authenticate/forgotPassword" class="btn  btn-success tab_id" >Mobile</a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="<?php echo base_url();?>authenticate/forgotPasswordByEmail" class="btn  btn-primary tab_id"  >Email</a></span></p>
                   <div class="panel-body">
                        <div><p class="login-box-msg"> 

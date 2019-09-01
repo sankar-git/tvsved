@@ -670,8 +670,8 @@ function drawMultSeries() {
 	function holidaylist(){
 		//$days = $this->getSundays(2019);exit;
 		 $sessdata= $this->session->userdata('sms');
-		
-		if(empty($sessdata)){
+        $data['campuses'] = $this->Discipline_model->get_campus();
+        if(empty($sessdata)){
 		redirect('authenticate', 'refresh');
 		}
 		if($sessdata[0]->role_id==2){
@@ -708,8 +708,8 @@ function drawMultSeries() {
 			redirect('authenticate', 'refresh');
 		    }
 		    $data['page_title']="Manage Holiday";
-			
-				$data['degrees'] = $this->Discipline_model->get_degree();
+            $data['campuses'] = $this->Discipline_model->get_campus();
+			//$data['degrees'] = $this->Discipline_model->get_degree();
 			$data['managelist']="1";
 			
 			$this->load->view('admin/attendance/manageholidays',$data);  

@@ -145,11 +145,21 @@ class Admin extends CI_Controller {
 		   $this->load->view('admin/edit_user_view',$data);
 	}
 
-	function listUser()
+	function listUser($role_type='')
 	{
-		$data['page_title'] ='User List';
-		$data['roles']=$this->type_model->get_role();
-		$data['user_list']=$this->type_model->list_user();
+		if(!empty($role_type)) {
+            $data['campuses'] = $this->Discipline_model->get_campus();
+
+            $data['campus_id'] = isset($_POST['campus_id'])?$_POST['campus_id']:'';
+            $data['degree_id'] = isset($_POST['degree_id'])?$_POST['degree_id']:'';
+            $data['batch_id'] = isset($_POST['batch_id'])?$_POST['batch_id']:'';
+            $data['program_id'] = isset($_POST['program_id'])?$_POST['program_id']:'';
+            $data['batches'] = $this->Discipline_model->get_batches();
+            $data['page_title'] = ucfirst($role_type).' List';
+            $data['roles'] = $this->type_model->get_role();
+            $data['role_type'] = $role_type;
+            $data['user_list'] = $this->type_model->list_user($role_type);//echo $this->db->last_query();exit;
+        }
 		$this->load->view('admin/user_list_view',$data);
 	}
 	
@@ -800,7 +810,7 @@ class Admin extends CI_Controller {
 	}
 	
 	function editUser($id,$role_id)
-	{     
+	{
            $data['page_title']="Update User";
 	       $data['disciplines'] = $this->Discipline_model->get_discipline(); 
 		   $data['batches'] = $this->Discipline_model->get_batch(); 
@@ -814,10 +824,11 @@ class Admin extends CI_Controller {
 		   $data['community']=$this->type_model->get_community();
 		   
 		   $data['userid'] = $id;
+		   $data['role_id'] = $role_id;
 		   $data['user_row']=$this->type_model->get_user_by_id($id,$role_id);
 		 //echo "<pre>";print_r( $data); echo $this->db->last_query();exit;exit;
 			//echo $role_id;exit;
-		   if($role_id=='1' || $role_id=='6')
+		   if($role_id=='1' || $role_id=='6' || $role_id=='5')
 		   {
 			    $data['user_school']=$this->type_model->get_user_school_by_id($id,$role_id);
 				 $data['user_education']=$this->type_model->get_user_education_by_id($id,$role_id);
@@ -1028,7 +1039,7 @@ class Admin extends CI_Controller {
 			$userid = $this->type_model->update_common_user_by_id($id,$save);//echo $this->db->last_query();
 			//echo $this->db->last_query();exit;
 			
-			if($user_type=='1' || $user_type == '6'){
+			if($user_type=='1' || $user_type == '6' || $user_type == '5'){
 				$saved['batch_id']=$this->input->post('batch_id');
 				$saved['campus_id']=$this->input->post('campus_id');
 				$saved['degree_id']=$this->input->post('degree_id');
@@ -1157,11 +1168,18 @@ class Admin extends CI_Controller {
 				}
 			}
 			//exit;
-			if($id>0)
-				$this->session->set_flashdata('message', 'Details updated successfully');
-			else
-				$this->session->set_flashdata('message', 'User created successfully');
-	        redirect('admin/listStudent','refresh'); 
+        if($user_type == 2)
+            $page='teacher';
+        elseif($user_type == 1)
+            $page='student';
+        elseif($user_type == 6)
+            $page='alumini';
+        elseif($user_type == 5)
+            $page='parent';
+        else
+            $page='admin';
+        $this->session->set_flashdata('message', 'User updated successfully');
+        redirect('admin/listUser/'.$page,'refresh');
 			
 	}
 	function updateTeacher($id,$role_id)
@@ -1218,7 +1236,6 @@ class Admin extends CI_Controller {
 			$save['dob']= $dob;
 			$save['gender']= $gender;
 			$save['user_image']= $save_file;
-			
 			$data = $this->type_model->update_common_user_by_id($id,$save);
 			$saved['address_line1']= $address_line1;
 			$saved['address_line2']= $address_line2;
@@ -1234,16 +1251,22 @@ class Admin extends CI_Controller {
 			$saved['discipline']= $discipline_id;
 			//print_r($saved); exit;
 			$data = $this->type_model->update_teacher_details_by_id($id,$saved);
-			
-		   
-			if($role_id == 2){
-				$this->session->set_flashdata('message', 'Teacher updated successfully');
-				redirect('admin/listTeacher','refresh'); 
-			}else{
-				 $this->session->set_flashdata('message', 'User updated successfully');
-				redirect('admin/listUser','refresh'); 
+
+
+            if($role_id == 2)
+                $page='teacher';
+            elseif($role_id == 1)
+                $page='student';
+            elseif($user_type == 6)
+                $page='alumini';
+            elseif($role_id == 5)
+                $page='parent';
+            else
+                $page='admin';
+			$this->session->set_flashdata('message', 'User updated successfully');
+            redirect('admin/listUser/'.$page,'refresh');
 				
-			}
+
 	}
 	
 	function studentStatus($id,$status)
@@ -1289,96 +1312,19 @@ class Admin extends CI_Controller {
 
 	     // echo "hello"; exit;
 	  
-	        $user_type=$this->input->post('user_type');
-             if($user_type=='1')
+	        $user_type=$this->input->post('role_type');
+
+             if($user_type=='student' || $user_type=='alumini' || $user_type=='parent')
 	        {
-		  $data['students'] = $this->Discipline_model->get_students_excel($user_type); 
+                if($user_type=='student')
+                    $user_type_id=1;
+                if($user_type=='alumini')
+                    $user_type_id=6;
+                if($user_type=='parent')
+                    $user_type_id=5;
+		  $data['students'] = $this->Discipline_model->get_students_excel($user_type_id);
 	     // dd($data['students']);
-		  if(!empty($this->input->post('userExcel')))
-          {
-			
-           $finalExcelArr = array('First Name','Last Name','Email',' Contact No','Gender',' DOB','Parent Name','Mother Name',' Occupation',' Father Contact',' Alternate Contact','Father Email','Religion','Nationality','Address',' Country',' State',' Zip','Registration','Class','Section','Roll','Last School','Last STD',' Marks Obtained','Sports');
-           $objPHPExcel = new PHPExcel();
-           $objPHPExcel->setActiveSheetIndex(0);
-           $objPHPExcel->getActiveSheet()->setTitle('Student Worksheet');
-           $cols= array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ');
-            $j=2;
-            
-            //For freezing top heading row.
-            $objPHPExcel->getActiveSheet()->freezePane('A2');
 
-            //Set height for column head.
-            $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(25);
-                        
-           for($i=0;$i<count($finalExcelArr);$i++){
-            
-            //Set width for column head.
-            $objPHPExcel->getActiveSheet()->getColumnDimension($cols[$i])->setAutoSize(true);
-
-            //Set background color for heading column.
-            $objPHPExcel->getActiveSheet()->getStyle($cols[$i].'1')->applyFromArray(
-                array(
-                    'fill' => array(
-                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                        'color' => array('rgb' => '71B8FF')
-                    ),
-                      'font'  => array(
-                      'bold'  => false,
-                      'size'  => 15,
-                      )
-                )
-            );
-
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[$i].'1', $finalExcelArr[$i]);
-
-            foreach ($data['students'] as $key => $value) {
-             
-            $newvar = $j+$key;
-
-            //Set height for all rows.
-            $objPHPExcel->getActiveSheet()->getRowDimension($newvar)->setRowHeight(20);
-            
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[0].$newvar, $value->first_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[1].$newvar, $value->last_name);
-			$objPHPExcel->getActiveSheet()->setCellValue($cols[2].$newvar, $value->email);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[3].$newvar, $value->contact_number);
-			$objPHPExcel->getActiveSheet()->setCellValue($cols[4].$newvar, $value->gender);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[5].$newvar, $value->dob);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[6].$newvar, $value->parent_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->mother_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[8].$newvar, $value->occupation);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[9].$newvar, $value->father_contact);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[10].$newvar, $value->alternate_contact);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[11].$newvar, $value->father_email);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[12].$newvar, $value->religion);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[13].$newvar, $value->nationality);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[14].$newvar, $value->address);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[15].$newvar, $value->country_id);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[16].$newvar, $value->state_id);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[17].$newvar, $value->zip_code);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[18].$newvar, $value->registration);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[19].$newvar, $value->class_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[20].$newvar, $value->section_id);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[21].$newvar, $value->roll);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[22].$newvar, $value->last_school);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[23].$newvar, $value->last_std);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[24].$newvar, $value->marks_obtained);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[25].$newvar, $value->sports_id);
-          
-            }
-          }
-
-          $filename='Students.xls';
-          header('Content-Type: application/vnd.ms-excel'); //mime type
-          header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
-          header('Cache-Control: max-age=0'); //no cache
-          $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-          ob_end_clean();
-          ob_start();  
-          $objWriter->save('php://output');
-
-         
-          }
 		  if($this->input->post('userPdf'))
 		  {
 			  ini_set('memory_limit', '512M');
@@ -1439,86 +1385,11 @@ class Admin extends CI_Controller {
      
       }	  //end user type
 	      
-	     if($user_type=='2')  // teacher section 
+	     if($user_type=='teacher')  // teacher section
 	     {
-		  $data['teachers'] = $this->Discipline_model->get_teacher_excel($user_type); 
+             $user_type_id=2;
+		  $data['teachers'] = $this->Discipline_model->get_teacher_excel($user_type_id);
 	      // dd($data['students']);
-		  if(!empty($this->input->post('userExcel')))
-          {
-			
-           $finalExcelArr = array('First Name','Last Name','Email',' Contact No','Gender',' DOB','Address Line1','Address Line2',' Address Line3',' Address Line4','Landline No','Employment Id','Qualification','Date of Join','Designation',' Department','Campus',' Discipline');
-           $objPHPExcel = new PHPExcel();
-           $objPHPExcel->setActiveSheetIndex(0);
-           $objPHPExcel->getActiveSheet()->setTitle('Student Worksheet');
-           $cols= array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ');
-            $j=2;
-            
-            //For freezing top heading row.
-            $objPHPExcel->getActiveSheet()->freezePane('A2');
-
-            //Set height for column head.
-            $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(25);
-                        
-           for($i=0;$i<count($finalExcelArr);$i++){
-            
-            //Set width for column head.
-            $objPHPExcel->getActiveSheet()->getColumnDimension($cols[$i])->setAutoSize(true);
-
-            //Set background color for heading column.
-            $objPHPExcel->getActiveSheet()->getStyle($cols[$i].'1')->applyFromArray(
-                array(
-                    'fill' => array(
-                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                        'color' => array('rgb' => '71B8FF')
-                    ),
-                      'font'  => array(
-                      'bold'  => false,
-                      'size'  => 15,
-                      )
-                )
-            );
-
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[$i].'1', $finalExcelArr[$i]);
-
-            foreach ($data['teachers'] as $key => $value) {
-             
-            $newvar = $j+$key;
-
-            //Set height for all rows.
-            $objPHPExcel->getActiveSheet()->getRowDimension($newvar)->setRowHeight(20);
-            
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[0].$newvar, $value->first_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[1].$newvar, $value->last_name);
-			$objPHPExcel->getActiveSheet()->setCellValue($cols[2].$newvar, $value->email);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[3].$newvar, $value->contact_number);
-			$objPHPExcel->getActiveSheet()->setCellValue($cols[4].$newvar, $value->gender);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[5].$newvar, $value->dob);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[6].$newvar, $value->address_line1);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->address_line2);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[8].$newvar, $value->address_line3);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[9].$newvar, $value->address_line4);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[10].$newvar, $value->landline_number);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[11].$newvar, $value->employee_id);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[12].$newvar, $value->qualification);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[13].$newvar, $value->date_of_joining);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[14].$newvar, $value->designation);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[15].$newvar, $value->department);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[16].$newvar, $value->campus);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[17].$newvar, $value->discipline);
-		}
-          }
-
-          $filename='Teachers.xls';
-          header('Content-Type: application/vnd.ms-excel'); //mime type
-          header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
-          header('Cache-Control: max-age=0'); //no cache
-          $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-          ob_end_clean();
-          ob_start();  
-          $objWriter->save('php://output');
-
-         
-          }
 		  if($this->input->post('userPdf'))
 		  {
 			ini_set('memory_limit', '512M');
@@ -1579,80 +1450,12 @@ class Admin extends CI_Controller {
       }	  //end user type
 	  
          
-	     if($user_type=='3')  // users section 
+	     if($user_type=='admin')  // users section
 	     {
-		  $data['users'] = $this->Discipline_model->get_users_excel($user_type); 
+             $ignore_id = array(1, 2,5,6);
+		  $data['users'] = $this->Discipline_model->get_users_excel($ignore_id);
 	      // dd($data['students']);
-		  if(!empty($this->input->post('userExcel')))
-          {
-			
-           $finalExcelArr = array('First Name','Last Name','Email',' Contact No','Gender',' DOB','Address Line1','Address Line2',' Address Line3',' Address Line4','Landline No');
-           $objPHPExcel = new PHPExcel();
-           $objPHPExcel->setActiveSheetIndex(0);
-           $objPHPExcel->getActiveSheet()->setTitle('Student Worksheet');
-           $cols= array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ');
-            $j=2;
-            
-            //For freezing top heading row.
-            $objPHPExcel->getActiveSheet()->freezePane('A2');
 
-            //Set height for column head.
-            $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(25);
-                        
-           for($i=0;$i<count($finalExcelArr);$i++){
-            
-            //Set width for column head.
-            $objPHPExcel->getActiveSheet()->getColumnDimension($cols[$i])->setAutoSize(true);
-
-            //Set background color for heading column.
-            $objPHPExcel->getActiveSheet()->getStyle($cols[$i].'1')->applyFromArray(
-                array(
-                    'fill' => array(
-                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                        'color' => array('rgb' => '71B8FF')
-                    ),
-                      'font'  => array(
-                      'bold'  => false,
-                      'size'  => 15,
-                      )
-                )
-            );
-
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[$i].'1', $finalExcelArr[$i]);
-
-            foreach ($data['users'] as $key => $value) {
-             
-            $newvar = $j+$key;
-
-            //Set height for all rows.
-            $objPHPExcel->getActiveSheet()->getRowDimension($newvar)->setRowHeight(20);
-            
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[0].$newvar, $value->first_name);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[1].$newvar, $value->last_name);
-			$objPHPExcel->getActiveSheet()->setCellValue($cols[2].$newvar, $value->email);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[3].$newvar, $value->contact_number);
-			$objPHPExcel->getActiveSheet()->setCellValue($cols[4].$newvar, $value->gender);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[5].$newvar, $value->dob);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[6].$newvar, $value->address_line1);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[7].$newvar, $value->address_line2);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[8].$newvar, $value->address_line3);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[9].$newvar, $value->address_line4);
-            $objPHPExcel->getActiveSheet()->setCellValue($cols[10].$newvar, $value->landline_number);
-            
-		}
-          }
-
-          $filename='Users.xls';
-          header('Content-Type: application/vnd.ms-excel'); //mime type
-          header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
-          header('Cache-Control: max-age=0'); //no cache
-          $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-          ob_end_clean();
-          ob_start();  
-          $objWriter->save('php://output');
-
-         
-          }
 		  if($this->input->post('userPdf'))
 		  {
 			ini_set('memory_limit', '512M');

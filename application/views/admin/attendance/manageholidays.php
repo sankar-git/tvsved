@@ -1,4 +1,5 @@
 <?php $this->load->view('admin/helper/header');?>
+<?php $this->load->view('admin/helper/header');?>
 <?php $this->load->view('admin/helper/sidebar');
         $sessdata= $this->session->userdata('sms');
 		$id = $sessdata[0]->id;
@@ -46,18 +47,34 @@
             <form role="form" name="attendance_form" id="attendance_form" method="post" enctype="multipart/form-data">
 			<div class="box-body">
               <div class="row">
+                  <div class="form-group col-md-4">
+                      <label for="campus">Campus<span style="color:red;font-weight: bold;">*</span></label>
+                      <select name="campus_id" id="campus_id" class="form-control" onchange="getProgramByCampusId();">
+                          <option value="">--Select Campus--</option>
+                          <?php foreach($campuses as $campus){?>
+                              <option value="<?php echo $campus->id; ?>"><?php echo $campus->campus_name; ?></option>
 
-			  <div class="form-group col-md-6">
-				  <input type="hidden" name="login_user_id" id="login_user_id" value="<?php echo $id;?>">
-				  <input type="hidden" name="login_user_type" id="login_user_type" value="<?php echo $role_id;?>">
+                          <?php } ?>
+                      </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                      <label for="program">Program<span style="color:red;font-weight: bold;">*</span></label>
+                      <select name="program_id" id="program_id" class="form-control" onchange="getDegreebyProgram();">
+                          <option value="">--Select Program--</option>
+                          <?php //foreach($programs as $program){?>
+                          <!--<option value="<?php //echo $program->id; ?>"><?php //echo $program->program_name; ?></option>-->
+
+                          <?php //} ?>
+                      </select>
+                  </div>
+			  <div class="form-group col-md-4" style="margin-top:15px;">
 				  <label for="degree_id">Degree<span style="color:red;font-weight: bold;">*</span></label>
 				  <select name="degree_id[]" multiple id="degree_id" class="form-control">
 					  <option value="">--Select Degree--</option>
-					  <?php foreach($degrees as $degree){?>
-					  <option value="<?php echo $degree->id; ?>"><?php echo $degree->degree_name; ?></option>
-					 
-					  <?php } ?>
+
 				  </select>
+                  <input type="hidden" name="login_user_id" id="login_user_id" value="<?php echo $id;?>">
+                  <input type="hidden" name="login_user_type" id="login_user_type" value="<?php echo $role_id;?>">
 				</div>
 				</div>
 				<div class="row">
@@ -153,7 +170,37 @@
     $('#event-modal input[name="event-end-date"]').datepicker('update', event ? event.endDate : '');
     $('#event-modal').modal();
 }
+  function getProgramByCampusId()
+  {
+      var campus_id =$('#campus_id').val();
+      $.ajax({
+          type:'POST',
+          url:'<?php echo base_url();?>course/getProgramByCampusId',
+          data: {'campus_id':campus_id},
+          success: function(data){
 
+              var  option_brand = '<option value="">--Select Program--</option>';
+              $('#program_id').empty();
+              $("#program_id").append(option_brand+data);
+          }
+      });
+  }
+  function getDegreebyProgram()
+  {
+      var program_id =$('#program_id').val();
+      var campus_id =$('#campus_id').val();
+      $.ajax({
+          type:'POST',
+          url:'<?php echo base_url();?>course/getDegreebyProgram',
+          data: {'program_id':program_id,'campus_id':campus_id},
+          success: function(data){
+              //alert(data);
+              $('#degree_id').empty();
+              $("#degree_id").append(data);
+              $('#degree_id').multiselect('rebuild');
+          }
+      });
+  }
 function deleteEvent(event) {
     var dataSource = $('#activitycalendar').data('calendar').getDataSource();
 
@@ -176,13 +223,23 @@ function deleteEvent(event) {
 }
 
 function saveEvent() {
-	
+
     var event = {
         id: $('#event-modal input[name="event-index"]').val(),
         name: $('#event-modal input[name="event-name"]').val(),
         startDate: $('#event-modal input[name="event-start-date"]').val(),
         endDate: $('#event-modal input[name="event-end-date"]').val(),
-		degree_id :$('#degree_id').val()
+        degree_id: $('#degree_id').val(),
+        campus_id: $('#campus_id').val(),
+        program_id: $('#program_id').val()
+    }
+    if ($('#campus_id').val() == ''){
+        alert('Please select campus');
+        return false;
+    }
+    if ($('#program_id').val() == ''){
+        alert('Please select program');
+        return false;
     }
     if($('#event-modal input[name="event-name"]').val() == ''){
 		alert('Please enter the name');
@@ -405,21 +462,7 @@ function uncheckedChk(){
 		});	
 	}
 	
-	function getDegreebyProgram()
-	{
-		var program_id =$('#program_id').val();
-		$.ajax({
-			type:'POST',
-			url:'<?php echo base_url();?>course/getDegreebyProgram',
-			data: {'program_id':program_id},
-			success: function(data){
-				//alert(data); 
-			var  option_brand = '<option value="">--Select Degree--</option>';
-			$('#degree_id').empty();
-			$("#degree_id").append(option_brand+data);
-			 }
-		});
-	}
+
 	function getCourseByPDS()
 	{
 		var $form = $("#attendance_form");

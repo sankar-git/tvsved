@@ -98,7 +98,7 @@
                                 <button class="btn btn-raised waves-effect bg-red" name="go" type="submit">Login</button>
                             </div>
 							
-                            <div class="col-xs-12"> <a href="<?php echo base_url();?>authenticate/forgotPassword">Forgot Password!</a> </div>
+                            <div class="col-xs-12"> <a href="<?php echo base_url();?>authenticate/forgotPassword">Reset Password!</a> </div>
                         </div>
                     </form>
 				</div>

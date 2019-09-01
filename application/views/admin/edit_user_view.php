@@ -129,8 +129,10 @@ function setgroup(val)
 					  <option value="">--Select Role--</option>
 					  <?php foreach($roles as $role){?>
 					  <option value="<?php echo $role->id;?>"<?php if(@$user_row->role_id==$role->id) echo "selected";?>><?php echo $role->role_name;?></option>
-					 
-					  <?php } ?>
+                          <?php if($role_id == 5){ ?>
+					  <option value="<?php echo $role_id;?>"<?php echo "selected";?>>Parent</option>
+					 <?php }
+					  } ?>
 					  </select>
 					</div>
 					<div class="form-group col-md-3">
@@ -293,23 +295,25 @@ function setgroup(val)
 						</div>
 						<div class="form-group col-md-3">
 					  <label for="date_of_birth"><i class="fa fa-birthday-cake"></i> Community</label>
-					   <select name="community" id="community" class="form-control" onchange="getCaste();">
+					   <!--<select name="community" id="community" class="form-control" onchange="getCaste();">
 					  <option value="">--Select Community--</option>
 					  <?php foreach($community as $rescom){?>
 					  <option value="<?php echo $rescom->name;?>" <?php if(@$user_row->community == $rescom->name) echo "selected";?>><?php echo $rescom->name;?></option>
 					 
 					  <?php } ?>
-					  </select>
+					  </select>-->
+                            <input type="text" class="form-control" id="community" name="community" placeholder="Enter community" value="<?php echo @$user_row->community; ?>">
 					</div>
 					<div class="form-group col-md-3">
 					  <label for="caste"><i class="fa fa-birthday-cake"></i> Caste</label>
-					  <select name="caste" id="caste" class="form-control" >
+					  <!--<select name="caste" id="caste" class="form-control" >
 					  <option value="">--Select Caste--</option>
 					   <?php foreach($caste as $rescom){?>
 					  <option value="<?php echo $rescom->name;?>" <?php if(@$user_row->caste == $rescom->name) echo "selected";?>><?php echo $rescom->name;?></option>
 					 
 					  <?php } ?>
-					  </select>
+					  </select>-->
+                        <input type="text" class="form-control" id="caste" name="caste" placeholder="Enter caste" value="<?php echo @$user_row->caste; ?>">
 					</div>
 					
 					
