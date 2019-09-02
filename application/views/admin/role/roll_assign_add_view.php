@@ -65,20 +65,20 @@
                         </select>
                     </div>
 
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 student_sec" >
                             <label for="program_id">Program<span style="color:red;font-weight: bold;">*</span></label>
                             <select name="program_id" id="program_id" class="form-control" onchange="getDegreebyProgram();">
                                 <option value="">--Select Program--</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 student_sec">
                             <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
                             <select class="form-control" name="degree_id" id="degree_id" onchange="getSemesterbyDegree(),getUser();" >
                                 <option value="">--Select Degree--</option>
 
                             </select>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 student_sec">
                             <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
                             <select name="batch_id" id="batch_id" class="form-control" onchange="getUser();">
                                 <option value="">Select Batch</option>
@@ -96,7 +96,6 @@
 					<div class="form-group col-md-3" style="margin-top:20px">
 					  <label for="user_id">User<span style="color:red;font-weight: bold;">*</span></label>
 					  <select class="selectpicker form-control" multiple data-live-search="true" name="user_id[]" id="user_id"  onchange="getmenu()">
-						  <option value="">--Select User--</option>
 					  </select>
 					</div>
 					
@@ -158,6 +157,13 @@
   <script type="text/javascript">
 	
 	$(document).ready(function() {
+	    $('#role_id').change(function(){
+	       if( $(this).val() == 1 ||  $(this).val() == 5 ||  $(this).val() == 6){
+	           $('.student_sec').show();
+           }else{
+               $('.student_sec').hide();
+           }
+        });
 		$("#sales_dob").datepicker({format: 'dd-mm-yyyy',autoclose: true});
 		$('#user_id').multiselect({
 			        	includeSelectAllOption: true,
@@ -233,7 +239,7 @@
 			url:'<?php echo base_url();?>permissions/getUserByRole',
 			data: {'role_id':role_id,'degree_id':degree_id,'program_id':program_id,'campus_id':campus_id,'batch_id':batch_id},
 			success: function(data){
-                var  option_student = '<option value="">--Select User--</option>';
+                var  option_student = '';
                 $('#user_id').empty();
                 $("#user_id").append(option_student+data);
                 $('#user_id').multiselect('rebuild');

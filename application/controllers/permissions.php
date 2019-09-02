@@ -104,8 +104,11 @@ class Permissions extends CI_Controller {
 		$data['roles']= $this->type_model->get_user_by_role($role_id);
 		//echo  $data['roles']; exit;
 		 $str = '';
-         foreach($data['roles'] as $k=>$v){   
-          $str .= "<option value=".$v->id.">".$v->first_name.'('.$v->user_unique_id.")</option>";
+         foreach($data['roles'] as $k=>$v){
+             if($role_id == 1 || $role_id == 6)
+                $str .= "<option value=".$v->id.">".$v->first_name.'('.$v->user_unique_id.")</option>";
+             else
+                 $str .= "<option value=".$v->id.">".$v->first_name."</option>";
            }
            echo $str;
     }

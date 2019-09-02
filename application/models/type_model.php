@@ -244,20 +244,42 @@ Class Type_model extends CI_Model
 	}
 	function get_user_by_role($role_id)
 	{
-		//print_r($role_id); exit;
-		$this->db->select('u.id,u.first_name,u.last_name,u.user_unique_id');
-        $this->db->from('users u');
-        $this->db->join('user_map_student_details as s','s.user_id = u.id','LEFT');
-		$this->db->where(array('u.role_id' =>$role_id,'u.status'=> 1));
-        if(isset($_POST['campus_id']) && $_POST['campus_id'] != '' && $_POST['campus_id'] != '0')
-            $this->db->where('s.campus_id', $_POST['campus_id']);
-        // if(isset($_POST['program_id']) && $_POST['program_id'] != '' && $_POST['program_id'] != '0')
-        // $this->db->where('s.program_id', $_POST['program_id']);
-        if(isset($_POST['degree_id']) && $_POST['degree_id'] != '' && $_POST['degree_id'] != '0')
-            $this->db->where('s.degree_id', $_POST['degree_id']);
-        if(isset($_POST['batch_id']) && $_POST['batch_id'] != '' && $_POST['batch_id'] != '0')
-            $this->db->where('s.batch_id', $_POST['batch_id']);
-        $this->db->order_by('user_unique_id','ASC');
+
+        if($role_id == 1) {
+            $this->db->select('u.id,u.first_name,u.last_name,u.user_unique_id')->from('users u')->join('user_map_student_details as s','s.user_id = u.id','LEFT');
+            if(isset($_POST['campus_id']) && $_POST['campus_id'] != '' && $_POST['campus_id'] != '0')
+                $this->db->where('s.campus_id', $_POST['campus_id']);
+            // if(isset($_POST['program_id']) && $_POST['program_id'] != '' && $_POST['program_id'] != '0')
+            // $this->db->where('s.program_id', $_POST['program_id']);
+            if(isset($_POST['degree_id']) && $_POST['degree_id'] != '' && $_POST['degree_id'] != '0')
+                $this->db->where('s.degree_id', $_POST['degree_id']);
+            if(isset($_POST['batch_id']) && $_POST['batch_id'] != '' && $_POST['batch_id'] != '0')
+                $this->db->where('s.batch_id', $_POST['batch_id']);
+            $this->db->order_by('user_unique_id','ASC');
+        }else if($role_id == 6) {
+            $this->db->select('u.id,u.first_name,u.last_name,u.user_unique_id')->from('users u')->join('user_map_student_details as s','s.user_id = u.id','LEFT');
+            if(isset($_POST['campus_id']) && $_POST['campus_id'] != '' && $_POST['campus_id'] != '0')
+                $this->db->where('s.campus_id', $_POST['campus_id']);
+            // if(isset($_POST['program_id']) && $_POST['program_id'] != '' && $_POST['program_id'] != '0')
+            // $this->db->where('s.program_id', $_POST['program_id']);
+            if(isset($_POST['degree_id']) && $_POST['degree_id'] != '' && $_POST['degree_id'] != '0')
+                $this->db->where('s.degree_id', $_POST['degree_id']);
+            if(isset($_POST['batch_id']) && $_POST['batch_id'] != '' && $_POST['batch_id'] != '0')
+                $this->db->where('s.batch_id', $_POST['batch_id']);
+            $this->db->order_by('user_unique_id','ASC');
+        }else if($role_id == 2) {
+            $this->db->select('u.id,u.first_name,u.last_name,u.user_unique_id')->from('users u')->join('user_map_teacher_details as s','s.user_id = u.id','LEFT')->order_by('first_name', 'ASC');
+            if(isset($_POST['campus_id']) && $_POST['campus_id'] != '' && $_POST['campus_id'] != '0')
+                $this->db->where('s.campus', $_POST['campus_id']);
+        }else if($role_id == 5) {
+            $this->db->select("u.id,u.first_name,u.last_name,u.user_unique_id")->from('users u')->join('user_map_student_details as s','s.user_id = u.id','LEFT');
+            if(isset($_POST['campus_id']) && $_POST['campus_id'] != '' && $_POST['campus_id'] != '0')
+                $this->db->where('s.campus_id', $_POST['campus_id']);
+            $this->db->order_by('user_unique_id','ASC');
+        }else{
+                $this->db->select('u.id,u.first_name,u.last_name,u.user_unique_id')->from('users u')->join('role', 'u.role_id=role.id', 'left')->order_by('first_name', 'ASC');
+        }
+        $this->db->where(array('u.role_id' =>$role_id,'u.status'=> 1));
         $result	= $this->db->get()->result();
 	//echo	$this->db->last_query(); die;
 		return $result;
