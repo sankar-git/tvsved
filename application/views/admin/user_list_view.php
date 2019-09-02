@@ -272,7 +272,7 @@
 
       function getSemesterbyDegree(){
           var degree_id =$('#degree_id').val();
-          getDisciplineByDegreeId();
+          //getDisciplineByDegreeId();
           //alert(degree_id);
           $.ajax({
               type:'POST',

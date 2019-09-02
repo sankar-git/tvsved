@@ -54,12 +54,14 @@ Class Gradechart_model extends CI_Model
         $result	= $this->db->get()->result();
 		return $result;
 	}
-	function get_student_marks($student_id,$semester_id,$course_id){
+	function get_student_marks($student_id,$semester_id,$course_id,$batch_id=''){
 		$this->db->select('r.theory_internal1,r.theory_internal2,r.theory_internal3,r.theory_internal,r.theory_paper1,
 		                   r.theory_paper2,r.theory_paper3,r.theory_paper4,r.sum_internal_practical,r.practical_internal,r.theory_external1,r.theory_external2,r.theory_external3,r.theory_external4,r.practical_external,
 						   r.marks_sum,r.external_sum');
 		$this->db->from('students_ug_marks as r');
 		 $this->db->where(array('r.student_id'=>$student_id,'r.course_id'=>$course_id,'r.semester_id'=>$semester_id));
+		 if(!empty($batch_id))
+		    $this->db->where(array('r.batch_id'=>$batch_id));
 		return $this->db->get()->result();
 	}
 	function get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_id,$semester_id,$exam_type=1)

@@ -105,7 +105,7 @@ class Permissions extends CI_Controller {
 		//echo  $data['roles']; exit;
 		 $str = '';
          foreach($data['roles'] as $k=>$v){   
-          $str .= "<option value=".$v->id.">".$v->first_name.' '.$v->last_name."</option>";
+          $str .= "<option value=".$v->id.">".$v->first_name.'('.$v->user_unique_id.")</option>";
            }
            echo $str;
     }

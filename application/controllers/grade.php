@@ -402,7 +402,7 @@ class Grade extends CI_Controller {
 		   $campus_id=$this->input->post('campus_id');
 	       $program_id=$data['program_id']=$this->input->post('program_id');
 	       $degree_id=$data['degree_id']=$this->input->post('degree_id');
-	       $batch_id=$this->input->post('batch_id');
+        $data['batch_id']=$batch_id=$this->input->post('batch_id');
 	       $data['semester_id']= $semester_id=$this->input->post('semester_id');
 	       $discipline_id=$this->input->post('discipline_id');
 	       $data['month']=$month=$this->input->post('month');
@@ -422,12 +422,12 @@ class Grade extends CI_Controller {
 		  	$data['month']=$month=$this->input->post('month');
 	       $data['year']=$year=$this->input->post('year');
 		  $data['course_count'] =  1;
-		 /*if($degree_id == 1){
+		 if($degree_id == 1){
 		   $courseArr = explode("|",$course_input);
 		   $courseArr = explode("-",$courseArr[1]);
-		   $course_input=$courseArr[0];
+		  // $course_input=$courseArr[0];
 		  $data['course_count'] =  count($courseArr);
-		 }*/
+		 }
 		   $data['numeralCodes'] =  array("I","II","III","IV","V","VI","VII","VIII","IX");
 		   $data['students_attendance'] = $this->Gradechart_model->get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_input,$semester_id,$exam_type);
 		   //echo $this->db->last_query();exit;
@@ -442,7 +442,7 @@ class Grade extends CI_Controller {
 		  //getting batch and year
 	      
 			//load the view and saved it into $html variable
-			$html=$this->load->view('admin/grade/subject_wise_mark_view',$data, true);
+			 $html=$this->load->view('admin/grade/subject_wise_mark_view',$data, true);
 			// print_r($html); exit;
 			//this the the PDF filename that user will get to download
 			$pdfFilePath = "registered_students.pdf";

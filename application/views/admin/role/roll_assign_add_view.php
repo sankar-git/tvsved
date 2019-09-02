@@ -39,7 +39,7 @@
             <form role="form" name="permission_form" id="permission_form" method="post" action="<?php echo base_url();?>role/saveMenu" enctype="multipart/form-data">
               <div class="box-body">
 			    <div class="row">
-					<div class="form-group col-md-6">
+					<div class="form-group col-md-3">
 					  <label for="degree_code">Role<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="role_id" id="role_id" class="form-control" onchange="getUser();">
 						  <option value="">--Select Role--</option>
@@ -49,7 +49,51 @@
 						<option value="5">Parent</option>
 					  </select>
 					</div>
-					<div class="form-group col-md-6">
+                    <div class="form-group col-md-3">
+                        <label for="program">Campus<span style="color:red;font-weight: bold;">*</span></label>
+                        <select name="campus_id" id="campus_id" class="form-control" onchange="getProgram(),getUser();">
+                            <option value="">--Select Campus--</option>
+                            <?php foreach($campuses as $campus){
+                                if($campus_id == $campus->id)
+                                    $selected="selected";
+                                else
+                                    $selected="";
+                                ?>
+                                <option value="<?php echo $campus->id; ?>" <?php echo $selected;?>><?php echo $campus->campus_name; ?></option>
+
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="program_id">Program<span style="color:red;font-weight: bold;">*</span></label>
+                            <select name="program_id" id="program_id" class="form-control" onchange="getDegreebyProgram();">
+                                <option value="">--Select Program--</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
+                            <select class="form-control" name="degree_id" id="degree_id" onchange="getSemesterbyDegree(),getUser();" >
+                                <option value="">--Select Degree--</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
+                            <select name="batch_id" id="batch_id" class="form-control" onchange="getUser();">
+                                <option value="">Select Batch</option>
+                                <?php foreach($batches as $batch){
+                                    if($batch_id == $batch->id)
+                                        $selected="selected";
+                                    else
+                                        $selected="";
+                                    ?>
+                                    <option value="<?php echo $batch->id;?>" <?php echo $selected;?>><?php echo $batch->batch_name;?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+
+					<div class="form-group col-md-3" style="margin-top:20px">
 					  <label for="user_id">User<span style="color:red;font-weight: bold;">*</span></label>
 					  <select class="selectpicker form-control" multiple data-live-search="true" name="user_id[]" id="user_id"  onchange="getmenu()">
 						  <option value="">--Select User--</option>
@@ -123,18 +167,76 @@
 						
 			        });
 	});
+    function getProgram()
+    {
+        var campus_id =$('#campus_id').val();
+        //alert(campus_id);
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>marks/getProgramByCampus',
+            data: {'campus_id':campus_id},
+            success: function(data){
+                //alert(data);
+                var  option_brand = '<option value="">--Select Program--</option>';
+                $('#program_id').empty();
+                $("#program_id").append(option_brand+data);
+
+            }
+        });
+    }
+
+    function getDegreebyProgram()
+    {
+
+        var program_id =$('#program_id').val();
+        var campus_id =$('#campus_id').val();
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>course/getDegreebyProgram',
+            data: {'campus_id':campus_id,'program_id':program_id},
+            success: function(data){
+                //alert(data);
+                var  option_brand = '<option value="">--Select Degree--</option>';
+                $('#degree_id').empty();
+                $("#degree_id").append(option_brand+data);
+
+            }
+        });
+    }
+
+    function getSemesterbyDegree(){
+        var degree_id =$('#degree_id').val();
+        //getDisciplineByDegreeId();
+        //alert(degree_id);
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>generate/getSemesterbyDegree',
+            data: {'degree_id':degree_id},
+            success: function(data){
+                //alert(data);
+                var  option_brand = '<option value="">--Select Semester--</option>';
+                $('#semester_id').empty();
+                $("#semester_id").append(option_brand+data);
+            }
+        });
+    }
   function getUser()
   {
+
 	 var role_id =$('#role_id').val();
+	 var degree_id =$('#degree_id').val();
+	 var campus_id =$('#campus_id').val();
+	 var program_id =$('#program_id').val();
+	 var batch_id =$('#batch_id').val();
 	 $.ajax({
 			type:'POST',
 			url:'<?php echo base_url();?>permissions/getUserByRole',
-			data: {'role_id':role_id},
+			data: {'role_id':role_id,'degree_id':degree_id,'program_id':program_id,'campus_id':campus_id,'batch_id':batch_id},
 			success: function(data){
-			var  option_student = '<option value="">--Select User--</option>';
-			$('#user_id').empty();
-			$("#user_id").append(option_student+data);
-			$('#user_id').multiselect('rebuild');
+                var  option_student = '<option value="">--Select User--</option>';
+                $('#user_id').empty();
+                $("#user_id").append(option_student+data);
+                $('#user_id').multiselect('rebuild');
 			},
 		});
   }

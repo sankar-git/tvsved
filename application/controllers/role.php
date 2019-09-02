@@ -93,8 +93,8 @@ class Role extends CI_Controller {
 		$data['page_title']="Role Management";
 		$data['roles']=$this->type_model->get_role();
 		$data['mainmenu']=$this->type_model->get_menu();
-		
-		
+        $data['campuses'] = $this->Discipline_model->get_campus();
+        $data['batches'] = $this->Discipline_model->get_batches();
 		
 		$this->load->view('admin/role/roll_assign_add_view',$data);
 	}

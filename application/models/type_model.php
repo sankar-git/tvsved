@@ -245,9 +245,19 @@ Class Type_model extends CI_Model
 	function get_user_by_role($role_id)
 	{
 		//print_r($role_id); exit;
-		$this->db->select('users.id,users.first_name,users.last_name');
-        $this->db->from('users');
-		$this->db->where(array('role_id' =>$role_id,'status'=> 1));
+		$this->db->select('u.id,u.first_name,u.last_name,u.user_unique_id');
+        $this->db->from('users u');
+        $this->db->join('user_map_student_details as s','s.user_id = u.id','LEFT');
+		$this->db->where(array('u.role_id' =>$role_id,'u.status'=> 1));
+        if(isset($_POST['campus_id']) && $_POST['campus_id'] != '' && $_POST['campus_id'] != '0')
+            $this->db->where('s.campus_id', $_POST['campus_id']);
+        // if(isset($_POST['program_id']) && $_POST['program_id'] != '' && $_POST['program_id'] != '0')
+        // $this->db->where('s.program_id', $_POST['program_id']);
+        if(isset($_POST['degree_id']) && $_POST['degree_id'] != '' && $_POST['degree_id'] != '0')
+            $this->db->where('s.degree_id', $_POST['degree_id']);
+        if(isset($_POST['batch_id']) && $_POST['batch_id'] != '' && $_POST['batch_id'] != '0')
+            $this->db->where('s.batch_id', $_POST['batch_id']);
+        $this->db->order_by('user_unique_id','ASC');
         $result	= $this->db->get()->result();
 	//echo	$this->db->last_query(); die;
 		return $result;
