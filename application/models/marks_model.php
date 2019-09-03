@@ -170,7 +170,7 @@ Class Marks_model extends CI_Model
 		$this->db->from('student_assigned_courses c');
         $this->db->join('users  u','u.id = c.student_id','LEFT');
         $this->db->join('user_map_student_details  umap','u.id = umap.user_id','LEFT');
-        $this->db->join('tbl_dummy  d','u.id = d.student_id and c.exam_type=d.exam_type','LEFT');
+        $this->db->join('tbl_dummy  d','u.id = d.student_id and c.exam_type=d.exam_type and c.batch_id=d.batch_id and c.semester_id=d.semester_id','LEFT');
 		if($data['degree_id']!=1){
 			$this->db->join('courses co','co.id = c.course_id','LEFT');
 		}
