@@ -89,23 +89,63 @@ Class Attendance_model extends CI_Model
 		$this->db->join('users i','i.id=a.teacher_id','LEFT');
 		return $this->db->get()->result();
 	}
-	function getScheduler($degree_id,$semester_id){
-		$this->db->select("DATE_FORMAT(now(), '%Y-%m-%d') as date,course_id as id,day as row, concat(`from`,':00') as start, concat(`to`,':00') as end,course_title as subject",false);
-		$this->db->from('attendance_time_table a');
-		$this->db->join('courses c','a.course_id=c.id','LEF');
-		$this->db->where('a.degree_id',$degree_id);
-		$this->db->where('a.semester_id',$semester_id);
-		return $this->db->get()->result();
+	function getScheduler($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$section_id){
+        if($degree_id == 1)
+		    $this->db->select("DATE_FORMAT(now(), '%Y-%m-%d') as date,course_id as id,day as row, concat(`from`,':00') as start, concat(`to`,':00') as end,course_title as subject",false);
+        else
+            $this->db->select("DATE_FORMAT(now(), '%Y-%m-%d') as date,course_id as id,day as row, concat(`from`,':00') as start, concat(`to`,':00') as end",false);
+		$this->db->from('attendance_time_table');
+        if($degree_id == 1)
+		    $this->db->join('courses','attendance_time_table.course_id=courses.id','LEFT');
+		$this->db->where('attendance_time_table.campus_id',$campus_id);
+		$this->db->where('attendance_time_table.program_id',$program_id);
+		$this->db->where('attendance_time_table.degree_id',$degree_id);
+		$this->db->where('attendance_time_table.batch_id',$batch_id);
+		$this->db->where('attendance_time_table.semester_id',$semester_id);
+		$this->db->where('attendance_time_table.discipline_id',$discipline_id);
+		$this->db->where('attendance_time_table.section_id',$section_id);
+		$result = $this->db->get()->result();
+        if($degree_id == 1) {
+            foreach ($result as $key=>$res) {
+                $course_idArr = explode("|",$res->id);
+                if($course_idArr[0] == 22) {
+                    $this->db->select('GROUP_CONCAT(course_code) as course_subject_title');
+                    $this->db->from('courses');
+                    $this->db->where_in('id', explode("-",$course_idArr[1]));
+                    $sub_res=$this->db->get()->result_array();
+                    $result[$key]->subject=$sub_res[0]['course_subject_title'];
+                }else{
+                    $this->db->select('course_subject_title');
+                    $this->db->from('course_subject_groups');
+                    $this->db->where('id', $course_idArr[0]);
+                    $sub_res=$this->db->get()->result_array();
+                    $result[$key]->subject=$sub_res[0]['course_subject_title'];
+                }
+
+            }
+        }
+        return $result;
+
 	}
 	function save_attendance($data,$id)
 	{
 		if($data['degree_id']>0 && $data['semester_id']>0 ){
+			$this->db->where('campus_id',$data['campus_id']);
+			$this->db->where('program_id',$data['program_id']);
+			$this->db->where('batch_id',$data['batch_id']);
+			$this->db->where('section_id',$data['section_id']);
 			$this->db->where('degree_id',$data['degree_id']);
+			$this->db->where('discipline_id',$data['discipline_id']);
 			$this->db->where('semester_id',$data['semester_id']);
 			$this->db->delete('attendance_time_table');
 			$json = json_decode($data['data'], TRUE);
 			//p($json);exit;
+			$result['campus_id'] = $data['campus_id'];
+			$result['program_id'] = $data['program_id'];
+			$result['batch_id'] = $data['batch_id'];
+			$result['section_id'] = $data['section_id'];
 			$result['degree_id'] = $data['degree_id'];
+			$result['discipline_id'] = $data['discipline_id'];
 				$result['semester_id'] = $data['semester_id'];
 			foreach($json as $res){ //echo $res['start'];p($res);exit;
 				$result['from'] = $res['start'];
@@ -114,6 +154,7 @@ Class Attendance_model extends CI_Model
 				$result['day'] = $res['row'];
 				$result['created_by'] = $id;
 				//print_r($result);
+                $this->db->set('created_on', 'NOW()', FALSE);
 				$this->db->insert('attendance_time_table',$result);
 				$insert_id = $this->db->insert_id();
 			}
@@ -192,7 +233,7 @@ Class Attendance_model extends CI_Model
 		return $this->db->get()->result();
 		
 	}
-	function save_holidays($degree_id,$result){
+	function save_holidays($degree_id,$result, $batch, $semester){
 		$startDateArr = explode("/",$result['startDate']);
 		$endDateArr = explode("/",$result['endDate']);
 		$data['startDate'] = $startDateArr[2].'-'.$startDateArr[0].'-'.$startDateArr[1];
@@ -200,6 +241,8 @@ Class Attendance_model extends CI_Model
 		$data['name'] = $result['name'];
 		$data['color'] = isset($result['color'])?$result['color']:'';
 		$data['degree_id'] = $degree_id;
+		$data['semester_id'] = $semester;
+		$data['batch_id'] = $batch;
 		$data['campus_id'] = $result['campus_id'];
 		$data['program_id'] = $result['program_id'];
 		$this->db->select('id');
@@ -207,6 +250,8 @@ Class Attendance_model extends CI_Model
 		$this->db->where('startDate',$data['startDate']);
 		$this->db->where('endDate',$data['endDate']);
 		$this->db->where('degree_id',$data['degree_id']);
+		$this->db->where('semester_id',$semester);
+		$this->db->where('batch_id',$batch);
 		$this->db->where('campus_id',$data['campus_id']);
 		$this->db->where('program_id',$data['program_id']);
 		$result =$this->db->get()->result();

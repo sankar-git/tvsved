@@ -89,18 +89,36 @@
 					</div>
 					<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Semester<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="semester_id" id="semester_id" class="form-control" onchange="getCourseByPDS();">
+					  <select name="semester_id" id="semester_id" class="form-control" onchange="">
 						  <option value="">Select Semester</option>
 						  
 					  </select>
 					</div>
-					
+                  <div class="form-group col-md-3">
+                      <label for="course-group">Discipline<span style="color:red;font-weight: bold;">*</span></label>
+                      <select class="form-control" name="discipline_id" id="discipline_id"  onchange="getCourseByIds();">
+
+                          <option value="">Select Discipline</option>
+
+
+                      </select>
+                  </div>
+                  <div class="form-group col-md-3">
+                      <label for="course-group">Section<span style="color:red;font-weight: bold;">*</span></label>
+                      <select class="form-control" name="section_id" id="section_id"  onchange="getCourseByIds();">
+                          <option value="">Select Section</option>
+                          <?php foreach($section as $sectionObj){ ?>
+                          <option value="<?php echo $sectionObj->id;?>"><?php echo $sectionObj->section_name;?></option>
+                          <?php } ?>
+
+                      </select>
+                  </div>
               
 					
 					<?php if(!in_array($role_id,array(2))){?>
 					<div class="form-group col-md-3">
 					  <label for="course">Course<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="course_id" id="course_id" class="form-control" onchange="getStudentAssignByCourse();">
+					  <select name="course_id" id="course_id" class="form-control">
 						  <option value="">Select Course</option>
 						 
 					  </select>
@@ -164,6 +182,37 @@
 			 }
 		});
 	}
+     function getDisciplinebyDegree()
+     {
+         var degree_id =$('#degree_id').val();
+         //alert(degree_id);
+         $.ajax({
+             type:'POST',
+             url:'<?php echo base_url();?>course/getDisciplineByDegreeId',
+             data: {'degree_id':degree_id},
+             success: function(data){
+                 //alert(data);
+                 var  option_brand = '<option value="">--Select Discipline--</option>';
+                 $('#discipline_id').empty();
+                 $("#discipline_id").append(option_brand+data);
+             }
+         });
+     }
+     function getCourseByIds()
+     {
+         var $form =$("#attendance_form");
+         $.ajax({
+             type:'POST',
+             url:'<?php echo base_url();?>marks/getCourseGroupByIds',
+             data: $form.serialize(),
+             success: function(data){
+                 var  option_brand = '<option value="">--Select Course--</option>';
+                 $('#course_id').empty();
+                 $("#course_id").append(option_brand+data);
+                 loadScheduler($("#semester").val());
+             }
+         });
+     }
 	function getCourseByPDS(){
 	 var degree_id =$('#degree_id').val();
 		var program_id =$('#program_id').val();
@@ -187,7 +236,7 @@
 		var degree_id =$('#degree_id').val();
 		var program_id =$('#program_id').val();
 		var campus_id =$('#campus_id').val();
-		//getDisciplineByDegreeId();
+      getDisciplinebyDegree();
 		//alert(degree_id); 
 		$.ajax({
 			type:'POST',
@@ -256,6 +305,37 @@
 			 }
 		});
 	}
+     function getDisciplinebyDegree()
+     {
+         var degree_id =$('#degree_id').val();
+         //alert(degree_id);
+         $.ajax({
+             type:'POST',
+             url:'<?php echo base_url();?>course/getDisciplineByDegreeId',
+             data: {'degree_id':degree_id},
+             success: function(data){
+                 //alert(data);
+                 var  option_brand = '<option value="">--Select Discipline--</option>';
+                 $('#discipline_id').empty();
+                 $("#discipline_id").append(option_brand+data);
+             }
+         });
+     }
+     function getCourseByIds()
+     {
+         var $form =$("#attendance_form");
+         $.ajax({
+             type:'POST',
+             url:'<?php echo base_url();?>attendance/getCourseGroupByIds',
+             data: $form.serialize(),
+             success: function(data){
+                 var  option_brand = '<option value="">--Select Course--</option>';
+                 $('#course_id').empty();
+                 $("#course_id").append(option_brand+data);
+                 loadScheduler($("#semester").val());
+             }
+         });
+     }
 	function getDegreebyProgram()
 	{
 		
@@ -275,7 +355,7 @@
 	}
 	function getSemesterbyDegree(){
 		var degree_id =$('#degree_id').val();
-		//getDisciplineByDegreeId();
+        getDisciplinebyDegree();
 		//alert(degree_id); 
 		$.ajax({
 			type:'POST',
@@ -309,14 +389,14 @@
 function getRsvns() {
 	var listArr = [];
 	$('.rsvn-container div').each(function(){
-	 var left = parseInt($(this).css('left').replace('px',''))/100+1;
-	 var top = parseInt($(this).css('top').replace('px',''))/70;
-	 var width = parseInt($(this).css('width').replace('px','')-1)/100;
+	 var left = parseInt($(this).css('left').replace('px',''))/115;
+	 var top = parseInt($(this).css('top').replace('px',''))/71;
+	 var width = parseInt($(this).css('width').replace('px',''))/116;
 	// console.log(top+' - '+left+' : '+(left+width)+' - '+$(this).find('span').html());
 	listArr.push({
-		"start": left,
-		"end": (left+width),
-		"id": parseInt($(this).find('span').html()),
+		"start": left+1,
+		"end": Math.round(left+width)+1,
+		"id": $(this).find('span').html(),
 		"row": top,
 	});
 	});
@@ -324,11 +404,15 @@ function getRsvns() {
 }
 	// Sets dates for example reservations to always be on current day or after
 function loadScheduler(){
+    $('#scheduler').html('');
+    $(".rsvn-container").html('');
+    console.log('clear rsvn');
 	$.ajax({
 			type:'POST',
 			url:'<?php echo base_url();?>attendance/getScheduler',
 			 dataType: "json",
-			data: {'degree_id':$('#degree_id').val(),'semester_id':$('#semester_id').val()},
+			data: {'degree_id':$('#degree_id').val(),'semester_id':$('#semester_id').val(),'campus_id':$('#campus_id').val(),
+                'program_id':$('#program_id').val(),'batch_id':$('#batch_id').val(),'discipline_id':$('#discipline_id').val(),'section_id':$('#section_id').val()},
 			success: function(resdata){
 				var date = new Date();
 				day = date.getDate();
@@ -343,7 +427,7 @@ function loadScheduler(){
 				//date3 = date3.format('Y-m-d');
 
 				// Array of example date
-				console.log(date1);
+				//console.log(date1);
 				/*var reservations = [
 									{date: date1, start: '1:00', end: '3:00',subject:'Veterinary Anatomy Paper-I',id:1, row: 1}, 
 									{date: date1, start: '2:00', end: '6:00',subject:'Veterinary Anatomy Paper-II',id:2, row: 3}, 
@@ -408,7 +492,8 @@ $(document).on('click', ".reservation", function () {
 			  dataType: "json",
 			type:'POST',
 			url:'<?php echo base_url();?>attendance/saveval',
-			data: {"data":JSON.stringify(listArr),'degree_id':$('#degree_id').val(),'semester_id':$('#semester_id').val()},
+			data: {"data":JSON.stringify(listArr),'degree_id':$('#degree_id').val(),'semester_id':$('#semester_id').val(),'campus_id':$('#campus_id').val(),
+                'program_id':$('#program_id').val(),'batch_id':$('#batch_id').val(),'discipline_id':$('#discipline_id').val(),'section_id':$('#section_id').val()},
 			success: function(data){
 				$('#showMsg').html('Saved Sucessfully');
 			}

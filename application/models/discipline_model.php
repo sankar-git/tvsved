@@ -62,6 +62,14 @@ Class Discipline_model extends CI_Model
         $result	= $this->db->get()->result();
 		return $result;
 	}
+	function get_section()
+	{
+		$this->db->select('*');
+        $this->db->from('section');
+		$this->db->where('status', 1);
+        $result	= $this->db->get()->result();
+		return $result;
+	}
 	function get_program($id='')
 	{
 		$this->db->select('*');
@@ -392,6 +400,14 @@ Class Discipline_model extends CI_Model
 		$result	= $this->db->get()->result();
 		return $result; 
 	}
+	function section_list()
+	{
+		$this->db->select('id,section_code,section_name,status');
+        $this->db->from('section');
+        //$this->db->where(array('status' => 1));
+		$result	= $this->db->get()->result();
+		return $result;
+	}
 	
 	function get_batch_by_id($id)
 	{
@@ -401,6 +417,14 @@ Class Discipline_model extends CI_Model
 		$result=$this->db->get()->row();
 		return $result;
 		
+	}
+	function get_section_by_id($id)
+	{
+		$this->db->select('id,section_code,section_name,status');
+		$this->db->from('section');
+		$this->db->where('id',$id);
+		$result=$this->db->get()->row();
+		return $result;
 	}
 	
 	

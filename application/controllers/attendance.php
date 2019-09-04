@@ -51,12 +51,18 @@ class Attendance extends CI_Controller {
 		echo $id;
 	}
 	function getScheduler(){
+        $campus_id  = $this->input->post('campus_id');
+        $program_id  = $this->input->post('program_id');
+        $batch_id  = $this->input->post('batch_id');
+        $discipline_id  = $this->input->post('discipline_id');
+        $section_id  = $this->input->post('section_id');
 		$degree_id  = $this->input->post('degree_id');
 		$semester_id  = $this->input->post('semester_id');
 		$sessdata= $this->session->userdata('sms');
 		$userid = $sessdata[0]->id;
-		if($degree_id>0 && $semester_id>0)
-				$schedulerList = $this->Attendance_model->getScheduler($degree_id,$semester_id);
+        $schedulerList=array();
+		if($campus_id>0 && $program_id>0 && $degree_id>0 && $semester_id>0 && $batch_id && $discipline_id>0 && $section_id>0)
+		    $schedulerList = $this->Attendance_model->getScheduler($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$section_id);
 		echo json_encode($schedulerList);
 	}
 	function getTeacherSemesterbyDegree(){
@@ -678,10 +684,12 @@ function drawMultSeries() {
 			$data['degrees'] = $this->Discipline_model->get_degree(@$sessdata[0]->campus);
 		}else
 			$data['degrees'] = $this->Discipline_model->get_degree();
-		$data['page_title']="Holiday List";
+        $data['batches'] = $this->Discipline_model->get_batches();
+        $data['page_title']="Holiday List";
 		$data['managelist']="0";
 		$this->load->view('admin/attendance/manageholidays',$data);  
 	}
+
 	function manage_timetable(){
 		$sessdata= $this->session->userdata('sms');
 			
@@ -696,7 +704,8 @@ function drawMultSeries() {
 		$data['campuses'] = $this->Discipline_model->get_campus(); 
             $data['semesters'] = $this->Generate_model->get_semester(); 
             $data['batches'] = $this->Discipline_model->get_batches(); 			
-			$this->load->view('admin/attendance/manage_timetable',$data);  
+            $data['section'] = $this->Discipline_model->get_section();
+			$this->load->view('admin/attendance/manage_timetable',$data);
 		
 	}
 	function manageholidays($degree='')
@@ -710,6 +719,7 @@ function drawMultSeries() {
 		    $data['page_title']="Manage Holiday";
             $data['campuses'] = $this->Discipline_model->get_campus();
 			//$data['degrees'] = $this->Discipline_model->get_degree();
+        $data['batches'] = $this->Discipline_model->get_batches();
 			$data['managelist']="1";
 			
 			$this->load->view('admin/attendance/manageholidays',$data);  
@@ -717,13 +727,16 @@ function drawMultSeries() {
 	function saveholidays(){
 		$data = $_POST;
 		$degree_id  = $this->input->post('degree_id');
-		if(is_array($degree_id)){
-			//$degree_id = implode(",",$degree_id);
-			foreach($degree_id as $key=>$val){
-				$id = $this->Attendance_model->save_holidays($val,$data);
-			}
-		}else	
-			$id = $this->Attendance_model->save_holidays($degree_id,$data);
+		$batch_id  = $this->input->post('batch_id');
+		$semester_id  = $this->input->post('semester_id');
+        foreach($degree_id as $key=>$degree){
+            foreach($batch_id as $key=>$batch) {
+                foreach($semester_id as $key=>$semester) {
+                    $id = $this->Attendance_model->save_holidays($degree, $data, $batch, $semester);
+                    echo $this->db->last_query();
+                }
+            }
+        }
 		echo $id;
 	}
 	function deleteholiday($id){
@@ -750,6 +763,31 @@ function drawMultSeries() {
            echo $str;
 
 	}
+    function getCourseGroupByIds()
+    {
+        //print_r($_POST); exit;
+        $campus_id = $this->input->post('campus_id');
+        $program_id = $this->input->post('program_id');
+        $degree_id = $this->input->post('degree_id');
+        $batch_id = $this->input->post('batch_id');
+        $semester_id = $this->input->post('semester_id');
+        $discipline_id = $this->input->post('discipline_id');
+
+        $data['courses']=$this->Marks_model->get_course_group_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id);
+
+        //echo $this->db->last_query();exit;
+        //print_r($data['programs']); exit;
+        $str = '';
+        foreach($data['courses'] as $k=>$v){
+            if(isset($v->course_subject_id) && $v->course_subject_id==22)
+                $str .= "<option value=".$v->id.">".$v->course_code."</option>";
+            else if(isset($v->course_subject_name) && $v->course_subject_name!=NULL)
+                $str .= "<option value=".$v->id.">".$v->course_subject_title."</option>";
+            else
+                $str .= "<option value=".$v->id.">".$v->course_title.' ('.$v->course_code.")</option>";
+        }
+        echo $str;
+    }
 	function get_teacher()
 	{
 		//echo "hello"; exit;

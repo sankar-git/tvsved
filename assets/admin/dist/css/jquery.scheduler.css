@@ -101,6 +101,15 @@ margin-left: 0px;
   color:#fff;
   font-size:12px;
 }
+.reservation-green {
+  background: #fffff0;
+  background: linear-gradient(#90EE90, #006400) !important;
+  z-index: 2;
+  text-align:center;
+  padding-top:20px !important;
+  color:#fff;
+  font-size:12px;
+}
 
 .reservation-creating {
   background: #b3b3b3;

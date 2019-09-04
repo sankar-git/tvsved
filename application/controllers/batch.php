@@ -91,12 +91,40 @@ class Batch extends CI_Controller {
 		//print_r($data['batch_list']); exit;
 		$this->load->view('admin/batch_list_view',$data);
 	}
+	function listSection()
+	{
+		$data['page_title']="Section List";
+		$data['section_list']=$this->Discipline_model->section_list();
+		//print_r($data['batch_list']); exit;
+		$this->load->view('admin/section_list_view',$data);
+	}
     function addBatch()
 	{
 		$data['page_title']="Add Batch";
 		$data['syllabus'] = $this->Discipline_model->get_syllabus_year(); 
 		$this->load->view('admin/batch_add_view',$data);
 	}
+	function addSection()
+	{
+		$data['page_title']="Add Section";
+		$this->load->view('admin/section_add_view',$data);
+	}
+    function saveSection()
+    {
+        $save['section_code']=$this->input->post('section_code');
+        $save['section_name']=$this->input->post('section_name');
+        $data= $this->Master_model->save_section($save);
+        if(!empty($data))
+        {
+            $this->session->set_flashdata('message', 'Section added successfully');
+        }
+        else
+        {
+            $this->session->set_flashdata('message', 'Section not added');
+        }
+        redirect('batch/listSection');
+
+    }
 	function saveBatch()
 	{
 		
@@ -119,7 +147,22 @@ class Batch extends CI_Controller {
 	    redirect('batch/listBatch');
 		
 	}
-    
+    function editSection($id)
+    {
+        $data['page_title']="Update Section";
+        $data['section_row'] = $this->Discipline_model->get_section_by_id($id);
+        $data['section_id'] = $id;
+        //p($data['batch_row']); exit;
+        $this->load->view('admin/section_add_view',$data);
+    }
+    function updateSection($id)
+    {
+        $save['section_code']=$this->input->post('section_code');
+        $save['section_name']=$this->input->post('section_name');
+        $data= $this->Master_model->update_section($id,$save);
+        $this->session->set_flashdata('message', 'Section updated successfully');
+        redirect('batch/listSection');
+    }
 	function editBatch($id)
 	{
 		$data['page_title']="Update Batch";
@@ -144,7 +187,13 @@ class Batch extends CI_Controller {
 		$this->session->set_flashdata('message', 'Batch Updated Successfully');
 	    redirect('batch/listBatch');
 	}
-	
+    function sectionStatus($id,$dststus)
+    {
+        $status = $dststus;
+        $this->Master_model->section_status($id,$status);
+        $this->session->set_flashdata('message', 'Section status updated successfully');
+        redirect('batch/listSection');
+    }
 	function batchStatus($id,$dststus)
 	{
 		 $status = $dststus;

@@ -149,7 +149,8 @@
 			if($('#course_id').val()==''){
 				alert('Please select course');return false;
 			}
-			var coursename = $('#course_id option[value='+$('#course_id').val()+']').text();
+			var course_name = $('#course_id').val();
+			var coursename = $('#course_id option[value="'+course_name+'"]').text();
             var $newRsvn,
                 settings = e.data.settings,
                 posY = e.pageY - $(".rsvn-container").offset().top,
@@ -224,7 +225,8 @@
                 $newRsvn.remove();
             } else {
                 $newRsvn.removeClass("reservation-creating");
-				
+                if($newRsvn.width() == '229')
+                    $newRsvn.addClass('reservation-green');
                 $newRsvn.addClass("reservation-final");
             }
             $(".row-container").off("mousemove.newevent");
@@ -336,6 +338,7 @@
      */
 	 
     var loadRsvns = function(date, rsvns, settings) {
+
         if (settings.use24Hour == true) {
             var firstHour = parseInt(settings.startTime.split(":")[0]),
                 lastHour = parseInt(settings.endTime.split(":")[0]);
@@ -359,7 +362,8 @@
                         height = settings.timeslotHeight + 1,
                         left = (start - firstHour) * settings.timeslotWidth,
                         width = (end - start) * settings.timeslotWidth + 1;
-
+                    if(width == '231')
+                        $rsvn.addClass("reservation").addClass('reservation-green');
                     $rsvn.addClass("reservation").addClass("reservation-final")
                     .css({
                         top: top,

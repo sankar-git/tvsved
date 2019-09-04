@@ -891,6 +891,22 @@ Class Master_model extends CI_Model
 		$insert_id = $this->db->insert_id();
 		return $insert_id;
 	}
+	function save_section($data)
+	{
+        $this->db->set('created_on', 'NOW()', FALSE);
+		$this->db->insert('section',$data);
+		$insert_id = $this->db->insert_id();
+		return $insert_id;
+	}
+    function update_section($id,$data)
+    {
+        if( !empty($id) )
+        {
+            $this->db->where('id',$id);
+            $this->db->update('section',$data);
+            return true;
+        }
+    }
 	function update_batch($id,$data)
 	{
 		if( !empty($id) )
@@ -900,6 +916,16 @@ Class Master_model extends CI_Model
 		return true;			
 		}
 	}
+    function section_status($id,$status)
+    {
+        if($status==0){
+            $save=1;
+        }else{$save=0;}
+        if( !empty($id) ){
+            $this->db->query("update section set status=$save where id=$id");
+            return true;
+        }
+    }
 	function batch_status($id,$status)
 	{
 		//p($status); exit;

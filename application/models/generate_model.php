@@ -47,15 +47,20 @@ Class Generate_model extends CI_Model
 	}
 	function get_semester_by_degree($degree_id)
 	{
-		if($degree_id == 1){
-		$this->db->select('s.id,s.semester_name');
-        $this->db->from('semesters as s');
-        $this->db->join('degree_map_semester m','s.id = m.semester_id','INNER');
-        $this->db->where(array('m.degree_id' => $degree_id));
+		if(is_array($degree_id) && in_array(1,$degree_id) ){
+            $this->db->select('s.id,s.semester_name');
+            $this->db->from('semesters as s');
+            $this->db->join('degree_map_semester m','s.id = m.semester_id','INNER');
+            $this->db->where_in(array('m.degree_id' => $degree_id));
+        }else if($degree_id == 1){
+            $this->db->select('s.id,s.semester_name');
+            $this->db->from('semesters as s');
+            $this->db->join('degree_map_semester m','s.id = m.semester_id','INNER');
+            $this->db->where(array('m.degree_id' => $degree_id));
 		}else{
 			$this->db->select('s.id,s.semester_name');
 			$this->db->from('semesters as s');
-			$this->db->where_in('s.id' ,array(3,8,9,10));
+            $this->db->where_not_in('s.id' ,array(1,4,5,6));
 		}
         $result	= $this->db->get()->result();
 		return $result;
