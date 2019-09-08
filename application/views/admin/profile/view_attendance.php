@@ -26,6 +26,9 @@
 .box-body,#activitycalendar{
 	height: 300px;
 }
+.course_txt{
+    background-color:#ccc !important;
+}
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -213,7 +216,7 @@ function getAttendance(attendance_date,attType){
 						//getchart(attendance_date,data.present,data.absent,'container');
 						$('#container').show();
 
-					
+
 				}else{
 					$('#attendanceRangeList').html(data.table);
 					var dataDate= [];

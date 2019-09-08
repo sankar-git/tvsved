@@ -531,6 +531,9 @@ function drawMultSeries() {
             $table.='<th style="text-align:center" class="info">'.$j.'</th>';
 
         }
+        $total=0;$pass_cnt=0; $p=0;
+        $a=0;
+        $na=0;
         $table.='</tr>';
 				foreach ($period as $key => $value) {
 				 $date = $value->format('Y-m-d');
@@ -571,7 +574,7 @@ function drawMultSeries() {
                                 $diff = $res->to - $res->from;
                                 $colspan = 'colspan="'.$diff.'"';
                             }
-                            $table.='<th '.$colspan.' style="text-align:center">'.$course_name.'</th>';
+                            $table.='<th '.$colspan.' class="course_txt" style="text-align:center">'.$course_name.'</th>';
                             $attendance_col='';
                             $attendanceList = $this->Attendance_model->getmyattendance($degree_id,$semester_id,$student_id,$date);
                             if(count($attendanceList)>0){
@@ -606,16 +609,22 @@ function drawMultSeries() {
 
 
                         $table.='</tr>';
+                        $pass_cnt = $pass_cnt+$p;
+                        $total = $total+$p+$a+$na;
                     }
 
 					}else{
 						$table.='<tr  class="thead-light"><th style="vertical-align:middle" class="info"  nowrap>'.$date_str.'</th><th style="text-align:center;color:red"  colspan="8">'.$result[0]->name.'</th></tr>';
 					}
-				
+
 			}
+
+
+        $table.='<tr  class="thead-light"><th colspan="8" style="vertical-align:middle;text-align: right;" class="info"  nowrap>Total</th><th style="text-align:center;color:green"  >'.$pass_cnt.'/'.$total.'</th></tr>';
 			$attendance['table'] = $table;
 			$attendance['present'] = $p;
 			$attendance['absent'] = $a;
+			$attendance['na'] = $na;
 			$attendance['datewise'] = $dataChart;
 			//print($attendance);
 			//echo $this->db->last_query();
