@@ -23,28 +23,41 @@ Class Attendance_model extends CI_Model
 		return $result;
 		
 	}
-	function get_time_table_from_to($course_id,$degree_id,$semester_id,$day){
-		$this->db->select('min(`from`) as start,max(`to`) as end',true);
+	function get_time_table_from_to($campus_id,$program_id,$course_id,$degree_id,$semester_id,$day,$section){
+		$this->db->select('from as start,to as end',true);
 		$this->db->from('attendance_time_table');
-		$this->db->where(array('degree_id' =>$degree_id,'day' =>$day,'semester_id'=>$semester_id,'course_id'=>$course_id));
-		$this->db->group_by('course_id,semester_id,degree_id,day');
-		$result	= $this->db->get()->result();
+		$this->db->where(array('campus_id' =>$campus_id,'program_id' =>$program_id,'section_id' =>$section,'degree_id' =>$degree_id,'day' =>$day,'semester_id'=>$semester_id,'course_id'=>$course_id));
+		//$this->db->group_by('course_id,semester_id,degree_id,day');
+		$result	= $this->db->get()->result_array();
 		return $result;
 	}
 	function get_student_assign_by_course($receive)
 	{
 		
+		$program_id     = $receive['program_id'];
+		$campus_id     = $receive['campus_id'];
 		$degree_id     = $receive['degree_id'];
 		$batch_id      = $receive['batch_id'];
 		$semester_id   = $receive['semester_id'];
 		$course_id     = $receive['course_id'];
-		
+		$section_id     = $receive['section_id'];
+
 		$this->db->select('ud.user_id,u.user_unique_id,u.first_name,u.last_name,sac.course_id');
         $this->db->from('users u');
         $this->db->join('user_map_student_details ud','ud.user_id=u.id','INNER');
         $this->db->join('student_assigned_courses sac','sac.student_id=u.id','INNER');
-		$this->db->where(array('sac.degree_id' =>$degree_id,'sac.batch_id' =>$batch_id,'sac.semester_id'=>$semester_id,'sac.course_id'=>$course_id));
-		$this->db->order_by('u.first_name,u.last_name');
+		$this->db->where(array('sac.campus_id' =>$campus_id,'sac.program_id' =>$program_id,'sac.degree_id' =>$degree_id,'sac.batch_id' =>$batch_id,'sac.semester_id'=>$semester_id));
+        if($section_id>0)
+            $this->db->where(array('ud.section_id' =>$section_id));
+		if($degree_id == 1){
+            $courseArr = explode("|",$receive['course_id']);
+            $course_id_arr = explode("-",$courseArr[1]);
+            $this->db->where_in('sac.course_id',$course_id_arr);
+        }else{
+            $this->db->where(array('sac.course_id' =>$course_id));
+        }
+		$this->db->order_by('u.user_unique_id');
+		$this->db->group_by('u.user_unique_id');
 		$result	= $this->db->get()->result();
 		return $result;
 	}
@@ -66,9 +79,25 @@ Class Attendance_model extends CI_Model
 			$this->db->where('id',$id);
 			$this->db->update('attendance_course_assigned_teacher',$data);
 		}else{
-			
-			$this->db->insert('attendance_course_assigned_teacher',$data);
-			$insert_id = $this->db->insert_id();
+            $this->db->select('id');
+            $this->db->from('attendance_course_assigned_teacher');
+            $this->db->where(array(
+                'campus_id' =>$data['campus_id'],
+                'program_id' =>$data['program_id'],
+                'degree_id' =>$data['degree_id'],
+                'batch_id' =>$data['batch_id'],
+                'semester_id' =>$data['semester_id'],
+                'discipline_id' =>$data['discipline_id'],
+                'course_id' =>$data['course_id'],
+                'teacher_id' =>$data['teacher_id'],
+                'section_id' =>$data['section_id']) );
+            $result	= $this->db->get()->result();
+            if(count($result)>0){
+             return true;
+            }else {
+                $this->db->insert('attendance_course_assigned_teacher', $data);
+                $insert_id = $this->db->insert_id();
+            }
 		}
 		return  true;
 	}
@@ -77,7 +106,7 @@ Class Attendance_model extends CI_Model
 		$this->db->delete('attendance_course_assigned_teacher');
 	}
 	function get_course_assigned_teacher_list(){
-		$this->db->select("a.id,b.campus_code,b.campus_name,c.program_code,c.program_name,d.degree_code,e.batch_name,f.semester_name,g.discipline_name,h.course_code,h.course_title,i.first_name,i.last_name");
+		$this->db->select("course_id,a.degree_id,a.id,b.campus_code,b.campus_name,c.program_code,c.program_name,d.degree_code,e.batch_name,f.semester_name,g.discipline_name,h.section_code,h.section_name,i.first_name,i.last_name");
 		$this->db->from('attendance_course_assigned_teacher a');
 		$this->db->join('campuses b','b.id=a.campus_id','LEFT');
 		$this->db->join('programs c','c.id=a.program_id','LEFT');
@@ -85,7 +114,7 @@ Class Attendance_model extends CI_Model
 		$this->db->join('batches e','e.id=a.batch_id','LEFT');
 		$this->db->join('semesters f','f.id=a.semester_id','LEFT');
 		$this->db->join('disciplines g','g.id=a.discipline_id','LEFT');
-		$this->db->join('courses h','h.id=a.course_id','LEFT');
+		$this->db->join('section h','h.id=a.section_id','LEFT');
 		$this->db->join('users i','i.id=a.teacher_id','LEFT');
 		return $this->db->get()->result();
 	}
@@ -97,13 +126,20 @@ Class Attendance_model extends CI_Model
 		$this->db->from('attendance_time_table');
         if($degree_id == 1)
 		    $this->db->join('courses','attendance_time_table.course_id=courses.id','LEFT');
-		$this->db->where('attendance_time_table.campus_id',$campus_id);
-		$this->db->where('attendance_time_table.program_id',$program_id);
-		$this->db->where('attendance_time_table.degree_id',$degree_id);
-		$this->db->where('attendance_time_table.batch_id',$batch_id);
-		$this->db->where('attendance_time_table.semester_id',$semester_id);
-		$this->db->where('attendance_time_table.discipline_id',$discipline_id);
-		$this->db->where('attendance_time_table.section_id',$section_id);
+        if($campus_id>0)
+		    $this->db->where('attendance_time_table.campus_id',$campus_id);
+        if($program_id>0)
+            $this->db->where('attendance_time_table.program_id',$program_id);
+        if($degree_id>0)
+            $this->db->where('attendance_time_table.degree_id',$degree_id);
+        if($batch_id>0)
+		    $this->db->where('attendance_time_table.batch_id',$batch_id);
+        if($semester_id>0)
+		    $this->db->where('attendance_time_table.semester_id',$semester_id);
+        if($discipline_id>0)
+		    $this->db->where('attendance_time_table.discipline_id',$discipline_id);
+        if($section_id>0)
+		    $this->db->where('attendance_time_table.section_id',$section_id);
 		$result = $this->db->get()->result();
         if($degree_id == 1) {
             foreach ($result as $key=>$res) {
@@ -169,26 +205,39 @@ Class Attendance_model extends CI_Model
              $this->db->delete('holiday_list');
 		}
 	}
-	function gettimeTable($degree_id,$semester_id,$day='-1'){
-		$this->db->select('`a`.`course_id`,`b`.`course_title`, `b`.`course_code`, `from`, `to`');
+	function gettimeTable($degree_id,$semester_id,$day='-1',$section=''){
+
+		$this->db->select('a.course_id, a.from, a.to,a.day');
 		$this->db->from('attendance_time_table a');
-		$this->db->join('courses b','a.course_id=b.id');
-		if($day>=0)
+		if($day!='' || $day === 0)
 			$this->db->where('a.day',$day);
 		$this->db->where('a.degree_id',$degree_id);
-		$this->db->where('a.semester_id',$semester_id);
-		$this->db->order_by('from,to');
+        if($semester_id>0)
+		    $this->db->where('a.semester_id',$semester_id);
+        if($section>0)
+		    $this->db->where('a.section_id',$section);
+		$this->db->order_by('a.day,a.from,a.to');
 	//	print_r($this->db->last_query());   
 		return $this->db->get()->result();
 	}
-	function get_holidays($degree_id,$date=''){
+	function get_holidays($data,$date=''){
 		$this->db->select('id,name,startDate,endDate,color');
 		$this->db->from('holiday_list');
-		$this->db->where_in('degree_id',$degree_id);
+		if(!empty($data['degree_id']))
+		    $this->db->where_in('degree_id',$data['degree_id']);
+		if(!empty($data['batch_id']))
+		    $this->db->where_in('batch_id',$data['batch_id']);
+		if(!empty($data['semester_id']))
+		    $this->db->where_in('semester_id',$data['semester_id']);
+		if(!empty($data['campus_id']))
+		    $this->db->where('campus_id',$data['campus_id']);
+		if(!empty($data['program_id']))
+		    $this->db->where('program_id',$data['program_id']);
 		if(!empty($date)){
 			$this->db->where('startDate <=', $date);
 			$this->db->where('endDate >=', $date);
 		}
+        $this->db->group_by('startDate,endDate');
 		return $this->db->get()->result();
 	}
 	function get_student_attendance($degree_id,$semester_id,$course_id='',$batch_id=''){
@@ -214,7 +263,8 @@ Class Attendance_model extends CI_Model
 		$this->db->from('attendance');
 		$this->db->join('users','users.id=attendance.student_id','LEFT');
 		$this->db->where('degree_id',$degree_id);
-		$this->db->where('semester_id',$semester_id);
+        if(!empty($course_id))
+		    $this->db->where('semester_id',$semester_id);
 		//if(!empty($date)){
 		if(!empty($attendance_date) && empty($attendance_date_to) )
 			$this->db->where('attendance_date', $attendance_date);
@@ -264,7 +314,7 @@ Class Attendance_model extends CI_Model
 		}
 		return true;
 	}
-	function find_attendance_date($attendance_date,$degree_id,$semester_id,$batch_id,$course_id,$student_id,$period)
+	function find_attendance_date($attendance_date,$degree_id,$semester_id,$batch_id,$course_id,$student_id,$period,$campus_id,$program_id,$discipline_id,$section_id)
 	{ 
 		$this->db->select('a.id');
 		$this->db->from('attendance as a');

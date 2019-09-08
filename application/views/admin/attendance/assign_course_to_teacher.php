@@ -96,11 +96,21 @@
 						  <option value="">Select Discipline</option>
 					  </select>
 					</div>
-			     <div id="courseCon" class="form-group col-md-3 ">
+                    <div class="form-group col-md-2">
+                        <label for="course-group">Section<span style="color:red;font-weight: bold;">*</span></label>
+                        <select class="form-control" name="section_id" id="section_id">
+                            <option value="">Select Section</option>
+                            <?php foreach($section as $sectionObj){ ?>
+                                <option value="<?php echo $sectionObj->id;?>"><?php echo $sectionObj->section_name;?></option>
+                            <?php } ?>
+
+                        </select>
+                    </div>
+			     <div id="courseCon" class="form-group col-md-2 ">
 					  <label for="course_id">Course<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control"  multiple="multiple"   id="course_id" name="course_id[]"></select>
 					</div> 
-					<div id="teacherCon" class="form-group col-md-3 " >
+					<div id="teacherCon" class="form-group col-md-2 " >
 					  <label for="teacher_id">Teacher<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control"  multiple="multiple"  id="teacher_id" name="teacher_id[]"></select>
 					</div>
@@ -128,6 +138,7 @@
 									<th>Batch</th>
 									<th>Semester</th>
 									<th>Discipline</th>
+									<th>Section</th>
 									<th>Course</th>
 									<th>Teacher</th>
 									<th>Action</th>
@@ -137,13 +148,23 @@
 							<?php foreach($list as $i=>$arr){ ?>
 								 <tr>
 								 <td><?php echo $i+1;?></td>
-								 <td><?php echo $arr->campus_code;?></td>
+								 <td><?php echo $arr->campus_name;?></td>
 								 <td><?php echo $arr->program_code;?></td>
 								 <td><?php echo $arr->degree_code;?></td>
 								 <td><?php echo $arr->batch_name;?></td>
 								 <td><?php echo $arr->semester_name;?></td>
 								 <td><?php echo $arr->discipline_name;?></td>
-								 <td><?php echo $arr->course_code.'-'.$arr->course_title;?></td>
+								 <td><?php echo $arr->section_name;?></td>
+								 <td><?php
+                                     $courseArr = get_course_name($arr->degree_id,$arr->course_id);
+                                     if(isset($courseArr[0]['course_subject_id']) && $courseArr[0]['course_subject_id']==22)
+                                         echo $courseArr[0]['course_code'].' ('.$courseArr[0]['course_subject_name'].")";
+                                     else if(isset($courseArr[0]['course_subject_name']) && $courseArr[0]['course_subject_name']!=NULL)
+                                         echo $courseArr[0]['course_subject_title'].' ('.$courseArr[0]['course_code'].")";
+                                     else
+                                         echo $courseArr[0]['course_title'].' ('.$courseArr[0]['course_code'].")";
+                                     ?>
+                                     </td>
 								 <td><?php echo $arr->first_name.' '.$arr->last_name;?></td>
 								 <td><a onclick="return confirm('Are you sure you want to delete?');" href="<?php echo base_url();?>attendance/deleteassigncourse/<?php echo $arr->id;?>">Delete</a></td>
 								 </tr>
@@ -279,7 +300,7 @@
 		var $form =$("#attendance_form");
 		$.ajax({
 			type:'POST',
-			url:'<?php echo base_url();?>attendance/getCourseByIds',
+			url:'<?php echo base_url();?>attendance/getCourseGroupByIds',
 			data: $form.serialize(),
 			success: function(data){
 				//alert(data); 

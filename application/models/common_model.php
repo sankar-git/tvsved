@@ -605,7 +605,7 @@ class common_model extends CI_Model {
 	}
 	function do_student_login($where)
 	{
-		$this->db->select('u.*,umtd.batch_id,umtd.campus_id,umtd.degree_id,umtd.course_type');
+		$this->db->select('u.*,umtd.batch_id,umtd.campus_id,umtd.degree_id,umtd.course_type,section_id,discipline_id,semester_id');
 		$this->db->from('users as u');
 		$this->db->join('user_map_student_details as umtd','umtd.user_id=u.id','LEFT');
 		$this->db->where($where);

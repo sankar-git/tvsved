@@ -37,6 +37,25 @@
 		//echo $ci->db->last_query();
         return $result; 
   }
+  function get_course_name($degree_id,$course_id){
+      $ci = &get_instance();
+        if($degree_id == 1){
+            $course_arr = explode("|",$course_id);
+            $courseArr = explode("-",$course_arr[1]);
+            $courseid = $courseArr;
+        }else{
+            $courseid = $course_id;
+        }
+      $ci->db->select('c.id as courseid, group_concat(distinct c.course_title) as course_title,
+      group_concat(distinct c.course_code) as course_code,c.theory_credit,c.practicle_credit,course_subject_id,
+      csg.course_subject_name,csg.course_subject_title,csg.id as coure_group_id',true);
+      $ci->db->from('courses as c');
+      $ci->db->join('course_subject_groups csg','csg.id=c.course_subject_id','LEFT');
+      $ci->db->where_in('c.id',$courseid);
+      if($degree_id == 1)
+          $ci->db->group_by('course_subject_id');
+      return $ci->db->get()->result_array();
+  }
   function fun_global_admin($userType='')
   { 
 	    $ci = &get_instance();

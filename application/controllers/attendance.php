@@ -61,7 +61,7 @@ class Attendance extends CI_Controller {
 		$sessdata= $this->session->userdata('sms');
 		$userid = $sessdata[0]->id;
         $schedulerList=array();
-		if($campus_id>0 && $program_id>0 && $degree_id>0 && $semester_id>0 && $batch_id && $discipline_id>0 && $section_id>0)
+		if($campus_id>0 &&  $degree_id>0 &&  $section_id>0)
 		    $schedulerList = $this->Attendance_model->getScheduler($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$section_id);
 		echo json_encode($schedulerList);
 	}
@@ -106,8 +106,18 @@ class Attendance extends CI_Controller {
 		$data['courses']=$this->Discipline_model->get_teacher_course_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$teacher_id); 
 		//print_r($data['programs']); exit;
 		$str = '';
-         foreach($data['courses'] as $k=>$v){ 
-           $str .= "<option value=".$v->id.">".$v->course_code.'-'.$v->course_title."</option>";
+         foreach($data['courses'] as $k=>$v){
+             if($degree_id == 1) {
+                 $courseArr = get_course_name($degree_id, $v->course_id);
+                 if (isset($courseArr[0]['course_subject_id']) && $courseArr[0]['course_subject_id'] == 22)
+                     $course_group_name = $courseArr[0]['course_code'] . ' (' . $courseArr[0]['course_subject_name'] . ")";
+                 else if (isset($courseArr[0]['course_subject_name']) && $courseArr[0]['course_subject_name'] != NULL)
+                     $course_group_name = $courseArr[0]['course_subject_title'] . ' (' . $courseArr[0]['course_code'] . ")";
+                 else
+                     $course_group_name = $courseArr[0]['course_title'] . ' (' . $courseArr[0]['course_code'] . ")";
+                  $str .= "<option value=".$v->course_id.">".$course_group_name."</option>";
+             }else
+                $str .= "<option value=".$v->id.">".$v->course_code.'-'.$v->course_title."</option>";
            }
 		   echo $str;
 	}
@@ -153,7 +163,8 @@ class Attendance extends CI_Controller {
 			//}else
 			//$data['degrees'] = $this->Discipline_model->get_degree();
             //$data['semesters'] = $this->Generate_model->get_semester(); 
-           // $data['batches'] = $this->Discipline_model->get_batches(); 			
+           // $data['batches'] = $this->Discipline_model->get_batches();
+        $data['section'] = $this->Discipline_model->get_section();
 			$this->load->view('admin/attendance/add_attendance_view',$data);  
 	}
 	
@@ -184,17 +195,18 @@ class Attendance extends CI_Controller {
 		//}else
 			//$data['degrees'] = $this->Discipline_model->get_degree();
 		//$data['semesters'] = $this->Generate_model->get_semester(); 
-		$data['batches'] = $this->Discipline_model->get_batches(); 			
+		$data['batches'] = $this->Discipline_model->get_batches();
+        $data['section'] = $this->Discipline_model->get_section();
 		$this->load->view('admin/attendance/assign_course_to_teacher',$data); 
 	}
 	function getholidays(){
-		$degree_id  = $this->input->post('degree_id');
-		//if(is_array($degree_id)){
-			//$degree_id = implode(",",$degree_id);
-		//}
-		//echo $degree_id;exit;
-		//if($degree_id>0)
-				$holidayList = $this->Attendance_model->get_holidays($degree_id);//echo $this->db->last_query();
+	     $data['degree_id'] = $this->input->post('degree_id');
+	     $data['semester_id'] = $this->input->post('semester_id');
+	     $data['student_id'] = $this->input->post('student_id');
+	     $data['campus_id'] = $this->input->post('campus_id');
+	     $data['program_id'] = $this->input->post('program_id');
+	     $data['batch_id'] = $this->input->post('batch_id');
+		$holidayList = $this->Attendance_model->get_holidays($data);//echo $this->db->last_query();
 		echo json_encode($holidayList);
 	}
 	function getStudentAttendance(){
@@ -476,34 +488,34 @@ function drawMultSeries() {
            echo $str;
 	}
 	
-	function attendanceRangeView(){
+	function attendanceRangeView($attendance_date){
 		$degree_id  = $this->input->post('degree_id');
 		$semester_id  = $this->input->post('semester_id');
 		$student_id  = $this->input->post('student_id');
-		$attendance_date  = $this->input->post('attendance_date');
+		$section_id  = $this->input->post('section_id');
+		//$attendance_date  = $this->input->post('attendance_date');
 		$attendance_dateArr = explode(" - ",$attendance_date);
 		//print_r($attendance_dateArr);
 		$attendance_date_fromArr = explode("-",$attendance_dateArr[0]);
 		$attendance_date_toArr = explode("-",$attendance_dateArr[1]);
-		
-		$period = new DatePeriod(
-			new DateTime($attendance_dateArr[0]),
-			new DateInterval('P1D'),
-			new DateTime($attendance_dateArr[1])
-		);
-		//print_r($period);exit;
-		$attendance_date_from=$attendance_date_fromArr[2].'-'.$attendance_date_fromArr[1].'-'.$attendance_date_fromArr[0];
+        $begin = new DateTime($attendance_dateArr[0]);
+        $end = clone $begin;
+        $end->modify($attendance_dateArr[1]);
+        $end->setTime(0,0,1);     // new line
+        $interval = new DateInterval('P1D');
+        $period = new DatePeriod($begin, $interval, $end);
+        $attendance_date_from=$attendance_date_fromArr[2].'-'.$attendance_date_fromArr[1].'-'.$attendance_date_fromArr[0];
 		$attendance_date_to=$attendance_date_toArr[2].'-'.$attendance_date_toArr[1].'-'.$attendance_date_toArr[0];
 		$dataChart='';
 		$p = 0;
 			$a = 0;
-			//$attendance_date=$this->input->post('attendance_date');
+
 			
 			$sessdata= $this->session->userdata('sms');
 			$userid = $sessdata[0]->id;
-			//if($degree_id>0 && $student_id>0 && $attendance_date!=''){
+
 			$attendanceList = $this->Attendance_model->getmyattendance($degree_id,$semester_id,$student_id,$attendance_date_from,$attendance_date_to);
-			//echo $this->db->last_query();
+
 			
 			$attendanceArr='';
 			foreach($attendanceList as $att){
@@ -513,71 +525,89 @@ function drawMultSeries() {
 				$tablebodyCon='';
 				
 				$i=0;
-				//print_r($period);exit;
-			//foreach($attendanceArr as $date=>$resAtt){
+
+        $table.='<tr  class="thead-light"><th  class="info">Date</th>';
+        for($j=1;$j<=8;$j++){
+            $table.='<th style="text-align:center" class="info">'.$j.'</th>';
+
+        }
+        $table.='</tr>';
 				foreach ($period as $key => $value) {
-					
-					//$dateArr = explode("-",$attendance_date);
-					//$attendance_date = $dateArr[2].'-'.$dateArr[1].'-'.$dateArr[0];
-				
-				//print_r($resAtt);exit;
-				$date = $value->format('Y-m-d');
-				$day =  date('N', strtotime($date))-1;
+				 $date = $value->format('Y-m-d');
+				 $day =  date('N', strtotime($date))-1;
 				$date_str =  date('d-m-Y', strtotime($date));
-				$result=$this->Attendance_model->get_holidays($degree_id,$date);
-				//echo $this->db->last_query();exit;
+                    $data['degree_id'] = $this->input->post('degree_id');
+                    $data['semester_id'] = $this->input->post('semester_id');
+                    $data['student_id'] = $this->input->post('student_id');
+                    $data['campus_id'] = $this->input->post('campus_id');
+                    $data['program_id'] = $this->input->post('program_id');
+                    $data['batch_id'] = $this->input->post('batch_id');
+
+				$result=$this->Attendance_model->get_holidays($data,$date);
+
 				if(count($result)==0){
-					$timeTableList = $this->Attendance_model->gettimeTable($degree_id,$semester_id,$day);//echo $this->db->last_query();exit;
-					
-						//$tablehead='';
-						if($i == 0){
-							$table.='<tr  class="thead-light"><th>Date</th>';
-							foreach($timeTableList as $res){
-								$table.='<th style="text-align:center">'.$res->from.'</th>';
-								
-							}
-							$table.='</tr>';
-						}
-						$table.='<tr  class="thead-light"><th style="vertical-align:middle" class="info" rowspan="2" nowrap>'.$date_str.'</th>';
-						$p=0;
-						$a=0;
-						$na=0;
-						$atten_row='';
-						foreach($timeTableList as $res){
-							$table.='<th style="text-align:center">'.$res->course_title.'</th>';
-							$attendance_col='';
-							$attendanceList = $this->Attendance_model->getmyattendance($degree_id,$semester_id,$student_id,$date);
-							if(count($attendanceList)>0){
-								foreach($attendanceList as $res1){
-									$dataChart[$date_str]['na']=0;
-									if($res->course_id == $res1->course_id && $res->from == $res1->attendance_period && $res1->attendance_status == 'P'){
-										$attendance_col='<td style="text-align:center;color:green">Present</td>';
-										$p++;
-										$dataChart[$date_str]['pass']=$p;
-									}elseif($res->course_id == $res1->course_id  && $res->from == $res1->attendance_period && $res1->attendance_status == 'A'){
-										$attendance_col='<td style="text-align:center;color:red">Absent</td>';
-										$a++;
-										$dataChart[$date_str]['fail']=$a;
-									}
-								}
-							}else{
-								$dataChart[$date_str]['pass']=0;
-								$dataChart[$date_str]['fail']=0;
-							}
-							if($attendance_col==''){
-								$attendance_col='<td style="text-align:center;">N/I</td>';
-								$na++;
-								$dataChart[$date_str]['na']=$na;
-							}
-								
-							$atten_row.=$attendance_col;
-						}
-						$i++;
-						$table.='</tr>';
-						$table.='<tr  class="thead-light">'.$atten_row;
-						
-					
-						$table.='</tr>';
+
+					$timeTableList = $this->Attendance_model->gettimeTable($degree_id,$semester_id,$day,$section_id);//echo $this->db->last_query();exit;
+					if(count($timeTableList) == 0){
+                        $table.='<tr  class="thead-light"><th style="vertical-align:middle" class="info"  nowrap>'.$date_str.'</th><th style="text-align:center;color:red"  colspan="8">-</th></tr>';
+                    }else{
+                        //$tablehead='';
+
+                        $table.='<tr  class="thead-light"><th style="vertical-align:middle" class="info" rowspan="2" nowrap>'.$date_str.'</th>';
+                        $p=0;
+                        $a=0;
+                        $na=0;
+                        $atten_row='';
+                        foreach($timeTableList as $res){
+                            $courseArr = get_course_name($degree_id,$res->course_id);
+                            if($degree_id == 1){
+                                $course_name = $courseArr[0]['course_subject_title'];
+                            }else{
+                                $course_name = $courseArr[0]['course_title'];
+                            }
+                            if($res->from == ($res->to-1))
+                                $colspan="";
+                            else {
+                                $diff = $res->to - $res->from;
+                                $colspan = 'colspan="'.$diff.'"';
+                            }
+                            $table.='<th '.$colspan.' style="text-align:center">'.$course_name.'</th>';
+                            $attendance_col='';
+                            $attendanceList = $this->Attendance_model->getmyattendance($degree_id,$semester_id,$student_id,$date);
+                            if(count($attendanceList)>0){
+                                foreach($attendanceList as $res1){
+                                    $dataChart[$date_str]['na']=0;
+                                    if($res->course_id == $res1->course_id && $res->from == $res1->attendance_period && $res1->attendance_status == 'P'){
+
+                                        $attendance_col='<td '.$colspan.' style="text-align:center;color:green">Present</td>';
+                                        $p++;
+                                        $dataChart[$date_str]['pass']=$p;
+                                    }elseif($res->course_id == $res1->course_id  && $res->from == $res1->attendance_period && $res1->attendance_status == 'A'){
+                                        $attendance_col='<td '.$colspan.' style="text-align:center;color:red">Absent</td>';
+                                        $a++;
+                                        $dataChart[$date_str]['fail']=$a;
+                                    }
+                                }
+                            }else{
+                                $dataChart[$date_str]['pass']=0;
+                                $dataChart[$date_str]['fail']=0;
+                            }
+                            if($attendance_col==''){
+                                $attendance_col='<td '.$colspan.' style="text-align:center;">N/I</td>';
+                                $na++;
+                                $dataChart[$date_str]['na']=$na;
+                            }
+
+                            $atten_row.=$attendance_col;
+                        }
+                        $i++;
+                        $table.='</tr>';
+                        $table.='<tr  class="thead-light">'.$atten_row;
+
+
+                        $table.='</tr>';
+                    }
+
 					}else{
 						$table.='<tr  class="thead-light"><th style="vertical-align:middle" class="info"  nowrap>'.$date_str.'</th><th style="text-align:center;color:red"  colspan="8">'.$result[0]->name.'</th></tr>';
 					}
@@ -597,8 +627,12 @@ function drawMultSeries() {
 		$student_id  = $this->input->post('student_id');
 		$attendance_date  = $this->input->post('attendance_date');
 		$type  = $this->input->post('type');
-		if($type == 'range'){
-			$this->attendanceRangeView();
+        $section_id  = $this->input->post('section_id');
+
+		if($type == 'range' || $type == 'single'){
+		    if($type == 'single')
+                $attendance_date = $attendance_date.' - '.$attendance_date;
+			$this->attendanceRangeView($attendance_date);
 		}else{
 			$p = 0;
 			$a = 0;
@@ -609,8 +643,8 @@ function drawMultSeries() {
 			$userid = $sessdata[0]->id;
 			//if($degree_id>0 && $student_id>0 && $attendance_date!=''){
 			$attendanceList = $this->Attendance_model->getmyattendance($degree_id,$semester_id,$student_id,$attendance_date);
-			//echo $this->db->last_query();
-			$timeTableList = $this->Attendance_model->gettimeTable($degree_id,$semester_id,$day);//echo $this->db->last_query();exit;
+
+			$timeTableList = $this->Attendance_model->gettimeTable($degree_id,$semester_id,$day,$section_id);//echo $this->db->last_query();exit;
 					//p($timeTableList);
 					//p($attendanceList);exit;
 			//}
@@ -618,30 +652,52 @@ function drawMultSeries() {
 			$table='<table id="example" class="table table-bordered table-hover table-striped table-condensed"><tr  class="thead-light">';
 			$tablebodyCon='';
 			//$tablehead='';
-			foreach($timeTableList as $res){
-				$table.='<th style="text-align:center">'.$res->from.'</th>';
-				
-			}
+            for($j=1;$j<=8;$j++){
+                $table.='<th style="text-align:center" class="info">'.$j.'</th>';
+
+            }
 			$table.='</tr><tr  class="thead-light">';
 			$atten_row='';
 			foreach($timeTableList as $res){
-				$table.='<th style="text-align:center">'.$res->course_title.'</th>';
+                $courseArr = get_course_name($degree_id,$res->course_id);
+                if($degree_id == 1){
+                    $course_name = $courseArr[0]['course_subject_title'];
+                }else{
+                    $course_name = $courseArr[0]['course_title'];
+                }
+                if($res->from == ($res->to-1))
+                    $colspan="";
+                else {
+                    $diff = $res->to - $res->from;
+                    $colspan = 'colspan="'.$diff.'"';
+                }
+                $table.='<th '.$colspan.' style="text-align:center">'.$course_name.'</th>';
 				$attendance_col='';
-				foreach($attendanceList as $res1){
-					if($res->course_id == $res1->course_id && $res->from == $res1->attendance_period && $res1->attendance_status == 'P'){
-						$attendance_col='<td style="text-align:center;color:green">Present</td>';
-						$p++;
-					}elseif($res->course_id == $res1->course_id  && $res->from == $res1->attendance_period && $res1->attendance_status == 'A'){
-						$attendance_col='<td style="text-align:center;color:red">Absent</td>';
-						$a++;
-					}
-				}
-				if($attendance_col==''){
-					$attendance_col='<td style="text-align:center;">N/I</td>';
-					$na++;
-				}
-					
-				$atten_row.=$attendance_col;
+                if(count($attendanceList)>0){
+                    foreach($attendanceList as $res1){
+                        $dataChart[$date_str]['na']=0;
+                        if($res->course_id == $res1->course_id && $res->from == $res1->attendance_period && $res1->attendance_status == 'P'){
+
+                            $attendance_col='<td '.$colspan.' style="text-align:center;color:green">Present</td>';
+                            $p++;
+                            $dataChart[$date_str]['pass']=$p;
+                        }elseif($res->course_id == $res1->course_id  && $res->from == $res1->attendance_period && $res1->attendance_status == 'A'){
+                            $attendance_col='<td '.$colspan.' style="text-align:center;color:red">Absent</td>';
+                            $a++;
+                            $dataChart[$date_str]['fail']=$a;
+                        }
+                    }
+                }else{
+                    $dataChart[$date_str]['pass']=0;
+                    $dataChart[$date_str]['fail']=0;
+                }
+                if($attendance_col==''){
+                    $attendance_col='<td '.$colspan.' style="text-align:center;">N/I</td>';
+                    $na++;
+                    $dataChart[$date_str]['na']=$na;
+                }
+
+                $atten_row.=$attendance_col;
 			}
 			$table.='</tr><tr>'.$atten_row;
 			
@@ -689,22 +745,28 @@ function drawMultSeries() {
 		$data['managelist']="0";
 		$this->load->view('admin/attendance/manageholidays',$data);  
 	}
+    function timetable(){
+        $this->manage_timetable();
+    }
 
 	function manage_timetable(){
 		$sessdata= $this->session->userdata('sms');
-			
+       // p($sessdata);exit;
 		    if(empty($sessdata)){
 			redirect('authenticate', 'refresh');
 		    }
-		    $data['page_title']="Attendance Timetable";
-			if($sessdata[0]->role_id==2){
+		    $data['page_title']="Timetable";
+			if($sessdata[0]->role_id==1){
+
+            }elseif($sessdata[0]->role_id==2){
 				$data['degrees'] = $this->Discipline_model->get_degree($sessdata[0]->campus);
-			}else
-			$data['degrees'] = $this->Discipline_model->get_degree();
-		$data['campuses'] = $this->Discipline_model->get_campus(); 
-            $data['semesters'] = $this->Generate_model->get_semester(); 
-            $data['batches'] = $this->Discipline_model->get_batches(); 			
-            $data['section'] = $this->Discipline_model->get_section();
+			}else {
+                $data['degrees'] = $this->Discipline_model->get_degree();
+                $data['campuses'] = $this->Discipline_model->get_campus();
+                $data['semesters'] = $this->Generate_model->get_semester();
+                $data['batches'] = $this->Discipline_model->get_batches();
+                $data['section'] = $this->Discipline_model->get_section();
+            }
 			$this->load->view('admin/attendance/manage_timetable',$data);
 		
 	}
@@ -775,16 +837,17 @@ function drawMultSeries() {
 
         $data['courses']=$this->Marks_model->get_course_group_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id);
 
-        //echo $this->db->last_query();exit;
+       // echo $this->db->last_query();exit;
         //print_r($data['programs']); exit;
         $str = '';
         foreach($data['courses'] as $k=>$v){
             if(isset($v->course_subject_id) && $v->course_subject_id==22)
-                $str .= "<option value=".$v->id.">".$v->course_code."</option>";
+                $str .= "<option value=".$v->id.">".$v->course_code.' ('.$v->course_subject_name.")</option>";
             else if(isset($v->course_subject_name) && $v->course_subject_name!=NULL)
-                $str .= "<option value=".$v->id.">".$v->course_subject_title."</option>";
+                $str .= "<option value=".$v->id.">".$v->course_subject_title.' ('.$v->course_code.")</option>";
             else
                 $str .= "<option value=".$v->id.">".$v->course_title.' ('.$v->course_code.")</option>";
+
         }
         echo $str;
     }
@@ -809,89 +872,107 @@ function drawMultSeries() {
 		
 		$sessdata= $this->session->userdata('sms');
 		$teacher_id = $sessdata[0]->id;
+		$campus_id = $sessdata[0]->campus;
 		$degree_id=$this->input->post('degree_id');
+		$program_id=$this->input->post('program_id');
 		$semester_id=$this->input->post('semester_id');
 		$batch_id=$this->input->post('batch_id');
 		$course_id=$this->input->post('course_id');
 		$course_id=$this->input->post('course_id');
+		$section_id=$this->input->post('section_id');
 		$attendance_date=$this->input->post('attendance_date');
-		$day =  date('N', strtotime($attendance_date))-1;
-		$day_string =  date('l', strtotime($attendance_date));
-		$trdata='';
-		if($degree_id>0 && $semester_id>0 && $batch_id>0 && $course_id>0){
-		
-	    $send['degree_id']=$degree_id;
-	    $send['semester_id']=$semester_id;
-	    $send['batch_id']=$batch_id;
-	    $send['course_id']=$course_id;
-	    $List= $this->Attendance_model->get_time_table_from_to($course_id,$degree_id,$semester_id,$day);
-		//echo $this->db->last_query();
-	    $studentList= $this->Attendance_model->get_student_assign_by_course($send);
-	   $dateArr = explode("-",$attendance_date);
-			$attendance_date_sys= $dateArr[2].'-'.$dateArr[1].'-'.$dateArr[0];
-	
-		
-			$i=0;
-			if(isset($List[0]->start)){
-			foreach($studentList as $students)
-			{
-				
-				$i++;
-				$checked = 'checked';
-				
-				$trdata.='<tr>
-				      
-						<td>'.$i.'</td>
-						<td><input type="hidden"  name="student_id[]" value="'.$students->user_id.'">'.$students->user_unique_id.'</td>
-						
-						<td>'.$students->first_name.' '.$students->last_name.'</td>
-						<td ><table width="100%" style=""><thead><tr>';
-						for($k=$List[0]->start;$k<$List[0]->end;$k++){
-							$trdata.='<th style="text-align:center;border:1px solid">'.$k.'</th>';
-						}
-						$trdata.='</tr></thead><tbody><tr >';
-						for($j=$List[0]->start;$j<$List[0]->end;$j++){
-							$existArr= $this->Attendance_model->get_student_existing_rec($course_id,$degree_id,$semester_id,$students->user_id,$j,$attendance_date_sys);
-							//p($existArr);exit;
-							if(isset($existArr[0]->attendance_status)){
-								if($existArr[0]->attendance_status == 'A'){
-									$absent_check = 'checked="checked"';
-									$absent_label = ' btn-off active ';
-									$present_label = ' btn-on ';
-									$present_check = '';
-								}else{
-									$absent_check = '';
-									$present_check = 'checked="checked"';
-									
-									$absent_label = ' btn-off ';
-									$present_label = ' btn-on active  ';
-								}
-							}else{
-								$absent_check = '';
-								$present_check = 'checked="checked"';
-								$absent_label = ' btn-off ';
-									$present_label = ' btn-on active  ';
-							}
-						$trdata.='<td style="text-align:center;border:1px solid"><!--<input type="checkbox" class="checkbox" id="attendance" name="attendance['.$students->user_id.']"  value="1"/>-->
-						 <div class="btn-group" id="status" data-toggle="buttons">
-              <label class="btn btn-default '.$present_label.'">
-              <input type="radio" value="1" class="attendance_on" name="attendance['.$students->user_id.']['.$j.']" '.$present_check.'>Present</label>
-              <label class="btn btn-default '.$absent_label.'">
-              <input type="radio" value="0" class="attendance_off" name="attendance['.$students->user_id.']['.$j.']" '.$absent_check.'>Absent</label>
-            </div></td>';
-						}
-						
-						$trdata.='</tr><tbody></table></td>
-						
-						
-						
-						
-					</tr>';
-				}
-			}else
-				$trdata.='<tr><td>There is no course assigned on '.$day_string.'</td></tr>';
-			echo $trdata; 
-		}else
+        $trdata='';
+		if(!empty($attendance_date)){
+            $day =  date('N', strtotime($attendance_date))-1;
+            $day_string =  date('l', strtotime($attendance_date));
+            if($degree_id>0 && $semester_id>0 && $batch_id>0 && $course_id>0) {
+                $send['program_id'] = $program_id;
+                $send['campus_id'] = $campus_id;
+                $send['degree_id'] = $degree_id;
+                $send['semester_id'] = $semester_id;
+                $send['batch_id'] = $batch_id;
+                $send['section_id'] = $section_id;
+                $send['course_id'] = $course_id;
+                $List = $this->Attendance_model->get_time_table_from_to($campus_id, $program_id, $course_id, $degree_id, $semester_id, $day, $section_id);
+                // echo $this->db->last_query();exit;
+                $studentList = $this->Attendance_model->get_student_assign_by_course($send);
+                //echo $this->db->last_query();exit;
+                $attendance_date_sys = '';
+                if (!empty($attendance_date)) {
+                    $dateArr = explode("-", $attendance_date);
+                    $attendance_date_sys = $dateArr[2] . '-' . $dateArr[1] . '-' . $dateArr[0];
+                }
+
+
+                $i = 0;
+                if (isset($List[0]['start'])) {
+                    foreach ($studentList as $students) {
+
+                        $i++;
+                        $checked = 'checked';
+
+                        $trdata .= '<tr>
+                          
+                            <td>' . $i . '</td>
+                            <td><input type="hidden"  name="student_id[]" value="' . $students->user_id . '">' . $students->user_unique_id . '</td>
+                            
+                            <td>' . $students->first_name . ' ' . $students->last_name . '</td>
+                            <td ><table width="100%" style=""><thead><tr>';
+                        foreach ($List as $key => $arr) {
+                            if ($arr['start'] == $arr['end'] - 1)
+                                $class = $arr['start'];
+                            else
+                                $class = $arr['start'] . '-' . ($arr['end'] - 1);
+                            $trdata .= '<th style="text-align:center;border:1px solid;background: lightgrey">' . $class . '</th>';
+                        }
+                        $trdata .= '</tr></thead><tbody><tr >';
+                        foreach ($List as $key => $arr) {
+                            $existArr = $this->Attendance_model->get_student_existing_rec($course_id, $degree_id, $semester_id, $students->user_id, $arr['start'], $attendance_date_sys);
+                            //p($existArr);exit;
+                            if (isset($existArr[0]->attendance_status)) {
+                                if ($existArr[0]->attendance_status == 'A') {
+                                    $absent_check = 'checked="checked"';
+                                    $absent_label = ' btn-off active ';
+                                    $present_label = ' btn-on ';
+                                    $present_check = '';
+                                } else {
+                                    $absent_check = '';
+                                    $present_check = 'checked="checked"';
+
+                                    $absent_label = ' btn-off ';
+                                    $present_label = ' btn-on active  ';
+                                }
+                            } else {
+                                $absent_check = '';
+                                $present_check = 'checked="checked"';
+                                $absent_label = ' btn-off ';
+                                $present_label = ' btn-on active  ';
+                            }
+                            $trdata .= '<td style="text-align:center;border:1px solid"><!--<input type="checkbox" class="checkbox" id="attendance" name="attendance[' . $students->user_id . ']"  value="1"/>-->
+                             <div class="btn-group" id="status" data-toggle="buttons">
+                  <label class="btn btn-default ' . $present_label . '">
+                  <input type="radio" value="1" class="attendance_on" name="attendance[' . $students->user_id . '][' . $arr['start'] . ']" ' . $present_check . '>Present</label>
+                  <label class="btn btn-default ' . $absent_label . '">
+                  <input type="radio" value="0" class="attendance_off" name="attendance[' . $students->user_id . '][' . $arr['start'] . ']" ' . $absent_check . '>Absent</label>
+                </div></td>';
+                        }
+
+                        $trdata .= '</tr><tbody></table></td>
+                            
+                            
+                            
+                            
+                        </tr>';
+                    }
+                } else
+                    $trdata .= '<tr><td colspan="5" align="center" style="color:red"><b>There is no course assigned on ' . $day_string . '</b></td></tr>';
+            }else{
+                $trdata = '<tr><td colspan="5" align="center" style="color:red"><b>Please select all fields</b></td></tr>';
+            }
+
+		}else{
+            $trdata = '<tr><td colspan="5" align="center" style="color:red"><b>Please select date</b></td></tr>';
+        }
 			echo $trdata; 
 	}
 	function getCourseByIds()
@@ -922,6 +1003,7 @@ function drawMultSeries() {
 		$course_id=$this->input->post('course_id');
 		$campus_id=$this->input->post('campus_id');
 		$teacher_id=$this->input->post('teacher_id');
+        $section_id=$this->input->post('section_id');
 		foreach($teacher_id as $teacher){
 			foreach($course_id as $course){
 				$attendanceArr = array(
@@ -932,7 +1014,8 @@ function drawMultSeries() {
 					  'semester_id'=>$semester_id,
 					  'discipline_id'=>$discipline_id,
 					  'course_id'=>$course,
-					  'teacher_id'=>$teacher
+					  'teacher_id'=>$teacher,
+					  'section_id'=>$section_id
 				);
 				$save = $this->Attendance_model->saveAssignCourse($attendanceArr);
 			}
@@ -959,10 +1042,14 @@ function drawMultSeries() {
 		$login_user_id=$this->input->post('login_user_id');
 		$login_user_type=$this->input->post('login_user_type');
 		
+		$campus_id=$sessdata[0]->campus;
+		$program_id=$this->input->post('program_id');
 		$degree_id=$this->input->post('degree_id');
 		$semester_id=$this->input->post('semester_id');
 		$batch_id=$this->input->post('batch_id');
+		$discipline_id=$this->input->post('discipline_id');
 		$course_id=$this->input->post('course_id');
+		$section_id=$this->input->post('section_id');
 		$student_ids=$this->input->post('student_id');//array input
 		$attendances=$this->input->post('attendance');//array input
 		$return='';
@@ -998,10 +1085,16 @@ function drawMultSeries() {
 		
 		//p($find_current_date); exit;
 		//p(count($find_current_date)); exit;
-		
+
 			//echo "hello"; exit;
 			//foreach($date_result_array as $key=>$attendance_date){
-				$result=$this->Attendance_model->get_holidays($degree_id,$attendance_date);
+        $data['degree_id'] = $this->input->post('degree_id');
+        $data['semester_id'] = $this->input->post('semester_id');
+        $data['student_id'] = $this->input->post('student_id');
+        $data['campus_id'] = $this->input->post('campus_id');
+        $data['program_id'] = $this->input->post('program_id');
+        $data['batch_id'] = $this->input->post('batch_id');
+				$result=$this->Attendance_model->get_holidays($data,$attendance_date);
 					//echo $this->db->last_query();
 					
 					if(count($result)==0){
@@ -1016,7 +1109,7 @@ function drawMultSeries() {
 								if(isset($attendances[$student_id])){
 									foreach($attendances[$student_id] as $period=>$pass_fail){
 										
-										$result=$this->Attendance_model->find_attendance_date($attendance_date,$degree_id,$semester_id,$batch_id,$course_id,$student_id,$period);
+										$result=$this->Attendance_model->find_attendance_date($attendance_date,$degree_id,$semester_id,$batch_id,$course_id,$student_id,$period,$campus_id,$program_id,$discipline_id,$section_id);
 										//p($attendances[$student_id]);
 										//p($_POST);exit;
 										if($pass_fail == 1)
@@ -1024,6 +1117,10 @@ function drawMultSeries() {
 										else
 											$attendance='A';
 										$attendanceArr = array(
+											  'section_id'=>$section_id,
+											  'campus_id'=>$campus_id,
+											  'discipline_id'=>$discipline_id,
+											  'program_id'=>$program_id,
 											  'student_id'=>$student_id,
 											  'degree_id'=>$degree_id,
 											  'semester_id'=>$semester_id,

@@ -1,10 +1,19 @@
 <?php $this->load->view('admin/helper/header');?>
 <?php $this->load->view('admin/helper/sidebar');
         $sessdata= $this->session->userdata('sms');
+
 		$id = $sessdata[0]->id;
 		$role_id = $sessdata[0]->role_id;
-		$campus_id = @$sessdata[0]->campus;
-		
+        if($role_id == 1) {
+            $campus_id = @$sessdata[0]->campus_id;
+            $section_id = @$sessdata[0]->section_id;
+            $program_id = @$sessdata[0]->program_id;
+            $degree_id = @$sessdata[0]->degree_id;
+        }else
+		    $campus_id = @$sessdata[0]->campus;
+
+
+
 ?>
 <style >
 .error{
@@ -45,6 +54,12 @@
             <!-- form start -->
             <form role="form" name="attendance_form" id="attendance_form" method="post" enctype="multipart/form-data">
               <div class="box-body">
+                  <?php if($role_id == 1){?>
+                      <input type="hidden" name="campus_id" id="campus_id" value="<?php echo $campus_id;?>" />
+                      <input type="hidden" name="program_id" id="program_id" value="<?php echo $program_id;?>" />
+                      <input type="hidden" name="degree_id" id="degree_id" value="<?php echo $degree_id;?>" />
+                      <input type="hidden" name="section_id" id="section_id" value="<?php echo $section_id;?>" />
+					<?php }else{ ?>
 					<?php if(!in_array($role_id,array(2))){?>
 					<div class="form-group col-md-3">
 					  <label for="program">Campus<span style="color:red;font-weight: bold;">*</span></label>
@@ -134,6 +149,7 @@
               </div>
 				 <?php } ?>
 			  </div>
+                <?php } ?>
 			   <div id="courseList" style="margin-left:30px;">
 				  <div id="scheduler"></div>
 <div id="log"></div>
@@ -145,6 +161,7 @@
 				  <!--<div style="float:right;">
 				    <a class="btn btn-primary" href="<?php //echo site_url('course/assignCourseList'); ?>"><i class="fa fa-arrow-left"></i> Back</a>
 				</div>-->
+
               </div>
 			  
             </form>
@@ -165,6 +182,11 @@
 <script src="<?php echo base_url();?>assets/admin/dist/js/date.format.min.js"></script>
 <script src="<?php echo base_url();?>assets/admin/dist/js/jquery.scheduler.js"></script>
  <script type="text/javascript">
+     <?php if($role_id == 1){?>
+     $().ready(function(){
+        loadScheduler('');
+     });
+     <?php } ?>
  <?php if($role_id == 2){?>
  function getProgram()
 	{
@@ -434,6 +456,7 @@ function loadScheduler(){
 									{date: date1, start: '3:00', end: '5:00',subject:'Veterinary Physiology -Paper-I',id:3, row: 5}
 									];*/
 				reservations = resdata;
+				//console.log(reservations);
 				// Array of sample items              
 				var printers = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 

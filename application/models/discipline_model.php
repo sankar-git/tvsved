@@ -188,10 +188,15 @@ Class Discipline_model extends CI_Model
 		return $result;
 	}
 	function get_teacher_course_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$teacher_id){
-		$this->db->select('c.id,c.course_code,course_title,c.course_group_id');
-		$this->db->from('courses c');
-        $this->db->join('attendance_course_assigned_teacher  ca','c.id = ca.course_id');
-		$this->db->where(array('ca.campus_id'=>$campus_id,'ca.program_id'=>$program_id,'ca.semester_id'=>$semester_id,'ca.degree_id'=>$degree_id,'ca.batch_id'=>$batch_id,'ca.teacher_id'=>$teacher_id));
+	    if($degree_id == 1){
+            $this->db->select('ca.course_id');
+            $this->db->from('attendance_course_assigned_teacher ca');
+        }else {
+            $this->db->select('c.id,c.course_code,course_title,c.course_group_id');
+            $this->db->from('courses c');
+            $this->db->join('attendance_course_assigned_teacher  ca', 'c.id = ca.course_id');
+        }
+        $this->db->where(array('ca.campus_id' => $campus_id, 'ca.program_id' => $program_id, 'ca.semester_id' => $semester_id, 'ca.degree_id' => $degree_id, 'ca.batch_id' => $batch_id, 'ca.teacher_id' => $teacher_id));
 		$result	= $this->db->get()->result();
 		return $result;
 	}

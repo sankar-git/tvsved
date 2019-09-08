@@ -92,6 +92,7 @@ $role_id = $sessdata[0]->role_id;
 
                             </select>
                         </div>
+
                         </div>
 
                         <div class="row">
@@ -411,7 +412,11 @@ $role_id = $sessdata[0]->role_id;
         $.ajax({
             type:'POST',
             url:'<?php echo base_url();?>attendance/getholidays',
-            data: {'degree_id':degree_id},
+            data: {'degree_id':degree_id,
+                'batch_id': $('#batch_id').val(),
+                'semester_id': $('#semester_id').val(),
+                'campus_id': $('#campus_id').val(),
+                'program_id': $('#program_id').val()},
             success: function(data){
                 data = jQuery.parseJSON(data);
                 $.each(data, function(i, item) {

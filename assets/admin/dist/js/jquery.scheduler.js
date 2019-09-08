@@ -168,7 +168,7 @@
                     return $(this).position().top == top && $(this).position().left == left;
                 }).not($newRsvn);
 			 
-            if (collisions.length == 0) {            
+            if (collisions.length == 0  && $('#course_id').val()!=undefined) {
                 $newRsvn = $("<div>"+coursename+"<span class='hidden'>"+$('#course_id').val()+"</span></div>")
                 .addClass("reservation reservation-creating")
                 .css({

@@ -822,7 +822,7 @@ class Admin extends CI_Controller {
 		   $data['states']=$this->type_model->get_state();
 		   $data['city']=$this->type_model->get_city();
 		   $data['community']=$this->type_model->get_community();
-		   
+        $data['section'] = $this->Discipline_model->get_section();
 		   $data['userid'] = $id;
 		   $data['role_id'] = $role_id;
 		   $data['user_row']=$this->type_model->get_user_by_id($id,$role_id);
@@ -1044,6 +1044,7 @@ class Admin extends CI_Controller {
 				$saved['campus_id']=$this->input->post('campus_id');
 				$saved['degree_id']=$this->input->post('degree_id');
 				$saved['discipline_id']=$this->input->post('discipline_id');
+				$saved['section_id']=$this->input->post('section_id');
 				$saved['parent_name']=$parent_name;
 				$saved['mother_name']=$mother_name;
 				$saved['occupation']=$occupation;

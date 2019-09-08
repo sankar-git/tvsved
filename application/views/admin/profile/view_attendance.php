@@ -54,6 +54,8 @@
 			<div class="tab-pane active" id="attendance_con">
 				<a class="btn btn-success" onclick="showDayWiseAttendance()" style="padding:5px 8px">Day Wise Attendance</a>
 				<a class="btn btn-primary" id="attendance_rangebtn" onclick="showRangeWiseAttendance()" style="padding:5px 8px">Multiple Date Range Attendance</a>
+				<input type="hidden" class="form-control" id="campus_id" name="campus_id" value="<?php echo $user_row->campus_id;?>">
+				<input type="hidden" class="form-control" id="section_id" name="section_id" value="<?php echo $user_row->section_id;?>">
 				<input type="hidden" class="form-control" id="student_id" name="student_id" value="<?php echo $user_row->user_id;?>">
 				   <input type="hidden" class="form-control" id="role_id" name="role_id" value="">
 				   <input type="hidden" class="form-control" id="semester_id" name="semester_id" value="<?php echo $user_row->semester_id;?>">
@@ -100,12 +102,12 @@
 				   <div id='activitycalendar' class="hidden" ></div>
 			 </div>
 			 </form>
-			      <div id="attendanceRangeList" > 
+			      <div id="attendanceRangeList" >
 				  </div>
 				  <div  id="containerRange"></div>
                 
               </div>
-			
+
 			  
               <!-- /.tab-pane -->
             </div>
@@ -178,39 +180,40 @@
  $( function() {
     $( "#datepicker" ).datepicker();
 	$('#datepicker').datepicker().on('changeDate', function (ev) {
-		getAttendance(ev.format(0,"yyyy-mm-dd"),'single');
+		getAttendance(ev.format(0,"dd-mm-yyyy"),'single');
 		});
   } );
 function getAttendance(attendance_date,attType){
 	var student_id = $('#student_id').val();
 	var degree_id = $('#degree_id').val();
 	var semester_id = $('#semester_id').val();
+	var campus_id = $('#campus_id').val();
+	var section_id = $('#section_id').val();
 	$.ajax({
 			type:'POST',
 			url:'<?php echo base_url();?>attendance/getmyattendance',
-			data: {'type':attType,'semester_id':semester_id,'student_id':student_id,'degree_id':degree_id,'attendance_date':attendance_date},
+			data: {'type':attType,'semester_id':semester_id,'student_id':student_id,'degree_id':degree_id,'campus_id':campus_id,'section_id':section_id,'attendance_date':attendance_date},
 
 			success: function(data){
 				 var data = $.parseJSON(data);
 				if(attType == 'single'){
 					$('#attendanceList').html(data.table);
-					if(data.present != '0' || data.absent != '0')
-					{
-						
-						var dataDate= [];
-					var resPassData= [];
-					var resFailData= [];
-					var resNaData= [];
-						dataDate.push(attendance_date);
-						resPassData.push(data.present);
-						resFailData.push(data.absent);
-					resNaData.push(data.na);
+                    var dataDate= [];
+                    var resPassData= [];
+                    var resFailData= [];
+                    var resNaData= [];
+                    $.each(data.datewise, function(i, item) {
+                        dataDate.push(i);
+                        resPassData.push(item.pass);
+                        resFailData.push(item.fail);
+                        resNaData.push(item.na);
+                    })
 					getchart(dataDate,resPassData,resFailData,resNaData,'container');
 					
 						//getchart(attendance_date,data.present,data.absent,'container');
 						$('#container').show();
-					}
-					else{$('#container').hide();}
+
+					
 				}else{
 					$('#attendanceRangeList').html(data.table);
 					var dataDate= [];
@@ -306,7 +309,7 @@ var holidayData=[];
         enableContextMenu: <?php if($managelist == 1){?>true<?php }else{?> false<?php }?>,
         style: 'background',
         enableRangeSelection: true,
-		
+        format: 'DD-MM-YYYY',
         
         mouseOnDay: function(e) {
             if(e.events.length > 0) {

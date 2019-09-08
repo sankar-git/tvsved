@@ -87,12 +87,29 @@
 						  
 					  </select>
 					</div>
-								     <div id="courseCon" class="form-group col-md-3 ">
+                    <div class="form-group col-md-3">
+                        <label for="course-group">Discipline<span style="color:red;font-weight: bold;">*</span></label>
+                        <select class="form-control" name="discipline_id" id="discipline_id" onchange="getCourseByIds();">
+                            <option value="">Select Discipline</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="course-group">Section<span style="color:red;font-weight: bold;">*</span></label>
+                        <select class="form-control" name="section_id" id="section_id" onchange="getStudentAssignByCourse()">
+                            <option value="">Select Section</option>
+                            <?php foreach($section as $sectionObj){ ?>
+                                <option value="<?php echo $sectionObj->id;?>"><?php echo $sectionObj->section_name;?></option>
+                            <?php } ?>
+
+                        </select>
+                    </div>
+					<div id="courseCon" class="form-group col-md-3 ">
 					  <label for="course_id">Course<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control"     id="course_id" name="course_id" onchange="getStudentAssignByCourse()">
 					   <option value="">Select Course</option>
 					   </select>
-					</div> 
+					</div>
+
 					<div class="form-group col-md-3" id="attendance_date_div" >
 					  <label for="attendance_date">Enter Attendance Date<span style="color:red;font-weight: bold;">*</span></label>
 					 <input type="text" class="form-control" id="attendance_date" name="attendance_date" placeholder="Enter Attendance Date">
@@ -231,7 +248,7 @@
 		var degree_id =$('#degree_id').val();
 		var program_id =$('#program_id').val();
 		var campus_id =$('#campus_id').val();
-		//getDisciplineByDegreeId();
+		getDisciplineByDegreeId();
 		//alert(degree_id); 
 		$.ajax({
 			type:'POST',
@@ -245,6 +262,22 @@
 			 }
 		});
 	}
+      function getDisciplineByDegreeId()
+      {
+
+          var degree_id =$('#degree_id').val();
+          $.ajax({
+              type:'POST',
+              url:'<?php echo base_url();?>course/getDisciplineByDegreeId',
+              data: {'degree_id':degree_id},
+              success: function(data){
+                  //alert(data);
+                  var  option_brand = '<option value="">--Select Discipline--</option>';
+                  $('#discipline_id').empty();
+                  $("#discipline_id").append(option_brand+data);
+              }
+          });
+      }
 	function getBatchbyDegree(){
 		var degree_id =$('#degree_id').val();
 		var program_id =$('#program_id').val();
@@ -428,7 +461,8 @@ function uncheckedChk(){
 	}
 	function getStudentAssignByCourse()
 	{
-		if($('#course_id').val()>0 && $('#attendance_date').val()!=''){
+        $('.showMsg').html('');
+		if($('#course_id').val()!=''){
 			var $form = $("#attendance_form");
 			$.ajax({
 				type:'POST',

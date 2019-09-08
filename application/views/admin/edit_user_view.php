@@ -221,6 +221,15 @@ function setgroup(val)
 						  </select>
 						 
 						</div>
+                    <div class="form-group col-md-3">
+                        <label for="father_contact">Section</label>
+                        <select name="section_id" id="section_id" class="form-control">
+                            <option value="">--Select Section--</option>
+                            <?php foreach($section as $sec_res){?>
+                                <option value="<?php echo $sec_res->id;?>" <?php if(@$user_row->section_id == $sec_res->id) echo "selected";?>><?php echo $sec_res->section_name;?></option>
+                            <?php }?>
+                        </select>
+                    </div>
 						<div class="form-group col-md-3">
 						  <label for="father_contact">Type</label>
 						  <select name="course_type" id="course_type" class="form-control">

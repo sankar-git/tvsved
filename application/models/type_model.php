@@ -569,7 +569,8 @@ Class Type_model extends CI_Model
 	}
 	function remove_assign_menu($emp_id,$sub_menu_id)
 	{
-		$this->db->where(array('emp_id'=>$emp_id,'sub_menu'=>$sub_menu_id));
+		$this->db->where_in('emp_id',$emp_id);
+		$this->db->where(array('sub_menu'=>$sub_menu_id));
 		$this->db->delete('tblassignrole');
 		//echo $this->db->last_query();exit;
 	}

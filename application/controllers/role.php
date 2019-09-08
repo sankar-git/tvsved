@@ -189,7 +189,7 @@ class Role extends CI_Controller {
 	  $menuid=$this->input->post('menuid');
 	  //print_r($menuid); exit;
 	  $this->type_model->remove_assign_menu($empid,$menuid);
-	 echo 1;
+	 echo "Successfully Updated";
  } 
 	
 	
