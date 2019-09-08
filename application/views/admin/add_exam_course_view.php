@@ -76,7 +76,33 @@
 						
 					  </select>
 					</div>
-					
+                    <div class="form-group col-md-2">
+                        <label for="exampleInputEmail1">Exam<span style="color:red;font-weight: bold;">*</span></label>
+                        <select name="exam_type" id="exam_type" class="form-control" onchange="getCourseList();">
+                            <option value="">Select Type</option>
+                            <option value="1">Regular</option>
+                            <option value="2">Cap</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="exampleInputEmail1">Examination Type<span style="color:red;font-weight: bold;">*</span></label>
+                        <select name="examination" id="examination" class="form-control" onchange="getCourseList();">
+                            <option value="">Select Examination Type</option>
+                            <option value="external">External</option>
+                            <option value="internal_1">Internal 1</option>
+                            <option value="internal_2">Internal 2</option>
+                            <option value="internal_3">Internal 3</option>
+                            <option value="internal_4">Internal 4</option>
+                            <option value="internal_5">Internal 5</option>
+                            <option value="internal_6">Internal 6</option>
+                            <option value="practical_1">Practical 1</option>
+                            <option value="practical_2">Practical 2</option>
+                            <option value="practical_3">Practical 3</option>
+                            <option value="practical_4">Practical 4</option>
+                            <option value="practical_5">Practical 5</option>
+                            <option value="practical_6">Practical 6</option>
+                        </select>
+                    </div>
 					
 				
                </div>

@@ -99,15 +99,18 @@
 								<thead>
 								<tr>
 									<th>S.No</th>
-									<th>Date</th>
-									<th>Slot</th>
 									<th>Campus</th>
 									<th>Degree</th>
 									<th>Semester</th>
 									<th>Batch</th>
 									<th>Course</th>
 									<th>Discipline</th>
-									<th>Teacher</th>
+									<th>Invigilators</th>
+									<th>Hall Superindent</th>
+									<th>Exam Type</th>
+									<th>Examination</th>
+                                    <th>Date</th>
+                                    <th>Slot</th>
 									<th>Room</th><?php if($role_id>3 || $role_id==0){?>
 									<th>Action</th><?php }?>
 									
@@ -117,18 +120,34 @@
 								
 									<?php if(count(@$time_table)>0){ $i=0;foreach ($time_table as $vieww): 
                                        //print_r($assign_list); exit;
+                                        $teacher_name='';
+                                        $hall_superindent_name='';
+                                        if(!empty($vieww->teacher_id)) {
+                                            $teacher_res = get_teacher_name($vieww->teacher_id);
+                                            if ($teacher_res[0]['name'] != '')
+                                                $teacher_name = $teacher_res[0]['name'];
+                                        }
+                                    if(!empty($vieww->hall_superindent)) {
+                                        $hall_superindent_res = get_teacher_name($vieww->hall_superindent);
+                                        if ($hall_superindent_res[0]['name'] != '')
+                                            $hall_superindent_name = $hall_superindent_res[0]['name'];
+                                    }
 									$i++;?>
 									<tr>
 									<td><?php echo $i; ?></td>
-									<td nowrap><?php echo $vieww->exam_date;?></td>
-									<td nowrap><?php echo $vieww->slot_name;?></td>
+
 									<td><?php echo $vieww->campus_name;?></td>
 									<td><?php echo $vieww->degree_name;?></td>
 									<td><?php echo $vieww->semester_name;?></td>
 									<td nowrap><?php echo $vieww->batch_name;?></td>
 									<td><?php echo $vieww->course_title;?></td>
 									<td><?php echo $vieww->discipline_name;?></td>
-									<td><?php echo ucfirst($vieww->first_name).' '.ucfirst($vieww->last_name);?></td>
+									<td><?php echo ucfirst($teacher_name);?></td>
+									<td><?php echo ucfirst($hall_superindent_name);?></td>
+                                    <td nowrap><?php if($vieww->exam_type == 1) echo "Regular"; else echo "Cap";?></td>
+                                    <td nowrap><?php echo ucfirst(str_replace("_"," ",$vieww->examination));?></td>
+                                    <td nowrap><?php echo $vieww->exam_date;?></td>
+                                    <td nowrap><?php echo $vieww->slot_name;?></td>
 									<td><?php echo $vieww->room_name;?></td>
 									
 									<?php $title = 'Activate';

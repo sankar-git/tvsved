@@ -98,7 +98,7 @@ class Examdate extends CI_Controller {
 		$date_of_start=$this->input->post('date_of_start');
 		$date_of_closure=$this->input->post('date_of_closure');
 		$student_id=$this->input->post('student_id');
-		$data['page_title']="Add Exam Course Date";
+		$data['page_title']="Schedule Exam Date";
 		$data['campuses'] = $this->Discipline_model->get_campus(); 
 		$data['semesters'] = $this->Generate_model->get_semester(); 
 		$this->load->view('admin/add_exam_course_view',$data);
@@ -227,16 +227,18 @@ class Examdate extends CI_Controller {
 	
 	function saveExamDate()
 	{
-		$register_date_time=date('Y-m-d H:i:s');
+
 		$campus_id =$this->input->post('campus_id');
 		$program_id =$this->input->post('program_id');
 		$degree_id =$this->input->post('degree_id');
 		$batch_id=$this->input->post('batch_id');
 		$course_ids=$this->input->post('course_id');
 		$semester_id=$this->input->post('semester_id');
+		$exam_type=$this->input->post('exam_type');
+		$examination=$this->input->post('examination');
 		$exam_dates=$this->input->post('exam_date');
 		//print_r($exam_dates); exit;
-		     $this->Generate_model->delete_old_exam_date($campus_id,$program_id,$degree_id,$batch_id); 
+		     //$this->Generate_model->delete_old_exam_date($campus_id,$program_id,$degree_id,$batch_id,$exam_type);
 			for($i=0;$i<count($course_ids);$i++){
 						$exam_date=$exam_dates[$i];
 						$course_id=$course_ids[$i];
@@ -247,8 +249,10 @@ class Examdate extends CI_Controller {
 							'batch_id'=>$batch_id,
 							'course_id'=>$course_id,
 							'semester_id'=>$semester_id,
-							'exam_date'=>$exam_date,
-                            'created_on'=>$register_date_time
+							'exam_type'=>$exam_type,
+							'examination'=>$examination,
+							'exam_date'=>$exam_date
+
 						
 						);
 						//p($data); exit;

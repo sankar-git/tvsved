@@ -37,6 +37,13 @@
 		//echo $ci->db->last_query();
         return $result; 
   }
+function get_teacher_name($userid){
+    $ci = &get_instance();
+    $ci->db->select('group_concat(first_name) as name',true);
+    $ci->db->from('users');
+    $ci->db->where_in('id',explode(",",$userid));
+    return $ci->db->get()->result_array();
+}
   function get_course_name($degree_id,$course_id){
       $ci = &get_instance();
         if($degree_id == 1){

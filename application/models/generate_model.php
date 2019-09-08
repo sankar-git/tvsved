@@ -324,7 +324,7 @@ Class Generate_model extends CI_Model
 		
 		$this->db->select('c.*,ce.exam_date');
 		$this->db->from('courses c');
-		$this->db->join('tbl_course_assignment sac','sac.course_id = c.id','INNER');
+		$this->db->join('student_assigned_courses sac','sac.course_id = c.id','INNER');
 		$this->db->join('course_exam_date ce','ce.course_id = c.id','LEFT');
 		$this->db->where(array('sac.campus_id'=>$campus_id,'sac.program_id'=>$program_id,'sac.batch_id'=>$batch_id,'sac.degree_id'=>$degree_id,'sac.semester_id'=>$semester_id));
 	    $this->db->group_by('sac.course_id');
@@ -334,20 +334,42 @@ Class Generate_model extends CI_Model
 		
 		
 	}
-	
-	function save_course_exam_date($datas)
+	function get_student_last_course_details($student_id){
+        $this->db->select('*');
+        $this->db->from('student_assigned_courses');
+        $this->db->where('student_id',$student_id);
+        $this->db->order_by('id','desc');
+        $this->db->limit(1,0);
+        return $this->db->get()->result_array();
+    }
+	function save_course_exam_date($data)
 	{
-		//print_r($datas); exit;
-			$this->db->insert('course_exam_date',$datas);
-			$insert_id = $this->db->insert_id();
-			if($insert_id)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+        $this->db->select('id');
+        $this->db->from('course_exam_date');
+        $this->db->where(array('campus_id'=> $data['campus_id'],'program_id'=>$data['program_id'],
+            'semester_id'=>$data['semester_id'],'batch_id'=>$data['batch_id'],'degree_id'=>$data['degree_id'],
+            'exam_type'=>$data['exam_type'],'examination'=>$data['examination'],'course_id'=>$data['course_id']));
+        $result=$this->db->get()->result();
+        if( count($result)>0)
+        {
+            $id = $result[0]->id;
+            $this->db->where('id',$id);
+            $this->db->update('course_exam_date',$data);
+            return $result[0]->id;
+        }else{
+            $register_date_time=date('Y-m-d H:i:s');
+            $data['created_on']=$register_date_time;
+            $this->db->insert('course_exam_date',$data);
+            $insert_id = $this->db->insert_id();
+        }
+        if($insert_id)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
 	}
 	function delete_old_exam_date($campus_id,$program_id,$degree_id,$batch_id
 	)

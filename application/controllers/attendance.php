@@ -774,8 +774,8 @@ function drawMultSeries() {
                 $data['campuses'] = $this->Discipline_model->get_campus();
                 $data['semesters'] = $this->Generate_model->get_semester();
                 $data['batches'] = $this->Discipline_model->get_batches();
-                $data['section'] = $this->Discipline_model->get_section();
             }
+            $data['section'] = $this->Discipline_model->get_section();
 			$this->load->view('admin/attendance/manage_timetable',$data);
 		
 	}

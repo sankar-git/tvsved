@@ -490,6 +490,7 @@ function setgroup(val)
 						      <option value="">--Select Student Status--</option>
 							  <option value="Active" <?php if(@$user_row->student_status == "Active"){echo "selected";}?>>Active</option>
 							<option value="Dismissed" <?php if(@$user_row->student_status == "Dismissed"){echo "selected";}?>>Dismissed</option>
+							<option value="Dismissed" <?php if(@$user_row->student_status == "Suspended"){echo "selected";}?>>Suspended</option>
 							  <option value="With held" <?php if(@$user_row->student_status == "With held"){echo "selected";}?>>With held</option>
 							  <option value="Dis-continued" <?php if(@$user_row->student_status == "Dis-continued"){echo "selected";}?>>Dis-continued</option>
 							</select>

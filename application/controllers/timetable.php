@@ -29,6 +29,7 @@ class Timetable extends CI_Controller {
 		 
 		 
 		 $this->load->model('Discipline_model');
+		 $this->load->model('generate_model');
 		 $this->load->model('Master_model');
 		 $this->load->model('Timetable_model');
 
@@ -112,7 +113,7 @@ class Timetable extends CI_Controller {
 		$data['semester_id'] = $this->input->post('semester_id');
 		$data['batch_id'] = $this->input->post('batch_id');
 		$data['campuses'] = $this->Discipline_model->get_campus();
-		
+
 		
 		if($this->input->post('view_time_table') == 'export_time_table'){
 			$this->exportTimeTable();exit;
@@ -120,9 +121,11 @@ class Timetable extends CI_Controller {
 		if($data['role_id'] == 2)
 			$data['time_table']=$this->Timetable_model->viewTimeTable($session_data[0]->id);
 		else{
-			if($data['campus_id']>0)
-				$data['time_table']=$this->Timetable_model->viewTimeTable('',$data['campus_id'],$data['program_id'],$data['degree_id'],$data['semester_id'],$data['batch_id']);
+            $student_data = $this->generate_model->get_student_last_course_details($session_data[0]->id);//echo $this->db->last_query();exit;
+			if(count($student_data)>0)
+				$data['time_table']=$this->Timetable_model->viewTimeTable('',$student_data[0]['campus_id'],$student_data[0]['program_id'],$student_data[0]['degree_id'],$student_data[0]['semester_id'],$student_data[0]['batch_id']);
 		}
+		//echo $this->db->last_query();exit;
 		//print_r($data['time_table']); exit;
 		$this->load->view('admin/time_table_list_view',$data);
 	}
@@ -220,15 +223,17 @@ class Timetable extends CI_Controller {
 		//$campus_id = $this->input->post('campus_id');
 		$course_id = $this->input->post('course_id');
 		$discipline_id = $this->input->post('discipline_id');
-		$teacher_id = $this->input->post('teacher_id');
+		$teacher_id = implode(",",$this->input->post('teacher_id'));
+		$hall_superindent = implode(",",$this->input->post('hall_superindent'));
 		$room_id = $this->input->post('room_id');
-		
+		//p($_POST);exit;
 		$save['exam_date_id']=$exam_date_id;
 		$save['slots']=$time_slot;
 		//$save['campus_id']=$campus_id;
 		//$save['course_id']=$course_id;
 		//$save['discipline_id']=$discipline_id;
 		$save['teacher_id']=$teacher_id;
+		$save['hall_superindent']=$hall_superindent;
 		$save['room_id']=$room_id;
 		$save['created_on']=   $register_date_time;
 		if($ttid>0){

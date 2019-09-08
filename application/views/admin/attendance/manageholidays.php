@@ -1,5 +1,4 @@
 <?php $this->load->view('admin/helper/header');?>
-<?php $this->load->view('admin/helper/header');?>
 <?php $this->load->view('admin/helper/sidebar');
 $sessdata= $this->session->userdata('sms');
 $id = $sessdata[0]->id;

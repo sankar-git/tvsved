@@ -81,15 +81,24 @@ $this->load->view('admin/helper/header');?>
 						  <?php }?>
 					  </select>
 					</div>
-					<div class="form-group col-md-3">
-					  <label for="degree_name">Teacher<span style="color:red;font-weight: bold;">*</span></label>
-					  <select  name="teacher_id" id="teacher_id" class="form-control">
-						  <option value="">--Select Teacher--</option>
+                   <div class="form-group col-md-3">
+                       <label for="degree_name">Hall Superindent<span style="color:red;font-weight: bold;">*</span></label>
+                       <select  name="hall_superindent[]"  class="selectpicker form-control" multiple data-live-search="true" id="hall_superindent" class="form-control">
+                           <?php foreach($teachers as $teacher){?>
+                               <option value="<?php echo $teacher->id;?>" <?php if(in_array($teacher->id,explode(",",$time_table_row->hall_superindent))){echo "selected";}?>><?php echo ucfirst($teacher->first_name).' '.ucfirst($teacher->last_name);?></option>
+                           <?php } ?>
+                       </select>
+                   </div>
+
+                   <div class="form-group col-md-3">
+					  <label for="degree_name">Invigilators<span style="color:red;font-weight: bold;">*</span></label>
+					  <select  name="teacher_id[]"  class="selectpicker form-control" multiple data-live-search="true" id="teacher_id" class="form-control">
 						  <?php foreach($teachers as $teacher){?>
-						  <option value="<?php echo $teacher->id;?>" <?php if($time_table_row->teacher_id==$teacher->id){echo "selected";}?>><?php echo ucfirst($teacher->first_name).' '.ucfirst($teacher->last_name);?></option>
+						  <option value="<?php echo $teacher->id;?>" <?php if(in_array($teacher->id,explode(",",$time_table_row->teacher_id))){echo "selected";}?>><?php echo ucfirst($teacher->first_name).' '.ucfirst($teacher->last_name);?></option>
 						  <?php } ?>
 					  </select>
 					</div>
+
 					<div class="form-group col-md-3">
 					  <label for="room_id">Class Room<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="room_id" id="room_id" class="form-control">
@@ -128,6 +137,12 @@ $this->load->view('admin/helper/header');?>
 	
 	$(document).ready(function() {
 		$("#sales_dob").datepicker({format: 'dd-mm-yyyy',autoclose: true});
+        $('#hall_superindent,#teacher_id').multiselect({
+            // enableClickableOptGroups: true,
+            enableFiltering: true,
+            buttonWidth: '345px',
+            includeSelectAllOption: true,
+        });
 		
 	});
 
@@ -157,9 +172,16 @@ $this->load->view('admin/helper/header');?>
 		}
 	});	
 	
-	</script>	
-  
-  
+	</script>
+
+<link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css"
+      rel="stylesheet" type="text/css" />
+<script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"
+        type="text/javascript"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/multiple-select/1.2.0/multiple-select.min.js"></script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/multiple-select/1.2.0/multiple-select.css" rel="stylesheet"/>
   
  <?php $this->load->view('admin/helper/footer');?> 
   

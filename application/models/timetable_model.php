@@ -8,7 +8,7 @@ Class Timetable_model extends CI_Model
 	}
 	function allocateInvigilator($teacher_id='',$campus_id='',$program_id='',$degree_id='',$semester_id='',$batch_id='')
 	{
-		$this->db->select('tt.id as ttid,tt.slots,tt.teacher_id,tt.room_id,cr.room_name,s.slot_name,tt.status,ced.id,d.discipline_name,c.campus_name,cc.course_title,u.first_name,u.last_name,ced.exam_date,deg.degree_name,sem.semester_name,bat.batch_name');
+		$this->db->select('hall_superindent,ced.exam_type,ced.examination,tt.id as ttid,tt.slots,tt.teacher_id,tt.room_id,cr.room_name,s.slot_name,tt.status,ced.id,d.discipline_name,c.campus_name,cc.course_title,ced.exam_date,deg.degree_name,sem.semester_name,bat.batch_name');
 		$this->db->from('course_exam_date as ced');
         $this->db->join('time_tables as tt','ced.id = tt.exam_date_id','LEFT');
 		$this->db->join('courses as cc','cc.id = ced.course_id','LEFT');
@@ -17,11 +17,11 @@ Class Timetable_model extends CI_Model
 		$this->db->join('degrees as deg','deg.id = ced.degree_id','LEFT');
 		$this->db->join('semesters as sem','sem.id = ced.semester_id','LEFT');
 		$this->db->join('batches as bat','bat.id = ced.batch_id','LEFT');
-		$this->db->join('users as u','u.id = tt.teacher_id','LEFT');
+		//$this->db->join('users as u','u.id = tt.teacher_id','LEFT');
 		$this->db->join('class_room as cr','cr.id = tt.room_id','LEFT');
 		$this->db->join('exam_slot as s','s.id = tt.slots','LEFT');
 		if($teacher_id>0){
-			$this->db->where('tt.teacher_id', $teacher_id);
+			$this->db->where_in('tt.teacher_id', $teacher_id);
 		}
 		if($campus_id>0){
 			$this->db->where('ced.campus_id', $campus_id);
@@ -35,12 +35,12 @@ Class Timetable_model extends CI_Model
 			$this->db->where('ced.batch_id', $batch_id);
 		}
 		$this->db->where("ced.exam_date!=","''",false);
-        $result	= $this->db->get()->result();
+        $result	= $this->db->get()->result();//echo $this->db->last_query();exit;
 		return $result;
 	}
 	function viewTimeTable($teacher_id='',$campus_id='',$program_id='',$degree_id='',$semester_id='',$batch_id='')
 	{
-		$this->db->select('tt.*,d.discipline_name,bat.batch_name,deg.degree_name,deg.degree_code,c.campus_name,c.campus_code,cc.course_title,u.first_name,u.last_name,cr.room_name,s.slot_name,ced.exam_date');
+		$this->db->select('ced.exam_type,ced.examination,tt.*,d.discipline_name,bat.batch_name,deg.degree_name,deg.degree_code,c.campus_name,c.campus_code,cc.course_title,u.first_name,u.last_name,cr.room_name,s.slot_name,ced.exam_date');
 		$this->db->from('course_exam_date as ced');
         $this->db->join('time_tables as tt','ced.id = tt.exam_date_id','LEFT');
 		$this->db->join('courses as cc','cc.id = ced.course_id','LEFT');
@@ -76,7 +76,7 @@ Class Timetable_model extends CI_Model
 	}
 	function get_time_table_by_id($id)
 	{
-		$this->db->select('ced.*,tt.slots,tt.teacher_id,tt.room_id,tt.status,cc.discipline_id,tt.id as ttid,deg.degree_name,sem.semester_name');
+		$this->db->select('ced.*,tt.slots,tt.teacher_id,tt.room_id,tt.status,cc.discipline_id,tt.id as ttid,deg.degree_name,sem.semester_name,tt.hall_superindent');
 		$this->db->from('course_exam_date as ced');
 		$this->db->join('time_tables as tt','ced.id = tt.exam_date_id','LEFT');
 		$this->db->join('courses as cc','cc.id = ced.course_id','LEFT');
