@@ -120,11 +120,13 @@ class Timetable extends CI_Controller {
 		}
 		if($data['role_id'] == 2)
 			$data['time_table']=$this->Timetable_model->viewTimeTable($session_data[0]->id);
-		else{
+		elseif($data['role_id'] == 1){
             $student_data = $this->generate_model->get_student_last_course_details($session_data[0]->id);//echo $this->db->last_query();exit;
 			if(count($student_data)>0)
-				$data['time_table']=$this->Timetable_model->viewTimeTable('',$student_data[0]['campus_id'],$student_data[0]['program_id'],$student_data[0]['degree_id'],$student_data[0]['semester_id'],$student_data[0]['batch_id']);
-		}
+				$data['time_table']=$this->Timetable_model->viewTimeTable('',$student_data[0]['campus_id'],$student_data[0]['program_id'],$student_data[0]['degree_id'],$student_data[0]['semester_id'],$student_data[0]['batch_id'],$student_data[0]['exam_type']);
+		}else{
+            $data['time_table']=$this->Timetable_model->viewTimeTable('',$data['campus_id'],$data['program_id'],$data['degree_id'],$data['semester_id'],$data['batch_id']);
+        }
 		//echo $this->db->last_query();exit;
 		//print_r($data['time_table']); exit;
 		$this->load->view('admin/time_table_list_view',$data);

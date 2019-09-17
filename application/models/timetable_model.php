@@ -38,7 +38,7 @@ Class Timetable_model extends CI_Model
         $result	= $this->db->get()->result();//echo $this->db->last_query();exit;
 		return $result;
 	}
-	function viewTimeTable($teacher_id='',$campus_id='',$program_id='',$degree_id='',$semester_id='',$batch_id='')
+	function viewTimeTable($teacher_id='',$campus_id='',$program_id='',$degree_id='',$semester_id='',$batch_id='',$exam_type='')
 	{
 		$this->db->select('ced.exam_type,ced.examination,tt.*,d.discipline_name,bat.batch_name,deg.degree_name,deg.degree_code,c.campus_name,c.campus_code,cc.course_title,u.first_name,u.last_name,cr.room_name,s.slot_name,ced.exam_date');
 		$this->db->from('course_exam_date as ced');
@@ -52,7 +52,7 @@ Class Timetable_model extends CI_Model
 		$this->db->join('class_room as cr','cr.id = tt.room_id','LEFT');
 		$this->db->join('exam_slot as s','s.id = tt.slots','LEFT');
 		if($teacher_id>0){
-			$this->db->where('tt.teacher_id', $teacher_id);
+			$this->db->where("( find_in_set('$teacher_id',tt.teacher_id) <> 0 OR  find_in_set('$teacher_id',tt.hall_superindent) <> 0)");
 		}
 		if($campus_id>0){
 			$this->db->where('ced.campus_id', $campus_id);
@@ -65,6 +65,9 @@ Class Timetable_model extends CI_Model
 		}if($batch_id>0){
 			$this->db->where('ced.batch_id', $batch_id);
 		}
+        if($exam_type>0){
+            $this->db->where('ced.exam_type', $exam_type);
+        }
 		$this->db->where("ced.exam_date!=","''",false);
         $result	= $this->db->get()->result();
 		return $result;

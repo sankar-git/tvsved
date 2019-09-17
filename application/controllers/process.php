@@ -851,11 +851,11 @@ class Process extends CI_Controller {
 		}
 		$data['page_title']="View Marks";
 		if($sessdata[0]->role_id == 5){
-		$id = $sessdata[0]->parents_student_id;
+		    $id = $sessdata[0]->parents_student_id;
 		$role_id = 1;
 		}else{
-		$id = $sessdata[0]->id;
-		$role_id = $sessdata[0]->role_id;
+		    $id = $sessdata[0]->id;
+		    $role_id = $sessdata[0]->role_id;
 		}
 			$data['user_row'] = $this->type_model->get_user_by_id($id,$role_id);
 			//p($data['user_row']); exit;
@@ -946,49 +946,50 @@ class Process extends CI_Controller {
 		//p($studentList); exit;
 		$trdata='';
 		$i=0;
-		foreach($studentList as $students)
-			{ 
-			    if($degree_id=='1')
-				{
-					$i++;
-					$checked = 'checked';
-					$readonly='readonly';
-					$disabled='disabled';
-					$trdata.='<tr>
-								<td  class="text-center"><input type="hidden"  value="'.$i.'">'.$i.' 
-								<input type="hidden" name="student_id[]" value="'.$students->id.'"></td>
+		if(count($studentList)>0) {
+            foreach ($studentList as $students) {
+                if ($degree_id == '1') {
+                    $i++;
+                    $checked = 'checked';
+                    $readonly = 'readonly';
+                    $disabled = 'disabled';
+                    $trdata .= '<tr>
+								<td  class="text-center"><input type="hidden"  value="' . $i . '">' . $i . ' 
+								<input type="hidden" name="student_id[]" value="' . $students->id . '"></td>
 							 
-							  <td  class="text-center">'.$students->course_code.'</td>
-							  <td  class="text-center">'.$students->theory_internal1.'</td>
-							  <td class="text-center">'.$students->theory_internal2.'</td>
-							  <td class="text-center">'.$students->theory_internal3.'</td>
+							  <td  class="text-center">' . $students->course_code . '</td>
+							  <td  class="text-center">' . $students->theory_internal1 . '</td>
+							  <td class="text-center">' . $students->theory_internal2 . '</td>
+							  <td class="text-center">' . $students->theory_internal3 . '</td>
 							 
-							  <td class="text-center">'.$students->theory_paper1.'</td>
-							   <td class="text-center">'.$students->theory_paper2.'</td>
+							  <td class="text-center">' . $students->theory_paper1 . '</td>
+							   <td class="text-center">' . $students->theory_paper2 . '</td>
 							 
-							  <td class="text-center">'.$students->theory_external.'</td>
-							   <td class="text-center">'.$students->practical_external.'</td>
+							  <td class="text-center">' . $students->theory_external1 . '</td>
+							   <td class="text-center">' . $students->theory_external2 . '</td>
 							 
 							  
 						</tr>';
-				}
-                if($degree_id!='1')	
-				{
-					$i++;
-					$checked = 'checked';
-					$readonly='readonly';
-					$disabled='disabled';
-					$trdata.='<tr>
-				           <td><input type="hidden"  value="'.$i.'">'.$i.'  
-						   <input type="hidden" name="student_id[]" value="'.$students->id.'"></td>
+                }
+                if ($degree_id != '1') {
+                    $i++;
+                    $checked = 'checked';
+                    $readonly = 'readonly';
+                    $disabled = 'disabled';
+                    $trdata .= '<tr>
+				           <td><input type="hidden"  value="' . $i . '">' . $i . '  
+						   <input type="hidden" name="student_id[]" value="' . $students->id . '"></td>
 						 
-						  <td>'.$students->course_code.'</td>
-						  <td><label style="width:60px;">'.$students->theory_internal.'</label></td>
-						  <td><label style="width:60px;">'.$students->practical_internal.'</label></td>
-						  <td><label style="width:60px;">'.$students->theory_external.'</label></td>
+						  <td>' . $students->course_code . '</td>
+						  <td><label style="width:60px;">' . $students->theory_internal . '</label></td>
+						  <td><label style="width:60px;">' . $students->practical_internal . '</label></td>
+						  <td><label style="width:60px;">' . $students->theory_external . '</label></td>
 					      </tr>';
-				}					
-			}
+                }
+            }
+        }else{
+            $trdata .= '<tr><td style="text-align: center;" colspan="9">Results not published</td></tr>';
+        }
 		echo $trdata;
 	}
 	function myStudentResult()

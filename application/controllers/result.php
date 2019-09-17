@@ -739,7 +739,7 @@ class Result extends CI_Controller {
 					//echo "hello"; exit;
 					foreach($students as $stuData)
 					 {
-						$list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id);
+						$list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id,$exam_type);
 						$list['first_name']  =$stuData->first_name;
 						 $list['father_name']  =$stuData->parent_name;
 						 $list['mother_name']  =$stuData->mother_name;
@@ -1814,8 +1814,8 @@ class Result extends CI_Controller {
 		 $this->load->view('admin/generate_student_result_view',$data);
 	}
 	
-	function get_bvsc_semester_marks($student_id,$semester_id){
-		$subjectList = $this->Result_model->get_student_marks_by_id($student_id,$semester_id);
+	function get_bvsc_semester_marks($student_id,$semester_id,$exam_type=''){
+		$subjectList = $this->Result_model->get_student_marks_by_id($student_id,$semester_id,$exam_type);
 		$dataList =array();
 		$overallReport =array();
 		$sum_subjects_credit_point=0;

@@ -33,7 +33,7 @@ Class Process_model extends CI_Model
 		$this->db->from('students_ug_marks as ug');
 		$this->db->join('users as u','u.id=ug.student_id','INNER');
 		$this->db->join('courses as c','c.id=ug.course_id','INNER');
-		$this->db->where(array('ug.campus_id'=>$campus_id,'ug.program_id'=>$program_id,'ug.degree_id'=>$degree_id,'ug.semester_id'=>$semester_id,'ug.batch_id'=>$batch_id,'ug.student_id'=>$user_id,));
+		$this->db->where(array('ug.campus_id'=>$campus_id,'ug.program_id'=>$program_id,'ug.degree_id'=>$degree_id,'ug.semester_id'=>$semester_id,'ug.batch_id'=>$batch_id,'ug.student_id'=>$user_id,'ug.publish_status'=>1));
 		$result=$this->db->get()->result();
 		return $result;
 	}
