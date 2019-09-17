@@ -108,8 +108,8 @@
                     <th rowspan="1">S.NO.</th>
                     <th rowspan="1">ID NO.</th>
                     <th rowspan="1">NAME</th>
-					<?php foreach($pass_fail_list[0]['subjectList'] as $subjectVal){  ?>
-                    <th rowspan="1" ><?php if($subjectVal['course_group_id'] == 22) echo 'NCC/NSS/CCA' ;else  echo $subjectVal['course_code'];?></th>
+					<?php foreach($courseList as $course_code=>$arr){  ?>
+                    <th rowspan="1" ><?php echo $course_code;?></th>
                     <?php }?>
                     <th rowspan="1">RESULT</th>
                 </tr>
@@ -126,19 +126,43 @@
 				         $resultStatus=array();
 						 $fail_cnt = 0;
 						 $sub_cnt = 0;
- 				         foreach($student_val['subjectList'] as $subject_status){
-							 if($subject_status['course_group_id'] != 22)
-								 $sub_cnt++;
-							 if($subject_status['passfail_status'] == 'Fail')
-								 $fail_cnt++;
-							 
-					         array_push($resultStatus,$subject_status['passfail_status']);
-							 //p($resultStatus);
-							 
-					   ?>
-                    <td><?php echo $subject_status['passfail_status'];?></td>
+						// p($student_val['subjectList']);exit;
+ 				         //foreach($student_val['subjectList'] as $subject_status){
+                        foreach($courseList as $course_code=>$arr){
+
+                            if(isset($student_val['subjectList'][$arr['courseid']])) {
+                                $subject_status =  $student_val['subjectList'][$arr['courseid']];
+
+                                if ($subject_status['course_group_id'] != 22)
+                                    $sub_cnt++;
+                                if ($subject_status['passfail_status'] == 'Fail')
+                                    $fail_cnt++;
+
+                                array_push($resultStatus, $subject_status['passfail_status']);
+                                ?>
+                                <td><?php echo $subject_status['passfail_status'];?></td>
+                            <?php }else{ ?>
+                                <td>-</td>
+                            <?php } ?>
+
 				   <?php } ?>
-                    <td><?php if( $sub_cnt == $fail_cnt) {echo 'FAIL';} elseif($fail_cnt>0){ echo "CAP";}else { echo 'PASS';}?></td>
+                    <td><?php
+                        if($exam_type == 1) {
+                            if ($sub_cnt == $fail_cnt) {
+                                echo 'FAIL';
+                            } elseif ($fail_cnt > 0) {
+                                echo "CAP";
+                            } else {
+                                echo 'PASS';
+                            }
+                        }else{
+                            if ($fail_cnt>0) {
+                                echo 'FAIL';
+                            }else {
+                                echo 'PASS';
+                            }
+                        }
+                        ?></td>
 					
                 </tr>
 			  <?php }     ?>

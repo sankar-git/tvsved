@@ -737,6 +737,7 @@ class Result extends CI_Controller {
 					// p($students); exit;
 				if($degree_id==1){
 					//echo "hello"; exit;
+                    $courseArr =array();
 					foreach($students as $stuData)
 					 {
 						$list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id,$exam_type);
@@ -755,11 +756,22 @@ class Result extends CI_Controller {
 						 $list['semester_code'] =$semesterRow->semester_code;
 						  $list['semester_name'] =$semesterRow->semester_name;
 						 $list['month_year']  =$monthYrr;
-							$allData[] = $list;  
-							//p($allData);
+							$allData[] = $list;  //p($list['subjectList']);exit;
+							foreach($list['subjectList'] as $k=>$v){
+							    if($v['course_group_id'] == 22){
+                                    if (!isset($courseArr['NCC/NSS/CCA']))
+                                        $courseArr['NCC/NSS/CCA'] = array('course_title' => 'NCC/NSS/CCA', 'course_group_id' => $v['course_group_id'],'courseid' => $v['courseid']);
+                                }else {
+                                    if (!isset($courseArr[$v['course_code']])) {
+                                        $courseArr[$v['course_code']] = array('course_title' => $v['course_title'], 'course_group_id' => $v['course_group_id'],'courseid' => $v['courseid']);
+                                    }
+                                }
+                            }
 					 } //exit;
+                   // p($courseArr);exit;
 				     $data['pass_fail_list']=$allData;
-					// p($data['pass_fail_list']); exit;
+				     $data['courseList']=$courseArr;
+					 //p($data['courseList']); exit;
 			
 			  
 			//load the view and saved it into $html variable
