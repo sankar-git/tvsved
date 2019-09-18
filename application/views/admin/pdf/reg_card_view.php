@@ -16,12 +16,13 @@
                     <td align="center" style=" font-size:13px;"><?php 
                     $crs_cod = explode("-",$subjects['course_code']);
                     $cod = $crs_cod[0];
-                    $course_title = $this->Generate_model->get_coursesubj_name($crs_cod[0]);
-                    if($course_title== Array ( )){
+                    //$course_title = $this->Generate_model->get_coursesubj_name($crs_cod[0]);
+                    if($subjects['course_subject_id'] == 22){
                         echo $cod.' (Non Credit Course)';
-                    }else{
-                        print_r($course_title);
-                    }
+                    }elseif(!empty($subjects['course_subject_id'])){
+                        echo $subjects['course_subject_title'];
+                    }else
+                        echo $subjects['course_title'];
                       
                     ?></td>
                     <td align="center" style=" font-size:13px;"><?php echo $subjects['theory_credit'].'+'.$subjects['practicle_credit']?></td>

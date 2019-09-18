@@ -301,7 +301,7 @@ class Generate extends CI_Controller {
 	       $data['year']=$year=$this->input->post('year');
 	    $send['campus_id']=$campus_id;
 	    $send['program_id']=$program_id;
-	    $send['degree_id']=$degree_id;
+	    $send['degree_id']=$data['degree_id']=$degree_id;
 	    $send['batch_id']=$batch_id;
 	    $month=$this->input->post('month');
 		$year=$this->input->post('year');
@@ -355,7 +355,7 @@ class Generate extends CI_Controller {
 				 $allData = array();
 				     $semesterRow = $this->Result_model->get_semester_name($semester_id); 
 					 $students = $this->Generate_model->get_studedent_data($student_id);
-					// p($students); exit;
+					// p($semesterRow); exit;
 					 foreach($students as $stuData)
 					 {
 						$subjectList = $this->Generate_model->get_student_assigned_subjects_bvsc($stuData->user_id,$semester_id,$exam_type,$batch_id,$degree_id);
@@ -371,6 +371,7 @@ class Generate extends CI_Controller {
 						     $list['degree_name']  =$stuData->degree_name;
 						     $list['degree_code']  =$stuData->degree_code;
 						     $list['month_year']  =$monthYrr;
+						     $list['degree_id']  =$degree_id;
 						     $list['semester_name']  =$semesterRow->semester_name;
 						     $list['semester_code']  =$semesterRow->semester_code;
 						     $list['created_on']  =$stuData->created_on;
@@ -380,6 +381,9 @@ class Generate extends CI_Controller {
 								 {    
 							        $data['course_id']   = $subjectVal->id;
 									$data['course_code']   = $subjectVal->course_code;
+									$data['course_title']   = $subjectVal->course_title;
+									$data['course_subject_id']   = $subjectVal->course_subject_id;
+									$data['course_subject_title']   = $subjectVal->course_subject_title;
 									$data['theory_credit']   = $subjectVal->theory_credit;
 									$data['practicle_credit']   = $subjectVal->practicle_credit;   
 									   $dataList[] = $data;
@@ -1030,6 +1034,7 @@ class Generate extends CI_Controller {
 						     $list['campus_name']  =$stuData->campus_name;
 						     $list['campus_code']  =$stuData->campus_code;
 						     $list['degree_code']  =$stuData->degree_code;
+						     $list['degree_id']  =$degree_id;
 						     $list['degree_name']  =$stuData->degree_name;
 						     $list['semester_name']  =$stuData->semester_name;
 						     $list['gender']  =$stuData->gender;

@@ -175,12 +175,16 @@ Class Generate_model extends CI_Model
 	}
 	function get_student_assigned_subjects_bvsc($stuId,$semester_id,$exam_type=1,$batch_id,$degree_id)
 	{
-		$this->db->select('c.id, group_concat(distinct c.course_title order by c.course_title) as course_title,group_concat(distinct c.course_code order by c.course_code) as course_code,c.theory_credit,c.practicle_credit,csg.course_subject_name,csg.course_subject_title,c.course_subject_id,csg.course_subject_title',true);
+	    if($degree_id == 1)
+		    $this->db->select('c.id, group_concat(distinct c.course_title order by c.course_title) as course_title,group_concat(distinct c.course_code order by c.course_code) as course_code,c.theory_credit,c.practicle_credit,csg.course_subject_name,csg.course_subject_title,c.course_subject_id,csg.course_subject_title',true);
+	    else
+            $this->db->select('c.id, c.course_title,c.course_code,c.theory_credit,c.practicle_credit,csg.course_subject_name,csg.course_subject_title,c.course_subject_id,csg.course_subject_title',true);
 		$this->db->from('courses c');
 		$this->db->join('student_assigned_courses sac','sac.course_id = c.id','INNER');
 		$this->db->join('course_subject_groups csg','csg.id=c.course_subject_id','LEFT');
 		$this->db->where(array('sac.student_id'=>$stuId,'sac.semester_id'=>$semester_id,'sac.batch_id'=>$batch_id,'sac.degree_id'=>$degree_id,'sac.exam_type'=>$exam_type));
-		$this->db->group_by("c.course_subject_id");
+        if($degree_id == 1)
+		    $this->db->group_by("c.course_subject_id");
 		$this->db->order_by("sac.course_id", "asc");
         $result	= $this->db->get()->result();
 		return $result;

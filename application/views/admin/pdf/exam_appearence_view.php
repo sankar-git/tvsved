@@ -74,7 +74,7 @@
 					<td align="left">4. Year of Admission:  <b><?php  echo $appearData['admission_year'];?></b></td>
 				</tr>
 				<tr>
-					<td >5. College: <b><?php echo $appearData['campus_code'];?></b></td>
+					<td >5. College: <b><?php echo $appearData['campus_name'];?></b></td>
 					
 				</tr>
 				
@@ -83,7 +83,9 @@
             <table id="table" width="100%" style="margin-top:5px;">
                 <tr style="font-size:13px; font-weight:bold;">
                     <th style="width:70px;">S.No</th>
+                    <?php if($appearData['degree_id'] == 1){?>
                     <th style="width:150px;">Subject</th>
+                    <?php } ?>
                     <th style="width:250px;">Papers</th>
                     <th style="width:70px;">Credit Hours</th>
                     <th>No of Appearances</th>
@@ -103,14 +105,16 @@
 				?>
                 <tr style=" font-size:12px; font-weight:bold;">
                     <td align="center"><?php echo $i;?></td>
+                    <?php if($appearData['degree_id'] == 1){?>
                     <td align="center"><?php echo str_replace(",","<br/>",$courseData['course_subject_title']);?></td>
+                    <?php }?>
                     <td style="padding-left:20px;"><?php echo str_replace(",","<br/>",$courseData['course_title']);?></td>
                     <td style="padding-left:20px;"><?php echo $courseData['theory_credit'].'+'.$courseData['practical_credit'];?></td>
                     <td style="padding-left:20px;"><?php if($exam_type == 2) echo "CAP"; else echo "First Time";?></td>
                 </tr>
 				<?php } ?>
 				
-                <tr><td align="right" style="padding-right:80px;" colspan="5"><div>Total Credits Registered = <b><?php echo $sumTotal.'('.$sum_theory.'+'.$sum_practical.')'?></b></div></td></tr>
+                <tr><td align="right" style="padding-right:80px;" colspan="<?php if($appearData['degree_id'] == 1){?>5<?php }else{?>4<?php }?>"><div>Total Credits Registered = <b><?php echo $sumTotal.'('.$sum_theory.'+'.$sum_practical.')'?></b></div></td></tr>
             </table>
 			
             

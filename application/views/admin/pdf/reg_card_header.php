@@ -87,8 +87,8 @@
                     <td>: <?php if(!empty($created_on)){ $dor = explode(" ", $created_on);  echo $dor[0]; }else{echo " - ";}?></td>
                 </tr>
                 <tr>
-					<td width="20%" style="font-weight:bold;">Professional Year </td>
-                    <td>: <?php $sem_cod = explode("-", $semester_code); echo $sem_cod[1]; ?></td> 
+					<td width="20%" style="font-weight:bold;"><?php if($degree_id == 1){?>Professional Year<?php }else{ ?> Semester <?php } ?> </td>
+                    <td>: <?php  echo $semester_name; ?></td>
                     <td align="left" style="font-weight:bold;">Class Batch </td>
                     <td>: <?php  echo "A/B/C/D";?></td>
                     <td align="right" style="font-weight:bold;">Year of Admission </td>
