@@ -66,7 +66,7 @@ class Student extends CI_Controller {
 			header("Content-Length: ".filesize($path));
 			readfile($path);
 			exit;*/
-			//$record['campuses'] = $this->Discipline_model->get_campus(); 
+			$record['campuses'] = $this->Discipline_model->get_campus();
 		   $record['disciplines'] = $this->Discipline_model->get_discipline(); 
 		   $record['batches'] = $this->Discipline_model->get_batch(); 
 		   $record['degrees'] = $this->Discipline_model->get_degree(); 
@@ -105,22 +105,22 @@ class Student extends CI_Controller {
 
 	  
 	  //**************campuses dropdown********************************//
-	 $record['campuses']  =array(
+	 /*$record['campuses']  =array(
 				  '1'     =>'Madras Veterinary College, Chennai',
 				  '2'     =>'Veterinary  College and Research Institute, Namakkal',
 				  '3'     =>'Veterinary  College and Research Institute, Orathanadu',
 				  '4'     =>'Veterinary  College and Research Institute, Tirunelveli',
 				  '5'     =>'College  of Poultry Production Management, Hosur',
 				  '6'     =>'College  of  Food and Diary Technology, Koduvalli'
-				  );
+				  );*/
 	  
 	   foreach ($record['campuses'] as $key => $value) {
-         // $campusid[]    = $value->id;
-          //$campusname[]  = $value->campus_name;
-		   $campusid[]    = $key;
-          $campusname[]  = $value;
-		  if($key == $this->input->post('campus_id'))
-			$default_campus = $value;
+         $campusid[]    = $value->id;
+          $campusname[]  = $value->campus_name;
+		   //$campusid[]    = $key;
+         // $campusname[]  = $value;
+		  if($value->id == $this->input->post('campus_id'))
+			$default_campus = $value->campus_name;
        }//foreach
 	   //echo $default_campus;exit;
        $finalcampusid   = implode($campusid, ',');
@@ -1201,7 +1201,7 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 	   	$m =0;
 	  //--------Insret Data Form Excel File --------//
 	  
-	 //p($rowsold);exit;
+
 	  //foreach($rowsold as $firstrow){
 		  for($m=0;$m<count($rowsold);$m++){
 			  $updateuser = 0;
@@ -1226,14 +1226,14 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 		  // exit;
 		    if(!empty($firstrow[55]))
 			{
-		    $campusLists=$this->type_model->get_campus_info($firstrow[0]);
+		    $campusLists=$this->type_model->get_campus_info($firstrow[0]);//echo $this->db->last_query();exit;
 		    $degreeLists=$this->type_model->get_degree_info($firstrow[1]);
 		    $disciplineLists=$this->type_model->get_discipline_info($firstrow[2]);
 		    $batchLists=$this->type_model->get_batch_info($firstrow[4]);
 		    $countryLists=$this->type_model->get_country_info($firstrow[29]);
 		    $stateLists=$this->type_model->get_state_info($firstrow[28]);
 			$cityLists=$this->type_model->get_city_info($firstrow[25]);
-		//	print_r($cityLists);
+			print_r($campusLists);
 			$communityLists=$this->type_model->get_community_info($firstrow[14]);
 			$casteLists=$this->type_model->get_caste_info($firstrow[15]);
 			//$LcountryLists=$this->type_model->get_country_info($firstrow[15]);
@@ -1388,15 +1388,9 @@ $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($styleArray);
 							'place_of_residence'=>'',
 							'academicvocational'=>''
 			);
-			
-			if($updateuser == '0')
-			{
-				$stateLists=$this->type_model->get_studentexcel_data2($dataArr2);
-			}
-			else
-			{
-				$updateuserdetails= $this->type_model->update_user_request_detail($dataArr2);
-			}
+
+			$updateuserdetails= $this->type_model->update_user_request_detail($dataArr2);
+
 			
 		//school details
 		/*

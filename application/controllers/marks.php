@@ -1204,7 +1204,7 @@ class Marks extends CI_Controller {
 		$data['courses']=$this->Marks_model->get_course_group_by_ids($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id); 
 		
 		//echo $this->db->last_query();
-		//print_r($data['programs']); exit;
+		//p($data['courses']); exit;
 		$str = '';
          foreach($data['courses'] as $k=>$v){ 
 			if(isset($v->course_subject_name) && $v->course_subject_name!=NULL)

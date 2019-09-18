@@ -1643,7 +1643,7 @@ class Admin extends CI_Controller {
 						$this->image_lib->resize();
 						$name = str_replace(".","_thumb.",$name);
 						$this->type_model->addimagepath($userid,$name);
-						echo $this->db->last_query();echo "<br/>";
+						//echo $this->db->last_query();echo "<br/>";
 					}else{
 						echo "User not exists - ".$image[0];echo "<br/>";
 					}

@@ -624,10 +624,18 @@ Class Type_model extends CI_Model
 	}
 	function update_user_request_detail($detailData)
 	{
-		//print_r($detailData); exit;
-		$id = $detailData['user_id'];
-		$this->db->where('user_id',$id);
-		$this->db->update('user_map_student_details',$detailData);
+        $this->db->select('id');
+        $this->db->from('user_map_student_details');
+        $this->db->where(array('user_id'=>$detailData['user_id']));
+        $result=$this->db->get()->row();
+        if(count($result)>0) {
+            $id = $detailData['user_id'];
+            $this->db->where('user_id', $id);
+            $this->db->update('user_map_student_details', $detailData);
+        }else{
+            $this->db->insert('user_map_student_details',$detailData);
+            $insert_id = $this->db->insert_id();
+        }
 		return true;			
 		
 	}
