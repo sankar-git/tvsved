@@ -54,19 +54,23 @@ Class Gradechart_model extends CI_Model
         $result	= $this->db->get()->result();
 		return $result;
 	}
-	function get_student_marks($student_id,$semester_id,$course_id,$batch_id=''){
+	function get_student_marks($student_id,$semester_id,$course_id,$batch_id='',$exam_type=''){
 		$this->db->select('r.theory_internal1,r.theory_internal2,r.theory_internal3,r.theory_internal,r.theory_paper1,
 		                   r.theory_paper2,r.theory_paper3,r.theory_paper4,r.sum_internal_practical,r.practical_internal,r.theory_external1,r.theory_external2,r.theory_external3,r.theory_external4,r.practical_external,
-						   r.marks_sum,r.external_sum');
+						   r.marks_sum,r.external_sum,r.ncc_status');
 		$this->db->from('students_ug_marks as r');
 		 $this->db->where(array('r.student_id'=>$student_id,'r.course_id'=>$course_id,'r.semester_id'=>$semester_id));
 		 if(!empty($batch_id))
 		    $this->db->where(array('r.batch_id'=>$batch_id));
+        if(!empty($batch_id))
+            $this->db->where(array('r.exam_type'=>$exam_type));
 		return $this->db->get()->result();
 	}
 	function get_attandence_sheet($campus_id,$degree_id,$batch_id,$course_id,$semester_id,$exam_type=1)
 	{
-	    	$this->db->select('u.id as student_id,u.first_name,u.last_name,u.user_unique_id,cp.campus_code,b.batch_name,c.course_title,c.course_code,du.dummy_value,d.degree_name,d.degree_code,sem.semester_name,csg.course_subject_name,csg.course_subject_title,c.theory_credit,c.practicle_credit,cp.campus_name');
+	    	$this->db->select('u.id as student_id,u.first_name,u.last_name,u.user_unique_id,cp.campus_code,b.batch_name,c.course_title,
+	    	c.course_code,du.dummy_value,d.degree_name,d.degree_code,sem.semester_name,csg.course_subject_name,csg.course_subject_title,
+	    	c.theory_credit,c.practicle_credit,cp.campus_name,csg.id,c.course_subject_id');
 	    	$this->db->from('users u');
 	    	//$this->db->from('courses c');
 	    	$this->db->join('user_map_student_details ud','ud.user_id = u.id','LEFT');
@@ -80,8 +84,14 @@ Class Gradechart_model extends CI_Model
 		    $this->db->join('course_subject_groups csg','csg.id = c.course_subject_id','LEFT');
 		    
 		    
-		    $this->db->where(array('sa.campus_id'=>$campus_id,'sa.degree_id'=>$degree_id,'sa.batch_id'=>$batch_id,'c.id'=>$course_id,'sa.semester_id'=>$semester_id,'sa.exam_type'=>$exam_type));$this->db->group_by('u.id');
-			
+		    $this->db->where(array('sa.campus_id'=>$campus_id,'sa.degree_id'=>$degree_id,'sa.batch_id'=>$batch_id,'sa.semester_id'=>$semester_id,'sa.exam_type'=>$exam_type));$this->db->group_by('u.id');
+			if($degree_id == 1){
+			    $courseArr = explode("|",$course_id);
+                $courseidArr = explode("-",$courseArr[1]);
+                $this->db->where_in('c.id',$courseidArr);
+            }else{
+                $this->db->where('c.id',$course_id);
+            }
 			$this->db->order_by('ud.batch_id','desc');
 	    $this->db->order_by('u.user_unique_id','asc');
 		    $result	= $this->db->get()->result();

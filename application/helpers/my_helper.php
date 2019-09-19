@@ -30,10 +30,10 @@
     }
 
   }
-  function get_student_marks($student_id,$semester_id,$course_id,$batch_id=''){
+  function get_student_marks($student_id,$semester_id,$course_id,$batch_id='',$exam_type=''){
 	  $ci = &get_instance();
         $ci->load->model('gradechart_model');
-		$result = $ci->gradechart_model->get_student_marks($student_id,$semester_id,$course_id,$batch_id);
+		$result = $ci->gradechart_model->get_student_marks($student_id,$semester_id,$course_id,$batch_id,$exam_type);
 		//echo $ci->db->last_query();
         return $result; 
   }
