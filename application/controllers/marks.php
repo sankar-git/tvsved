@@ -100,6 +100,7 @@ class Marks extends CI_Controller {
 		$semester_id=$this->input->post('semester_id');
 		$discipline_id=$this->input->post('discipline_id');
 		$course_id=$this->input->post('course_id');
+		$exam_type=$this->input->post('exam_type');
 		//$courseid=explode('-',$course_input);
 	   // $course_id=$courseid[0]; 
 	   /// $course_credit=$courseid[1]; 
@@ -114,7 +115,8 @@ class Marks extends CI_Controller {
 	    $send['semester_id']=$semester_id;
 	    $send['discipline_id']=$discipline_id;
 	    $send['course_id']=$course_id;
-		
+	    $send['exam_type']=$exam_type;
+
 		
 	   //p($studentList); exit;
 	    //if($program_id=='1' && $degree_id=='1'){
@@ -125,7 +127,13 @@ class Marks extends CI_Controller {
 			$i=0;
 			
 			foreach($studentList as $students)
-			{ 
+			{
+                if(@$students->publish_marks == 1) {
+                    $disabled = "disabled";
+                }else {
+                    $disabled = "";
+                }
+
 				if($marks_type_ncc=='3')
 				{
 					
@@ -158,7 +166,7 @@ class Marks extends CI_Controller {
 							
 							<td>'.$students->first_name.'</td>
 							<td>
-							 <select class="form-control" name="ncc_subject[]" id="ncc_subject">
+							 <select '.$disabled.' class="form-control" name="ncc_subject[]" id="ncc_subject">
 							  <option value="">--Select Option--</option>
 							  <option value="1" '.$passstatus.'>Pass</option>
 							  <option value="0" '.$failstatus.'>Fail</option>
@@ -304,6 +312,13 @@ class Marks extends CI_Controller {
 					$students->theory_credit = $courseList[0]->theory_credit;
 					$students->practicle_credit = $courseList[0]->practicle_credit;
 				}
+                if(@$students->publish_marks == 1) {
+                    $readonly = "readonly";
+                    $disabled = "disabled";
+                }else {
+                    $readonly = ""; $disabled = "";
+                }
+
 				if($marks_type=='1')
 				{
 					$i++;
@@ -343,8 +358,9 @@ class Marks extends CI_Controller {
 						{
 							 $failstatus='';
 						}
+
 						$trdata.='<td>
-							<select class="form-control" style="width:40%" name="ncc_subject[]" id="ncc_subject">
+							<select '.$disabled.' class="form-control" style="width:40%" name="ncc_subject[]" id="ncc_subject">
 							<option value="">--Select Option--</option>
 							<option value="1" '.$passstatus.'>Pass</option>
 							<option value="0" '.$failstatus.'>Fail</option>
@@ -361,14 +377,15 @@ class Marks extends CI_Controller {
 								}
 							}
 						}
-						$trdata.='<td><input type="text" name="theory_internal1[]" class="theory_internal"  value="'.@$students->theory_internal1.'" style="width:60px;" >
-									<input type="text" name="theory_internal2[]" class="theory_internal"  value="'.@$students->theory_internal2.'" style="width:60px;" >
-									<input type="text" name="theory_internal3[]" class="theory_internal"  value="'.@$students->theory_internal3.'" style="width:60px;" >
+
+						$trdata.='<td><input '.$readonly.' type="text" name="theory_internal1[]" class="theory_internal"  value="'.@$students->theory_internal1.'" style="width:60px;" >
+									<input '.$readonly.' type="text" name="theory_internal2[]" class="theory_internal"  value="'.@$students->theory_internal2.'" style="width:60px;" >
+									<input '.$readonly.' type="text" name="theory_internal3[]" class="theory_internal"  value="'.@$students->theory_internal3.'" style="width:60px;" >
 								</td>
 								<td>';
 						for($j=1;$j<=$course_idCount;$j++){
 							$var = "theory_paper{$j}";
-							$trdata.='<input type="text" name="theory_paper'.$j.'[]"  class="practical_exam" value="'.@$students->{$var}.'" style="width:60px;" >&nbsp;';
+							$trdata.='<input '.$readonly.' type="text" name="theory_paper'.$j.'[]"  class="practical_exam" value="'.@$students->{$var}.'" style="width:60px;" >&nbsp;';
 							
 						}
 						$trdata.='</td>';
@@ -412,7 +429,7 @@ class Marks extends CI_Controller {
 							 $failstatus='';
 						}
 						$trdata.='<td>
-							<select class="form-control"  style="width:40%" name="ncc_subject[]" id="ncc_subject">
+							<select '.$disabled.' class="form-control"  style="width:40%" name="ncc_subject[]" id="ncc_subject">
 							<option value="">--Select Option--</option>
 							<option value="1" '.$passstatus.'>Pass</option>
 							<option value="0" '.$failstatus.'>Fail</option>
@@ -423,7 +440,7 @@ class Marks extends CI_Controller {
 						$trdata.=' <td>';
 						for($j=1;$j<=$course_idCount;$j++){
 							$var = "theory_external{$j}";
-							$trdata.='<input type="text" name="theory_external'.$j.'[]" class="theory_external" value="'.@$students->{$var}.'" style="width:60px;">&nbsp;';
+							$trdata.='<input  '.$readonly.' type="text" name="theory_external'.$j.'[]" class="theory_external" value="'.@$students->{$var}.'" style="width:60px;">&nbsp;';
 						}
 						$trdata.='</td>';
 					}
@@ -762,6 +779,38 @@ class Marks extends CI_Controller {
 	}		
 	}
 		
+	function publishUGInternalMarksNew(){
+        $data['campus_id']=$this->input->post('campus_id');
+        $data['program_id']=$this->input->post('program_id');
+        $data['degree_id']=$this->input->post('degree_id');
+        $data['batch_id']=$this->input->post('batch_id');
+        $data['semester_id']=$this->input->post('semester_id');
+        $data['discipline_id']=$this->input->post('discipline_id');
+       // $data['course_id']=$this->input->post('course_id');
+        $data['exam_type']=$this->input->post('exam_type');
+        $save = $this->Marks_model->publish_ug_marks($data);
+        //p($save);exit;
+        if($save)
+            echo 1;
+        else
+            echo 0;
+    }
+    function unpublishUGInternalMarksNew(){
+        $data['campus_id']=$this->input->post('campus_id');
+        $data['program_id']=$this->input->post('program_id');
+        $data['degree_id']=$this->input->post('degree_id');
+        $data['batch_id']=$this->input->post('batch_id');
+        $data['semester_id']=$this->input->post('semester_id');
+        $data['discipline_id']=$this->input->post('discipline_id');
+        //$data['course_id']=$this->input->post('course_id');
+        $data['exam_type']=$this->input->post('exam_type');
+        $save = $this->Marks_model->unpublish_ug_marks($data);
+        //p($save);exit;
+        if($save)
+            echo 1;
+        else
+            echo 0;
+    }
 	function saveUGInternalMarksNew()
 	{
 		

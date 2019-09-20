@@ -409,7 +409,9 @@ class Result extends CI_Controller {
 		$year=$data['year'] =$this->input->post('year');
 		$student_id=$this->input->post('student_id');
         $certificate_type=$this->input->post('certificate_type');
-
+        $force_download=$this->input->post('force_download');
+        if(!empty($force_download))
+            $force_download = 0;
 	    $send['campus_id']=$campus_id;
 	    $send['program_id']=$program_id;
 	    $send['degree_id']=$degree_id;
@@ -673,7 +675,10 @@ class Result extends CI_Controller {
                 $this->m_pdf->pdf->setTitle('Report Card');
                 //generate the PDF from the given html
                 $this->m_pdf->pdf->WriteHTML($html);
-                $this->m_pdf->pdf->Output($pdfFilePath, "I");
+                if($force_download)
+                    $this->m_pdf->pdf->Output($pdfFilePath, "D");
+                else
+                    $this->m_pdf->pdf->Output($pdfFilePath, "I");
 
                 exit;
              }	// end b_tech condition

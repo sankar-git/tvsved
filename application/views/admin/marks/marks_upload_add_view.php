@@ -36,22 +36,7 @@
             <div class="box-header with-border">
               <h3 class="box-title" style="color:green"><?php echo $this->session->flashdata('message'); ?></h3>   
             </div>
-			
-            <!-- /.box-header -->
-            <!-- form start -->
-			<!--<center>
-			<div class="row" style="padding-left:30px;" align="rignt">
-			 <div class="form-group col-md-4">
-					  <label for="wwe">Upload Type<span style="color:red;font-weight: bold;">*</span></label>
-					  <select class="form-control" name="upload_type" id="upload_type" onchange="ChangeUploadView();">
-						  <option value="">--Select College Type--</option>
-						   <option value="B">BVSC</option>
-						   <option value="A">BTECH</option>
-						 
-					 </select>
-		      </div>
-			  </div>
-			  </center>-->
+
 			 <div id="bvscccc">
             <form role="form"  name="ug_marks_upload_view" id="ug_marks_upload_view" method="post" action="return false;" enctype="multipart/form-data">
               <div class="box-body">
@@ -83,10 +68,7 @@
 					  <label for="program">Program<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="program_id" id="program_id" class="form-control" onchange="getDegreebyProgram();">
 						  <option value="">--Select Program--</option>
-						  <?php foreach($programs as $program){?>
-						  <option value="<?php echo $program->id; ?>"><?php echo $program->program_name; ?></option>
-						 
-						  <?php } ?>
+
 					  </select>
 					</div>
 					<div class="form-group col-md-4">
@@ -101,9 +83,7 @@
 					  <label for="exampleInputEmail1">Batch<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="batch_id" id="batch_id" class="form-control">
 						  <option value="">Select Batch</option>
-						  <?php foreach($batches as $batch){ ?>
-						  <option value="<?php echo $batch->id;?>"><?php echo $batch->batch_name;?></option>
-						  <?php } ?>
+
 					  </select>
 					</div>
 					
@@ -112,9 +92,7 @@
 					  <label for="exampleInputEmail1">Semester<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="semester_id" id="semester_id" class="form-control">
 						  <option value="">Select Semester</option>
-						  <?php foreach($semesters as $semester){ ?>
-						  <option value="<?php echo $semester->id;?>"><?php echo $semester->semester_name;?></option>
-						  <?php } ?>
+
 					  </select>
 					</div>
 					
@@ -124,9 +102,7 @@
 					   <select class="form-control" name="discipline_id" id="discipline_id"  onchange="<?php if($upload_type == 'coursewise'){?>getCourseByIds()<?php }else{?>getStudentList()<?php } ?>;">
 					   
 						  <option value="">Select Discipline</option>
-						  <?php foreach($disciplines as $discipline){?>
-						    <option value="<?php echo $discipline->id;?>"><?php echo $discipline->discipline_name;?></option>
-						  <?php } ?>
+
 						
 					  </select>
 					</div>
@@ -224,6 +200,10 @@
 			  </div>
 			  <div class="box-footer"  <?php if(empty($upload_type)){?> style="display:none" <?php } ?>>
                <button type="button" class="btn btn-success" onclick="saveUGInternalMarksNew();">Save</button>
+                  <?php if($session_data[0]->role_id==0 || $session_data[0]->role_id==9){?>
+               <button type="button" class="btn btn-success" onclick="publishUGInternalMarksNew();">Publish Mark</button>
+               <button type="button" class="btn btn-success" onclick="unpublishUGInternalMarksNew();">Unpublish Mark</button>
+                  <?php } ?>
 			  </div>
 			    <div id="ncc">
 			   <div id="nccListDiv" class="nccListDiv" style="display:none" >
@@ -668,7 +648,44 @@
 			 }
 		});
 	}
-	
+	function publishUGInternalMarksNew(){
+        var bvsc = [ "1", "2", "3", "4" ];
+        if($.inArray($('#campus_id').val(),bvsc)>=0 && $('#program_id').val()==1){
+            var $form =$("#ug_marks_upload_view");
+        }else{
+            var $form =$("#ug_marks_upload_view");
+        }
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>marks/publishUGInternalMarksNew',
+            data: $form.serialize(),
+            success: function(data){
+                if(data==1)
+                {
+                    alert("Marks Published Successfully");
+                }
+            }
+        });
+    }
+    function unpublishUGInternalMarksNew(){
+        var bvsc = [ "1", "2", "3", "4" ];
+        if($.inArray($('#campus_id').val(),bvsc)>=0 && $('#program_id').val()==1){
+            var $form =$("#ug_marks_upload_view");
+        }else{
+            var $form =$("#ug_marks_upload_view");
+        }
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>marks/unpublishUGInternalMarksNew',
+            data: $form.serialize(),
+            success: function(data){
+                if(data==1)
+                {
+                    alert("Marks Unpublished Successfully");
+                }
+            }
+        });
+    }
 	function saveUGInternalMarksNew()
 	{
 		//alert("hello");return false;

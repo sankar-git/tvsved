@@ -77,7 +77,9 @@ Class Marks_model extends CI_Model
 		 $student_id=$data['student_id'];
 		 if($data['degree_id']!=1){
 			$this->db->select('co.id as courseid,co.course_code,co.theory_credit,co.practicle_credit,co.course_title');
-			$this->db->select('d.dummy_value,u.user_unique_id,u.id,u.first_name,ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark');
+			$this->db->select('d.dummy_value,u.user_unique_id,u.id,u.first_name,ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,
+			ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,
+			ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark,ug.publish_marks');
 			$this->db->from('student_assigned_courses c');
 			$this->db->join('users  u','u.id = c.student_id','LEFT');
 			$this->db->join('tbl_dummy  d','u.id = d.student_id','LEFT');
@@ -108,7 +110,9 @@ Class Marks_model extends CI_Model
 					$user_result	= $this->db->get()->result();
 				}
 				
-				$this->db->select('ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark');
+				$this->db->select('ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,
+				ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,ug.theory_external2,ug.theory_external3,ug.theory_external4,
+				ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark,ug.publish_marks');
 				 $this->db->from('students_ug_marks ug')->where("exam_type",$exam_type);
 				 if(isset($data['course_id']) && $data['course_id']!='')
 					 $this->db->where("course_id",$data['course_id']);
@@ -155,9 +159,9 @@ Class Marks_model extends CI_Model
 		 $degree_id=$data['degree_id'];
 		 $batch_id=$data['batch_id'];
 		 $semester_id=$data['semester_id'];
-		 $discipline_id=$data['discipline_id'];
+		 //$discipline_id=$data['discipline_id'];
 		 $exam_type=$data['exam_type'];
-		 $marks_type=$data['marks_type'];
+		// $marks_type=isset($data['marks_type'])?$data['marks_type']:1;
 		 if(isset($data['course_id']) && $data['course_id']!='')
 			$course_id=$data['course_id'];
 		else{
@@ -166,7 +170,9 @@ Class Marks_model extends CI_Model
 		  if($data['degree_id']!=1){
 			  $this->db->select('co.id as courseid,co.course_code,co.theory_credit,co.practicle_credit,co.course_title');
 		  }
-		$this->db->select('d.dummy_value,u.user_unique_id,u.id,u.first_name,ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark');
+		$this->db->select('d.dummy_value,u.user_unique_id,u.id,u.first_name,ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,
+		ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,
+		ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark,ug.publish_marks');
 		$this->db->from('student_assigned_courses c');
         $this->db->join('users  u','u.id = c.student_id','LEFT');
         $this->db->join('user_map_student_details  umap','u.id = umap.user_id','LEFT');
@@ -183,8 +189,9 @@ Class Marks_model extends CI_Model
 				$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.exam_type ='$exam_type'  and c.batch_id=ug.batch_id",'LEFT');
 			}
 		}
-		$this->db->where(array('c.campus_id'=>$campus_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,'c.batch_id'=>$batch_id,'c.exam_type'=>$exam_type,'u.role_id'=>1));
-		if($degree_id==1){
+		$this->db->where(array('c.campus_id'=>$campus_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,
+            'c.batch_id'=>$batch_id,'c.exam_type'=>$exam_type,'u.role_id'=>1));
+		if($degree_id==1 &&  isset($data['course_id']) && $data['course_id']!=''){
 			$mystring = $course_id;
 			$findme   = '|';
 			$pos = strpos($mystring, $findme);
@@ -202,6 +209,8 @@ Class Marks_model extends CI_Model
 			$this->db->group_by('ug.student_id,ug.course_id');
 			//
 		}
+         if(isset($data['publish_marks']) && $data['publish_marks']!='')
+             $this->db->where('ug.publish_marks',1);
 		$this->db->order_by('umap.batch_id','desc');
 		$this->db->order_by('u.user_unique_id','asc');
 		
@@ -602,6 +611,16 @@ Class Marks_model extends CI_Model
 		return true;			
 		}
 	 }
+	 function publish_ug_marks($data){
+         $update['publish_marks'] = 1;
+         $this->db->where($data);
+         return $this->db->update('students_ug_marks',$update);
+     }
+     function unpublish_ug_marks($data){
+         $update['publish_marks'] = 0;
+         $this->db->where($data);
+         return $this->db->update('students_ug_marks',$update);
+     }
 	
 	
 	

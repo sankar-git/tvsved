@@ -60,8 +60,9 @@
 				<input type="hidden" class="form-control" id="degree_id" name="degree_id" value="<?php echo $degree_id;?>">
                  <div class="form-group">
                   <input type="hidden" name="program_id" id="program_id" class="form-control" value="<?php echo $user_row->program_id;?>" />
-				    <label for="inputName" class="col-sm-1 control-label" id="semester" name="semester">Semester</label>
+                     <label for="inputName" class="col-sm-1 control-label" id="semester" name="semester">Semester</label>
                     <div class="col-sm-3">
+
                       <select name="semester_id" id="semester_id" class="form-control" onchange="getMarksTable();">
 						      <option value="">--Select Semester--</option>
 							  <?php foreach($semesters as $semvalue){?>
@@ -70,7 +71,15 @@
 							 
 					  </select> 
                     </div>
-					
+                     <label for="exampleInputEmail1" class="col-sm-1 control-label">Exam<span style="color:red;font-weight: bold;">*</span></label>
+                     <div class="col-sm-3">
+
+                         <select name="exam_type" id="exam_type" class="form-control">
+                             <option value="">Select Type</option>
+                             <option value="1">Regular</option>
+                             <option value="2">Cap</option>
+                         </select>
+                     </div>
 					
                     <!--<div class="col-sm-3">
                       <select name="marks_type" id="marks_type" class="form-control" onchange="getMarks();">

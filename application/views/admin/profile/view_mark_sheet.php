@@ -51,8 +51,11 @@
 			
 				   <div class=" active tab-pane mydetails" id="marksheet">
 			  
-			    <form  class="form-horizontal" method="post" name="marksheet_form" target="fred" id="marksheet_form" action="<?php echo base_url();?>process/viewReport" enctype="multipart/form-data">
-				<input type="hidden" class="form-control" id="user_id" name="user_id" value="<?php echo $id;?>">
+			    <form  class="form-horizontal" method="post" name="marksheet_form" target="fred" id="marksheet_form" action="<?php echo base_url();?>result/generateResult" enctype="multipart/form-data">
+				<input type="hidden" class="form-control" id="report_card" name="report_card" value="1">
+				<input type="hidden" class="form-control" id="force_download" name="force_download" value="1">
+				<input type="hidden" class="form-control" id="certificate_type" name="certificate_type" value="2">
+				<input type="hidden" class="form-control" id="student_id" name="student_id" value="<?php echo $id;?>">
 				<input type="hidden" class="form-control" id="user_role" name="user_role" value="<?php echo $role_id;?>">
 				<input type="hidden" class="form-control" id="campus_id" name="campus_id" value="<?php echo $campus_id;?>">
 				<input type="hidden" class="form-control" id="batch_id" name="batch_id" value="<?php echo $batch_id;?>">
@@ -69,7 +72,15 @@
 							 
 					  </select> 
                     </div>
-					
+                     <label for="exampleInputEmail1" class="col-sm-1 control-label">Exam<span style="color:red;font-weight: bold;">*</span></label>
+                     <div class="col-sm-3">
+
+                         <select name="exam_type" id="exam_type" class="form-control">
+                             <option value="">Select Type</option>
+                             <option value="1">Regular</option>
+                             <option value="2">Cap</option>
+                         </select>
+                     </div>
 					
                     <!--<div class="col-sm-3">
                       <select name="marks_type" id="marks_type" class="form-control" onchange="getMarks();">

@@ -36,6 +36,7 @@ class Process extends CI_Controller {
 			$this->load->model('Generate_model');
 			$this->load->model('Payment_model');
 			$this->load->library('excel');
+         $this->load->model('Marks_model');
 			
 		   $sessdata= $this->session->userdata('sms');
 		    if(empty($sessdata)){
@@ -942,22 +943,47 @@ class Process extends CI_Controller {
 		$batch_id=$this->input->post('batch_id');
 		$user_id=$this->input->post('user_id');
 		$marks_type=$this->input->post('marks_type');
-		$studentList= $this->Process_model->get_student_marks($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$user_id);
+		$exam_type=$this->input->post('exam_type');
+
+        $send['campus_id']=$campus_id;
+        $send['program_id']=$program_id;
+        $send['degree_id']=$degree_id;
+        $send['batch_id']=$batch_id;
+        $send['semester_id']=$semester_id;
+       // $send['discipline_id']=$discipline_id;
+        $send['student_id']=$user_id;
+        $send['exam_type']=$exam_type;
+        $send['publish_marks']=1;
+		$studentList= $this->Marks_model->get_student_assigned_marks($send);
 		//p($studentList); exit;
 		$trdata='';
 		$i=0;
 		if(count($studentList)>0) {
             foreach ($studentList as $students) {
+                $courseArr = get_course_name($degree_id,$students->course_id);//p($courseArr);exit;
                 if ($degree_id == '1') {
                     $i++;
                     $checked = 'checked';
                     $readonly = 'readonly';
                     $disabled = 'disabled';
-                    $trdata .= '<tr>
+                    if($courseArr[0]['coure_group_id'] == 22){
+                        $ncc_status='';
+                        if($students->ncc_status == 1)
+                            $ncc_status = "Satisfactory";
+                        elseif($students->ncc_status == 0)
+                            $ncc_status = "Not Satisfactory";
+                        $trdata .= '<tr>
 								<td  class="text-center"><input type="hidden"  value="' . $i . '">' . $i . ' 
 								<input type="hidden" name="student_id[]" value="' . $students->id . '"></td>
 							 
-							  <td  class="text-center">' . $students->course_code . '</td>
+							  <td  class="text-center">' . $courseArr[0]['course_subject_title'] . '</td>
+							  <td colspan="7"  class="text-center">' . $ncc_status . '</td></tr>';
+                    }else {
+                        $trdata .= '<tr>
+								<td  class="text-center"><input type="hidden"  value="' . $i . '">' . $i . ' 
+								<input type="hidden" name="student_id[]" value="' . $students->id . '"></td>
+							 
+							  <td  class="text-center">' . $courseArr[0]['course_subject_title'] . '</td>
 							  <td  class="text-center">' . $students->theory_internal1 . '</td>
 							  <td class="text-center">' . $students->theory_internal2 . '</td>
 							  <td class="text-center">' . $students->theory_internal3 . '</td>
@@ -970,6 +996,7 @@ class Process extends CI_Controller {
 							 
 							  
 						</tr>';
+                    }
                 }
                 if ($degree_id != '1') {
                     $i++;
@@ -980,7 +1007,7 @@ class Process extends CI_Controller {
 				           <td><input type="hidden"  value="' . $i . '">' . $i . '  
 						   <input type="hidden" name="student_id[]" value="' . $students->id . '"></td>
 						 
-						  <td>' . $students->course_code . '</td>
+						  <td>' . $courseArr[0]['course_title'] . '</td>
 						  <td><label style="width:60px;">' . $students->theory_internal . '</label></td>
 						  <td><label style="width:60px;">' . $students->practical_internal . '</label></td>
 						  <td><label style="width:60px;">' . $students->theory_external . '</label></td>
