@@ -427,6 +427,11 @@ class Result extends CI_Controller {
             $batch_id=$this->input->post('batch_id');
             $date_of_start=$this->input->post('date_of_start');
             $date_of_closure=$this->input->post('date_of_closure');
+            $publish_marks=$this->input->post('publish_marks');
+             if(!empty($publish_marks))
+                 $publish_marks=1;
+             else
+                 $publish_marks='';
             //$batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
 
             //p($semesterRow); exit;
@@ -443,7 +448,7 @@ class Result extends CI_Controller {
                  $students = $this->Generate_model->get_studedent_data($student_id);
                 foreach($students as $stuData)
                 {
-                    $subjectList = $this->Result_model->get_student_marks_by_id($stuData->user_id,$semester_id);
+                    $subjectList = $this->Result_model->get_student_marks_by_id($stuData->user_id,$semester_id,'',$publish_marks);
                     $list['first_name']  =$stuData->first_name;
                     $list['last_name']  =$stuData->last_name;
                     $list['user_unique_id']  =$stuData->user_unique_id;
@@ -686,7 +691,7 @@ class Result extends CI_Controller {
 			 
             if($degree_id=1  && $program_id==1) //bvsc
             {
-                $data['aggregate_marks']=$this->Result_model->get_student_results($campus_id,$program_id,$batch_id,$degree_id,$semester_id,$student_id,$month,$year,$exam_type,'reportcard');
+                $data['aggregate_marks']=$this->Result_model->get_student_results($campus_id,$program_id,$batch_id,$degree_id,$semester_id,$student_id,$month,$year,$exam_type,'reportcard',$publish_marks);
                 // p($data['aggregate_marks']); exit;
                 //p($data['result_data']);
                 //exit;

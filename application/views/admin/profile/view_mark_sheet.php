@@ -54,6 +54,7 @@
 			    <form  class="form-horizontal" method="post" name="marksheet_form" target="fred" id="marksheet_form" action="<?php echo base_url();?>result/generateResult" enctype="multipart/form-data">
 				<input type="hidden" class="form-control" id="report_card" name="report_card" value="1">
 				<input type="hidden" class="form-control" id="force_download" name="force_download" value="1">
+				<input type="hidden" class="form-control" id="publish_marks" name="publish_marks" value="1">
 				<input type="hidden" class="form-control" id="certificate_type" name="certificate_type" value="2">
 				<input type="hidden" class="form-control" id="student_id" name="student_id" value="<?php echo $id;?>">
 				<input type="hidden" class="form-control" id="user_role" name="user_role" value="<?php echo $role_id;?>">

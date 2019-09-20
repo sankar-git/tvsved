@@ -12,23 +12,8 @@ Class Result_model extends CI_Model
         $result	= $this->db->get()->result();
 		return $result;
 	}
-	function get_student_marks_by_id($student_id,$semester_id='',$exam_type='')
+	function get_student_marks_by_id($student_id,$semester_id='',$exam_type='',$publish_marks='')
 	{
-		/*$this->db->select('um.assignment_mark,um.theory_internal1,um.highest_marks,um.second_highest_marks,um.smallest_marks,um.theory_internal2,um.theory_internal3,
-		                   um.theory_internal,um.theory_paper1,um.theory_paper2,um.theory_paper3,um.theory_paper4,um.sum_internal_practical,
-		                   um.external_sum,um.practical_internal,um.theory_external1,um.theory_external2,um.theory_external3,um.theory_external4,um.practical_external,
-		                   um.marks_sum,um.student_id,um.course_id,um.ncc_status,c.id,c.course_code,c.course_title,
-						   c.theory_credit,c.practicle_credit,c.course_group_id,um.semester_id,csg.course_subject_name,csg.course_subject_title'); 
-		$this->db->from('students_ug_marks um');
-		$this->db->join('courses as c','c.id=um.course_id','INNER');
-		$this->db->join('course_subject_groups as csg','csg.id=c.course_subject_id','LEFT');
-		//$this->db->where('um.student_id',$student_id);
-		$this->db->where(array('um.student_id'=>$student_id));
-		if($semester_id>0)
-			$this->db->where(array('um.semester_id'=>$semester_id));
-		$this->db->order_by("c.id,um.course_id", "asc");
-        $result	= $this->db->get()->result();//echo $this->db->last_query();exit;
-		return $result;*/
 		$this->db->select('discipline_id,program_id,degree_id,campus_id,batch_id,semester_id,r.course_id,r.theory_internal1,r.theory_internal2,r.theory_internal3,r.theory_internal,r.theory_paper1,
 		                   r.theory_paper2,r.theory_paper3,r.theory_paper4,r.sum_internal_practical,r.practical_internal,r.theory_external1,r.theory_external2,r.theory_external3,r.theory_external4,r.practical_external,
 						   r.marks_sum,r.external_sum,assignment_mark,student_id,ncc_status,r.exam_type');
@@ -38,11 +23,13 @@ Class Result_model extends CI_Model
 			$this->db->where('r.semester_id',$semester_id);
 		if(!empty($exam_type))
 			$this->db->where('r.exam_type',$exam_type);
+		if(!empty($publish_marks))
+			$this->db->where('r.publish_marks',$publish_marks);
 		//elseif(isset($_POST['exam_type']))
 			//$this->db->where('r.exam_type',$_POST['exam_type']);
 		
 		$this->db->order_by('student_id,exam_type');
-		$resultArr=$this->db->get()->result_array();//echo $this->db->last_query();echo "<br/>";
+		$resultArr=$this->db->get()->result_array();echo $this->db->last_query();echo "<br/>";
 		$final_array=array();
 		foreach($resultArr as $key=>$result_val){
 			if($result_val['program_id'] == 1 && $result_val['degree_id'] == 1){
@@ -334,8 +321,8 @@ Class Result_model extends CI_Model
         $result	= $this->db->get()->result();
         return $result;
     }
-    function get_bvsc_semester_marks($student_id,$semester_id,$exam_type=''){
-        $subjectList = $this->get_student_marks_by_id($student_id,$semester_id,$exam_type);
+    function get_bvsc_semester_marks($student_id,$semester_id,$exam_type='',$publish_marks=''){
+        $subjectList = $this->get_student_marks_by_id($student_id,$semester_id,$exam_type,$publish_marks);
         $dataList =array();
         $overallReport =array();
         $sum_subjects_credit_point=0;
@@ -420,13 +407,13 @@ Class Result_model extends CI_Model
         }
         return 	$list;
     }
-	function get_student_results($campus_id,$program_id,$batch_id,$degree_id,$semester_id,$student_id,$month,$year,$exam_type='',$section=''){
+	function get_student_results($campus_id,$program_id,$batch_id,$degree_id,$semester_id,$student_id,$month,$year,$exam_type='',$section='',$publish_marks=''){
         $semesterRow = $this->get_semester_name($semester_id);
         $students = $this->get_student_data($student_id);
         foreach($students as $stuData)
         {
             $list['overall']=array();
-            $list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id,$exam_type);
+            $list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id,$exam_type,$publish_marks);
             //p($list);exit;
             $list['first_name']  =$stuData->first_name;
             $list['father_name']  =$stuData->parent_name;
