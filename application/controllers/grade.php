@@ -508,7 +508,7 @@ class Grade extends CI_Controller {
 			if($degree_id > 1){
 				 $course_id=$course_input;
 				 
-		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id,'',$exam_type);
 		    $subject_name=$data['subject_wise_list'][0]->course_title;
 			$data['display'] = 'pass_fail_list';
 			$data['title'] = 'Subject Wise Mark Report';
@@ -542,7 +542,7 @@ class Grade extends CI_Controller {
 	       //$course_credit=$courseid[1]; 
 	     //  print_r($course_id); exit;
 		 
-		  $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		  $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id,'',$exam_type);
 		 $courseGroup=array();
 			$resultArray=array();
 		 foreach($data['subject_wise_list'] as $subject_wise_val){
@@ -617,7 +617,7 @@ class Grade extends CI_Controller {
 	      // $course_credit=$courseid[1]; 
 	     //  print_r($course_id); exit;
 		 
-		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id);
+		  $data['aggregate_marks'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$course_id,'',$exam_type);
 		// p($data['aggregate_marks']); exit;
 		  //getting batch and year
 	      
@@ -744,7 +744,7 @@ class Grade extends CI_Controller {
 			  
 		   $data['numeralCodes'] =  array("I","II","III","IV","V","VI","VII","VIII","IX");
 		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id,'',$exam_type);
-		//	p($data['subject_wise_list']);exit;
+			//p($data['subject_wise_list']);exit;
 		    $subject_name=@$data['subject_wise_list'][0]->course_title;
 			$data['display'] = 'fail_list';
 			$data['title'] = "Failed Student's Report";

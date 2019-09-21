@@ -135,10 +135,14 @@ Class Gradechart_model extends CI_Model
 		                   r.theory_paper2,r.theory_paper3,r.theory_paper4,r.sum_internal_practical,r.practical_internal,r.theory_external1,r.theory_external2,r.theory_external3,r.theory_external4,r.practical_external,
 						   r.marks_sum,r.external_sum,assignment_mark,student_id,ncc_status');
 		$this->db->from('students_ug_marks as r');
+		$this->db->join('users as u','u.id=r.student_id');
+		$this->db->join('user_map_student_details as umap','u.id=umap.user_id');
 		$this->db->where(array('r.campus_id'=>$campus_id,'r.program_id'=>$program_id,'r.degree_id'=>$degree_id,'r.batch_id'=>$batch_id,'r.semester_id'=>$semester_id,'r.exam_type'=>$exam_type));
-		if($course_id>0)
-			$this->db->where(array('r.course_id'=>$course_id));
-		if($student_id>0) {
+		if($course_id>0) {
+            $this->db->where(array('r.course_id' => $course_id));
+            $this->db->order_by('umap.batch_id','desc');
+            $this->db->order_by('u.user_unique_id','asc');
+        }if($student_id>0) {
             $this->db->where_in('r.student_id', $student_id);
             //
            $order = sprintf('FIELD(r.student_id, %s)',"'".implode("','", $student_id)."'");
