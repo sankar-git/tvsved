@@ -138,12 +138,20 @@ Class Gradechart_model extends CI_Model
 		$this->db->where(array('r.campus_id'=>$campus_id,'r.program_id'=>$program_id,'r.degree_id'=>$degree_id,'r.batch_id'=>$batch_id,'r.semester_id'=>$semester_id,'r.exam_type'=>$exam_type));
 		if($course_id>0)
 			$this->db->where(array('r.course_id'=>$course_id));
-		if($student_id>0)
-			$this->db->where_in('r.student_id',$student_id);
-		$this->db->order_by('student_id,id');
+		if($student_id>0) {
+            $this->db->where_in('r.student_id', $student_id);
+            //
+           $order = sprintf('FIELD(r.student_id, %s)',"'".implode("','", $student_id)."'");
+            $this->db->_protect_identifiers = FALSE;
+           // echo $order;exit;
+            $this->db->order_by($order);
+            $this->db->_protect_identifiers = TRUE;
+            //$this->db->where_in('r.student_id', $student_id);
+        }
+		//$this->db->order_by('student_id,id');
 		$resultArr=$this->db->get()->result_array();
 		$final_array=array();
-		//echo $this->db->last_query();echo "<br>";
+		//echo $this->db->last_query();exit;
 		//echo "<pre>";
 		foreach($resultArr as $key=>$result_val){
 			if($program_id == 1 && $degree_id == 1){
@@ -186,7 +194,7 @@ Class Gradechart_model extends CI_Model
 		}
 	
 		
-		//print_r($final_array);exit;
+		//p($final_array);exit;
 		
 		return $final_array;
 	}

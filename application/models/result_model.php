@@ -19,17 +19,18 @@ Class Result_model extends CI_Model
 						   r.marks_sum,r.external_sum,assignment_mark,student_id,ncc_status,r.exam_type');
 		$this->db->from('students_ug_marks as r');
 		$this->db->where('r.student_id',$student_id);
-		if(!empty($semester_id))
-			$this->db->where('r.semester_id',$semester_id);
-		if(!empty($exam_type))
+		if(!empty($semester_id)) {
+            $this->db->where('r.semester_id', $semester_id);
+        }if(!empty($exam_type))
 			$this->db->where('r.exam_type',$exam_type);
 		if(!empty($publish_marks))
 			$this->db->where('r.publish_marks',$publish_marks);
+
 		//elseif(isset($_POST['exam_type']))
 			//$this->db->where('r.exam_type',$_POST['exam_type']);
 		
-		$this->db->order_by('student_id,exam_type');
-		$resultArr=$this->db->get()->result_array();echo $this->db->last_query();echo "<br/>";
+		//$this->db->order_by('student_id,exam_type');
+		$resultArr=$this->db->get()->result_array();//echo $this->db->last_query();echo "<br/>";
 		$final_array=array();
 		foreach($resultArr as $key=>$result_val){
 			if($result_val['program_id'] == 1 && $result_val['degree_id'] == 1){
@@ -114,6 +115,10 @@ Class Result_model extends CI_Model
 		$this->db->join('campuses c','c.id = umap.campus_id','left');
 		$this->db->join('degrees d','d.id = umap.degree_id','left');
 		$this->db->where_in('u.id',$student_id);
+        $order = sprintf('FIELD(u.id, %s)',"'".implode("','", $student_id)."'");
+        $this->db->_protect_identifiers = FALSE;
+        $this->db->order_by($order);
+        $this->db->_protect_identifiers = TRUE;
         $result	= $this->db->get()->result();//echo $this->db->last_query(); die;
 		return $result;
 	}
