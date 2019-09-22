@@ -980,6 +980,7 @@ class Generate extends CI_Controller {
 	 
 			//load mPDF library
 			$this->load->library('m_pdf');
+             // $this->m_pdf->pdf->mPDF('utf-8','A4','','','10','10','10','10');
 	       //generate the PDF from the given html
 			$this->m_pdf->pdf->setTitle('Moderation Mark');
 			$this->m_pdf->pdf->WriteHTML($html);

@@ -85,7 +85,7 @@
                 </tr>
                 <tr>
                     <td><b>Examination</b></td>
-                    <td > : <?php echo $aggregate_marks[0]->semester_name.'-'."Annual";?></td>
+                    <td > : <?php echo $aggregate_marks[0]->semester_name.'-';if($exam_type ==2) echo "Cap"; else echo "Annual";?></td>
                     <td><b>Month & Year</b></td>
                     <td> : <?php if(!empty($month) && !empty($year)){ 
                     echo $month.' '.$year;}else{echo "Select Month&Year of Exam";}?></td>
@@ -147,12 +147,12 @@
             <?php foreach($courseGroup as $key=>$value){?>
                 <label width="50%"><?php $title = $this->Gradechart_model->get_title_bycode($value); 
                 echo $title;?></label> :____________________<br />
-            <?php } ?><br /><br /><br /><br /><br /><br />
+            <?php } ?><br /><br />
             <table width="100%">
                 <tr style="font-size:12px; font-weight:bold;">
-                    <td width="20%" align="center"><div>Signature Of<br />C.E.O</div></td>
-                    <td width="20%" align="center"><div>Signature Of<br />Registar </div></td>
-                    <td width="20%" align="center"><div>Signature Of<br /> V.C </div></td>
+                    <td width="20%" align="center"><b>Signature Of<br />C.E.O</b></td>
+                    <td width="20%" align="center"><b>Signature Of<br />Registar </b></td>
+                    <td width="20%" align="center"><b>Signature Of<br /> V.C </b></td>
                     
                 </tr>
             </table>

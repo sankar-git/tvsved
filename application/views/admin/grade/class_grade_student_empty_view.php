@@ -55,7 +55,7 @@
                                 <tr><td><div><div style="margin-left:30px; font-weight:bold; font-size:16px;"><p>TAMIL NADU  VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></div></div></td></tr><br />
                                 <tr>
                                     <td align="center">
-                                            <p align="center" style=" font-size:14px;"><b><?php echo $aggregate_marks[0]->discipline_code;?></b></p><br />
+                                            <p align="center" style=" font-size:14px;"><b><?php echo $aggregate_marks[0]->degree_name;?></b></p><br />
                                             <p align="center" style=" font-size:14px; padding:10px 0px 0px 0px;"><b>
                                             RESULTS</b>
                                             </p>
