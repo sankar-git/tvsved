@@ -63,7 +63,7 @@
                 </tr>
             </table>
 
-            <hr />
+
             <table style="font-size:14px;">
                 <tr>
                     <td><div><b>College :</b>&nbsp;&nbsp;<?php echo $student_val['campus_name']; ?></div></td>

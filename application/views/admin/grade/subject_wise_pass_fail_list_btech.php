@@ -73,7 +73,7 @@
                 </tr>
             </table>-->
 
-            <hr />
+
             <table width="100%" style="font-size:16px;">
 			
                 <tr>

@@ -17,7 +17,7 @@
         </td>
     </tr>
 </table>
-<hr />
+
 <!-- <div align="center">
 			   <p align="center" style="font-weight:bold; font-size:14px;">TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p>
 			   <p align="center" style=" font-size:14px; font-weight:bold;"><?php echo $students_attendance[0]->degree_code;?>&nbsp;SUBJECT WISE MARK ENTRY REPORT</p>

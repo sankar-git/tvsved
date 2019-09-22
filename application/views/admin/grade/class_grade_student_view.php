@@ -94,7 +94,7 @@
                     </td>
                 </tr>
             </table>
-            <hr />
+
     <div style="padding:0px; width:100%; font-family:Arial, Helvetica, sans-serif; ">
         <div class="pdf_container">
             <table width="100%" style="font-size:12px;">

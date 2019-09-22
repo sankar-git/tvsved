@@ -91,7 +91,7 @@
                 </tr>
             </table>
 
-            <hr />
+
             <div id="Divmain">
                 <table style="font-size:14px;">
                     <tr>

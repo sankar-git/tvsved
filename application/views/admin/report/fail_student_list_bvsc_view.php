@@ -69,7 +69,7 @@
                 </tr>
             </table>
 
-            <hr />
+
             <table width="100%" style="font-size:12px;">
                 <tr>
                     <td width="33%" align="left"><b>College: </b><?php 

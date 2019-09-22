@@ -63,7 +63,7 @@
                 </tr>
             </table>
 
-            <hr />
+
             <table style="font-size:14px;">
                 <tr>
                     <td style="text-align:left;"><div><b>Name :&nbsp;&nbsp;</b><?php echo $result_data[0]['first_name'];?></div></td>

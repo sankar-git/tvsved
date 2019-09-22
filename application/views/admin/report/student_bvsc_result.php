@@ -65,7 +65,7 @@
                 </tr>
             </table>
 
-            <hr />
+
 
                 <table style="width:100%;padding:0px; margin:0px; border:1px solid #103">
                     
