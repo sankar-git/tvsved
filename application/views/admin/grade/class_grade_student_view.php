@@ -194,8 +194,8 @@ if ($numbers[$k] > $max) {
                     <td><?php echo $subject_wise_val->user_unique_id;?></td>
                     <td align="left"> <?php echo ucfirst($subject_wise_val->first_name).' '.ucfirst($subject_wise_val->last_name);?></td>
 
-            <td style="text-align:center"><?php if($numbers[0]==''){echo 'N/A';}else{echo $numbers[0]/4;}?></td>
-            <td style="text-align:center"><?php if($numbers[1]==''){echo 'N/A';}else{echo $numbers[1]/4;}?></td>
+            <td style="text-align:center"><?php if($numbers[0]==''){echo 'N/A';}else{echo round_two_digit($numbers[0]/4);}?></td>
+            <td style="text-align:center"><?php if($numbers[1]==''){echo 'N/A';}else{echo round_two_digit($numbers[1]/4);}?></td>
             
             
            <?php $theory_marks_40=0; for($j=1;$j<=$course_count;$j++){ $var = "theory_external".$j; $theory_marks_40+=$subject_wise_val->{$var}/5;}?>

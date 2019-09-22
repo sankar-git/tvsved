@@ -95,7 +95,7 @@
                 <h5 align="center"><a href="javascript:;" onclick="document.genpdf.submit();">Download PDF</a></h5>
 			<?php } ?>		 
 	   
-	  </div><hr>
+	  </div>
 	
     <div style="padding:0px; width:100%; font-family:Arial, Helvetica, sans-serif; ">
         <div class="pdf_container">
