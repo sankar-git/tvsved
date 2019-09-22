@@ -66,7 +66,7 @@
                         </div>
                     </td>
                 </tr>
-            </table><hr />
+            </table>
             <table width="100%" style="font-size:12px;">
                 <tr>
                     <td><b>College</b></td>

@@ -83,7 +83,7 @@
                 </tr>
             </table>
 
-            <hr/>
+
             <table style="font-size:13px;">
                 <tr>
                     <td><div><b>College :</b>&nbsp;&nbsp;<?php echo $halldata['campus_code'];?></div></td> 

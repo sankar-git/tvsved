@@ -39,13 +39,12 @@
 ?>
 <div style="width:100%; font-family:Arial, Helvetica, sans-serif;">
     <div id="dummy">
-        <table style="padding-top:0px;">
-            <tr>
-                <td><div><span class="logo"><img height="90" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></span></div></td>
-                <td>
-                    <div>
-                        <table>
-                            <tr><td align="center"><div><div style=" font-weight:bold; font-size:15px;"><p>TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></div></div></td></tr>
+        <table style="padding-top:0px;" align="center">
+
+                <!--<td><div><span class="logo"><img height="90" src="<?php echo base_url();?>assets/admin/dist/img/tanuvaslogo.png"></span></div></td>-->
+
+
+                            <!--<tr><td align="center"><div><div style=" font-weight:bold; font-size:15px;"><p>TAMILNADU VETERINARY AND ANIMAL SCIENCES UNIVERSITY</p></div></div></td></tr>-->
 
                             <tr>
                                 <td align="center">
@@ -61,10 +60,7 @@
                                     </div>
                                 </td>
                             </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
+
         </table>
         <table class="sub-detail-tbl" style="width:100%;padding:2px 0px; margin:0px; border-collapse: collapse; Lline-height:1.5">
             <tr>

@@ -56,7 +56,7 @@
                 </tr>
             </table>
 
-            <hr/>
+
             <table style="font-size:14px;">
                 <tr>
                     <td><div><b>College :</b>&nbsp;&nbsp; <?php echo $dummy_number_report[0]['campus_name'];?></div></td>

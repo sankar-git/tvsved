@@ -9,7 +9,7 @@ if($mail_flag == false){?>
 </form>
 <p><a href="<?php echo base_url();?>process/viewProcess">Back To Home</a></p>
 </div>
-<hr/>
+
 <?php } ?>
 <!DOCTYPE html>
 <html>

@@ -363,17 +363,18 @@
 		$('#courseList').show(); 
 		$('#studentList').show(); 
 		var $form = $("#registration_form");
-		
-		$.ajax({
-			type:'POST',
-			url:'<?php echo base_url();?>result/getStudentList',
-			data: $form.serialize(),
-			success: function(data){
-				//alert(data); 
-				 $('#tr_list').html(data);
-		
-			 }
-		});
+		if($('#campus_id').val()>0 && $('#program_id').val()>0 && $('#degree_id').val()>0 && $('#semester_id').val()>0 && $('#batch_id').val()>0){
+            $.ajax({
+                type:'POST',
+                url:'<?php echo base_url();?>result/getStudentList',
+                data: $form.serialize(),
+                success: function(data){
+                    //alert(data);
+                     $('#tr_list').html(data);
+
+                }
+		    });
+        }
 	}
 	function getPrint()
 	{
