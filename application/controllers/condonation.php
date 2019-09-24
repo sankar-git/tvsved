@@ -112,16 +112,16 @@ class Condonation extends CI_Controller {
 			//$this->db->where(array('student_id'=>$student_id,'course_id'=>$course_input));
 			//$this->db->delete('students_ug_deflicit_marks');
 			if(trim($mark)<=trim($deflicit_range) && $practical[$student_id] == ''){
-				$result = $this->db->select('theory_external1,theory_external2')->from('students_ug_marks')->where(array('student_id'=>$student_id,'batch_id'=>$batch_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id,'program_id'=>$program_id,'campus_id'=>$campus_id))->get()->result_array();
+				$result = $this->db->select('theory_external1,theory_external2')->from('students_ug_marks')->where(array('student_id'=>$student_id,'batch_id'=>$batch_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id,'program_id'=>$program_id,'campus_id'=>$campus_id,'exam_type'=>1))->get()->result_array();
 				
 				//echo $this->db->last_query();exit;
 				//p($result);
 				//if(count($result) == 0){
 					
-					$this->db->query("INSERT INTO students_ug_deflicit_marks (campus_id,program_id,degree_id,batch_id,semester_id,discipline_id,student_id,course_id,highest_marks,second_highest_marks,smallest_marks,date_of_start,theory_internal1,theory_internal2,theory_internal3,theory_internal,theory_paper1,theory_paper2,theory_paper3,theory_paper4,sum_internal_practical,practical_internal,theory_external1,theory_external2,theory_external3,theory_external4,practical_external,external_sum,marks_sum,ncc_status) SELECT campus_id,program_id,degree_id,batch_id,semester_id,discipline_id,student_id,course_id,highest_marks,second_highest_marks,smallest_marks,date_of_start,theory_internal1,theory_internal2,theory_internal3,theory_internal,theory_paper1,theory_paper2,theory_paper3,theory_paper4,sum_internal_practical,practical_internal,theory_external1,theory_external2,theory_external3,theory_external4,practical_external,external_sum,marks_sum,ncc_status FROM students_ug_marks WHERE student_id = '$student_id' AND program_id = '$program_id' AND campus_id = '$campus_id' AND batch_id = '$batch_id' AND semester_id = '$semester_id' AND degree_id = '$degree_id' AND course_id = '$course_input'");
+					$this->db->query("INSERT INTO students_ug_deflicit_marks (campus_id,program_id,degree_id,batch_id,semester_id,discipline_id,student_id,course_id,highest_marks,second_highest_marks,smallest_marks,date_of_start,theory_internal1,theory_internal2,theory_internal3,theory_internal,theory_paper1,theory_paper2,theory_paper3,theory_paper4,sum_internal_practical,practical_internal,theory_external1,theory_external2,theory_external3,theory_external4,practical_external,external_sum,marks_sum,ncc_status) SELECT campus_id,program_id,degree_id,batch_id,semester_id,discipline_id,student_id,course_id,highest_marks,second_highest_marks,smallest_marks,date_of_start,theory_internal1,theory_internal2,theory_internal3,theory_internal,theory_paper1,theory_paper2,theory_paper3,theory_paper4,sum_internal_practical,practical_internal,theory_external1,theory_external2,theory_external3,theory_external4,practical_external,external_sum,marks_sum,ncc_status FROM students_ug_marks WHERE student_id = '$student_id' AND program_id = '$program_id' AND campus_id = '$campus_id' AND batch_id = '$batch_id' AND semester_id = '$semester_id' AND degree_id = '$degree_id' AND course_id = '$course_input' AND exam_type=1");
 					$insert_id = $this->db->insert_id(); 
 				//}
-				$this->db->where(array('student_id'=>$student_id,'batch_id'=>$batch_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id,'program_id'=>$program_id,'campus_id'=>$campus_id));
+				$this->db->where(array('student_id'=>$student_id,'batch_id'=>$batch_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id,'program_id'=>$program_id,'campus_id'=>$campus_id,'exam_type'=>1));
 				$data1['deflicit_mark'] = $mark;
 				$data1['deflicit_range'] = $deflicit_range;
 				$deflicit_mark = $mark*5;
@@ -136,7 +136,7 @@ class Condonation extends CI_Controller {
 					//$data['theory_external2'] = $result[0]['theory_external2']+$deflicit_mark;
 				//}
 				//p($data);exit;
-				$this->db->where(array('student_id'=>$student_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id,'batch_id'=>$batch_id,'program_id'=>$program_id,'campus_id'=>$campus_id));
+				$this->db->where(array('student_id'=>$student_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id,'batch_id'=>$batch_id,'program_id'=>$program_id,'campus_id'=>$campus_id,'exam_type'=>1));
 				$this->db->update('students_ug_marks',$data);
 				$msg=1;
 			}
