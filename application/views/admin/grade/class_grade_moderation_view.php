@@ -147,12 +147,12 @@
             <?php foreach($courseGroup as $key=>$value){?>
                 <label width="50%"><?php $title = $this->Gradechart_model->get_title_bycode($value); 
                 echo $title;?></label> :____________________<br />
-            <?php } ?><br /><br />
+            <?php } ?><br /><br /><br />
             <table width="100%">
                 <tr style="font-size:12px; font-weight:bold;">
-                    <td width="20%" align="center"><b>Signature Of<br />C.E.O</b></td>
-                    <td width="20%" align="center"><b>Signature Of<br />Registar </b></td>
-                    <td width="20%" align="center"><b>Signature Of<br /> V.C </b></td>
+                    <td width="30%" align="center"><b>Controller of Examinations</b></td>
+                    <td width="30%" align="center"><b>Registar</b></td>
+                    <td width="30%" align="center"><b>Vice-Chancellor</b></td>
                     
                 </tr>
             </table>

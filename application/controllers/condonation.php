@@ -112,14 +112,14 @@ class Condonation extends CI_Controller {
 			//$this->db->where(array('student_id'=>$student_id,'course_id'=>$course_input));
 			//$this->db->delete('students_ug_deflicit_marks');
 			if(trim($mark)<=trim($deflicit_range) && $practical[$student_id] == ''){
-				$result = $this->db->select('theory_external1,theory_external2')->from('students_ug_marks')->where(array('student_id'=>$student_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id))->get()->result_array();
+				$result = $this->db->select('theory_external1,theory_external2')->from('students_ug_marks')->where(array('student_id'=>$student_id,'batch_id'=>$batch_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id,'program_id'=>$program_id,'campus_id'=>$campus_id))->get()->result_array();
 				//p($result);
 				//if(count($result) == 0){
 					
-					$this->db->query("INSERT INTO students_ug_deflicit_marks (campus_id,program_id,degree_id,batch_id,semester_id,discipline_id,student_id,course_id,highest_marks,second_highest_marks,smallest_marks,date_of_start,theory_internal1,theory_internal2,theory_internal3,theory_internal,theory_paper1,theory_paper2,theory_paper3,theory_paper4,sum_internal_practical,practical_internal,theory_external1,theory_external2,theory_external3,theory_external4,practical_external,external_sum,marks_sum,ncc_status) SELECT campus_id,program_id,degree_id,batch_id,semester_id,discipline_id,student_id,course_id,highest_marks,second_highest_marks,smallest_marks,date_of_start,theory_internal1,theory_internal2,theory_internal3,theory_internal,theory_paper1,theory_paper2,theory_paper3,theory_paper4,sum_internal_practical,practical_internal,theory_external1,theory_external2,theory_external3,theory_external4,practical_external,external_sum,marks_sum,ncc_status FROM students_ug_marks WHERE student_id = '$student_id' AND course_id = '$course_input'");
+					$this->db->query("INSERT INTO students_ug_deflicit_marks (campus_id,program_id,degree_id,batch_id,semester_id,discipline_id,student_id,course_id,highest_marks,second_highest_marks,smallest_marks,date_of_start,theory_internal1,theory_internal2,theory_internal3,theory_internal,theory_paper1,theory_paper2,theory_paper3,theory_paper4,sum_internal_practical,practical_internal,theory_external1,theory_external2,theory_external3,theory_external4,practical_external,external_sum,marks_sum,ncc_status) SELECT campus_id,program_id,degree_id,batch_id,semester_id,discipline_id,student_id,course_id,highest_marks,second_highest_marks,smallest_marks,date_of_start,theory_internal1,theory_internal2,theory_internal3,theory_internal,theory_paper1,theory_paper2,theory_paper3,theory_paper4,sum_internal_practical,practical_internal,theory_external1,theory_external2,theory_external3,theory_external4,practical_external,external_sum,marks_sum,ncc_status FROM students_ug_marks WHERE student_id = '$student_id' AND program_id = '$program_id' AND campus_id = '$campus_id' AND batch_id = '$batch_id' AND semester_id = '$semester_id' AND degree_id = '$degree_id' AND course_id = '$course_input'");
 					$insert_id = $this->db->insert_id(); 
 				//}
-				$this->db->where(array('student_id'=>$student_id,'course_id'=>$course_input));
+				$this->db->where(array('student_id'=>$student_id,'batch_id'=>$batch_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id,'program_id'=>$program_id,'campus_id'=>$campus_id));
 				$data1['deflicit_mark'] = $mark;
 				$data1['deflicit_range'] = $deflicit_range;
 				$deflicit_mark = $mark*5;
@@ -134,7 +134,7 @@ class Condonation extends CI_Controller {
 					$data['theory_external2'] = $result[0]['theory_external2']+$deflicit_mark;
 				}
 				//p($data);exit;
-				$this->db->where(array('student_id'=>$student_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id));
+				$this->db->where(array('student_id'=>$student_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id,'batch_id'=>$batch_id,'program_id'=>$program_id,'campus_id'=>$campus_id));
 				$this->db->update('students_ug_marks',$data);
 				$msg=1;
 			}
@@ -230,7 +230,7 @@ class Condonation extends CI_Controller {
 	      if($degree_id=='1'){
 			  
 		   $data['numeralCodes'] =  array("I","II","III","IV","V","VI","VII","VIII","IX");
-		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id,'',1);
 			//p($data['subject_wise_list']);exit;
 		    $subject_name=$data['subject_wise_list'][0]->course_title;
 			$data['display'] = 'fail_list';
@@ -252,7 +252,7 @@ class Condonation extends CI_Controller {
 		   }
 		  }	
           if($degree_id!='1'){
-		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id);
+		    $data['subject_wise_list'] = $this->Gradechart_model->get_subject_wise_pass_fail_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$course_id,'',1);
 			$data['display'] = 'fail_list';
 			$data['title'] = "Failed Student's Report";
 			//p($data['subject_wise_list']); exit;
