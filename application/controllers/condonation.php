@@ -113,6 +113,8 @@ class Condonation extends CI_Controller {
 			//$this->db->delete('students_ug_deflicit_marks');
 			if(trim($mark)<=trim($deflicit_range) && $practical[$student_id] == ''){
 				$result = $this->db->select('theory_external1,theory_external2')->from('students_ug_marks')->where(array('student_id'=>$student_id,'batch_id'=>$batch_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id,'program_id'=>$program_id,'campus_id'=>$campus_id))->get()->result_array();
+				
+				//echo $this->db->last_query();exit;
 				//p($result);
 				//if(count($result) == 0){
 					
@@ -124,15 +126,15 @@ class Condonation extends CI_Controller {
 				$data1['deflicit_range'] = $deflicit_range;
 				$deflicit_mark = $mark*5;
 				$this->db->update('students_ug_deflicit_marks',$data1);
-				if($result[0]['theory_external1'] < $result[0]['theory_external2']){
-					$data['theory_external1'] = $result[0]['theory_external1']+$deflicit_mark;
-				}elseif($result[0]['theory_external1'] = $result[0]['theory_external1']){
+				//if($result[0]['theory_external1'] < $result[0]['theory_external2']){
+					//$data['theory_external1'] = $result[0]['theory_external1']+$deflicit_mark;
+				//}elseif($result[0]['theory_external1'] = $result[0]['theory_external1']){
 					$divide_two = $deflicit_mark/2;
 					$data['theory_external1'] = $result[0]['theory_external1']+$divide_two;
 					$data['theory_external2'] = $result[0]['theory_external2']+$divide_two;
-				}else{
-					$data['theory_external2'] = $result[0]['theory_external2']+$deflicit_mark;
-				}
+				//}else{
+					//$data['theory_external2'] = $result[0]['theory_external2']+$deflicit_mark;
+				//}
 				//p($data);exit;
 				$this->db->where(array('student_id'=>$student_id,'course_id'=>$course_input,'semester_id'=>$semester_id,'degree_id'=>$degree_id,'batch_id'=>$batch_id,'program_id'=>$program_id,'campus_id'=>$campus_id));
 				$this->db->update('students_ug_marks',$data);
