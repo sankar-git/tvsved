@@ -385,6 +385,13 @@
 					$('.action-save').removeClass('hidden');	
 					$('#example').empty();	
 					$('#example').append(data);
+					if($('#publish_marks_1').val() == 1){
+						$('input').attr('disabled','disabled');
+						$('button').attr('disabled','disabled');
+						$('#failed_list').removeAttr('disabled');
+					}else{
+						$('input').removeAttr('disabled');
+						$('button').removeAttr('disabled');
 					 }
 				});
 				return false;

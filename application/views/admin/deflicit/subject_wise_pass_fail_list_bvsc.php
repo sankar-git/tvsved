@@ -85,17 +85,19 @@
 					   rsort($numbers);
 					  $theory_internal_total = $numbers[0]/4 + $numbers[1]/4;
 					  if($display == 'fail_list'){
+						  //echo trim($theory_internal_total+$theory_marks_40);
 						  if($subject_wise_val->coure_group_id == 22 && $subject_wise_val->ncc_status==1){
 							  continue;
-						  }elseif(trim($theory_internal_total+$theory_marks_40) >=30 && $paper_20>=20 && trim($theory_internal_total+$theory_marks_40+$paper_20)>=50)
+						  }elseif(trim($theory_internal_total+$theory_marks_40) >=30 && trim($paper_20)>=20 && trim($theory_internal_total+$theory_marks_40+$paper_20)>=50){
 						  continue;
+						  }
 					  }
 					  $i++;
 				?>
 				<tr>
 				
 					
-					<td  align="center" style="padding:2px;height:30px;"><?php echo $i;?><input type="hidden" name="student_id[]" value="<?php echo $subject_wise_val->student_id;?>" /></td>
+					<td  align="center" style="padding:2px;height:30px;"><?php echo $i;?><input type="hidden" name="student_id[]" value="<?php echo $subject_wise_val->student_id;?>" /><input type="hidden" name="publish_marks_<?php echo $i;?>" id="publish_marks_<?php echo $i;?>" value="<?php echo $subject_wise_val->publish_marks;?>" /></td>
                     <td  align="center" style="padding:2px;"><?php echo $subject_wise_val->user_unique_id;?></td>
                     <td  align="left" style="padding:2px;"><?php echo $subject_wise_val->first_name;?></td>
                     <!--<td  align="center" style="padding:2px;"><?php echo round_two_digit($subject_wise_val->theory_internal1/4);?></td>
@@ -120,13 +122,15 @@
 					<td  align="center" style="padding:1px;text-align:center;vertical-align:middle">
 					<?php 
 						$diff_mark=''; 
-						if(round_two_digit($theory_internal_total+$theory_marks_40)<30 && round_two_digit($paper_20)>=20) {
-							if(round_two_digit($theory_internal_total+$theory_marks_40)<30){ 
-								echo $diff_mark =  round_two_digit(30-($theory_internal_total+$theory_marks_40));
+						if($theory_internal_total+$theory_marks_40<30 && $paper_20>=20) {
+							if($theory_internal_total+$theory_marks_40<30){ 
+								$diff_mark =  30-($theory_internal_total+$theory_marks_40);
+								echo round_two_digit($diff_mark);
 								//echo $diff_mark = round_two_digit(($diff_mark/60)*100);
 							}
-							} elseif(round_two_digit($theory_internal_total+$theory_marks_40)<30){ 
-								echo $diff_mark = round_two_digit(30-($theory_internal_total+$theory_marks_40)); 
+							} elseif($theory_internal_total+$theory_marks_40<30){ 
+								$diff_mark = 30-($theory_internal_total+$theory_marks_40); 
+								echo round_two_digit($diff_mark);
 								//echo $diff_mark = round_two_digit(($diff_mark/60)*100);
 							}else  echo '-';?>
 					<input  type="hidden" name="thoery[<?php echo $subject_wise_val->student_id;?>]" id="thoery" value="<?php echo $diff_mark;?>" />

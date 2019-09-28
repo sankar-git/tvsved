@@ -326,6 +326,7 @@ class Marks extends CI_Controller {
 						$trdata.='<tr>
 							<td>
 								<input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
+								<input type="hidden" name="publish_marks_'.$i.'" id="publish_marks_'.$i.'" value="'.$students->publish_marks.'" />
 								<input type="hidden" name="student_id[]" value="'.$students->id.'">
 							</td>
 							<td>'.$students->first_name.'</td>';
@@ -398,6 +399,7 @@ class Marks extends CI_Controller {
 					if($upload_type == 'coursewise'){
 						$trdata.='<tr>
 							<td><input type="hidden"  value="'.$students->user_unique_id.'">'.($i) .' 
+							<input type="hidden" name="publish_marks_'.$i.'" id="publish_marks_'.$i.'" value="'.$students->publish_marks.'" />
 							<input type="hidden" name="student_id[]" value="'.$students->id.'"></td>
 						  <td>'.$students->dummy_value.'</td>';
 					}else{

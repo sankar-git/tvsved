@@ -1025,7 +1025,7 @@ class Result extends CI_Controller {
 						$list['month']=$month=$this->input->post('month');
 	       				$list['year']=$year=$this->input->post('year');
 						     
-						    $list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id);
+						    $list=$this->get_bvsc_semester_marks($stuData->user_id,$semester_id,$exam_type);
 							$list['first_name']  =$stuData->first_name;
 						     $list['last_name']  =$stuData->last_name;
 						     $list['user_unique_id']  =$stuData->user_unique_id;
@@ -1836,8 +1836,11 @@ class Result extends CI_Controller {
 		 $this->load->view('admin/generate_student_result_view',$data);
 	}
 	
-	function get_bvsc_semester_marks($student_id,$semester_id,$exam_type=''){
-		$subjectList = $this->Result_model->get_student_marks_by_id($student_id,$semester_id,$exam_type);
+	function get_bvsc_semester_marks($student_id,$semester_id,$exam_type='',$batch_id=''){
+		if($batch_id == ''){
+			$batch_id=$this->input->post('batch_id');
+		}
+		$subjectList = $this->Result_model->get_student_marks_by_id($student_id,$semester_id,$exam_type,'',$batch_id);
 		$dataList =array();
 		$overallReport =array();
 		$sum_subjects_credit_point=0;
@@ -1914,7 +1917,7 @@ class Result extends CI_Controller {
 			$dataList[$data['courseid']] = $data;
 			//echo $count_subject;
 		}
-			//p($subjectVal);exit;
+			//p($dataList);exit;
 		$list['subjectList'] = $dataList;
 		$list['overallReport'] = $overallReport;
 		//p($list);exit;

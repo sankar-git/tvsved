@@ -12,8 +12,11 @@ Class Result_model extends CI_Model
         $result	= $this->db->get()->result();
 		return $result;
 	}
-	function get_student_marks_by_id($student_id,$semester_id='',$exam_type='',$publish_marks='')
+	function get_student_marks_by_id($student_id,$semester_id='',$exam_type='',$publish_marks='',$batch_id='')
 	{
+		if($batch_id == ''){
+			$batch_id=$this->input->post('batch_id');
+		}
 		$this->db->select('discipline_id,program_id,degree_id,campus_id,batch_id,semester_id,r.course_id,r.theory_internal1,r.theory_internal2,r.theory_internal3,r.theory_internal,r.theory_paper1,
 		                   r.theory_paper2,r.theory_paper3,r.theory_paper4,r.sum_internal_practical,r.practical_internal,r.theory_external1,r.theory_external2,r.theory_external3,r.theory_external4,r.practical_external,
 						   r.marks_sum,r.external_sum,assignment_mark,student_id,ncc_status,r.exam_type');
@@ -23,6 +26,8 @@ Class Result_model extends CI_Model
             $this->db->where('r.semester_id', $semester_id);
         }if(!empty($exam_type))
 			$this->db->where('r.exam_type',$exam_type);
+		if(!empty($batch_id))
+			$this->db->where('r.batch_id',$batch_id);
 		if(!empty($publish_marks))
 			$this->db->where('r.publish_marks',$publish_marks);
 
@@ -30,7 +35,7 @@ Class Result_model extends CI_Model
 			//$this->db->where('r.exam_type',$_POST['exam_type']);
 		
 		//$this->db->order_by('student_id,exam_type');
-		$resultArr=$this->db->get()->result_array();//echo $this->db->last_query();echo "<br/>";
+		$resultArr=$this->db->get()->result_array();//echo $this->db->last_query();echo "<br/>";exit;
 		$final_array=array();
 		foreach($resultArr as $key=>$result_val){
 			if($result_val['program_id'] == 1 && $result_val['degree_id'] == 1){

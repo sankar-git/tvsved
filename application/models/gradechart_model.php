@@ -133,7 +133,7 @@ Class Gradechart_model extends CI_Model
 	{
 		$this->db->select('r.course_id,r.theory_internal1,r.theory_internal2,r.theory_internal3,r.theory_internal,r.theory_paper1,
 		                   r.theory_paper2,r.theory_paper3,r.theory_paper4,r.sum_internal_practical,r.practical_internal,r.theory_external1,r.theory_external2,r.theory_external3,r.theory_external4,r.practical_external,
-						   r.marks_sum,r.external_sum,assignment_mark,student_id,ncc_status');
+						   r.marks_sum,r.external_sum,assignment_mark,student_id,ncc_status,r.publish_marks');
 		$this->db->from('students_ug_marks as r');
 		$this->db->join('users as u','u.id=r.student_id');
 		$this->db->join('user_map_student_details as umap','u.id=umap.user_id');

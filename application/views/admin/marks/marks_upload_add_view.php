@@ -201,8 +201,8 @@
 			  <div class="box-footer"  <?php if(empty($upload_type)){?> style="display:none" <?php } ?>>
                <button type="button" class="btn btn-success" onclick="saveUGInternalMarksNew();">Save</button>
                   <?php if($session_data[0]->role_id==0 || $session_data[0]->role_id==9){?>
-               <button type="button" class="btn btn-success" onclick="publishUGInternalMarksNew();">Publish Mark</button>
-               <button type="button" class="btn btn-success" onclick="unpublishUGInternalMarksNew();">Unpublish Mark</button>
+               <button type="button" class="btn btn-success" name="publish_btn" id="publish_btn" onclick="publishUGInternalMarksNew();">Publish Mark</button>
+               <button type="button" class="btn btn-success"  name="unpublish_btn" id="unpublish_btn"  onclick="unpublishUGInternalMarksNew();">Unpublish Mark</button>
                   <?php } ?>
 			  </div>
 			    <div id="ncc">
@@ -663,6 +663,9 @@
                 if(data==1)
                 {
                     alert("Marks Published Successfully");
+					$('input').attr('disabled','disabled');
+					$('button').attr('disabled','disabled');
+					$('#unpublish_btn').removeAttr('disabled');
                 }
             }
         });
@@ -682,6 +685,9 @@
                 if(data==1)
                 {
                     alert("Marks Unpublished Successfully");
+					$('input').removeAttr('readonly');
+					$('input').removeAttr('disabled');
+					$('button').removeAttr('disabled');
                 }
             }
         });
@@ -837,6 +843,14 @@ var upload_type=$('#upload_type').val();
 					$('#ncc').hide();
 					$('.trlist').empty();	
 					$('#bvsc .trlist').append(data);
+					if($('#publish_marks_1').val() == 1){
+						$('input').attr('disabled','disabled');
+						$('button').attr('disabled','disabled');
+						$('#unpublish_btn').removeAttr('disabled');
+					}else{
+						$('input').removeAttr('disabled');
+						$('button').removeAttr('disabled');
+					}
 				 }
 			});
 		}else if($('#program_id').val()==1){
@@ -890,6 +904,14 @@ var upload_type=$('#upload_type').val();
 				//alert(data); return false;
 				$('.trlist').empty();	
 				$('#bvscwewew .trlist').append(data);
+				if($('#publish_marks_1').val() == 1){
+						$('input').attr('disabled','disabled');
+						$('button').attr('disabled','disabled');
+						$('#unpublish_btn').removeAttr('disabled');
+					}else{
+						$('input').removeAttr('disabled');
+						$('button').removeAttr('disabled');
+					}
 			 }
 		});
 	}
@@ -962,6 +984,14 @@ var upload_type=$('#upload_type').val();
 				//alert(data); return false;
 				$('.trlist').empty();	
 				$('#bvscwewew .trlist').append(data);
+				if($('#publish_marks_1').val() == 1){
+						$('input').attr('disabled','disabled');
+						$('button').attr('disabled','disabled');
+						$('#unpublish_btn').removeAttr('disabled');
+					}else{
+						$('input').removeAttr('disabled');
+						$('button').removeAttr('disabled');
+					}
 			 }
 		});
 			
