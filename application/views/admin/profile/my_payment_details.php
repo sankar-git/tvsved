@@ -101,7 +101,7 @@ label.star:before {
                 <tr>
                   <td><?php echo $i;?></td>
                   <td><?php echo $payment->program_name;?></td>
-                  <td><?php echo $payment->semester_name;?></td>
+                  <td><?php if(!empty($payment->semester_name)) echo $payment->semester_name;elseif(!empty($payment->semester_id)) echo $payment->semester_id;?></td>
                   <td><?php echo $payment->payment_type;?></td>
                   <td><?php echo $payment->amt;?></td>
                   <td><?php echo $payment->mer_txn;?></td>

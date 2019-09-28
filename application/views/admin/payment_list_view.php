@@ -41,13 +41,14 @@
 								<thead>
 								<tr>
 									<th>S.No</th>
-									<th>Bank Transaction Id</th>
-									<th>Amount</th>
+									<th>User ID</th>
 									<th>User Name</th>
 									<th>Type</th>
 									<th>Program</th>
 									<th>Semester</th>
-									
+									<th>Bank Transaction Id</th>
+									<th>Amount</th>
+									<th>Transaction Status</th>
 									<th>Transaction Date</th>
 									
 									
@@ -58,12 +59,15 @@
 									<?php $i=0; foreach ($payments as $payment): $i++;?>
 									<tr>
 									<td><?php echo $i; ?></td>
-									<td><?php echo $payment->mer_txn;?></td>
-									<td><?php echo $payment->amt;?></td>
+									<td><?php echo $payment->user_unique_id;?></td>
 									<td><?php echo $payment->first_name.' '.$payment->last_name;?></td>
+									
 									<td><?php echo $payment->payment_type;?></td>
 									<td><?php echo $payment->program_name;?></td>
-									<td><?php echo $payment->semester_name;?></td>
+									<td><?php if(!empty($payment->semester_name)) echo $payment->semester_name;elseif(!empty($payment->semester_id)) echo $payment->semester_id;?></td>
+									<td><?php echo $payment->mer_txn;?></td>
+									<td><?php echo $payment->amt;?></td>
+									<td><?php echo $payment->desc;?></td>
 									<td><?php echo $payment->date;?></td>
 									
 									</tr>

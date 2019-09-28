@@ -19,7 +19,7 @@ Class Payment_model extends CI_Model
 	}
 	function get_mypayment_details($userid)
 	{
-		$this->db->select('pr.*,p.program_name,s.semester_name,pay.payment_type');
+		$this->db->select('pr.*,p.program_name,s.semester_name,pay.semester_id,pay.payment_type');
 		$this->db->from('payments_response as pr');
 		$this->db->join('payments as pay','pay.transaction_id=pr.mer_txn','LEFT');
 		$this->db->join('programs as p','pay.program_id=p.id','LEFT');
@@ -64,7 +64,7 @@ Class Payment_model extends CI_Model
 	}
 	function get_payment_history()
 	{
-		$this->db->select('p.*,u.first_name,u.last_name,pay.payment_type,s.semester_name,pg.program_code,pg.program_name');
+		$this->db->select('p.*,u.first_name,u.last_name,u.user_unique_id,pay.payment_type,s.semester_name,pay.semester_id,pg.program_code,pg.program_name');
 		$this->db->from('payments_response as p');
 		$this->db->join('users as u','u.id=p.user_id');
 		$this->db->join('payments as pay','p.mer_txn=pay.transaction_id','LEFT');
