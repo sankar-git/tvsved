@@ -55,7 +55,7 @@
 									<?php $i=0; foreach ($payments as $payment): $i++;?>
 									<tr>
 									<td><?php echo $i; ?></td>
-									<td><?php if($payment->user_id == 0 || $payment->user_id == '') echo "Admin"; else  echo $payment->first_name.' '.$payment->last_name;?></td>
+									<td><?php if($payment->user_id == 0 || $payment->user_id == '') echo "Admin"; elseif(!empty($payment->first_name)) echo $payment->first_name;elseif(!empty($payment->username)) echo $payment->username;?></td>
 									<td><?php echo $payment->phone;?></td>
 									<td><?php echo urldecode($payment->message);?></td>
 									<td><?php echo $payment->responseCode;?></td>

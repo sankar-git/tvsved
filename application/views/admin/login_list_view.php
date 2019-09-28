@@ -56,7 +56,7 @@
 									<?php $i=0; foreach ($payments as $payment): $i++;?>
 									<tr>
 									<td><?php echo $i; ?></td>
-									<td><?php echo $payment->first_name.' '.$payment->last_name;?></td>
+									<td><?php if(!empty($payment->first_name)) echo $payment->first_name;elseif(!empty($payment->username)) echo $payment->username; ?></td>
 									<td><?php echo ucfirst($payment->log_type);?></td>
 									<td><?php if($payment->role_name == 0) echo "Admin"; else echo $payment->role_name;?></td>
 									<td><?php echo $payment->ipaddress;?></td>

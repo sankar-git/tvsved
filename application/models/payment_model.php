@@ -75,7 +75,7 @@ Class Payment_model extends CI_Model
 	}
 	function get_login_history()
 	{
-		$this->db->select('u.first_name,u.last_name,l.created_on,l.log_type,u.role_id,r.role_name,l.full_user_agent_string,l.ipaddress');
+		$this->db->select('u.first_name,u.last_name,u.username,l.created_on,l.log_type,u.role_id,r.role_name,l.full_user_agent_string,l.ipaddress');
 		$this->db->from('user_log as l');
 		$this->db->join('users as u','u.id=l.user_id','LEFT');
 		$this->db->join('role as r','r.id=u.role_id','LEFT');
@@ -84,7 +84,7 @@ Class Payment_model extends CI_Model
 	}
 	function get_sms_history()
 	{
-		$this->db->select('u.first_name,u.last_name,s.phone,message,sent_date,responseCode,s.user_id');
+		$this->db->select('u.first_name,u.last_name,s.phone,message,sent_date,responseCode,s.user_id,u.username');
 		$this->db->from('sms_delivery as s');
 		$this->db->join('users as u','u.id=s.user_id','LEFT');
 		
