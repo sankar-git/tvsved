@@ -607,7 +607,7 @@ class Excelupload extends CI_Controller {
 						'exam_type'    =>($exam_type) ? $exam_type : '1',
 						'created_on'    =>($register_date_time) ? $register_date_time : '');
 					$final_array = array_merge($common_array,$internal_arr ,$external_arr);
-					p($final_array);exit;
+					//p($final_array);exit;
 					if(!empty($check_student->student_id))
 					{
 						$savedata = $this->Excel_model->update_ug_marks_excel($final_array);
@@ -616,7 +616,7 @@ class Excelupload extends CI_Controller {
 					{
 						$savedata = $this->Excel_model->save_ug_marks_excel($final_array);
 					}
-					echo $this->db->last_query();echo "<br/>";
+					//echo $this->db->last_query();echo "<br/>";
 					$m++;
 				}else{
 					//$this->session->set_flashdata('errormessage', 'Excel data not uploaded.');
@@ -624,7 +624,7 @@ class Excelupload extends CI_Controller {
 				}
 			}
         }
-		exit;
+		//exit;
 	    $this->session->set_flashdata('message', 'Excel uploaded successfully.');
         redirect(base_url().'excelupload/uploadUgMarksExcel');
     }
