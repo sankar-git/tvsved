@@ -181,12 +181,12 @@ Class Marks_model extends CI_Model
 			$this->db->join('courses co','co.id = c.course_id','LEFT');
 		}
 		if(isset($data['course_id']) && $data['course_id']!=''){
-			$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.course_id ='$course_id' AND ug.exam_type ='$exam_type'  and c.batch_id=ug.batch_id",'LEFT');
+			$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id and ug.semester_id=c.semester_id AND ug.course_id ='$course_id' AND ug.exam_type ='$exam_type'  and c.batch_id=ug.batch_id",'LEFT');
 		}else{
 			if($data['degree_id']!=1){
-					$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id and ug.course_id=c.course_id  AND ug.exam_type ='$exam_type' and c.batch_id=ug.batch_id",'LEFT');
+					$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id and ug.course_id=c.course_id and ug.semester_id=c.semester_id  AND ug.exam_type ='$exam_type' and c.batch_id=ug.batch_id",'LEFT');
 			}else{
-				$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.exam_type ='$exam_type'  and c.batch_id=ug.batch_id",'LEFT');
+				$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id AND ug.exam_type ='$exam_type' and ug.semester_id=c.semester_id and c.batch_id=ug.batch_id",'LEFT');
 			}
 		}
 		$this->db->where(array('c.campus_id'=>$campus_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,
