@@ -1363,7 +1363,7 @@ class Course extends CI_Controller {
 									$result[$name][$groupname][] = @$marks->result;
 								}
 								$result[$name][$groupname] = array_unique($result[$name][$groupname]);
-								if(count($result[$name])>=3){
+								if(count($result[$name])>=1){
 									$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
 									$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
 								}
@@ -1392,7 +1392,7 @@ class Course extends CI_Controller {
 									$result[$name][$groupname][] = @$marks->result;
 								}
 								$result[$name][$groupname] = array_unique($result[$name][$groupname]);
-								if(count($result[$name])>=3){
+								if(count($result[$name])>=1){
 									$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
 									$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
 								}
@@ -1419,7 +1419,7 @@ class Course extends CI_Controller {
 									$result[$name][$groupname][] = @$marks->result;
 								}
 								$result[$name][$groupname] = array_unique($result[$name][$groupname]);
-								if(count($result[$name])>=3){
+								if(count($result[$name])>=1){
 									$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
 									$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
 								}
@@ -1442,13 +1442,14 @@ class Course extends CI_Controller {
 					}
 					
 					$result_marks = $this->get_academic_students($ccampus_id,$pprogram_id,$ddegree_id,$bbatch_id,$semester_id,'','',1);
+					
 					foreach($result_marks['result_marks'] as $name=>$courseGroupArr){
 						foreach($courseGroupArr as $groupname=>$marksArr){
 							foreach($marksArr as $key=>$marks){
 								$result[$name][$groupname][] = @$marks->result;
 							}
 							$result[$name][$groupname] = array_unique($result[$name][$groupname]);
-							if(count($result[$name])>=3){
+							if(count($result[$name])>=1){
 								$prev_sem_student[$marksArr[0]->user_unique_id]['name']=$name;
 								$prev_sem_student[$marksArr[0]->user_unique_id]['student_id']=$marksArr[0]->student_id;
 							}
