@@ -117,7 +117,8 @@ Class Discipline_model extends CI_Model
 			$this->db->where(array('b.campus' => $campus));
 		}
 		$this->db->where(array('a.role_id' => 2,'a.status' => 1));
-        $result	= $this->db->get()->result();
+		$this->db->group_by('a.id');
+        $result	= $this->db->get()->result();//echo $this->db->last_query();exit;
 		return $result;
 	}
 	function save_course($data)

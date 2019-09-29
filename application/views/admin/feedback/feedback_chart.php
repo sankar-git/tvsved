@@ -43,11 +43,32 @@
             <form role="form" name="feedback_form" id="feedback_form"  id="attendance_form" method="post" enctype="multipart/form-data">
             <div class="box-body">
 			    <div class="row">
+				 <div class="form-group col-md-3">
+                            <label for="campus">Campus<span style="color:red;font-weight: bold;">*</span></label>
+                            <select name="campus_id" id="campus_id" class="form-control" onchange="getProgramByCampusId(),getTeacher();">
+                                <option value="">--Select Campus--</option>
+                                <?php foreach($campuses as $campus){?>
+                                    <option value="<?php echo $campus->id; ?>"><?php echo $campus->campus_name; ?></option>
+
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="program">Program<span style="color:red;font-weight: bold;">*</span></label>
+                            <select name="program_id" id="program_id" class="form-control" onchange="getDegreebyProgram();">
+                                <option value="">--Select Program--</option>
+                                <?php //foreach($programs as $program){?>
+                                <!--<option value="<?php //echo $program->id; ?>"><?php //echo $program->program_name; ?></option>-->
+
+                                <?php //} ?>
+                            </select>
+                        </div>
+
 				    <div class="form-group col-md-3">
 					  
 					  <input type="hidden" name="id" id="id" value="<?php echo @$feedbacks_result->id;?>" />
 					  <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
-					  <select class="form-control" name="degree_id" id="degree_id" onchange="getQuestions();" >
+					  <select class="form-control" name="degree_id" id="degree_id" onchange="getSemesterbyDegree(),getQuestions();" >
 						  <option value="">--Select Degree--</option>
 						  <?php foreach($degrees as $degree){?>
 					  <option value="<?php echo $degree->id; ?>" <?php if($degree->id == @$degree_id){ ?> selected <?php }?> ><?php echo $degree->degree_name; ?></option>
@@ -78,9 +99,7 @@
 					  <label for="batch">Teacher<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="teacher_id" id="teacher_id" class="form-control" onchange="getQuestions();">
 						  <option value="">Select Teacher</option>
-						  <?php foreach($teachers as $teacher){ ?>
-						  <option value="<?php echo $teacher->id;?>" <?php if($teacher->id == @$teacher_id){ ?> selected <?php }?>><?php echo $teacher->first_name.' '.$teacher->last_name;?></option>
-						  <?php } ?>
+						  
 					  </select>
 					</div>
 					
@@ -109,7 +128,70 @@
   <!-- /.content-wrapper -->
    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-		
+	function getProgramByCampusId()
+    {
+        var campus_id =$('#campus_id').val();
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>course/getProgramByCampusId',
+            data: {'campus_id':campus_id},
+            success: function(data){
+
+                var  option_brand = '<option value="">--Select Program--</option>';
+                $('#program_id').empty();
+                $("#program_id").append(option_brand+data);
+            }
+        });
+    }
+	function getTeacher()
+    {
+        var campus_id =$('#campus_id').val();
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>attendance/get_teacher',
+            data: {'campus_id':campus_id},
+            success: function(data){
+
+                var  option_brand = '<option value="">--Select Teacher--</option>';
+                $('#teacher_id').empty();
+                $("#teacher_id").append(option_brand+data);
+            }
+        });
+    }
+    function getDegreebyProgram()
+    {
+        var program_id =$('#program_id').val();
+        var campus_id =$('#campus_id').val();
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>course/getDegreebyProgram',
+            data: {'program_id':program_id,'campus_id':campus_id},
+            success: function(data){
+                //alert(data);
+				var  option_brand = '<option value="">--Select Degree--</option>';
+                $('#degree_id').empty();
+                $("#degree_id").append(option_brand+data);
+                
+            }
+        });
+    }
+    function getSemesterbyDegree(){
+        var degree_id =$('#degree_id').val().toString();
+        //getDisciplineByDegreeId();
+        //alert(degree_id);
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>generate/getSemesterbyDegree',
+            data: {'degree_id':degree_id},
+            success: function(data){
+                //alert(data);
+                var  option_brand = '<option value="">--Select Semester--</option>';
+                $('#semester_id').empty();
+                $("#semester_id").append(option_brand+data);
+                
+            }
+        });
+    }
 		function getchartByQuestionid(){
 			if($('#question').val()>0){
 			location.href='<?php echo base_url();?>feedback/chart/'+$('#degree_id').val()+'/'+$('#semester_id').val()+'/'+$('#batch_id').val()+'/'+$('#teacher_id').val()+'/'+$('#question').val();

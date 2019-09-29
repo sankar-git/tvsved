@@ -94,10 +94,10 @@ label.star:before {
 					  <label for="program">Campus<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="campus_id" id="campus_id" class="form-control" onchange="getProgram(),get_teacher_list(); $('#sender_campus').val(this.val);">
 						  <option value="">--Select Campus--</option>
-						  <?php foreach($campuses as $campus){?>
+						  <?php foreach($campuses as $campus){ if($campus->id == $sessdata[0]->campus_id){?>
 						  <option value="<?php echo $campus->id; ?>" <?php if(isset($_POST['campus_id']) && $_POST['campus_id'] == $campus->id) echo "selected"; ?>><?php echo $campus->campus_name; ?></option>
 						 
-						  <?php } ?>
+						  <?php } } ?>
 					  </select>
 			    </div>
 					
@@ -138,15 +138,12 @@ label.star:before {
 					</div>
 					<div class="form-group col-md-3">
 					  <label for="course-group">Discipline<span style="color:red;font-weight: bold;">*</span></label>
-					   <select class="form-control" name="discipline_id" id="discipline_id" onchange="getCourseByIds(); $('#sender_discipline').val(this.value);">
+					   <select class="form-control" name="discipline_id" id="discipline_id" onchange="$('#sender_discipline').val(this.value);">
 					   
 						  <option value="">Select Discipline</option>
 					  </select>
 					</div>
-			     <div id="courseCon" class="form-group col-md-3 ">
-					  <label for="course_id">Course<span style="color:red;font-weight: bold;">*</span></label>
-					   <select class="form-control"  multiple="multiple"   id="course_id" name="course_id[]"></select>
-					</div> 
+			     
 					<div id="teacherCon" class="form-group col-md-3 " >
 					  <label for="teacher_id">Teacher<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control"  id="teacher_id" name="teacher_id" onchange="$('#sender_teacher').val(this.value);">
@@ -167,7 +164,7 @@ label.star:before {
 			  </div>
 			</form>
               <div class="active tab-pane mydetails" id="feedback">
-			  <?php $res=[]; if(isset($feedbacks[0])) $res = $feedbacks[0]; if(count($res)>0){ ?>
+			  <?php if(!$feedbacks_already_submitted){ $res=[]; if(isset($feedbacks[0])) $res = $feedbacks[0]; if(count($res)>0){ ?>
 			    <form  class="form-horizontal" method="post" name="feedback_form" id="feedback_form" action="<?php echo base_url();?>process/sendFeedback" enctype="multipart/form-data">
 			<input type="hidden" class="form-control" id="sender_id" name="sender_id" value="<?php echo $id;?>">
 			<input type="hidden" class="form-control" id="sender_role" name="sender_role" value="<?php echo $role_id;?>">
@@ -232,7 +229,7 @@ label.star:before {
 			  </div>
 
 				</form>
-			  <?php }else{ echo "No Feedback available now";} ?>
+			  <?php }else{ echo "No Feedback available now";} }else{ echo "Feedback Already Submitted";} ?>
 				 </div>
 				 
          <!-- /.tab-pane -->
@@ -480,7 +477,7 @@ label.star:before {
 	function getCourseByIds()
 	{
 		 //$('#courseCon').removeClass('hidden');
-		var $form =$("#attendance_form");
+		var $form =$("#feedback_form");
 		$.ajax({
 			type:'POST',
 			url:'<?php echo base_url();?>attendance/getCourseByIds',

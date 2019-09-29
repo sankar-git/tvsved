@@ -488,13 +488,16 @@ Class Attendance_model extends CI_Model
 		return $result;
 	}
 	function feedback_result_list(){
-		$this->db->select('*');
+		$this->db->select('campus_name,program_name,question,rate,message,batch_name,semester_name,degree_name,u.first_name as student_name,t.first_name as teacher_name');
 		$this->db->from('feedbacks a');
 		$this->db->join('manage_feedback f','a.feedback_id=f.id');
+		$this->db->join('campuses c','c.id=a.sender_campus');
+		$this->db->join('programs p','a.sender_program=p.id');
 		$this->db->join('degrees d','f.degree_id=d.id');
 		$this->db->join('semesters s','f.semester_id=s.id');
 		$this->db->join('batches b','f.batch_id=b.id');
 		$this->db->join('users u','a.sender_id=u.id');
+		$this->db->join('users t','a.sender_teacher=t.id');
 		$result	= $this->db->get()->result_array();
 		return $result;
 	}

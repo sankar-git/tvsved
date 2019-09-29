@@ -204,24 +204,29 @@ class Process extends CI_Controller {
 		
 		//print_r($_POST);
 		    $data['page_title']="Feedback";
-			$sessdata= $this->session->userdata('sms');
+			$data['sessdata'] = $sessdata= $this->session->userdata('sms');
 			$data['campuses'] = $this->Discipline_model->get_campus();
 			$data['degrees'] = $this->Discipline_model->get_degree();
             $data['semesters'] = $this->Generate_model->get_semester(); 
             $data['batches'] = $this->Discipline_model->get_batches(); 
-			
+			//p($sessdata); exit;
 			//print_r($data['feedbacks']);
+			$data['feedbacks_already_submitted'] = false;
 			if(!empty($sessdata)){
 				
-				$data['payments']=$this->Payment_model->get_mypayment_details($sessdata[0]->id);
+				//$data['payments']=$this->Payment_model->get_mypayment_details($sessdata[0]->id);
 				//p($data['payments']); exit;
 				$sessdata= $this->session->userdata('sms');
 				//$data['feedbacks'] = $this->Attendance_model->get_feedbacks(); 
 				if(isset($_POST) && count($_POST) != '0')
 				{
 					$checkfeedback = $this->Attendance_model->get_feedbacks_entered();
-					if(count($checkfeedback) == '0')
+					
+					if(count($checkfeedback) == '0'){
 						$data['feedbacks'] = $this->Attendance_model->get_feedbacks_list(); 
+					}else{
+						$data['feedbacks_already_submitted'] = true;
+					}
 					//print_r($data['feedbacks']);
 				}
 				if($sessdata[0]->role_id == 5){

@@ -869,7 +869,7 @@ function drawMultSeries() {
 		//print_r($data['doc']); exit;
 		 $str = '';
          foreach($data['teacher'] as $k=>$v){   
-          $str .= "<option value=".$v->id.">".$v->first_name.' '.$v->last_name."</option>";
+          $str .= "<option value=".$v->id.">".$v->first_name."</option>";
            }
 		   
            echo $str;

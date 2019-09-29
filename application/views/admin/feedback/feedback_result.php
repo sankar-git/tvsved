@@ -48,11 +48,14 @@
 								<thead>
 								<tr>
 								    <th>S.No.</th>
+									<th>Campus</th>
+									<th>Program</th>
 									<th>Degree</th>
 									<th>Semester</th>
 									<th>Batch</th>
 									<th>Question</th>
 									<th>Student</th>
+									<th>Teacher</th>
 									<th>Rate</th>
 									<th>Comments</th>
 									
@@ -61,11 +64,14 @@
 							<tbody id="tr_list">
 							<?php foreach($result as $key=>$val){?>
 									<tr><td><?php echo $key+1;?></td>
+									<td><?php echo $val['campus_name'];?></td>
+									<td><?php echo $val['program_name'];?></td>
 									<td><?php echo $val['degree_name'];?></td>
 									<td><?php echo $val['semester_name'];?></td>
 									<td><?php echo $val['batch_name'];?></td>
 									<td><?php echo $val['question'];?></td>
-									<td><?php echo $val['first_name'];?></td>
+									<td><?php echo $val['student_name'];?></td>
+									<td><?php echo $val['teacher_name'];?></td>
 									<td><?php echo $val['rate'];?></td>
 									<td><?php echo $val['message'];?></td>
 									

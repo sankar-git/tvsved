@@ -92,10 +92,12 @@ class Feedback extends CI_Controller {
 			 $data['teacher_id']=$teacher_id;
 			 $data['question']=$question;
 		    $data['page_title']="FeedBack Chart";
-			$data['degrees'] = $this->Discipline_model->get_degree();
-            $data['semesters'] = $this->Generate_model->get_semester(); 
-            $data['batches'] = $this->Discipline_model->get_batches(); 
+			//$data['degrees'] = $this->Discipline_model->get_degree();
+           // $data['semesters'] = $this->Generate_model->get_semester(); 
+           // $data['batches'] = $this->Discipline_model->get_batches(); 
 			$data['teachers'] = $this->Discipline_model->get_teacher();	
+			$data['campuses'] = $this->Discipline_model->get_campus();
+        $data['batches'] = $this->Discipline_model->get_batches();
 //p($data['teachers']);			
             if($degree_id>0 && $semester_id>0 && $batch_id>0  && $teacher_id>0  &&$question>0){
 				$result = $this->Attendance_model->feedback_result($degree_id,$semester_id,$batch_id,$teacher_id,$question);
