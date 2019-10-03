@@ -86,9 +86,14 @@ Class Gradechart_model extends CI_Model
 		    
 		    $this->db->where(array('sa.campus_id'=>$campus_id,'sa.degree_id'=>$degree_id,'sa.batch_id'=>$batch_id,'sa.semester_id'=>$semester_id,'sa.exam_type'=>$exam_type));$this->db->group_by('u.id');
 			if($degree_id == 1){
-			    $courseArr = explode("|",$course_id);
-                $courseidArr = explode("-",$courseArr[1]);
-                $this->db->where_in('c.id',$courseidArr);
+				if (strpos($course_id, '|') !== false) {
+					$courseArr = explode("|",$course_id);
+					$courseidArr = explode("-",$courseArr[1]);
+					$this->db->where_in('c.id',$courseidArr);
+				}else{
+					$this->db->where_in('c.id',$course_id);
+				}
+			    
             }else{
                 $this->db->where('c.id',$course_id);
             }

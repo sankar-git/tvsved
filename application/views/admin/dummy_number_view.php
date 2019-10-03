@@ -92,7 +92,7 @@
 					  <select name="exam_type" id="exam_type" class="form-control">
 						  <option value="">Select Type</option>
 						  <option value="1">Regular</option>						  
-						  <option value="2">Cap</option>						  
+						  <option value="2">CAP</option>						  
 					  </select>
 					</div>
 						<div class="form-group col-md-2">

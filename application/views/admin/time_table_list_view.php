@@ -143,7 +143,7 @@
 									<?php if(in_array($role_id,array(0,2,4,6,8,7))){?>
 									<td><?php echo ucfirst($vieww->first_name).' '.ucfirst($vieww->last_name);?></td>
 									<?php }?>
-                                    <td nowrap><?php if($vieww->exam_type == 1) echo "Regular"; else echo "Cap";?></td>
+                                    <td nowrap><?php if($vieww->exam_type == 1) echo "Regular"; else echo "CAP";?></td>
                                     <td nowrap><?php echo ucfirst(str_replace("_"," ",$vieww->examination));?></td>
 									<td><?php echo $vieww->room_name;?></td>
                                         <td><?php echo $vieww->exam_date;?></td>

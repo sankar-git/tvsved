@@ -34,7 +34,7 @@
                 </tr>
                 <tr>
                     <td align="left" style="vertical-align:top;font-weight:bold;">Examination</td>
-					<td align="left"  style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->semester_name.'-'; if($exam_type == 2) echo "Cap";else echo "Annual";?><!-- <?php if(empty($students_attendance[0]->course_subject_name)) echo $students_attendance[0]->course_code; else echo $students_attendance[0]->course_subject_name;?> (<?php echo $students_attendance[0]->theory_credit.'+'.$students_attendance[0]->practicle_credit;?>) --></td>
+					<td align="left"  style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->semester_name.'-'; if($exam_type == 2) echo "CAP";else echo "Annual";?><!-- <?php if(empty($students_attendance[0]->course_subject_name)) echo $students_attendance[0]->course_code; else echo $students_attendance[0]->course_subject_name;?> (<?php echo $students_attendance[0]->theory_credit.'+'.$students_attendance[0]->practicle_credit;?>) --></td>
 					
                     <td align="right"  style="vertical-align:top;font-weight:bold;">Month & Year</td>
 					<td align="left"  style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $month.' '.$year;?></td>

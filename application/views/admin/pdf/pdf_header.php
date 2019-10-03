@@ -87,7 +87,7 @@
                 </tr>
                 <tr>
 					<td width="15%" style="font-weight:bold;">Examination </td>
-                    <td>: <?php echo $semester_name; if($exam_type == 1) echo "-Annual";  if($exam_type == 2) echo "-Cap";?></td> 
+                    <td>: <?php echo $semester_name; if($exam_type == 1) echo "-Annual";  if($exam_type == 2) echo "-CAP";?></td> 
                     <td align="right" style="font-weight:bold;">Month & Year </td>
                     <td>: <?php  echo $month_year;?></td>
                 </tr>

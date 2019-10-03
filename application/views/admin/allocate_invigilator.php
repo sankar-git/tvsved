@@ -144,7 +144,7 @@
 									<td><?php echo $vieww->discipline_name;?></td>
 									<td><?php echo ucfirst($teacher_name);?></td>
 									<td><?php echo ucfirst($hall_superindent_name);?></td>
-                                    <td nowrap><?php if($vieww->exam_type == 1) echo "Regular"; else echo "Cap";?></td>
+                                    <td nowrap><?php if($vieww->exam_type == 1) echo "Regular"; else echo "CAP";?></td>
                                     <td nowrap><?php echo ucfirst(str_replace("_"," ",$vieww->examination));?></td>
                                     <td nowrap><?php echo $vieww->exam_date;?></td>
                                     <td nowrap><?php echo $vieww->slot_name;?></td>

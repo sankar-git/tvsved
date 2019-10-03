@@ -40,7 +40,7 @@
                 </tr>
                 <tr>
                 	<td align="left" width="22%" style="vertical-align:top;font-weight:bold;">Examination</td>
-					<td align="left" width="35%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->semester_name;  if($exam_type == 1) echo "-Annual"; if($exam_type == 2) echo "-Cap";?></td>
+					<td align="left" width="35%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->semester_name;  if($exam_type == 1) echo "-Annual"; if($exam_type == 2) echo "-CAP";?></td>
 					 <td align="left" width="8%" style="vertical-align:top;font-weight:bold;">Subject</td>
 					<td align="left" width="35%" style="vertical-align:top;">:&nbsp;&nbsp;<?php echo $students_attendance[0]->course_title;?></td>
                     

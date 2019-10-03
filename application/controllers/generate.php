@@ -296,6 +296,7 @@ class Generate extends CI_Controller {
 		$date_of_start=$this->input->post('date_of_start');
 		//$date_of_closure=$this->input->post('date_of_closure');
 		$student_id=$this->input->post('student_id');
+		$data['date_of_registration']=$date_of_registration=$this->input->post('date_of_registration');
 		$data['exam_type']=$exam_type=$this->input->post('exam_type');
 		$data['month']=$month=$this->input->post('month');
 	       $data['year']=$year=$this->input->post('year');
@@ -343,7 +344,7 @@ class Generate extends CI_Controller {
 				$batch_id=$this->input->post('batch_id');
 				$date_of_start=$this->input->post('date_of_start');
 				
-				//print_r($date_of_closure); exit;
+				//echo "<pre>";print_r($_POST); exit;
 				// $batchYear = $this->Generate_model->get_batch_and_year_name($date_of_closure); //getting batch and year
 				// print_r($batchYear->date_of_closure); exit;
 				 //$batch_year=$batchYear->date_of_closure;
@@ -360,7 +361,8 @@ class Generate extends CI_Controller {
 					 {
 						$subjectList = $this->Generate_model->get_student_assigned_subjects_bvsc($stuData->user_id,$semester_id,$exam_type,$batch_id,$degree_id);
 						//echo $this->db->last_query();exit;
-						// p($subjectList); 
+						 
+						     $list['student_id']  =$stuData->id;
 						     $list['first_name']  =$stuData->first_name;
 						     $list['last_name']  =$stuData->last_name;
 						     $list['user_unique_id']  =$stuData->user_unique_id;
@@ -1269,7 +1271,7 @@ class Generate extends CI_Controller {
 	    $send['semester_id']=$semester_id;
 	    $send['exam_type']=$exam_type;
 	    $studentList= $this->Generate_model->get_student_list_for_registration($send);
-		//echo $this->db->last_query();exit;
+		
 	  //print_r($studentList); exit;
 	
 		$trdata='';
@@ -1279,8 +1281,9 @@ class Generate extends CI_Controller {
 				
 				$i++;
 				$checked = 'checked';
+				if($students->batch_id == $batch_id) $type_student = "First Time";else $type_student = "Second Time";
 				$trdata.='<tr>
-				      <td ><input type="checkbox" class="checkbox"  id="select_all" name="student_id[]" value="'.$students->user_id.'"></td>
+				      <td ><input type="checkbox" class="checkbox"  id="select_all" name="student_id[]" value="'.$students->user_id.'"><input type="hidden" class=""  id="type_student_'.$students->user_id.'" name="'.$students->user_id.'" value="'.$type_student.'"></td>
 						<td>'.$i.'</td>
 						<td>'.$students->user_unique_id.'</td>
 						<td>'.$students->batch_name.'</td>

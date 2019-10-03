@@ -79,19 +79,13 @@
             <br />
             <table style="font-size:11px;"  width="100%">
                 <tr>
-                    <td width="20%" style="font-weight:bold;">Name of Student </td>
-                    <td>: <?php echo $first_name.' '.$last_name;?></td> 
-                     <td align="left" style="font-weight:bold;">I.D. No. </td>
-                    <td>: <?php echo $user_unique_id;?></td>
-                    <td align="right" style="font-weight:bold;">Date of Registration </td>
-                    <td>: <?php if(!empty($created_on)){ $dor = explode(" ", $created_on);  echo $dor[0]; }else{echo " - ";}?></td>
+                    <td width="50%" style="font-weight:bold;">Name of the Student&nbsp;: <?php echo $first_name.' '.$last_name;?></td>
+                     <td width="21%" align="left" style="font-weight:bold;">I.D. No.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?php echo $user_unique_id;?></td>
+                    <td width="29%" align="left" style="font-weight:bold;">Date of Registration&nbsp;:&nbsp;<?php if(!empty($date_of_registration)){ echo $date_of_registration; }else{echo " - ";}?></td>
                 </tr>
                 <tr>
-					<td width="20%" style="font-weight:bold;"><?php if($degree_id == 1){?>Professional Year<?php }else{ ?> Semester <?php } ?> </td>
-                    <td>: <?php  echo $semester_name; ?></td>
-                    <td align="left" style="font-weight:bold;">Class Batch </td>
-                    <td>: <?php  echo "A/B/C/D";?></td>
-                    <td align="right" style="font-weight:bold;">Year of Admission </td>
-                    <td>: <?php  echo $batch_name;?></td>
+					<td width="50%" style="font-weight:bold;"><?php if($degree_id == 1){?>Professional Year<?php }else{ ?> Semester <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?php  echo $semester_name; ?></td>
+                    <td width="21%" align="left" style="font-weight:bold;">Class Batch&nbsp;: <?php  echo "A/B/C/D";?></td>
+                    <td width="29%" align="left" style="font-weight:bold;">Year of Admission&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<?php  echo $batch_name;?></td>
                 </tr>
             </table>

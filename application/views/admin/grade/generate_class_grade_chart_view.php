@@ -125,7 +125,6 @@
 					<div class="form-group col-md-4">
 					 <label for="date_of_exam">Date of Exam</label>
 					  <input type="text" class="form-control" id="date_of_exam" name="date_of_exam" value="" placeholder="Enter Date Of Exam">
-					  
 					</div>
 			    </div>
 			   

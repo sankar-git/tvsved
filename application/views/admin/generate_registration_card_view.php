@@ -104,7 +104,7 @@ $this->load->view('admin/helper/header');?>
 					  <select name="exam_type" id="exam_type" class="form-control" onchange="getStudentList();">
 						  <option value="">Select Type</option>
 						  <option value="1">Regular</option>						  
-						  <option value="2">Cap</option>						  
+						  <option value="2">CAP</option>						  
 					  </select>
 					</div>
 					<!--<div class="form-group col-md-3">
@@ -120,7 +120,7 @@ $this->load->view('admin/helper/header');?>
 						
 					  </select>
 					</div>-->
-					<div class="form-group col-md-3">
+					<div class="form-group col-md-2">
 					  <label for="month">Month<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="month" id="month">
 					   
@@ -130,7 +130,7 @@ $this->load->view('admin/helper/header');?>
 						<?php }?>
 					  </select>
 					</div>
-					 <div class="form-group col-md-3">
+					 <div class="form-group col-md-2">
 					  <label for="year">Year<span style="color:red;font-weight: bold;">*</span></label>
 					   <select class="form-control" name="year" id="year">
 					   
@@ -140,6 +140,10 @@ $this->load->view('admin/helper/header');?>
 							<?php }?>
 						
 					  </select>
+					</div>
+					<div class="form-group col-md-2">
+					 <label for="date_of_registration">Date of Registration</label>
+					  <input type="text" class="form-control" id="date_of_registration" name="date_of_registration" value="" placeholder="Enter Date Of Registration">
 					</div>
 				</div>	
 			 </div>
@@ -208,6 +212,7 @@ $this->load->view('admin/helper/header');?>
 	  }
   $(document).ready(function() {
 		$("#start_date").datepicker({format: 'dd-mm-yyyy',autoclose: true});
+		$("#date_of_registration").datepicker({format: 'dd-mm-yyyy',autoclose: true});
 		$("#date_of_closure11").datepicker({format: 'dd-mm-yyyy',autoclose: true});
 		
 	});
