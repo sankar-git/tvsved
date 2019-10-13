@@ -59,10 +59,14 @@ class Attendance extends CI_Controller {
 		$degree_id  = $this->input->post('degree_id');
 		$semester_id  = $this->input->post('semester_id');
 		$sessdata= $this->session->userdata('sms');
+		
 		$userid = $sessdata[0]->id;
         $schedulerList=array();
+		$show_teacher = false;
+		if($sessdata[0]->role_id == 1)
+			$show_teacher = true;
 		if($campus_id>0 &&  $degree_id>0 &&  $section_id>0)
-		    $schedulerList = $this->Attendance_model->getScheduler($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$section_id);
+		    $schedulerList = $this->Attendance_model->getScheduler($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$section_id,$show_teacher);
 		echo json_encode($schedulerList);
 	}
 	function getTeacherSemesterbyDegree(){

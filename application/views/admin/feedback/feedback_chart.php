@@ -40,7 +40,7 @@
 
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" name="feedback_form" id="feedback_form"  id="attendance_form" method="post" enctype="multipart/form-data">
+            <form role="form" name="feedback_form" id="feedback_form"  id="attendance_form" action="<?php echo  base_url();?>feedback/chart" method="post" enctype="multipart/form-data">
             <div class="box-body">
 			    <div class="row">
 				 <div class="form-group col-md-3">
@@ -48,7 +48,7 @@
                             <select name="campus_id" id="campus_id" class="form-control" onchange="getProgramByCampusId(),getTeacher();">
                                 <option value="">--Select Campus--</option>
                                 <?php foreach($campuses as $campus){?>
-                                    <option value="<?php echo $campus->id; ?>"><?php echo $campus->campus_name; ?></option>
+                                    <option value="<?php echo $campus->id; ?>" <?php if($campus->id == @$campus_id){ ?> selected <?php }?>><?php echo $campus->campus_name; ?></option>
 
                                 <?php } ?>
                             </select>
@@ -57,10 +57,7 @@
                             <label for="program">Program<span style="color:red;font-weight: bold;">*</span></label>
                             <select name="program_id" id="program_id" class="form-control" onchange="getDegreebyProgram();">
                                 <option value="">--Select Program--</option>
-                                <?php //foreach($programs as $program){?>
-                                <!--<option value="<?php //echo $program->id; ?>"><?php //echo $program->program_name; ?></option>-->
-
-                                <?php //} ?>
+                               
                             </select>
                         </div>
 
@@ -68,27 +65,22 @@
 					  
 					  <input type="hidden" name="id" id="id" value="<?php echo @$feedbacks_result->id;?>" />
 					  <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
-					  <select class="form-control" name="degree_id" id="degree_id" onchange="getSemesterbyDegree(),getQuestions();" >
+					  <select class="form-control" name="degree_id" id="degree_id" onchange="getSemesterbyDegree();" >
 						  <option value="">--Select Degree--</option>
-						  <?php foreach($degrees as $degree){?>
-					  <option value="<?php echo $degree->id; ?>" <?php if($degree->id == @$degree_id){ ?> selected <?php }?> ><?php echo $degree->degree_name; ?></option>
-					 
-					  <?php } ?>
+						  
 						 
 					  </select>
 					</div>
 					<div class="form-group col-md-3">
 					  <label for="exampleInputEmail1">Semester<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="semester_id" id="semester_id" class="form-control" onchange="getQuestions();">
+					  <select name="semester_id" id="semester_id" class="form-control">
 						  <option value="">Select Semester</option>
-						  <?php foreach($semesters as $semester){ ?>
-						  <option value="<?php echo $semester->id;?>" <?php  if($semester->id == @$semester_id){ ?> selected <?php }?>><?php echo $semester->semester_name;?></option>
-						  <?php } ?>
+						  
 					  </select>
 					</div>
 					<div class="form-group col-md-3">
 					  <label for="batch">Batch<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="batch_id" id="batch_id" class="form-control" onchange="getQuestions();">
+					  <select name="batch_id" id="batch_id" class="form-control" >
 						  <option value="">Select Batch</option>
 						  <?php foreach($batches as $batch){ ?>
 						  <option value="<?php echo $batch->id;?>" <?php if($batch->id == @$batch_id){ ?> selected <?php }?>><?php echo $batch->batch_name;?></option>
@@ -97,24 +89,35 @@
 					</div>
 					<div class="form-group col-md-3">
 					  <label for="batch">Teacher<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="teacher_id" id="teacher_id" class="form-control" onchange="getQuestions();">
+					  <select name="teacher_id" id="teacher_id" class="form-control" >
 						  <option value="">Select Teacher</option>
 						  
 					  </select>
 					</div>
-					
-					<div class="form-group col-md-3">
+					<div class="form-group col-md-6">
+					<div class="form-group col-md-2"><label for="show_result">&nbsp;</label><br/>
+				   <input  type="submit" name="show_result" id="show_result" class="btn btn-success" value="Show" /></div>
+				   <?php if(isset($result) && !empty($result)){ ?>
+					&nbsp;&nbsp;
+					<div class="form-group col-md-2"><label for="export_csv">&nbsp;</label><br/>
+				   <input  type="submit" name="export_csv" id="export_csv" class="btn btn-success" value="Export CSV" />
+				 </div>
+					<?php } ?>
+				  </div>
+					<!--<div class="form-group col-md-3">
 					  <label for="batch">Question<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="question" id="question" class="form-control" onchange="getchartByQuestionid();">
 						  <option value="">Select Question</option>
 						 
 					  </select>
-					</div>
+					</div>-->
+					
 					
 				</div>
 		</div>
        <div id="piechart" style="width: 900px; height: 500px;"></div>
-			  
+			  <div id="columnchart_material" style="margin-left:50px;width: 950px; height: 700px;"></div>
+
             </form>
           </div>
 	   <!-- ./col -->
@@ -126,7 +129,9 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+  <?php if(isset($result) && !empty($result)){ ?>
    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <?php } ?>
 <script type="text/javascript">
 	function getProgramByCampusId()
     {
@@ -140,6 +145,10 @@
                 var  option_brand = '<option value="">--Select Program--</option>';
                 $('#program_id').empty();
                 $("#program_id").append(option_brand+data);
+				<?php if(@$program_id>0){?>
+				$("#program_id").val(<?php echo @$program_id;?>);
+				getDegreebyProgram();
+				<?php } ?>
             }
         });
     }
@@ -155,6 +164,9 @@
                 var  option_brand = '<option value="">--Select Teacher--</option>';
                 $('#teacher_id').empty();
                 $("#teacher_id").append(option_brand+data);
+				<?php if(@$teacher_id>0){?>
+				$("#teacher_id").val(<?php echo @$teacher_id;?>);
+				<?php } ?>
             }
         });
     }
@@ -171,6 +183,10 @@
 				var  option_brand = '<option value="">--Select Degree--</option>';
                 $('#degree_id').empty();
                 $("#degree_id").append(option_brand+data);
+				<?php if(@$degree_id>0){?>
+				$("#degree_id").val(<?php echo @$degree_id;?>);
+				getSemesterbyDegree();
+				<?php } ?>
                 
             }
         });
@@ -188,54 +204,56 @@
                 var  option_brand = '<option value="">--Select Semester--</option>';
                 $('#semester_id').empty();
                 $("#semester_id").append(option_brand+data);
-                
+                <?php if(@$semester_id>0){?>
+				$("#semester_id").val(<?php echo @$semester_id;?>);
+				<?php } ?>
             }
         });
     }
-		function getchartByQuestionid(){
-			if($('#question').val()>0){
-			location.href='<?php echo base_url();?>feedback/chart/'+$('#degree_id').val()+'/'+$('#semester_id').val()+'/'+$('#batch_id').val()+'/'+$('#teacher_id').val()+'/'+$('#question').val();
-			}
-			return false;
+		//function getchartByQuestionid(){
+			//location.href='<?php echo base_url();?>feedback/chart/'+$('#campus_id').val()+'/'+$('#program_id').val()+'/'+$('#degree_id').val()+'/'+$('#semester_id').val()+'/'+$('#batch_id').val()+'/'+$('#teacher_id').val()+'/'+Math.floor((Math.random() * 10) + 1);;
+			//return false;
 			
-		}
-		function getQuestions(){
-			var degree_id =$('#degree_id').val();
-			var semester_id =$('#semester_id').val();
-			var batch_id =$('#batch_id').val();
-			var teacher_id =$('#teacher_id').val();
-			 // alert(campus_id); 
-			 if(degree_id>0 && semester_id>0 && batch_id>0 && teacher_id>0){
-				$.ajax({
-					type:'POST',
-					url:'<?php echo base_url();?>feedback/getQuestions',
-					data: {'degree_id':degree_id,'semester_id':semester_id,'batch_id':batch_id},
-					success: function(data){
-						//alert(data); 
-					var  option_brand = '<option value="">--Select Question--</option>';
-					$('#question').empty();
-					$("#question").append(option_brand+data);
-					$("#question").val(<?php echo $question;?>);
-					}
-				});	
-			 }else{
-				 $('#question').empty();
-				 var  option_brand = '<option value="">--Select Question--</option>';
-				 $("#question").append(option_brand);
-				 
-			 }
-		}
+		//}
+		
 		$().ready(function(){
-			if($('#batch_id').val()>0){
-				$('#batch_id').trigger('change');
-				
-			}
+			<?php if(@$campus_id>0){?>
+					getProgramByCampusId();
+					getTeacher();
+			<?php } ?>
+			
 			
 		});
 		<?php if(isset($result) && !empty($result)){ ?>
 		 google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
+	
+	 google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawBarChart);
+/*[
+          ['Student', 'How was your semester exam Rate it yourself', 'How was the question paper Rate it from 1 to 5', 'Delivering subject(objective and coverage)'],
+          ['AASHIKA K', 4, 5, 3],
+          ['ABHOORVAN A', 4, 5, 3],
+        ]
+		*/
+      function drawBarChart() {
+        var data = google.visualization.arrayToDataTable(<?php if(isset($bar_result) && !empty($bar_result)){ echo json_encode($bar_result, JSON_NUMERIC_CHECK);}else{ echo "[[]]";}?>);
 
+        var options = {
+          chart: {
+            title: 'Overall Feedback',
+			animation:{
+			duration: 5000,
+			easing: 'out'
+		  }
+		   
+          }
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      }
       function drawChart() {
 
         var data = google.visualization.arrayToDataTable(<?php if(isset($result) && !empty($result)){ echo json_encode($result, JSON_NUMERIC_CHECK);}else{ echo "[[]]";}?>);
@@ -243,10 +261,10 @@
         var options = {
           title: 'Feedback Result',
 		  animation:{
-			duration: 1000,
+			duration: 5000,
 			easing: 'out',
 		  },
-
+			colors: ['#DC3912', '#E67300', '#AAAA11', '#329262', '#109618']
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));

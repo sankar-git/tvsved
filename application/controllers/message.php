@@ -88,6 +88,8 @@ class Message extends CI_Controller {
 	function sendSms()
 	{
 		$data['page_title']="Send Message";
+		$data['campuses'] = $this->Discipline_model->get_campus();
+			$data['batches'] = $this->Discipline_model->get_batches();
         $data['roles']     =     $this->Message_model->get_user_roles();
 		$this->load->view('admin/message/add_message_view',$data);
 	}
@@ -164,39 +166,25 @@ class Message extends CI_Controller {
     }
 	function getUsers()
 	{
- 		$userType=$this->input->post('userType');
+ 		$userType=$this->input->post('user_type');
+ 		$campus_id=$this->input->post('campus_id');
+ 		$program_id=$this->input->post('program_id');
+		$batch_id=$this->input->post('batch_id');
+ 		$degree_id=$this->input->post('degree_id');
+ 		$semester_id=$this->input->post('semester_id');
+ 		
 		//p($userType); exit;
-		$roles=explode(',',$userType);
+		//$roles=explode(',',$userType);
 		//p($roles); exit;
-		 $data['activeusers']=$this->Message_model->get_type_user($roles);// sending type roles 
-         
-		$otpGrpArr=array();
-		$dataval='';
-		foreach($roles as $role)
-		{
-			$dataVal=$this->Message_model->get_user_role_name($role);
-		    //p($dataVal->role_name); exit;	
-			array_push($otpGrpArr,$dataVal->id);
-		}
-		//p($otpGrpArr); exit;
-		$str = '';
-		$optname='';
-		foreach($otpGrpArr as $row){
-			if($row=='1'){$optname='Student';}
-			if($row=='2'){$optname='Teacher';}
-			if($row=='3'){$optname='User';}
-			if($row=='4'){$optname='Subadmin';}
-			if($row=='7'){$optname='Faculty Admin(HOD)';}
-			if($row=='8'){$optname='Junior Admin';}
-			$str .= '<optgroup label="'.$optname.'">';		
+		 $data['activeusers']=$this->Message_model->get_type_user($userType,$campus_id,$program_id,$batch_id,$degree_id,$semester_id);// sending type roles 
+         //echo $this->db->last_query();
+		$str='';
+		
+
 		foreach($data['activeusers'] as $k=>$v){ 
-				    if($row==$v->role_id){
-					$str .= '<option value="'.$v->id.'">"'.$v->first_name.'"</option>';
-					}
-					
+			$str .= '<option value="'.$v->id.'">'.$v->first_name.'</option>';
 			} 
-		}
-	  echo $str .= '</optgroup>';
+	  echo $str;
 	}
 	function getUsersold()
 	{
@@ -213,8 +201,9 @@ class Message extends CI_Controller {
 	
 	function listMessages()
 	{
+		$this->load->model('Payment_model');
 		$data['page_title']="Sended Messages";
-		$data['sended_message']=$this->Message_model->get_sended_message();
+		$data['sended_message']=$this->Payment_model->get_sms_history();
 		$this->load->view('admin/message/sended_message_list',$data);
 	}
 	function deleteMessage($id)

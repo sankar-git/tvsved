@@ -50,22 +50,24 @@
 									<th>User Name</th>
 									<th>Message</th>
 									<th>Mobile No</th>
-									<th>Send By</th>
-									<th>Send Date</th>
+									
+									<th>Response</th>
+									
+									<th>Sent Date</th>
 									<!--<th width="100px">Action</th>-->
 									
 								</tr>
 							</thead>
 									<tbody>
 								
-									<?php $i=0; foreach ($sended_message as $messages): $i++;?>
+									<?php $i=0; foreach ($sended_message as $payment): $i++;?>
 									<tr>
 									<td><?php echo $i; ?></td>
-									<td><?php echo $messages->name;?></td>
-									<td><?php echo $messages->message;?></td>
-									<td><?php echo $messages->mobile;?></td>
-									<td><?php echo $messages->sender_name;?></td>
-									<td><?php echo $messages->created_on;?></td>
+									<td><?php if($payment->user_id == 0 || $payment->user_id == '') echo "Admin"; elseif(!empty($payment->first_name)) echo $payment->first_name;elseif(!empty($payment->username)) echo $payment->username;?></td>
+									<td><?php echo urldecode($payment->message);?></td>
+									<td><?php echo $payment->phone;?></td>
+									<td><?php echo $payment->responseCode;?></td>
+									<td nowrap><?php echo $payment->sent_date;?></td>
 									
 								
 									<!--<td>

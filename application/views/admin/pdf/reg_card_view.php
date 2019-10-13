@@ -7,12 +7,12 @@
                     <th align="center" style=" font-size:13px;">Course Title</th>
                     <th align="center" style=" font-size:13px;">Credit<br/>Hours</th>
                     <th align="center" style=" font-size:13px;">Initial of<br/>Teacher</th>
-                    <th align="center" style=" font-size:13px;">Remarks</th>
+                    <th align="center" style=" font-size:13px;">Remarks<sup>*</sup></th>
                 </tr>
                 <tbody>
                     <?php $i=1;foreach($regdata['subjectList'] as $subjects){?>
                     <tr>
-                    <td align="center" style=" font-size:13px;"><?php echo $i; ?></td>
+                    <td align="center" style=" font-size:13px;height:35px;"><?php echo $i; ?></td>
                     <td align="left" style=" font-size:13px;padding-left:2px;"><?php 
                     $crs_cod = explode("-",$subjects['course_code']);
                     $cod = $crs_cod[0];
@@ -29,22 +29,16 @@
                     <td align="center" width="20%" style=" font-size:13px;"></td>
                     <td align="center" style=" font-size:13px;"><?php echo $this->input->post($regdata['student_id']);?></td>
                     </tr>
-                    <?php $i++; } $rem_cnt = 8-count($regdata['subjectList']); for($j=0;$j<$rem_cnt;$j++){?>
-						 <tr> <td align="center" style=" font-size:13px;"><?php echo $i; ?></td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td></tr>
-					<?php $i++; } ?>
+                    <?php $i++; } ?>
                 </tbody>
             </table><p style=" font-size:12px;">*&nbsp;Whether taking course for the first time or repeating the course</p> <br /><br /><br /><br />
         <div>
             <table width="100%">
                         <tr style="font-size:10px; font-weight:bold;">
-                            <td width="20%" align="center"><div>Signature of<br />Student</div></td>
-                            <td width="20%" align="center"><div>Student's Counsellor<br />With Name and Designation </div></td>
-                            <td width="20%" align="center"><div>Dean </div></td>
-                            <td width="20%" align="center"><div>Registrar</div></td>
+                            <td width="20%" align="center"><div><b>Signature of<br />Student</b></div></td>
+                            <td width="20%" align="center"><div><b>Student's Counsellor<br />with Name and Designation</b></div></td>
+                            <td width="20%" align="center"><div><b>Dean</b></div></td>
+                            <td width="20%" align="center"><div><b>Registrar</b></div></td>
                         </tr>
                     </table>
         </div>

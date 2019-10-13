@@ -118,7 +118,7 @@ Class Attendance_model extends CI_Model
 		$this->db->join('users i','i.id=a.teacher_id','LEFT');
 		return $this->db->get()->result();
 	}
-	function getScheduler($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$section_id){
+	function getScheduler($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$section_id,$show_teacher = false){
         if($degree_id == 1)
 		    $this->db->select("DATE_FORMAT(now(), '%Y-%m-%d') as date,course_id as id,day as row, concat(`from`,':00') as start, concat(`to`,':00') as end,course_title as subject",false);
         else
@@ -141,21 +141,56 @@ Class Attendance_model extends CI_Model
         if($section_id>0)
 		    $this->db->where('attendance_time_table.section_id',$section_id);
 		$result = $this->db->get()->result();
+		if($show_teacher==true){
+			$this->db->select('course_id,teacher_id,b.first_name');
+			$this->db->from('attendance_course_assigned_teacher as a');
+			$this->db->join('users as b','a.teacher_id=b.id');
+			if($campus_id>0)
+				$this->db->where('a.campus_id',$campus_id);
+			if($program_id>0)
+				$this->db->where('a.program_id',$program_id);
+			if($degree_id>0)
+				$this->db->where('a.degree_id',$degree_id);
+			if($batch_id>0)
+				$this->db->where('a.batch_id',$batch_id);
+			if($semester_id>0)
+				$this->db->where('a.semester_id',$semester_id);
+			if($discipline_id>0)
+				$this->db->where('a.discipline_id',$discipline_id);
+			if($section_id>0)
+				$this->db->where('a.section_id',$section_id);
+			$teacherresult = $this->db->get()->result();
+			//p($teacherresult);exit;
+		}
         if($degree_id == 1) {
             foreach ($result as $key=>$res) {
+				$teacher_name = '';
+				if($show_teacher==true){
+					foreach($teacherresult  as $key1=>$resnew){
+						if($resnew->course_id == $res->id)
+							$teacher_name.= $resnew->first_name .',';
+					}
+					$teacher_name = rtrim($teacher_name,',');
+				}
                 $course_idArr = explode("|",$res->id);
                 if($course_idArr[0] == 22) {
                     $this->db->select('GROUP_CONCAT(course_code) as course_subject_title');
                     $this->db->from('courses');
                     $this->db->where_in('id', explode("-",$course_idArr[1]));
                     $sub_res=$this->db->get()->result_array();
-                    $result[$key]->subject=$sub_res[0]['course_subject_title'];
+					$course_title = $sub_res[0]['course_subject_title'];
+					if(!empty($teacher_name))
+						$course_title = $course_title."<br/><span style='font-size:9px;color:#000'>($teacher_name)</span>";
+                    $result[$key]->subject=$course_title;
                 }else{
                     $this->db->select('course_subject_title');
                     $this->db->from('course_subject_groups');
                     $this->db->where('id', $course_idArr[0]);
                     $sub_res=$this->db->get()->result_array();
-                    $result[$key]->subject=$sub_res[0]['course_subject_title'];
+					$course_title = $sub_res[0]['course_subject_title'];
+					if(!empty($teacher_name))
+						$course_title = $course_title."<br/><span style='font-size:9px;color:#000'>($teacher_name)</span>";
+                    $result[$key]->subject=$course_title;
                 }
 
             }
@@ -487,8 +522,8 @@ Class Attendance_model extends CI_Model
 		$result	= $this->db->get()->result_array();
 		return $result;
 	}
-	function feedback_result_list(){
-		$this->db->select('campus_name,program_name,question,rate,message,batch_name,semester_name,degree_name,u.first_name as student_name,t.first_name as teacher_name');
+	function feedback_result_list_csv($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$teacher_id){
+		$this->db->select('campus_name,program_name,degree_name,semester_name,batch_name,question,u.first_name as student_name,t.first_name as teacher_name,rate,message');
 		$this->db->from('feedbacks a');
 		$this->db->join('manage_feedback f','a.feedback_id=f.id');
 		$this->db->join('campuses c','c.id=a.sender_campus');
@@ -502,7 +537,24 @@ Class Attendance_model extends CI_Model
 		return $result;
 	}
 	
-	function feedback_result($degree_id='',$semester_id='',$batch_id='',$teacher_id='',$question=''){
+	function feedback_result_list($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$teacher_id){
+		$this->db->select('campus_name,program_name,question,rate,message,batch_name,semester_name,degree_name,u.first_name as student_name,t.first_name as teacher_name');
+		$this->db->from('feedbacks a');
+		$this->db->join('manage_feedback f','a.feedback_id=f.id');
+		$this->db->join('campuses c','c.id=a.sender_campus');
+		$this->db->join('programs p','a.sender_program=p.id');
+		$this->db->join('degrees d','f.degree_id=d.id');
+		$this->db->join('semesters s','f.semester_id=s.id');
+		$this->db->join('batches b','f.batch_id=b.id');
+		$this->db->join('users u','a.sender_id=u.id');
+		$this->db->join('users t','a.sender_teacher=t.id');
+		if($degree_id>0 && $semester_id>0 && $batch_id>0  && $teacher_id>0  && $campus_id>0  && $program_id>0)
+			$this->db->where(array('a.sender_campus'=>$campus_id,'a.sender_program'=>$program_id,'a.sender_degree'=>$degree_id,'a.sender_semester'=>$semester_id,'a.sender_batch'=>$batch_id,'a.sender_teacher'=>$teacher_id));
+		$result	= $this->db->get()->result_array();
+		return $result;
+	}
+	
+	function feedback_result($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$teacher_id){
 		$this->db->select('a.rate,count(a.rate) counts');
 		$this->db->from('feedbacks a');
 		//$this->db->join('manage_feedback f','a.feedback_id=f.id');
@@ -510,11 +562,22 @@ Class Attendance_model extends CI_Model
 		//$this->db->join('semesters s','f.semester_id=s.id');
 		//$this->db->join('batches b','f.batch_id=b.id');
 		//$this->db->join('users u','a.sender_id=u.id');
-		if($degree_id>0 && $semester_id>0 && $batch_id>0  && $teacher_id>0  &&$question>0)
-			$this->db->where(array('a.sender_degree'=>$degree_id,'a.sender_semester'=>$semester_id,'a.sender_batch'=>$batch_id,'a.sender_teacher'=>$teacher_id,'a.feedback_id'=>$question));
+		if($degree_id>0 && $semester_id>0 && $batch_id>0  && $teacher_id>0  && $campus_id>0  && $program_id>0)
+			$this->db->where(array('a.sender_campus'=>$campus_id,'a.sender_program'=>$program_id,'a.sender_degree'=>$degree_id,'a.sender_semester'=>$semester_id,'a.sender_batch'=>$batch_id,'a.sender_teacher'=>$teacher_id));
 			$this->db->group_by('a.rate');
 		$result	= $this->db->get()->result();
-		//echo $this->db->last_query();
+		//echo $this->db->last_query();exit;
+		return $result;
+	}
+	function feedback_result_bar($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$teacher_id){
+		$this->db->select('sum(a.rate)/count(a.rate) as average,sum(a.rate) as total,count(a.rate) as counts,b.question,b.id,c.first_name as teacher');
+		$this->db->from('feedbacks a');
+		$this->db->join('manage_feedback b','a.feedback_id=b.id');
+		$this->db->join('users c','a.sender_teacher=c.id');
+		if($degree_id>0 && $semester_id>0 && $batch_id>0  && $teacher_id>0  && $campus_id>0  && $program_id>0)
+			$this->db->where(array('a.sender_campus'=>$campus_id,'a.sender_program'=>$program_id,'a.sender_degree'=>$degree_id,'a.sender_semester'=>$semester_id,'a.sender_batch'=>$batch_id,'a.sender_teacher'=>$teacher_id));
+		$this->db->group_by('a.feedback_id');
+		$result	= $this->db->get()->result();
 		return $result;
 	}
 	function changefeedback($id,$status){

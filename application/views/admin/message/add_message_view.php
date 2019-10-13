@@ -44,31 +44,67 @@
               <h3 class="box-title" style="color:green"><?php echo $this->session->flashdata('message'); ?></h3>   
             </div>
              <!-- /.box-header -->
-            <!-- form start -->
-            <form role="form" name="batch_form" id="batch_form" method="post" action="<?php echo base_url();?>message/sendMessage" enctype="multipart/form-data">
-              <div class="box-body">
+			 <form role="form" name="batch_form" id="batch_form"  method="post" action="<?php echo base_url();?>message/sendMessage" enctype="multipart/form-data">
+            <div class="box-body">
 			    <div class="row">
-				    <div class="form-group col-md-3">
+				<div class="form-group col-md-3">
 					  <label for="user_type">User Type<span style="color:red;font-weight: bold;">*</span></label>
-					  
-					   <?php foreach($roles as $role){?>
-					    <input type="checkbox"  class="chk" id="user_type" name="user_type[]" value="<?php echo $role->id;?>" onclick="getValueUsingClass();"><?php echo $role->role_name;?><br />
-					   <?php }?>
-						
+					  <select name="user_type" id="user_type" class="form-control"  >
+						  <option value="">User Type</option>
+						  <?php foreach($roles as $role){?>
+						  <option value="<?php echo $role->id;?>"><?php echo $role->role_name;?></option>
+						  <?php } ?>
+					  </select>
 					</div>
+				 <div class="form-group col-md-3">
+                            <label for="campus">Campus<span style="color:red;font-weight: bold;">*</span></label>
+                            <select name="campus_id" id="campus_id" class="form-control" onchange="getProgramByCampusId(),getTeacher();">
+                                <option value="">--Select Campus--</option>
+                                <?php foreach($campuses as $campus){?>
+                                    <option value="<?php echo $campus->id; ?>" <?php if($campus->id == @$campus_id){ ?> selected <?php }?>><?php echo $campus->campus_name; ?></option>
+
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="program">Program<span style="color:red;font-weight: bold;">*</span></label>
+                            <select name="program_id" id="program_id" class="form-control" onchange="getDegreebyProgram();">
+                                <option value="">--Select Program--</option>
+                               
+                            </select>
+                        </div>
+
+				    <div class="form-group col-md-3">
+					  
+					  <input type="hidden" name="id" id="id" value="<?php echo @$feedbacks_result->id;?>" />
+					  <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
+					  <select class="form-control" name="degree_id" id="degree_id" onchange="getSemesterbyDegree();" >
+						  <option value="">--Select Degree--</option>
+						  
+						 
+					  </select>
+					</div>
+					<div class="form-group col-md-3">
+					  <label for="exampleInputEmail1">Semester<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="semester_id" id="semester_id" class="form-control">
+						  <option value="">Select Semester</option>
+						  
+					  </select>
+					</div>
+					<div class="form-group col-md-3">
+					  <label for="batch">Batch<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="batch_id" id="batch_id" class="form-control" onchange="getUsers();" >
+						  <option value="">Select Batch</option>
+						  <?php foreach($batches as $batch){ ?>
+						  <option value="<?php echo $batch->id;?>" <?php if($batch->id == @$batch_id){ ?> selected <?php }?>><?php echo $batch->batch_name;?></option>
+						  <?php } ?>
+					  </select>
+					</div>
+					
 					<div class="form-group col-md-3">
 					  <label for="degree_code">User<span style="color:red;font-weight: bold;">*</span></label>
 					 <select  class="form-control" name="userlist[]" id="userlist" multiple="multiple">
-						<!--<optgroup label="Group A">
-							<option value="1">Radio A1</option>
-							<option value="2">Radio A2</option>
-							<option value="3">Radio A3</option>            
-						</optgroup>
-						<optgroup label="Group B">
-							<option value="4">Radio B1</option>
-							<option value="5">Radio B2</option>
-							<option value="6">Radio B3</option>   
-						</optgroup>-->
+						
 					 </select>
 					 
 					</div>
@@ -76,19 +112,27 @@
 					  <label for="degree_name">Message<span style="color:red;font-weight: bold;">*</span></label>
 					  <textarea type="text" class="form-control" maxlength="160" id="message" name="message" placeholder="Enter Message"></textarea>
 					</div>
+					<div class="form-group col-md-6">
 					
-               </div>
-			 </div>
-              <!-- /.box-body -->
-
-              <div class="box-footer">
-                <button type="submit" class="btn btn-success">Send</button>
+				  <button type="submit" class="btn btn-success">Send</button>
 				 <button type="reset" class="btn btn-danger">Reset</button>
-				  <div style="float:right;">
-				  <!--<a class="btn btn-primary" href="<?php echo site_url('batch/listBatch'); ?>"><i class="fa fa-arrow-left"></i> Back</a>-->
+				  
+				  </div>
+					<!--<div class="form-group col-md-3">
+					  <label for="batch">Question<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="question" id="question" class="form-control" onchange="getchartByQuestionid();">
+						  <option value="">Select Question</option>
+						 
+					  </select>
+					</div>-->
+					
+					
 				</div>
-              </div>
+		</div>
+       
+
             </form>
+           
           </div>
 	   <!-- ./col -->
       </div>
@@ -100,6 +144,92 @@
   </div>
   <!-- /.content-wrapper -->
   <script type="text/javascript">
+  function getProgramByCampusId()
+    {
+        var campus_id =$('#campus_id').val();
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>course/getProgramByCampusId',
+            data: {'campus_id':campus_id},
+            success: function(data){
+
+                var  option_brand = '<option value="">--Select Program--</option>';
+                $('#program_id').empty();
+                $("#program_id").append(option_brand+data);
+				<?php if(@$program_id>0){?>
+				$("#program_id").val(<?php echo @$program_id;?>);
+				getDegreebyProgram();
+				<?php } ?>
+            }
+        });
+    }
+	function getTeacher()
+    {
+        var campus_id =$('#campus_id').val();
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>attendance/get_teacher',
+            data: {'campus_id':campus_id},
+            success: function(data){
+
+                var  option_brand = '<option value="">--Select Teacher--</option>';
+                $('#teacher_id').empty();
+                $("#teacher_id").append(option_brand+data);
+				<?php if(@$teacher_id>0){?>
+				$("#teacher_id").val(<?php echo @$teacher_id;?>);
+				<?php } ?>
+            }
+        });
+    }
+    function getDegreebyProgram()
+    {
+        var program_id =$('#program_id').val();
+        var campus_id =$('#campus_id').val();
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>course/getDegreebyProgram',
+            data: {'program_id':program_id,'campus_id':campus_id},
+            success: function(data){
+                //alert(data);
+				var  option_brand = '<option value="">--Select Degree--</option>';
+                $('#degree_id').empty();
+                $("#degree_id").append(option_brand+data);
+				<?php if(@$degree_id>0){?>
+				$("#degree_id").val(<?php echo @$degree_id;?>);
+				getSemesterbyDegree();
+				<?php } ?>
+                
+            }
+        });
+    }
+    function getSemesterbyDegree(){
+        var degree_id =$('#degree_id').val().toString();
+        //getDisciplineByDegreeId();
+        //alert(degree_id);
+        $.ajax({
+            type:'POST',
+            url:'<?php echo base_url();?>generate/getSemesterbyDegree',
+            data: {'degree_id':degree_id},
+            success: function(data){
+                //alert(data);
+                var  option_brand = '<option value="">--Select Semester--</option>';
+                $('#semester_id').empty();
+                $("#semester_id").append(option_brand+data);
+                <?php if(@$semester_id>0){?>
+				$("#semester_id").val(<?php echo @$semester_id;?>);
+				<?php } ?>
+            }
+        });
+    }
+
+		$().ready(function(){
+			<?php if(@$campus_id>0){?>
+					getProgramByCampusId();
+					getTeacher();
+			<?php } ?>
+			
+			
+		});
    function getValueUsingClass(){
 	/* declare an checkbox array */
 	var chkArray = [];
@@ -124,14 +254,11 @@
 			success: function(data){
 			//alert(data); return false;
 			$("#userlist").empty();
-			$("#userlist").attr("multiple","multiple");
-			$("#userlist").multiselect('destroy');
+			//$("#userlist").attr("multiple","multiple");
+			//$("#userlist").multiselect('destroy');
 			$("#userlist").append(data);
-			$('#userlist').multiselect({ 
-			// enableClickableOptGroups: true, 
-			enableFiltering: true,  
-			includeSelectAllOption: true,   
-			}); 
+			
+			$('#userlist').multiselect('rebuild');
 			 }
 		});
 }
@@ -140,28 +267,30 @@
 	{
 		
 		//alert(selectedGroups); return false;
-		var userType = $(".user_type").val();
+		var userType = $("#user_type").val();
 		//alert(userType); return false;
 		$.ajax({
 			type:'POST',
 			url:'<?php echo base_url();?>message/getUsers',
-			data: {'userType':userType},
+			data: $('#batch_form').serialize(),
 			success: function(data){
 			 //alert(data); return false;
 			$("#userlist").empty();
-			$("#userlist").attr("multiple","multiple");
-			$("#userlist").multiselect('destroy');
+			//$("#userlist").attr("multiple","multiple");
+			//$("#userlist").multiselect('destroy');
 			$("#userlist").append(data);
-			$('#userlist').multiselect({ 
-			// enableClickableOptGroups: true, 
-			enableFiltering: true,  
-			includeSelectAllOption: true,   
-			}); 
+ $('#userlist').multiselect('rebuild');
 			 }
 		});
 		
 	}
 	$(document).ready(function() {
+		$('#userlist').multiselect({
+			includeSelectAllOption: true,
+			enableFiltering: true,
+			buttonWidth: '250px',
+			maxHeight: 350
+		});
 		$("#sales_dob").datepicker({format: 'dd-mm-yyyy',autoclose: true});
 		
 	});
@@ -187,19 +316,6 @@
 	});	
 	
 	</script>	
-	
-	 <script type="text/javascript">
-        $(function () {
-            $('#userlist').multiselect({
-                includeSelectAllOption: true
-            });
-            $('#btnSelected').click(function () {
-                var selected = $("#userlist option:selected");
-              
-               
-            });
-        });
-    </script>
   
   
   
