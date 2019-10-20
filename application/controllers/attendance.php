@@ -178,6 +178,7 @@ class Attendance extends CI_Controller {
 		if(empty($sessdata)){
 		redirect('authenticate', 'refresh');
 		}
+		$data['role_id']=$role_id = $sessdata[0]->role_id;
 		$data['page_title']="Student Wise Attendance Report";
 		$data['campuses'] = $this->Discipline_model->get_campus(); 
 		//$data['list'] =='';
@@ -212,6 +213,16 @@ class Attendance extends CI_Controller {
 	     $data['batch_id'] = $this->input->post('batch_id');
 		$holidayList = $this->Attendance_model->get_holidays($data);//echo $this->db->last_query();
 		echo json_encode($holidayList);
+	}
+	function publishAttendance(){
+		 $campus_id = $this->input->post('campus_id');
+		 $program_id = $this->input->post('program_id');
+		 $degree_id = $this->input->post('degree_id');
+	     $semester_id = $this->input->post('semester_id');
+	     $batch_id = $this->input->post('batch_id');
+	     $discipline_id = $this->input->post('discipline_id');
+		 $student_id = $this->input->post('student_id');
+		 $this->Attendance_model->publishAttendance($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$discipline_id,$student_id);
 	}
 	function getStudentAttendance(){
 		$degree_id  = $this->input->post('degree_id');

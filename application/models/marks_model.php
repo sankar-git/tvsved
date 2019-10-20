@@ -25,10 +25,14 @@ Class Marks_model extends CI_Model
 		$result	= $this->db->get()->result();
 		return $result;
 	 }
-	 function get_student_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id){
+	 function get_student_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$revaluation_mark=''){
 		 $this->db->select("u.first_name,u.id,u.user_unique_id");
 		$this->db->from('student_assigned_courses c');
         $this->db->join('users  u','u.id = c.student_id');
+		if($revaluation_mark>0){
+			$this->db->join('students_ug_marks  m',"u.id = m.student_id and m.program_id=$program_id and m.semester_id=$semester_id and m.degree_id=$degree_id and m.semester_id=$semester_id");
+			$this->db->where('m.revaluation_status',1);
+		}
 		$this->db->where(array('c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,'c.semester_id'=>$semester_id));
 		$this->db->group_by('u.id');
 		$this->db->group_by('u.first_name');
@@ -75,6 +79,8 @@ Class Marks_model extends CI_Model
 		 $discipline_id=$data['discipline_id'];
 		 $exam_type=$data['exam_type'];
 		 $student_id=$data['student_id'];
+		 $revaluation_status=$data['revaluation_status'];
+		 
 		 if($data['degree_id']!=1){
 			$this->db->select('co.id as courseid,co.course_code,co.theory_credit,co.practicle_credit,co.course_title');
 			$this->db->select('d.dummy_value,u.user_unique_id,u.id,u.first_name,ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,
@@ -89,6 +95,9 @@ Class Marks_model extends CI_Model
 			else
 				$this->db->join('students_ug_marks ug',"c.student_id = ug.student_id and ug.course_id=c.course_id  AND ug.exam_type ='$exam_type'",'LEFT');
 			$this->db->where(array('c.campus_id'=>$campus_id,'c.program_id'=>$program_id,'c.semester_id'=>$semester_id,'c.degree_id'=>$degree_id,'c.batch_id'=>$batch_id,'c.exam_type'=>$exam_type,'u.role_id'=>1));
+			if($revaluation_status == 1){
+				$this->db->where('ug.revaluation_status',$revaluation_status);
+			}
 			if(isset($data['course_id']) && $data['course_id']!=''){
 				$this->db->group_by('c.student_id');
 				$this->db->order_by('u.first_name');
@@ -112,8 +121,11 @@ Class Marks_model extends CI_Model
 				
 				$this->db->select('ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,
 				ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,ug.theory_external2,ug.theory_external3,ug.theory_external4,
-				ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark,ug.publish_marks');
+				ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark,ug.publish_marks,revaluation_status');
 				 $this->db->from('students_ug_marks ug')->where("exam_type",$exam_type);
+				 if($revaluation_status == 1){
+					$this->db->where('ug.revaluation_status',$revaluation_status);
+				}
 				 if(isset($data['course_id']) && $data['course_id']!='')
 					 $this->db->where("course_id",$data['course_id']);
 				 else
@@ -121,6 +133,9 @@ Class Marks_model extends CI_Model
 				 if(isset($data['student_id']) && $data['student_id']!='')
 					 $this->db->where("student_id",$data['student_id']);
 				 $mark_result	= $this->db->get()->result();
+				// if($revaluation_status == 1 && count($mark_result)==0)
+					//	continue;
+				 
 				$result[$key]->dummy_value=$user_result[0]->dummy_value;
 				$result[$key]->user_unique_id=$user_result[0]->user_unique_id;
 				$result[$key]->first_name=$user_result[0]->first_name;
@@ -142,13 +157,14 @@ Class Marks_model extends CI_Model
 						$result[$key]->theory_external3 = $mark_res->theory_external3;
 						$result[$key]->theory_external4 = $mark_res->theory_external4;
 						$result[$key]->practical_external = $mark_res->practical_external;
+						$result[$key]->revaluation_status = $mark_res->revaluation_status;
 						$result[$key]->course_id = $mark_res->course_id;
 						$result[$key]->ncc_status = $mark_res->ncc_status;
 						$result[$key]->assignment_mark = $mark_res->assignment_mark;
 					}
 				}
 			 }
-			 //echo "<pre>";print_r($result);exit;
+			// echo "<pre>";print_r($result);exit;
 			 return $result;
 		 }
 	 }
@@ -158,6 +174,7 @@ Class Marks_model extends CI_Model
 		 $program_id=$data['program_id'];
 		 $degree_id=$data['degree_id'];
 		 $batch_id=$data['batch_id'];
+		 $revaluation_status=$data['revaluation_status'];
 		 $semester_id=$data['semester_id'];
 		 //$discipline_id=$data['discipline_id'];
 		 $exam_type=$data['exam_type'];
@@ -172,7 +189,7 @@ Class Marks_model extends CI_Model
 		  }
 		$this->db->select('d.dummy_value,u.user_unique_id,u.id,u.first_name,ug.theory_internal1,ug.theory_internal2,ug.theory_internal3,
 		ug.theory_paper1,ug.theory_paper2,ug.theory_paper3,ug.theory_paper4,ug.theory_internal,ug.practical_internal,ug.theory_external1,
-		ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark,ug.publish_marks');
+		ug.theory_external2,ug.theory_external3,ug.theory_external4,ug.practical_external,ug.course_id,ug.ncc_status,assignment_mark,ug.publish_marks,revaluation_status');
 		$this->db->from('student_assigned_courses c');
         $this->db->join('users  u','u.id = c.student_id','LEFT');
         $this->db->join('user_map_student_details  umap','u.id = umap.user_id','LEFT');
@@ -200,6 +217,9 @@ Class Marks_model extends CI_Model
 				$courseIdArr = explode("-",$courseArr[1]);
 				$this->db->where_in('c.course_id',$courseIdArr);
 			}
+		}
+		if($revaluation_status == 1){
+			$this->db->where('ug.revaluation_status',$revaluation_status);
 		}
 		if(isset($data['course_id']) && $data['course_id']!=''){
 			$this->db->group_by('c.student_id');
@@ -619,6 +639,24 @@ Class Marks_model extends CI_Model
      function unpublish_ug_marks($data){
          $update['publish_marks'] = 0;
          $this->db->where($data);
+         return $this->db->update('students_ug_marks',$update);
+     }
+	 function sendToRevaluation($data,$student_list_id,$coursedata_list_id){
+         $update['revaluation_status'] = 1;
+         $this->db->where($data);
+		 if(count($student_list_id)>0)
+			$this->db->where_in('student_id',$student_list_id);
+		if(count($coursedata_list_id)>0)
+			$this->db->where_in('course_id',$coursedata_list_id);
+         return $this->db->update('students_ug_marks',$update);
+     }
+	 function sendToRevaluationComplete($data,$student_list_id,$coursedata_list_id){
+         $update['revaluation_status'] = 0;
+         $this->db->where($data);
+		 if(count($student_list_id)>0)
+			$this->db->where_in('student_id',$student_list_id);
+		if(count($coursedata_list_id)>0)
+			$this->db->where_in('course_id',$coursedata_list_id);
          return $this->db->update('students_ug_marks',$update);
      }
 	

@@ -5,10 +5,7 @@
  color:red;	
 }
 </style>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css"
-        rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
     <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css"
         rel="stylesheet" type="text/css" />
     <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"
@@ -46,10 +43,10 @@
              <!-- /.box-header -->
 			 <form role="form" name="batch_form" id="batch_form"  method="post" action="<?php echo base_url();?>message/sendMessage" enctype="multipart/form-data">
             <div class="box-body">
-			    <div class="row">
+			   <div class="row">
 				<div class="form-group col-md-3">
 					  <label for="user_type">User Type<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="user_type" id="user_type" class="form-control"  >
+					  <select name="user_type" id="user_type" class="form-control" onchange="loadSection();"  >
 						  <option value="">User Type</option>
 						  <?php foreach($roles as $role){?>
 						  <option value="<?php echo $role->id;?>"><?php echo $role->role_name;?></option>
@@ -66,7 +63,7 @@
                                 <?php } ?>
                             </select>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 student_section">
                             <label for="program">Program<span style="color:red;font-weight: bold;">*</span></label>
                             <select name="program_id" id="program_id" class="form-control" onchange="getDegreebyProgram();">
                                 <option value="">--Select Program--</option>
@@ -74,7 +71,7 @@
                             </select>
                         </div>
 
-				    <div class="form-group col-md-3">
+				    <div class="form-group col-md-3 student_section">
 					  
 					  <input type="hidden" name="id" id="id" value="<?php echo @$feedbacks_result->id;?>" />
 					  <label for="degree">Degree<span style="color:red;font-weight: bold;">*</span></label>
@@ -84,14 +81,14 @@
 						 
 					  </select>
 					</div>
-					<div class="form-group col-md-3">
+					<div class="form-group col-md-3 student_section">
 					  <label for="exampleInputEmail1">Semester<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="semester_id" id="semester_id" class="form-control">
 						  <option value="">Select Semester</option>
 						  
 					  </select>
 					</div>
-					<div class="form-group col-md-3">
+					<div class="form-group col-md-3 student_section">
 					  <label for="batch">Batch<span style="color:red;font-weight: bold;">*</span></label>
 					  <select name="batch_id" id="batch_id" class="form-control" onchange="getUsers();" >
 						  <option value="">Select Batch</option>
@@ -100,23 +97,34 @@
 						  <?php } ?>
 					  </select>
 					</div>
-					
-					<div class="form-group col-md-3">
+					<div class="form-group col-md-3 other_section" style="display:none" >
+					  <label for="discipline">Discipline<span style="color:red;font-weight: bold;">*</span></label>
+					  <select name="discipline" id="discipline" class="form-control" onchange="getUsers();" >
+						  <option value="">Select Discipline</option>
+						 <?php foreach($disciplines as $discipline){?>
+					      <option value="<?php echo $discipline->id;?>"><?php echo $discipline->discipline_name;?></option>
+					     <?php } ?>
+					  </select>
+					</div>
+					<div class="form-group col-md-3" style="margin-top:15px" >
 					  <label for="degree_code">User<span style="color:red;font-weight: bold;">*</span></label>
 					 <select  class="form-control" name="userlist[]" id="userlist" multiple="multiple">
 						
 					 </select>
 					 
 					</div>
-					<div class="form-group col-md-3">
-					  <label for="degree_name">Message<span style="color:red;font-weight: bold;">*</span></label>
+					</div>
+					<div class="row">
+					<div class="form-group col-md-6">
+					  <label for="message">Message<span style="color:red;font-weight: bold;">*</span></label>
 					  <textarea type="text" class="form-control" maxlength="160" id="message" name="message" placeholder="Enter Message"></textarea>
 					</div>
-					<div class="form-group col-md-6">
+					<div class="form-group col-md-6" style="margin-top:30px;">
 					
 				  <button type="submit" class="btn btn-success">Send</button>
 				 <button type="reset" class="btn btn-danger">Reset</button>
 				  
+				  </div>
 				  </div>
 					<!--<div class="form-group col-md-3">
 					  <label for="batch">Question<span style="color:red;font-weight: bold;">*</span></label>
@@ -127,7 +135,7 @@
 					</div>-->
 					
 					
-				</div>
+				
 		</div>
        
 
@@ -144,6 +152,18 @@
   </div>
   <!-- /.content-wrapper -->
   <script type="text/javascript">
+  function loadSection(){
+	  if($('#user_type').val() == 1 || $('#user_type').val() == 6){
+		$('.student_section').show();
+		$('.other_section').hide();
+	  }else if($('#user_type').val()>0){
+		$('.student_section').hide();
+		$('.other_section').show();
+	  }else{
+		  $('.student_section').hide();
+		$('.other_section').hide();
+	  }
+  }
   function getProgramByCampusId()
     {
         var campus_id =$('#campus_id').val();
@@ -223,6 +243,9 @@
     }
 
 		$().ready(function(){
+			if($('#user_type').val()>0){
+				loadSection();
+			}
 			<?php if(@$campus_id>0){?>
 					getProgramByCampusId();
 					getTeacher();
@@ -274,16 +297,17 @@
 			url:'<?php echo base_url();?>message/getUsers',
 			data: $('#batch_form').serialize(),
 			success: function(data){
-			 //alert(data); return false;
-			$("#userlist").empty();
-			//$("#userlist").attr("multiple","multiple");
-			//$("#userlist").multiselect('destroy');
-			$("#userlist").append(data);
- $('#userlist').multiselect('rebuild');
+				//alert(data); return false;
+				$("#userlist").empty();
+				//$("#userlist").attr("multiple","multiple");
+				//$("#userlist").multiselect('destroy');
+				$("#userlist").append(data);
+				$('#userlist').multiselect('rebuild');
 			 }
 		});
 		
 	}
+	
 	$(document).ready(function() {
 		$('#userlist').multiselect({
 			includeSelectAllOption: true,
@@ -297,17 +321,16 @@
 
    $("#batch_form").validate({
 		rules: {
-			syllabus_year_id: "required",
-			batch_start_year: "required",
-			batch_name: "required"
+			user_type: "required",
+			campus_id: "required",
+			userlist: "required"
 			
 			
 		},
 		messages: {
-			syllabus_year_id: "Syllabus Year Is Required..",
-			batch_start_year: "Batch Start Year Is Required.",
-			batch_name:"Batch Name Is Reqiured." 
-			
+			user_type: "User Type is required..",
+			campus_id: "Campus is required.",
+			userlist:"User is reqiured." 
 			
 		},
 		submitHandler: function (form) {

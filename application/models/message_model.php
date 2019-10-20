@@ -1,7 +1,7 @@
 <?php
 Class Message_model extends CI_Model
 {	
-	function get_type_user($roleid,$campus_id='',$program_id='',$batch_id='',$degree_id='',$semester_id='')
+	function get_type_user($roleid,$campus_id='',$program_id='',$batch_id='',$degree_id='',$semester_id='',$discipline='')
 	{
 		$this->db->select('u.id,u.role_id,u.first_name,u.last_name');
         $this->db->from('users as u');
@@ -12,6 +12,8 @@ Class Message_model extends CI_Model
 		}else{
 			$this->db->join('user_map_teacher_details as ud','ud.user_id=u.id','INNER');
 			$this->db->where(array('ud.campus'=>$campus_id));
+			//if($discipline>0)
+				//$this->db->where(array('ud.discipline'=>$discipline));
 		}
 		$this->db->where_in('u.role_id',$roleid);
         $result	= $this->db->get()->result();
@@ -34,6 +36,14 @@ Class Message_model extends CI_Model
 		return $result;
 	}
 	function get_user_roles()
+	{
+		$this->db->select('r.id,r.role_name');
+		$this->db->from('role as r');
+		$this->db->where(array('r.status' => 1));
+        $result	= $this->db->get()->result();
+		return $result;
+	}
+	function get_department()
 	{
 		$this->db->select('r.id,r.role_name');
 		$this->db->from('role as r');

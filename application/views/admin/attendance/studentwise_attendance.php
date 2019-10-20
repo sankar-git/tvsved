@@ -120,6 +120,9 @@
 					<div class="form-group col-md-3">
 					<label for="attendance_date">&nbsp;</label><br/>
                <button type="button" class="btn btn-success" onclick="getAttendance();">Submit</button>
+			   <?php if($role_id == 8 || $role_id == 0){ ?>
+               <button type="button" class="btn btn-success" onclick="publishAttendance();">Publish Attendance</button>
+			   <?php } ?>
 			   <span class="showMsg" id="showMsg"></span>
 				  <!--<div style="float:right;">
 				    <a class="btn btn-primary" href="<?php //echo site_url('course/assignCourseList'); ?>"><i class="fa fa-arrow-left"></i> Back</a>
@@ -394,6 +397,17 @@ function uncheckedChk(){
 			//$.dataTable.draw(false);
 	
 		    }
+		});
+	}
+	function publishAttendance(){
+		var $form = $("#attendance_form");
+		$.ajax({
+			type:'POST',
+			url:'<?php echo base_url();?>attendance/publishAttendance',
+			data: $form.serialize(),
+			success: function(data){
+				alert('Published Successfully');
+			}
 		});
 	}
 	function getAttendance()

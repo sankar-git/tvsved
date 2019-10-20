@@ -91,6 +91,7 @@ class Message extends CI_Controller {
 		$data['campuses'] = $this->Discipline_model->get_campus();
 			$data['batches'] = $this->Discipline_model->get_batches();
         $data['roles']     =     $this->Message_model->get_user_roles();
+        $data['disciplines'] = $this->Discipline_model->get_discipline(); 
 		$this->load->view('admin/message/add_message_view',$data);
 	}
 	function sendMessage()
@@ -172,11 +173,12 @@ class Message extends CI_Controller {
 		$batch_id=$this->input->post('batch_id');
  		$degree_id=$this->input->post('degree_id');
  		$semester_id=$this->input->post('semester_id');
+ 		$discipline=$this->input->post('discipline');
  		
 		//p($userType); exit;
 		//$roles=explode(',',$userType);
 		//p($roles); exit;
-		 $data['activeusers']=$this->Message_model->get_type_user($userType,$campus_id,$program_id,$batch_id,$degree_id,$semester_id);// sending type roles 
+		 $data['activeusers']=$this->Message_model->get_type_user($userType,$campus_id,$program_id,$batch_id,$degree_id,$semester_id,$discipline);// sending type roles 
          //echo $this->db->last_query();
 		$str='';
 		

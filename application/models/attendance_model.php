@@ -609,4 +609,10 @@ Class Attendance_model extends CI_Model
 		
 		return $insert_id = $this->db->insert_id();
 	}
+	function publishAttendance($campus_id,$program_id,$degree_id,$semester_id,$batch_id,$discipline_id,$student_id){
+		$this->db->where(array('campus_id'=>$campus_id,'program_id'=>$program_id,'degree_id'=>$degree_id,'discipline_id'=>$discipline_id,'semester_id'=>$semester_id,'batch_id'=>$batch_id));
+		$this->db->where_in('student_id',$student_id);
+		$data['approve_status'] = 1;
+		$this->db->update('attendance',$data);
+	}
 } //end class

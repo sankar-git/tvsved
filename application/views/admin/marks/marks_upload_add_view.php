@@ -43,7 +43,7 @@
 			    <div class="row">
 				<div class="form-group col-md-4">
 					  <label for="upload_type">Type<span style="color:red;font-weight: bold;">*</span></label>
-					  <select name="upload_type" id="upload_type" class="form-control" onchange="window.location.href='marksUpload?upload_type='+this.value;">
+					  <select name="upload_type" id="upload_type" class="form-control" onchange="window.location.href='<?php echo $page_link;?>?upload_type='+this.value;">
 						  <option value="" >Select Type</option>
 						  <option value="coursewise" <?php if($upload_type == 'coursewise'){?>selected<?php } ?>>Course Wise</option>
 						  <option value="studentwise" <?php if($upload_type == 'studentwise'){?>selected<?php } ?> >Student Wise</option>
@@ -200,10 +200,16 @@
 			  </div>
 			  <div class="box-footer"  <?php if(empty($upload_type)){?> style="display:none" <?php } ?>>
                <button type="button" class="btn btn-success" onclick="saveUGInternalMarksNew();">Save</button>
-                  <?php if($session_data[0]->role_id==0 || $session_data[0]->role_id==9){?>
+               <input type="hidden" id="revaluation_mark" name="revaluation_mark"  value="<?php echo $revaluation;?>" />
+                  <?php if(($session_data[0]->role_id==0 || $session_data[0]->role_id==9) && $revaluation==0){?>
                <button type="button" class="btn btn-success" name="publish_btn" id="publish_btn" onclick="publishUGInternalMarksNew();">Publish Mark</button>
                <button type="button" class="btn btn-success"  name="unpublish_btn" id="unpublish_btn"  onclick="unpublishUGInternalMarksNew();">Unpublish Mark</button>
-                  <?php } ?>
+			  
+			   <button type="button" class="btn btn-success" name="publish_btn" id="publish_btn" onclick="sendToRevaluation();">Send to Revaluation</button>
+			   <?php  } ?>
+			   <?php if($revaluation==1){?>
+			   <button type="button" class="btn btn-success" name="publish_btn" id="publish_btn" onclick="sendToRevaluationComplete();">Revaluation Complete</button>
+			   <?php } ?>
 			  </div>
 			    <div id="ncc">
 			   <div id="nccListDiv" class="nccListDiv" style="display:none" >
@@ -238,6 +244,7 @@
 							 <table id="example" class="table table-bordered table-hover">
 								<thead>
 								<tr id="internal" class="internal" style="display:none">
+									<th>Select</th>
 								    <th>Id</th>
 								    <!--<th>Student Id</th>-->
 								    <th>Student Name</th>
@@ -248,6 +255,7 @@
 								</tr>
 								
 								<tr id="external" class="external" style="display:none">
+								    <th>Select</th>
 								    <th>Id</th>
 								   <!-- <th>Student Id</th>-->
 								    <th>Dummy No</th>
@@ -272,6 +280,7 @@
 						    <table id="example" class="table table-bordered table-hover">
 							<thead>
 								<tr id="internal" class="internal" style="display:none">
+								    <th>Select</th>
 								    <th>Id</th>
 								    <th>Student Name</th>
 									<th>Internal Theory(25)</th>
@@ -279,6 +288,7 @@
 									<th>Internal Practical(20)</th>
 								</tr>
 								<tr id="external" class="external" style="display:none">
+								    <th>Select</th>
 								    <th>Id</th>
 								    <th>Student Name</th>
 									<th>Theory(25)</th>
@@ -670,6 +680,80 @@
             }
         });
     }
+	function sendToRevaluation(){
+        var bvsc = [ "1", "2", "3", "4" ];
+        if($.inArray($('#campus_id').val(),bvsc)>=0 && $('#program_id').val()==1){
+            var $form =$("#ug_marks_upload_view");
+        }else{
+            var $form =$("#ug_marks_upload_view");
+        }
+		var val = [];
+		if($('#upload_type').val() == 'studentwise'){
+			$('input[name="course_list_id[]"]:checked').each(function(i){
+			  val[i] = $(this).val();
+			});
+		}else{
+			$('input[name="student_list_id[]"]:checked').each(function(i){
+			  val[i] = $(this).val();
+			});
+		}
+		if(val.length>0){
+			$.ajax({
+				type:'POST',
+				url:'<?php echo base_url();?>marks/sendToRevaluation',
+				data: $form.serialize(),
+				success: function(data){
+					if(data==1)
+					{
+						alert("Sent to Revaluation");
+					}
+				}
+			});
+		}else{
+			if($('#upload_type').val() == 'studentwise')
+					alert('Please select Course');
+			else
+				alert('Please select Student');
+			return false;
+		}
+    }
+	function sendToRevaluationComplete(){
+        var bvsc = [ "1", "2", "3", "4" ];
+        if($.inArray($('#campus_id').val(),bvsc)>=0 && $('#program_id').val()==1){
+            var $form =$("#ug_marks_upload_view");
+        }else{
+            var $form =$("#ug_marks_upload_view");
+        }
+		var val = [];
+		if($('#upload_type').val() == 'studentwise'){
+			$('input[name="course_list_id[]"]:checked').each(function(i){
+			  val[i] = $(this).val();
+			});
+		}else{
+			$('input[name="student_list_id[]"]:checked').each(function(i){
+			  val[i] = $(this).val();
+			});
+		}
+		if(val.length>0){
+			$.ajax({
+				type:'POST',
+				url:'<?php echo base_url();?>marks/sendToRevaluationComplete',
+				data: $form.serialize(),
+				success: function(data){
+					if(data==1)
+					{
+						alert("Revaluation Completed");
+					}
+				}
+			});
+		}else{
+			if($('#upload_type').val() == 'studentwise')
+					alert('Please select Course');
+			else
+				alert('Please select Student');
+			return false;
+		}
+    }
     function unpublishUGInternalMarksNew(){
         var bvsc = [ "1", "2", "3", "4" ];
         if($.inArray($('#campus_id').val(),bvsc)>=0 && $('#program_id').val()==1){
@@ -802,18 +886,18 @@ var upload_type=$('#upload_type').val();
 			 {
 				 $(".internal").show();
 				 if(upload_type == 'studentwise')
-					$("#bvsc .internal th").eq(1).html('Course Name');
+					$("#bvsc .internal th").eq(2).html('Course Name');
 				else
-					$("#bvsc .internal th").eq(1).html('Student Name');
+					$("#bvsc .internal th").eq(2).html('Student Name');
 				 $(".external").hide(); 
 			 }
 			 if(uploadType=='2')
 			 {
 				$(".external").show(); 
 				 if(upload_type == 'studentwise')
-					$("#bvsc .external th").eq(1).html('Course Name');
+					$("#bvsc .external th").eq(2).html('Course Name');
 				else
-					$("#bvsc .external th").eq(1).html('Dummy No');
+					$("#bvsc .external th").eq(2).html('Dummy No');
 				$(".internal").hide();
 			 }
 			 
@@ -831,7 +915,7 @@ var upload_type=$('#upload_type').val();
 						upload_type: $('#upload_type').val(),
 						student_id: $('#student_id').val(),
 						exam_type: $('#exam_type').val(),
-						//date_of_start: $('#date_of_start').val(),
+						revaluation_mark: $('#revaluation_mark').val(),
 						marks_type_ncc: $('#marks_type_ncc').val(),
 				marks_type: $('#marks_type').val() },
 				success: function(data){
@@ -869,12 +953,12 @@ var upload_type=$('#upload_type').val();
 		{
 			$(".internal").show();
 			if(upload_type == 'studentwise')
-				$("#bvscwewew .internal th").eq(1).html('Course Name');
+				$("#bvscwewew .internal th").eq(2).html('Course Name');
 			else
-				$("#bvscwewew .internal th").eq(1).html('Student Name');
-			$("#bvscwewew .internal th").eq(2).show().html('Internal Theory(20)');
-			$("#bvscwewew .internal th").eq(3).html('TermPaper(10)');
-			$("#bvscwewew .internal th").eq(4).show().html('Internal Practical(50/100)');
+				$("#bvscwewew .internal th").eq(2).html('Student Name');
+			$("#bvscwewew .internal th").eq(3).show().html('Internal Theory(20)');
+			$("#bvscwewew .internal th").eq(4).html('TermPaper(10)');
+			$("#bvscwewew .internal th").eq(5).show().html('Internal Practical(50/100)');
 			$(".external").hide(); 
 		}
 		if(uploadType=='2')
@@ -885,13 +969,13 @@ var upload_type=$('#upload_type').val();
 			//$("#bvscwewew .external th").eq(3).html('TermPaper(10)');
 			//$("#bvscwewew .external th").eq(4).show().html('Internal Practical(50/100)');
 			if(upload_type == 'studentwise')
-				$("#bvscwewew .external th").eq(1).html('Course Name');
+				$("#bvscwewew .external th").eq(2).html('Course Name');
 			else
-				$("#bvscwewew .external th").eq(1).html('Dummy No');
-			$("#bvscwewew .external th").eq(2).hide();
+				$("#bvscwewew .external th").eq(2).html('Dummy No');
 			$("#bvscwewew .external th").eq(3).hide();
 			$("#bvscwewew .external th").eq(4).hide();
-			$("#bvscwewew .external th").eq(5).show().html('External Theory(70/100)');
+			$("#bvscwewew .external th").eq(5).hide();
+			$("#bvscwewew .external th").eq(6).show().html('External Theory(70/100)');
 			$(".internal").hide();
 		}
 		var $form =$("#ug_marks_upload_view");
@@ -927,23 +1011,23 @@ var upload_type=$('#upload_type').val();
 		{
 			$(".internal").show();
 			if(upload_type == 'studentwise')
-				$("#bvscwewew .external th").eq(1).html('Student Name');
+				$("#bvscwewew .external th").eq(2).html('Student Name');
 			else
-				$("#bvscwewew .external th").eq(1).html('Course Name');
+				$("#bvscwewew .external th").eq(2).html('Course Name');
 			if($('#practicle_credit').val() == 0) { 
-				$("#bvscwewew .internal th").eq(2).show().html('Internal Theory(40)');
-				$("#bvscwewew .internal th").eq(3).html('Assignment(10)');
-				$("#bvscwewew .internal th").eq(4).hide();
+				$("#bvscwewew .internal th").eq(3).show().html('Internal Theory(40)');
+				$("#bvscwewew .internal th").eq(4).html('Assignment(10)');
+				$("#bvscwewew .internal th").eq(5).hide();
 			}else if($('#theory_credit').val() == 0) { 
-				$("#bvscwewew .internal th").eq(2).hide();
-				$("#bvscwewew .internal th").eq(3).html('Assignment(10)');
-				$("#bvscwewew .internal th").eq(4).show().html('Internal Practical(40)');
+				$("#bvscwewew .internal th").eq(3).hide();
+				$("#bvscwewew .internal th").eq(4).html('Assignment(10)');
+				$("#bvscwewew .internal th").eq(5).show().html('Internal Practical(40)');
 			}else{
-				$("#bvscwewew .internal th").eq(2).show().html('Internal Theory(30)');
-				$("#bvscwewew .internal th").eq(3).html('Assignment(5)');
-				$("#bvscwewew .internal th").eq(4).show().html('Internal Practical(15)');
+				$("#bvscwewew .internal th").eq(3).show().html('Internal Theory(30)');
+				$("#bvscwewew .internal th").eq(4).html('Assignment(5)');
+				$("#bvscwewew .internal th").eq(5).show().html('Internal Practical(15)');
 			}
-			$("#bvscwewew .external th").eq(5).show().html('External Theory(50)');
+			$("#bvscwewew .external th").eq(6).show().html('External Theory(50)');
 			$(".external").hide(); 
 		}
 		if(uploadType=='2')
@@ -966,12 +1050,12 @@ var upload_type=$('#upload_type').val();
 				
 			}*/
 			if(upload_type == 'studentwise')
-				$("#bvscwewew .external th").eq(1).html('Course Name');
+				$("#bvscwewew .external th").eq(2).html('Course Name');
 			else
-				$("#bvscwewew .external th").eq(1).html('Dummy No');
-			$("#bvscwewew .external th").eq(2).hide();
-			$("#bvscwewew .external th").eq(4).hide();
+				$("#bvscwewew .external th").eq(2).html('Dummy No');
 			$("#bvscwewew .external th").eq(3).hide();
+			$("#bvscwewew .external th").eq(5).hide();
+			$("#bvscwewew .external th").eq(4).hide();
 			$(".internal").hide();
 		}
 		var $form =$("#ug_marks_upload_view");

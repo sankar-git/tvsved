@@ -70,6 +70,24 @@ class Marks extends CI_Controller {
 		
 		
 		$data['page_title']="Upload UG/PG Marks";
+		$data['page_link']="marksUpload";
+		$data['revaluation']=0;
+		$data['upload_type']=$this->input->get('upload_type');
+		$data['campuses'] = $this->Discipline_model->get_campus(); 
+		//$data['batches'] = $this->Discipline_model->get_batches(); 
+		//$data['semesters'] = $this->Discipline_model->get_semester(); 
+		//$data['disciplines'] = $this->Discipline_model->get_discipline(); 
+		
+		$this->load->view('admin/marks/marks_upload_add_view',$data);
+		
+	}
+	function revaluation()
+	{
+		
+		
+		$data['page_title']="Revaluation Marks";
+		$data['page_link']="revaluation";
+		$data['revaluation']=1;
 		$data['upload_type']=$this->input->get('upload_type');
 		$data['campuses'] = $this->Discipline_model->get_campus(); 
 		//$data['batches'] = $this->Discipline_model->get_batches(); 
@@ -242,6 +260,7 @@ class Marks extends CI_Controller {
 		$marks_type=$this->input->post('marks_type');
 		$upload_type=$this->input->post('upload_type');
 		$exam_type=$this->input->post('exam_type');
+		$revaluation_mark=$this->input->post('revaluation_mark');
 		$student_id=$this->input->post('student_id');
 		$course_idCount=1;
 		 $send['campus_id']=$campus_id;
@@ -271,13 +290,20 @@ class Marks extends CI_Controller {
 		}
 		//print_r($_POST);
 		if($upload_type == 'coursewise'){
+			if($revaluation_mark == 1){
+				$send['revaluation_status']=1;
+			}
 			$studentList= $this->Marks_model->get_student_assigned_marks($send);
 			if($marks_type == 1 && $exam_type == 2){
 				$send['exam_type']=1;
 				$data['regstudentsmarks']=$this->Marks_model->get_student_assigned_marks($send);
 			}
 		}else{
+			if($revaluation_mark == 1){
+				$send['revaluation_status']=1;
+			}
 			$studentList= $this->Marks_model->get_student_wise_assigned_marks($send);
+			//echo $this->db->last_query();exit;
 			if($marks_type == 1 && $exam_type == 2){
 				$send['exam_type']=1;
 				$data['regstudentsmarks']=$this->Marks_model->get_student_wise_assigned_marks($send);
@@ -289,6 +315,10 @@ class Marks extends CI_Controller {
 		if(count($studentList)>0){
 			foreach($studentList as $key=>$students)
 			{ 
+			if($revaluation_mark == 1){
+				if(!isset($students->revaluation_status) || @$students->revaluation_status==0)
+					continue;
+			}
 				if($upload_type == 'studentwise'){
 					$course_id = $students->course_id;
 					if(strpos($course_id,"|") !== false){
@@ -324,6 +354,7 @@ class Marks extends CI_Controller {
 					$i++;
 					if($upload_type == 'coursewise'){
 						$trdata.='<tr>
+							<td><input type="checkbox" name="student_list_id[]" value="'.$students->id.'" /> </td>
 							<td>
 								<input type="hidden"  value="'.$students->user_unique_id.'">'.$students->user_unique_id.'
 								<input type="hidden" name="publish_marks_'.$i.'" id="publish_marks_'.$i.'" value="'.$students->publish_marks.'" />
@@ -332,6 +363,7 @@ class Marks extends CI_Controller {
 							<td>'.$students->first_name.'</td>';
 					}else{
 						$trdata.='<tr>
+						<td><input type="checkbox" name="course_list_id[]" value="'.$students->courseid.'" /> </td>
 							<td>
 								<input type="hidden"  value="'.$students->courseid.'">'.$i.'
 								<input type="hidden" name="course_id[]" value="'.$students->courseid.'">
@@ -398,12 +430,14 @@ class Marks extends CI_Controller {
 					$i++;
 					if($upload_type == 'coursewise'){
 						$trdata.='<tr>
+						<td><input type="checkbox" name="student_list_id[]" value="'.$students->id.'" /> </td>
 							<td><input type="hidden"  value="'.$students->user_unique_id.'">'.($i) .' 
 							<input type="hidden" name="publish_marks_'.$i.'" id="publish_marks_'.$i.'" value="'.$students->publish_marks.'" />
 							<input type="hidden" name="student_id[]" value="'.$students->id.'"></td>
 						  <td>'.$students->dummy_value.'</td>';
 					}else{
 						$trdata.='<tr>
+						<td><input type="checkbox" name="course_list_id[]" value="'.$students->courseid.'" /> </td>
 							<td><input type="hidden"  value="'.$students->courseid.'">'.($i) .' 
 							<input type="hidden" name="course_id[]" value="'.$students->courseid.'"></td>';
 							if(isset($students->course_subject_title)){
@@ -414,7 +448,7 @@ class Marks extends CI_Controller {
 						  
 					}
 					if(@$courseList[0]->course_subject_id == 22){
-						if($students->ncc_status=='1')
+						if(@$students->ncc_status=='1')
 						{
 							 $passstatus='selected';
 						}
@@ -422,7 +456,7 @@ class Marks extends CI_Controller {
 						{
 							 $passstatus='';
 						}
-						if($students->ncc_status=='0')
+						if(@$students->ncc_status=='0')
 						{
 							 $failstatus='selected';
 						}
@@ -797,6 +831,55 @@ class Marks extends CI_Controller {
         else
             echo 0;
     }
+	function sendToRevaluationComplete(){
+        $upload_type=$this->input->post('upload_type');
+        $data['campus_id']=$this->input->post('campus_id');
+        $data['program_id']=$this->input->post('program_id');
+        $data['degree_id']=$this->input->post('degree_id');
+        $data['batch_id']=$this->input->post('batch_id');
+        $data['semester_id']=$this->input->post('semester_id');
+        $data['discipline_id']=$this->input->post('discipline_id');
+		if($upload_type == 'studentwise'){
+			$student_list_id=$this->input->post('student_id');
+			$coursedata_list_id=$this->input->post('course_list_id');
+		}else{
+			$coursedata_list_id=$this->input->post('course_id');	
+			$student_list_id=$this->input->post('student_list_id');
+		}
+        $data['exam_type']=$this->input->post('exam_type');
+		//p($data);exit;
+        $save = $this->Marks_model->sendToRevaluationComplete($data,$student_list_id,$coursedata_list_id);
+        //echo $this->db->last_query();
+        if($save)
+            echo 1;
+        else
+            echo 0;
+    }
+	
+	function sendToRevaluation(){
+        $upload_type=$this->input->post('upload_type');
+        $data['campus_id']=$this->input->post('campus_id');
+        $data['program_id']=$this->input->post('program_id');
+        $data['degree_id']=$this->input->post('degree_id');
+        $data['batch_id']=$this->input->post('batch_id');
+        $data['semester_id']=$this->input->post('semester_id');
+        $data['discipline_id']=$this->input->post('discipline_id');
+		if($upload_type == 'studentwise'){
+			$student_list_id=$this->input->post('student_id');
+			$coursedata_list_id=$this->input->post('course_list_id');
+		}else{
+			$coursedata_list_id=$this->input->post('course_id');	
+			$student_list_id=$this->input->post('student_list_id');
+		}
+        $data['exam_type']=$this->input->post('exam_type');
+		//p($data);exit;
+        $save = $this->Marks_model->sendToRevaluation($data,$student_list_id,$coursedata_list_id);
+       // echo $this->db->last_query();
+        if($save)
+            echo 1;
+        else
+            echo 0;
+    }
     function unpublishUGInternalMarksNew(){
         $data['campus_id']=$this->input->post('campus_id');
         $data['program_id']=$this->input->post('program_id');
@@ -826,6 +909,7 @@ class Marks extends CI_Controller {
 		
 		$course_id=$this->input->post('course_id');
 		$exam_type=$this->input->post('exam_type');
+		$revaluation_mark=$this->input->post('revaluation_mark');
 		
 		//print_r($_POST); exit;
 		$course_idCount=1;
@@ -1274,8 +1358,9 @@ class Marks extends CI_Controller {
 		$batch_id = $this->input->post('batch_id');
 		$semester_id = $this->input->post('semester_id');
 		$discipline_id = $this->input->post('discipline_id');
+		$revaluation_mark = $this->input->post('revaluation_mark');
 		
-		$data['student']=$this->Marks_model->get_student_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id); 
+		$data['student']=$this->Marks_model->get_student_list($campus_id,$program_id,$degree_id,$batch_id,$semester_id,$discipline_id,$revaluation_mark); 
 		
 		//echo $this->db->last_query();
 		//print_r($data['programs']); exit;
